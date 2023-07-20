@@ -1,4 +1,4 @@
-import { Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList } from "@mui/material"
+import { Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList, Divider } from "@mui/material"
 import { useState, MouseEvent } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
@@ -23,6 +23,8 @@ const pages = [
 
     },
 ]
+
+
 
 export default function LateralPanel() {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -87,6 +89,15 @@ export default function LateralPanel() {
                                 <Typography textAlign="center">{page.name}</Typography>
                             </MenuItem>
                         ))}
+                        <Divider />
+                        <MenuItem>
+                            <Stack direction="row">
+                                <Typography>Carpetas</Typography>
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <AddIcon />
+                                </IconButton>
+                            </Stack>
+                        </MenuItem>
                     </MenuList>
 
                 </Grid>
