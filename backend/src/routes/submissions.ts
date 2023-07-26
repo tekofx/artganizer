@@ -50,6 +50,33 @@ router.get('/', async (req: Request, res: Response) => {
     res.send(submissions);
 });
 
+router.get('/uploads/:submissionId', async (req: Request, res: Response) => {
+    if (req.params.submissionId == null) {
+        res.status(400).send("submission ID not provided");
+        return;
+    }
+
+    var submissionId: number = parseInt(req.params.submissionId);
+    const submission = await SubmissionRepo.findOne({ where: { id: submissionId } });
+
+    if (submission == null) {
+        res.status(404).send("submission not found");
+        return;
+    }
+
+    const filePath = path.join(submissionsDir, submissionId + "." + submission.format);
+
+    if (!fs.existsSync(filePath)) {
+        res.status(404).send("submission file not found");
+        return;
+    }
+
+    return res.sendFile(filePath);
+});
+
+
+
+
 router.post('/', uploadSubmissions.single("file"), async (req: Request, res: Response) => {
 
     var { title, description } = req.body;
