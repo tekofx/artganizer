@@ -78,6 +78,19 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
 
+app.post('/artist', async (req: Request, res: Response) => {
+    const artist = new Artist();
+    var { name } = req.body;
+    if (name == null) {
+        res.status(400).send("name not provided");
+        return;
+    }
+
+    artist.name = name;
+    await ArtistRepo.save(artist);
+    res.send(artist);
+});
+
 app.get('/artists', async (req: Request, res: Response) => {
     const artists = await ArtistRepo.find();
     res.send(artists);
@@ -190,6 +203,43 @@ app.delete('/submission/:submissionId', async (req: Request, res: Response) => {
     // Remove from database
     await SubmissionRepo.remove(submission);
 
+    res.send(submission);
+});
+
+app.put('/submission/:submissionId', async (req: Request, res: Response) => {
+    if (req.params.submissionId == null) {
+        res.status(400).send("submission ID not provided");
+        return;
+    }
+
+    var submissionId: number = parseInt(req.params.submissionId);
+    const submission = await SubmissionRepo.findOne({ where: { id: submissionId } });
+
+    if (submission == null) {
+        res.status(404).send("submission not found");
+        return;
+    }
+
+    var { title, description, rating, artist } = req.body;
+
+    switch (true) {
+        case title != null:
+            submission.title = title;
+            break;
+        case description != null:
+            submission.description = description;
+            break;
+        case rating != null:
+            submission.rating = rating;
+            break;
+        case artist != null:
+            submission.artist = artist;
+            break;
+        default:
+            break;
+    }
+
+    await SubmissionRepo.save(submission);
     res.send(submission);
 });
 
