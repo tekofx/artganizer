@@ -12,9 +12,6 @@ export class Artist {
     @Column({ length: 200, default: "" })
     description: string;
 
-    @Column({ length: 200, default: "" })
-    picture: string;
-
     @Column({ length: 500, default: "" })
     socials: string;
 

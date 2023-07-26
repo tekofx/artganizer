@@ -13,11 +13,16 @@ import sizeOf from 'image-size';
 import submissionPostValidation from './utils';
 
 
-const uploadsDir = path.join(__dirname, '../uploads/');
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir);
+const submissionsDir = path.join(__dirname, '../uploads/submissions');
+const artistsPicsDir = path.join(__dirname, '../uploads/artistPics');
+
+if (!fs.existsSync(submissionsDir)) {
+    fs.mkdirSync(submissionsDir);
 }
 
+if (!fs.existsSync(artistsPicsDir)) {
+    fs.mkdirSync(artistsPicsDir);
+}
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -27,9 +32,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Multer config
-const storage = multer.diskStorage({
+const submissionsStorage = multer.diskStorage({
     destination: function (req: Express.Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
-        cb(null, uploadsDir)
+        cb(null, submissionsDir)
     },
     filename: function (req: Express.Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
         // Guardar el archivo con un nombre temporal
@@ -49,7 +54,8 @@ const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFil
     }
 }
 
-const upload = multer({ storage: storage, fileFilter: fileFilter });
+const uploadSubmissions = multer({ storage: submissionsStorage, fileFilter: fileFilter });
+const uploadArtistPics = multer({ dest: artistsPicsDir, fileFilter: fileFilter });
 
 
 // Create express app
@@ -78,16 +84,41 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
 
-app.post('/artist', async (req: Request, res: Response) => {
+app.post('/artist', uploadArtistPics.single("file"), async (req: Request, res: Response) => {
     const artist = new Artist();
-    var { name } = req.body;
+    var { name, description, socials } = req.body;
+    var file = req.file;
     if (name == null) {
         res.status(400).send("name not provided");
         return;
     }
 
     artist.name = name;
-    await ArtistRepo.save(artist);
+
+    switch (true) {
+
+        case description != null:
+            artist.description = description;
+        case socials != null:
+            artist.socials = socials;
+            break;
+        default:
+            break;
+    }
+
+    var id = await ArtistRepo.save(artist).then((artist) => {
+        return artist.id;
+    }).catch((error) => {
+        console.log(error);
+    });
+
+    // Renombrar el archivo con el ID generado
+    if (file) {
+        const tempPath = file.path;
+        const newPath = path.join('uploads/artistPics', id + path.extname(file.originalname));
+        fs.renameSync(tempPath, newPath);
+    }
+
     res.send(artist);
 });
 
@@ -146,7 +177,7 @@ app.post('/artist', async (req: Request, res: Response) => {
 });
 
 
-app.post('/submission', upload.single("file"), async (req: Request, res: Response) => {
+app.post('/submission', uploadSubmissions.single("file"), async (req: Request, res: Response) => {
 
     var { title, description } = req.body;
     var file = req.file;
@@ -176,7 +207,7 @@ app.post('/submission', upload.single("file"), async (req: Request, res: Respons
 
     // Renombrar el archivo con el ID generado
     const tempPath = file.path;
-    const newPath = path.join('uploads', id + path.extname(file.originalname));
+    const newPath = path.join('uploads/submissions', id + path.extname(file.originalname));
     fs.renameSync(tempPath, newPath);
 
     res.send(submission);
@@ -197,7 +228,7 @@ app.delete('/submission/:submissionId', async (req: Request, res: Response) => {
     }
 
     // Remove from uploads folder
-    const filePath = path.join(uploadsDir, submissionId + "." + submission.format);
+    const filePath = path.join(submissionsDir, submissionId + "." + submission.format);
     fs.unlinkSync(filePath);
 
     // Remove from database
@@ -225,13 +256,10 @@ app.put('/submission/:submissionId', async (req: Request, res: Response) => {
     switch (true) {
         case title != null:
             submission.title = title;
-            break;
         case description != null:
             submission.description = description;
-            break;
         case rating != null:
             submission.rating = rating;
-            break;
         case artist != null:
             submission.artist = artist;
             break;
