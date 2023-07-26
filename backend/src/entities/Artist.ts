@@ -18,5 +18,5 @@ export class Artist {
     @OneToMany(() => Submission, submission => submission.artist)
     submissions: Submission[];
 
-
+    image: string;
 }

@@ -32,6 +32,8 @@ export class Submission {
     @Column({ length: 10 })
     format: string;
 
+    image: string;
+
 
 
 

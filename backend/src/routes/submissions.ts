@@ -47,6 +47,11 @@ const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
     const submissions = await SubmissionRepo.find();
+
+    // Add image URL
+    submissions.forEach((submission) => {
+        submission.image = "/api/submissions/uploads/" + submission.id;
+    });
     res.send(submissions);
 });
 

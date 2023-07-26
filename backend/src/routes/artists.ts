@@ -33,6 +33,16 @@ const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFil
 }
 
 const uploadArtistPics = multer({ dest: artistsPicsDir, fileFilter: fileFilter });
+router.get('/', async (req: Request, res: Response) => {
+    const artists = await ArtistRepo.find();
+
+    // Add image URL
+    artists.forEach((artist) => {
+        artist.image = "/api/artists/uploads/" + artist.id;
+    }
+    );
+    res.send(artists);
+});
 
 router.post('/', uploadArtistPics.single("file"), async (req: Request, res: Response) => {
     const artist = new Artist();
