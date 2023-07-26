@@ -144,15 +144,15 @@ app.post('/submission', upload.single("file"), async (req: Request, res: Respons
     }
 
 
-
-
     // Obtener las dimensiones de la imagen
     const dimensions = sizeOf(file.path);
+
     const submission = new Submission();
     submission.title = title;
     submission.description = description;
     submission.height = dimensions.height || 0;
     submission.width = dimensions.width || 0;
+    submission.format = dimensions.type || "";
 
     var id = await SubmissionRepo.save(submission).then((submission) => {
         return submission.id;
@@ -183,11 +183,12 @@ app.delete('/submission/:submissionId', async (req: Request, res: Response) => {
         return;
     }
 
-    await SubmissionRepo.remove(submission);
-
     // Remove from uploads folder
-    /* const filePath = path.join(uploadsDir, submissionId + path.extname(submission.path));
-    fs.unlinkSync(filePath); */
+    const filePath = path.join(uploadsDir, submissionId + "." + submission.format);
+    fs.unlinkSync(filePath);
+
+    // Remove from database
+    await SubmissionRepo.remove(submission);
 
     res.send(submission);
 });
