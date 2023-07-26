@@ -11,7 +11,7 @@ import sizeOf from 'image-size';
 import submissionPostValidation from './utils';
 import sharp from 'sharp';
 import { AppDataSource, ArtistRepo, SubmissionRepo } from './typeorm.config';
-import artist from './routes/artist';
+import artist from './routes/artists';
 import submission from './routes/submissions';
 
 if (process.env.NODE_ENV !== 'production') {
