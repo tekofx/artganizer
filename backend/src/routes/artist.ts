@@ -9,8 +9,10 @@ import * as path from 'path';
 import sharp from 'sharp';
 import { ArtistRepo, SubmissionRepo } from '../typeorm.config';
 
-const artistsPicsDir = path.join(__dirname, '../uploads/artistPics');
-
+const artistsPicsDir = path.join(__dirname, '../../uploads/artistPics');
+if (!fs.existsSync(artistsPicsDir)) {
+    fs.mkdirSync(artistsPicsDir);
+}
 
 
 
