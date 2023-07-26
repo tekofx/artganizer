@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import "reflect-metadata";
 import { DataSource } from 'typeorm';
-import { Artist } from './entity/Artist';
-import { Submission } from './entity/Submission';
+import { Artist } from './entities/Artist';
+import { Submission } from './entities/Submission';
 import { config } from './config';
 import multer, { FileFilterCallback } from 'multer';
 import * as fs from 'fs';
@@ -10,6 +10,8 @@ import * as path from 'path';
 import sizeOf from 'image-size';
 import submissionPostValidation from './utils';
 import sharp from 'sharp';
+import { AppDataSource, ArtistRepo, SubmissionRepo } from './typeorm.config';
+import artist from './routes/artist';
 
 const submissionsDir = path.join(__dirname, '../uploads/submissions');
 const artistsPicsDir = path.join(__dirname, '../uploads/artistPics');
@@ -61,154 +63,14 @@ const app = express();
 app.use(express.json());
 const port = 3001;
 
-// Create a connection to the database
-const AppDataSource = new DataSource({
-    type: "mysql",
-    host: process.env.MYSQL_HOST,
-    port: 3306,
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    entities: [Artist, Submission],
-    synchronize: true,
-    logging: false,
-})
-
-// Get repositories of db entities
-const ArtistRepo = AppDataSource.manager.getRepository(Artist);
-const SubmissionRepo = AppDataSource.manager.getRepository(Submission);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
 
-app.post('/artist', uploadArtistPics.single("file"), async (req: Request, res: Response) => {
-    const artist = new Artist();
-    var { name, description, socials } = req.body;
-    var file = req.file;
-    if (name == null) {
-        res.status(400).send("name not provided");
-        return;
-    }
+app.use("/artists", artist);
 
-    artist.name = name;
-
-    switch (true) {
-
-        case description != null:
-            artist.description = description;
-        case socials != null:
-            artist.socials = socials;
-            break;
-        default:
-            break;
-    }
-
-    var id = await ArtistRepo.save(artist).then((artist) => {
-        return artist.id;
-    }).catch((error) => {
-        console.log(error);
-    });
-
-
-    // Convertir a JPG y Renombrar el archivo con el ID generado
-    if (file) {
-        sharp(file.path)
-            .jpeg()
-            .toFile(path.join(artistsPicsDir, id + ".jpg")).then(() => {
-                // Eliminar el archivo temporal
-                if (file?.path) {
-                    fs.unlinkSync(file.path);
-                }
-            }).catch((error) => {
-                console.log(error);
-            }
-            );
-    }
-
-    res.send(artist);
-});
-
-app.get('/artists', async (req: Request, res: Response) => {
-    const artists = await ArtistRepo.find();
-    res.send(artists);
-});
-
-app.get('/artist/:artistId', async (req: Request, res: Response) => {
-    if (req.params.artistId == null) {
-        res.status(400).send("artist ID not provided");
-        return;
-    }
-
-    var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({ where: { id: artistId }, relations: ["submissions"] });
-
-
-    if (artist == null) {
-        res.status(404).send("artist not found");
-        return;
-    }
-
-    res.send(artist);
-});
-
-app.delete('/artist/:artistId', async (req: Request, res: Response) => {
-    if (req.params.artistId == null) {
-        res.status(400).send("artist ID not provided");
-        return;
-    }
-
-    var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({ where: { id: artistId } });
-
-    if (artist == null) {
-        res.status(404).send("artist not found");
-        return;
-    }
-
-    // Remove from uploads folder
-    const filePath = path.join(artistsPicsDir, artistId + ".jpg");
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-    }
-
-    // Remove from database
-    await ArtistRepo.remove(artist);
-
-    res.send(artist);
-});
-
-app.get('/artist/:artistId/submissions', async (req: Request, res: Response) => {
-    if (req.params.artistId == null) {
-        res.status(400).send("artist ID not provided");
-        return;
-    }
-
-    var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({ where: { id: artistId } });
-
-    if (artist == null) {
-        res.status(404).send("artist not found");
-        return;
-    }
-    const submissions = await SubmissionRepo.findBy({ artist: artist });
-
-
-    res.send(submissions);
-});
-
-app.post('/artist', async (req: Request, res: Response) => {
-    const artist = new Artist();
-    var { name } = req.body;
-    if (name == null) {
-        res.status(400).send("name not provided");
-        return;
-    }
-    artist.name = name;
-    await ArtistRepo.save(artist);
-    res.send(artist);
-});
-
+// Submission endpoints
 
 app.post('/submission', uploadSubmissions.single("file"), async (req: Request, res: Response) => {
 
