@@ -6,12 +6,17 @@ import { Submission } from './entity/Submission';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { config } from './config';
-import { authenticateMiddleware, CustomRequest } from './middleware/Auth';
-import multer from 'multer';
+import multer, { FileFilterCallback } from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
 import sizeOf from 'image-size';
 import submissionPostValidation from './utils';
+
+
+const uploadsDir = path.join(__dirname, '../uploads/');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+}
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -23,15 +28,28 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Multer config
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/')
+    destination: function (req: Express.Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
+        cb(null, uploadsDir)
     },
-    filename: function (req, file, cb) {
+    filename: function (req: Express.Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
         // Guardar el archivo con un nombre temporal
         cb(null, Date.now() + path.extname(file.originalname))
     }
 })
-const upload = multer({ storage: storage });
+
+// Función de filtro de archivos
+const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+    // Verificar si el archivo es una imagen
+    if (file.mimetype.startsWith('image/')) {
+        // Aceptar el archivo
+        cb(null, true);
+    } else {
+        // Rechazar el archivo
+        cb(null, false);
+    }
+}
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 // Create express app
@@ -115,20 +133,21 @@ app.post('/artist', async (req: Request, res: Response) => {
 });
 
 
-app.post('/artist/:artistId/submission', upload.single("file"), async (req: Request, res: Response) => {
+app.post('/submission', upload.single("file"), async (req: Request, res: Response) => {
 
     var { title, description } = req.body;
     var file = req.file;
 
     if (!file) {
-        res.status(400).send("File not provided");
+        res.status(400).send("File not provided or not an image");
         return;
     }
 
 
+
+
     // Obtener las dimensiones de la imagen
     const dimensions = sizeOf(file.path);
-    console.log(dimensions.width, dimensions.height);
     const submission = new Submission();
     submission.title = title;
     submission.description = description;
@@ -150,6 +169,33 @@ app.post('/artist/:artistId/submission', upload.single("file"), async (req: Requ
     res.send(submission);
 });
 
+app.delete('/submission/:submissionId', async (req: Request, res: Response) => {
+    if (req.params.submissionId == null) {
+        res.status(400).send("submission ID not provided");
+        return;
+    }
+
+    var submissionId: number = parseInt(req.params.submissionId);
+    const submission = await SubmissionRepo.findOne({ where: { id: submissionId } });
+
+    if (submission == null) {
+        res.status(404).send("submission not found");
+        return;
+    }
+
+    await SubmissionRepo.remove(submission);
+
+    // Remove from uploads folder
+    /* const filePath = path.join(uploadsDir, submissionId + path.extname(submission.path));
+    fs.unlinkSync(filePath); */
+
+    res.send(submission);
+});
+
+app.get('/submissions', async (req: Request, res: Response) => {
+    const submissions = await SubmissionRepo.find();
+    res.send(submissions);
+});
 
 
 app.listen(port, () => {
