@@ -30,6 +30,9 @@ export class Submission {
     @ManyToOne(() => Artist, (artist) => artist.submissions)
     artist: Artist;
 
+    // Image format
+    @Column({ length: 10 })
+    format: string;
 
 
 
