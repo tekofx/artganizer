@@ -3,15 +3,13 @@ import "reflect-metadata";
 import { DataSource } from 'typeorm';
 import { Artist } from './entity/Artist';
 import { Submission } from './entity/Submission';
-import bcrypt from 'bcrypt';
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import { config } from './config';
 import multer, { FileFilterCallback } from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
 import sizeOf from 'image-size';
 import submissionPostValidation from './utils';
-
+import sharp from 'sharp';
 
 const submissionsDir = path.join(__dirname, '../uploads/submissions');
 const artistsPicsDir = path.join(__dirname, '../uploads/artistPics');
@@ -112,11 +110,20 @@ app.post('/artist', uploadArtistPics.single("file"), async (req: Request, res: R
         console.log(error);
     });
 
-    // Renombrar el archivo con el ID generado
+
+    // Convertir a JPG y Renombrar el archivo con el ID generado
     if (file) {
-        const tempPath = file.path;
-        const newPath = path.join('uploads/artistPics', id + path.extname(file.originalname));
-        fs.renameSync(tempPath, newPath);
+        sharp(file.path)
+            .jpeg()
+            .toFile(path.join(artistsPicsDir, id + ".jpg")).then(() => {
+                // Eliminar el archivo temporal
+                if (file?.path) {
+                    fs.unlinkSync(file.path);
+                }
+            }).catch((error) => {
+                console.log(error);
+            }
+            );
     }
 
     res.send(artist);
@@ -141,6 +148,32 @@ app.get('/artist/:artistId', async (req: Request, res: Response) => {
         res.status(404).send("artist not found");
         return;
     }
+
+    res.send(artist);
+});
+
+app.delete('/artist/:artistId', async (req: Request, res: Response) => {
+    if (req.params.artistId == null) {
+        res.status(400).send("artist ID not provided");
+        return;
+    }
+
+    var artistId: number = parseInt(req.params.artistId);
+    const artist = await ArtistRepo.findOne({ where: { id: artistId } });
+
+    if (artist == null) {
+        res.status(404).send("artist not found");
+        return;
+    }
+
+    // Remove from uploads folder
+    const filePath = path.join(artistsPicsDir, artistId + ".jpg");
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+    }
+
+    // Remove from database
+    await ArtistRepo.remove(artist);
 
     res.send(artist);
 });
