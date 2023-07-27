@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Link from '../src/Link';
 import ProTip from '../src/ProTip';
 import Copyright from '../src/Copyright';
-import RecentSubmissions from '../components/RecentSubmissions';
+import Gallery from '../components/Gallery';
 export default function Home() {
   return (
     <Container maxWidth={false}>
@@ -18,10 +18,7 @@ export default function Home() {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom>
-          Material UI - Next.js example in TypeScript
-        </Typography>
-        <RecentSubmissions />
+        <Gallery />
         <Link href="/about" color="secondary">
           Go to the about page
         </Link>
