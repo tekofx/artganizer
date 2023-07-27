@@ -13,7 +13,7 @@ import sharp from 'sharp';
 import { AppDataSource, ArtistRepo, SubmissionRepo } from './typeorm.config';
 import artist from './routes/artists';
 import submission from './routes/submissions';
-
+import cors from 'cors';
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
     console.log(process.env.NODE_ENV);
@@ -24,6 +24,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Create express app
 const app = express();
 app.use(express.json());
+app.use(cors());
 const port = 3001;
 
 
