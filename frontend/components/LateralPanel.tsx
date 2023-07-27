@@ -235,6 +235,7 @@ function LabelAccordion() {
 export default function LateralPanel() {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const router = useRouter()
 
     const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -255,37 +256,49 @@ export default function LateralPanel() {
         <Paper>
             <Grid container sx={{ p: 2 }}>
                 <Grid item lg={12}>
-                    <Tooltip title="Open settings">
-                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <MenuIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorElUser}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorElUser)}
-                        onClose={handleCloseUserMenu}
-                        color="white"
-                    >
-                        {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                <Typography textAlign="center">{setting}</Typography>
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <AddIcon />
-                    </IconButton>
+                    <Grid container justifyContent="space-between" alignItems="center">
+                        <Grid item>
+
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <MenuIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                            color="white"
+                        >
+                            {settings.map((setting) => (
+                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                    <Typography textAlign="center">{setting}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                        <Grid item>
+
+                            <Typography variant="h5" onClick={() => router.push("/")} sx={{ cursor: "pointer" }}>Artganizer</Typography>
+                        </Grid>
+                        <Grid item>
+
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <AddIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
 
                 </Grid>
                 <Grid item lg={12}>
