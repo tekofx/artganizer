@@ -47,7 +47,6 @@ function FolderAccordion() {
     const [showCreateFolder, setShowCreateFolder] = useState<boolean>(false);
 
     async function createFolder() {
-        console.log(newFolder);
         await axios.post("http://localhost:3001/folders", {
 
             name: newFolder,
@@ -86,7 +85,6 @@ function FolderAccordion() {
                 expandIcon={<ExpandMoreIcon onClick={() => setExpanded(!expanded)} />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
-                sx={{ flexDirection: "row-reverse", justifyContent: "space-between" }}
             >
                 <Stack direction="row" spacing={1} alignItems="center">
 
@@ -129,7 +127,7 @@ function FolderAccordion() {
                     )}
                 </Stack>
             </AccordionDetails>
-        </Accordion>
+        </Accordion >
     )
 }
 function LabelAccordion() {

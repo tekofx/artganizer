@@ -47,6 +47,23 @@ const theme = createTheme({
     fontFamily: roboto.style.fontFamily,
 
   },
+  components: {
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#1E1E1E',
+          color: '#fff',
+          flexDirection: "row-reverse",
+          justifyContent: "space-between",
+          height: "10",
+          '&.Mui-expanded': {
+            backgroundColor: '#1E1E1E',
+            height: 10,
+          },
+        },
+      },
+    },
+  },
 });
 
 
