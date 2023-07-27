@@ -17,7 +17,8 @@ router.post('/', async (req: Request, res: Response) => {
     const { name } = req.body;
     const label = LabelRepo.create({ name });
     await LabelRepo.save(label);
-    res.send(label);
+    var labels = await LabelRepo.find();
+    res.send(labels);
 });
 
 export default router;
