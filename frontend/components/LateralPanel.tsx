@@ -7,7 +7,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/router'
 import axios from "axios";
-
+import Label from "../interfaces/Label";
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -34,11 +34,6 @@ interface Page {
     icon: JSX.Element;
 }
 
-interface Label {
-    id: number;
-    name: string;
-    color: string;
-}
 
 interface Folder {
     id: number;
