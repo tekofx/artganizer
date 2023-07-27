@@ -13,6 +13,7 @@ import sharp from 'sharp';
 import { AppDataSource, ArtistRepo, SubmissionRepo } from './typeorm.config';
 import artist from './routes/artists';
 import submission from './routes/submissions';
+import folders from './routes/folders';
 import cors from 'cors';
 
 const port = 3001;
@@ -36,7 +37,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use("/artists", artist);
 app.use("/submissions", submission);
-
+app.use("/folders", folders);
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at ${process.env.URL}`);

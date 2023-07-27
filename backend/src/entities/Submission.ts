@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, PrimaryColumn, ManyToOne, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, PrimaryColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
 import { Artist } from "./Artist";
+import { Folder } from "./Folder";
 
 @Entity()
 export class Submission {
@@ -28,15 +29,13 @@ export class Submission {
     @ManyToOne(() => Artist, (artist) => artist.submissions)
     artist: Artist;
 
+    @ManyToMany(() => Folder)
+    @JoinTable()
+    folders: Folder[];
+
     // Image format
     @Column({ length: 10 })
     format: string;
 
     image: string;
-
-
-
-
-
-
 }
