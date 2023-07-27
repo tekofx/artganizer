@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FolderIcon from '@mui/icons-material/Folder';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useRouter } from 'next/router'
 import axios from "axios";
 
 
@@ -34,11 +35,13 @@ interface Page {
 }
 
 interface Label {
+    id: number;
     name: string;
     color: string;
 }
 
 interface Folder {
+    id: number;
     name: string;
     description: string;
 }
@@ -139,7 +142,7 @@ function LabelAccordion() {
     const [expanded, setExpanded] = useState<boolean>(true);
     const [newLabel, setNewLabel] = useState<string>("");
     const [showCreateLabel, setShowCreateLabel] = useState<boolean>(false);
-
+    const router = useRouter()
 
 
     async function createLabel() {
@@ -159,6 +162,11 @@ function LabelAccordion() {
             }
             );
 
+    }
+
+    const navigateToLabel = (label: Label) => {
+        console.log(label);
+        router.push(`/label/${label.id}`);
     }
 
     useEffect(() => {
@@ -195,7 +203,7 @@ function LabelAccordion() {
             <AccordionDetails>
                 <Stack direction="column">
                     {labels.map((label) => (
-                        <MenuItem>
+                        <MenuItem onClick={() => navigateToLabel(label)}>
                             <Stack direction="row" spacing={1}>
                                 <Icon sx={{ color: label.color }}>
                                     <LocalOfferIcon />
@@ -206,7 +214,7 @@ function LabelAccordion() {
                         </MenuItem>
                     ))}
                     {showCreateLabel && (
-                        <MenuItem>
+                        <MenuItem >
                             <Stack direction="row">
 
                                 <TextField
