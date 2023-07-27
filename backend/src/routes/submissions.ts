@@ -46,14 +46,37 @@ const uploadSubmissions = multer({ storage: submissionsStorage, fileFilter: file
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-    const submissions = await SubmissionRepo.find();
+    var { labels, folders, characters, artist } = req.query;
+
+    const queryBuilder = SubmissionRepo.createQueryBuilder('submission');
+
+    if (labels) {
+
+        queryBuilder.innerJoinAndSelect('submission.labels', 'label', 'label.id IN (:...labels)', { labels });
+    }
+
+    if (folders) {
+        queryBuilder.innerJoinAndSelect('submission.folders', 'folder', 'folder.id IN (:...folders)', { folders });
+    }
+
+    if (characters) {
+        queryBuilder.innerJoinAndSelect('submission.characters', 'character', 'character.id IN (:...characters)', { characters });
+    }
+
+    if (artist) {
+        queryBuilder.andWhere('submission.artistId = :artist', { artist });
+    }
+
+    const submissions = await queryBuilder.getMany();
 
     // Add image URL
     submissions.forEach((submission) => {
-        submission.image = process.env.URL + "/submissions/uploads/" + submission.id;
+        submission.image = process.env.URL + '/submissions/uploads/' + submission.id;
     });
+
     res.send(submissions);
 });
+
 
 router.get('/uploads/:submissionId', async (req: Request, res: Response) => {
     if (req.params.submissionId == null) {
