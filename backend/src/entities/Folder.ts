@@ -12,7 +12,5 @@ export class Folder {
     @Column({ length: 200, default: "" })
     description: string;
 
-    @OneToMany(() => Submission, submission => submission.artist)
-    submissions: Submission[];
 
 }
