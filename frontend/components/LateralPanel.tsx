@@ -303,15 +303,7 @@ export default function LateralPanel() {
                     <MenuList>
                         <LabelAccordion />
                         <FolderAccordion />
-                        <Divider />
-                        <MenuItem>
-                            <Stack direction="row" >
-                                <Typography>Carpetas</Typography>
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <AddIcon />
-                                </IconButton>
-                            </Stack>
-                        </MenuItem>
+
                     </MenuList>
 
                 </Grid>
