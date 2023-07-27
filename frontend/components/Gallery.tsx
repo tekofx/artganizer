@@ -6,19 +6,7 @@ import Theme from "../src/theme";
 import LaunchIcon from '@mui/icons-material/Launch';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from "axios";
-import Image from "next/image";
-interface Image {
-    date: Date,
-    description: string,
-    format: string,
-    height: number,
-    id: number,
-    image: string,
-    rating: number,
-    title: string,
-    width: number,
-}
-
+import Image from "../interfaces/Image";
 
 
 export default function Gallery() {
