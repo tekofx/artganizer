@@ -48,10 +48,6 @@ function FolderAccordion() {
     const [newFolder, setNewFolder] = useState<string>("");
     const [showCreateFolder, setShowCreateFolder] = useState<boolean>(false);
 
-    const onClick = () => {
-        setExpanded(!expanded);
-    }
-
     async function createFolder() {
         console.log(newFolder);
         await axios.post("http://localhost:3001/folders", {
@@ -89,14 +85,14 @@ function FolderAccordion() {
     return (
         <Accordion expanded={expanded}>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon onClick={onClick} />}
+                expandIcon={<ExpandMoreIcon onClick={() => setExpanded(!expanded)} />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 sx={{ flexDirection: "row-reverse", justifyContent: "space-between" }}
             >
                 <Stack direction="row" spacing={1} alignItems="center">
 
-                    <Typography onClick={onClick}>Folders</Typography>
+                    <Typography onClick={() => setExpanded(!expanded)}>Folders</Typography>
                     <IconButton onClick={() => setShowCreateFolder(true)}>
                         <AddIcon />
                     </IconButton>
@@ -141,9 +137,28 @@ function FolderAccordion() {
 function LabelAccordion() {
     const [labels, setLabels] = useState<Label[]>([]);
     const [expanded, setExpanded] = useState<boolean>(true);
+    const [newLabel, setNewLabel] = useState<string>("");
+    const [showCreateLabel, setShowCreateLabel] = useState<boolean>(false);
 
-    const onClick = () => {
-        setExpanded(!expanded);
+
+
+    async function createLabel() {
+        await axios.post("http://localhost:3001/labels", {
+
+            name: newLabel,
+
+        })
+            .then((response) => {
+                setLabels(response.data);
+                setNewLabel("");
+
+            }
+            )
+            .catch((error) => {
+                console.log(error);
+            }
+            );
+
     }
 
     useEffect(() => {
@@ -164,12 +179,18 @@ function LabelAccordion() {
     return (
         <Accordion expanded={expanded}>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon onClick={() => setExpanded(!expanded)} />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
-                onClick={onClick}
+                sx={{ flexDirection: "row-reverse", justifyContent: "space-between" }}
             >
-                <Typography>Labels</Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+
+                    <Typography onClick={() => setExpanded(!expanded)}>Labels</Typography>
+                    <IconButton onClick={() => setShowCreateLabel(true)}>
+                        <AddIcon />
+                    </IconButton>
+                </Stack>
             </AccordionSummary>
             <AccordionDetails>
                 <Stack direction="column">
@@ -184,6 +205,24 @@ function LabelAccordion() {
                             </Stack>
                         </MenuItem>
                     ))}
+                    {showCreateLabel && (
+                        <MenuItem>
+                            <Stack direction="row">
+
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Label name"
+                                    variant="outlined"
+                                    fullWidth={false}
+                                    value={newLabel}
+                                    onChange={(e) => setNewLabel(e.target.value)}
+                                />
+                                <IconButton onClick={createLabel} >
+                                    <AddIcon />
+                                </IconButton>
+                            </Stack>
+                        </MenuItem>
+                    )}
                 </Stack>
             </AccordionDetails>
         </Accordion>
