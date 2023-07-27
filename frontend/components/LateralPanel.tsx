@@ -99,7 +99,7 @@ function FolderAccordion() {
             <AccordionDetails>
                 <Stack direction="column">
                     {folders.map((folder) => (
-                        <MenuItem>
+                        <MenuItem key={folder.id}>
                             <Stack direction="row" spacing={1}>
                                 <Icon >
                                     <FolderIcon />
@@ -198,7 +198,7 @@ function LabelAccordion() {
             <AccordionDetails>
                 <Stack direction="column">
                     {labels.map((label) => (
-                        <MenuItem onClick={() => navigateToLabel(label)}>
+                        <MenuItem key={label.id} onClick={() => navigateToLabel(label)}>
                             <Stack direction="row" spacing={1}>
                                 <Icon sx={{ color: label.color }}>
                                     <LocalOfferIcon />
