@@ -96,12 +96,11 @@ router.post('/', uploadSubmissions.single("file"), async (req: Request, res: Res
     // Obtener las dimensiones de la imagen
     const dimensions = sizeOf(file.path);
 
-    const submission = new Submission();
-    submission.title = title;
-    submission.description = description;
-    submission.height = dimensions.height || 0;
-    submission.width = dimensions.width || 0;
-    submission.format = dimensions.type || "";
+    const submission = SubmissionRepo.create(
+        {
+            title: title, description: description, width: dimensions.width, height: dimensions.height, format: dimensions.type
+        }
+    );
 
     var id = await SubmissionRepo.save(submission).then((submission) => {
         return submission.id;
