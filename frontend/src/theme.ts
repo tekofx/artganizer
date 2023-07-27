@@ -9,6 +9,22 @@ export const roboto = Roboto({
   fallback: ['Helvetica', 'Arial', 'sans-serif'],
 });
 
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    image_title: React.CSSProperties;
+  }
+
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    image_title?: React.CSSProperties;
+  }
+}
+// Update the Typography's variant prop options
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    image_title: true;
+  }
+}
 // Create a theme instance.
 const theme = createTheme({
   palette: {
@@ -29,6 +45,7 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
+
   },
 });
 
@@ -43,6 +60,16 @@ theme.typography.h1 = {
   },
   [theme.breakpoints.up('md')]: {
     fontSize: '4rem',
+  },
+};
+
+theme.typography.image_title = {
+  fontSize: '1rem',
+  fontWeight: 500,
+  letterSpacing: '-0.05rem',
+
+  [theme.breakpoints.up('md')]: {
+    fontSize: '1.2rem',
   },
 };
 export default theme;

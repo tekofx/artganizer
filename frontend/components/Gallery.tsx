@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Grid, Typography, Paper, Stack, Dialog, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { Skeleton } from "@mui/material";
-import Theme from "../src/theme";
-import LaunchIcon from '@mui/icons-material/Launch';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from "axios";
 import Image from "../interfaces/Image";
 
@@ -25,7 +22,6 @@ export default function Gallery() {
         setOpen(true);
     };
 
-
     useEffect(() => {
         setLoading(true);
         axios.get("http://localhost:3001/submissions", {
@@ -34,7 +30,6 @@ export default function Gallery() {
                 'Content-Type': 'application/json',
             }
         })
-
             .then((response) => {
                 setLoading(false);
                 setImages(response.data);
@@ -73,7 +68,13 @@ export default function Gallery() {
                             transition={{ type: "spring", stiffness: 400, damping: 20 }}
                             onClick={() => onImageClick(image)}
                         >
-                            <img src={image.image} className="pic" />
+                            <Stack direction="column" spacing={1} justifyContent="center" alignItems="center">
+
+                                <img src={image.image} className="pic" />
+                                <Typography variant="image_title">{image.title}</Typography>
+                                <Typography>{image.width}x{image.width}</Typography>
+
+                            </Stack>
 
                         </motion.div>
                     ))}
