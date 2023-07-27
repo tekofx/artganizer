@@ -2,6 +2,8 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn
 import { Artist } from "./Artist";
 import { Folder } from "./Folder";
 import { Label } from "./Label";
+import { Character } from "./Character";
+
 
 @Entity()
 export class Submission {
@@ -37,6 +39,10 @@ export class Submission {
     @ManyToMany(() => Label)
     @JoinTable()
     labels: Label[];
+
+    @ManyToMany(() => Character)
+    @JoinTable()
+    characters: Character[];
 
     // Image format
     @Column({ length: 10 })
