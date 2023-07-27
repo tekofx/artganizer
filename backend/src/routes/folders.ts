@@ -17,7 +17,8 @@ router.post('/', async (req: Request, res: Response) => {
     const { name, description } = req.body;
     const folder = FolderRepo.create({ name, description });
     await FolderRepo.save(folder);
-    res.send(folder);
+    var folders = await FolderRepo.find();
+    res.send(folders);
 });
 
 export default router;
