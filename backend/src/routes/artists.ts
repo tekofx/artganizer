@@ -45,7 +45,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 router.post('/', uploadArtistPics.single("file"), async (req: Request, res: Response) => {
-    const artist = new Artist();
+
     var { name, description, socials } = req.body;
     var file = req.file;
     if (name == null) {
@@ -53,18 +53,7 @@ router.post('/', uploadArtistPics.single("file"), async (req: Request, res: Resp
         return;
     }
 
-    artist.name = name;
-
-    switch (true) {
-
-        case description != null:
-            artist.description = description;
-        case socials != null:
-            artist.socials = socials;
-            break;
-        default:
-            break;
-    }
+    const artist = ArtistRepo.create({ name, description, socials });
 
     var id = await ArtistRepo.save(artist).then((artist) => {
         return artist.id;
