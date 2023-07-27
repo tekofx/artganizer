@@ -12,6 +12,13 @@ router.get('/', async (req: Request, res: Response) => {
     res.send(labels);
 });
 
+router.get('/:id', async (req: Request, res: Response) => {
+    var id = parseInt(req.params.id);
+    const label = await LabelRepo.findOne({ where: { id: id } });
+    res.send(label);
+});
+
+
 
 router.post('/', async (req: Request, res: Response) => {
     const { name } = req.body;
