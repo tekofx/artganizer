@@ -44,7 +44,7 @@ export default function Gallery(props: GalleryProps) {
 
                             <img src={image.image} className="pic" />
                             <Typography variant="image_title">{image.title}</Typography>
-                            <Typography>{image.width}x{image.width}</Typography>
+                            <Typography>{image.width}x{image.height}</Typography>
 
                         </Stack>
 
