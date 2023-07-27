@@ -7,7 +7,7 @@ import multer, { FileFilterCallback } from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
 import sharp from 'sharp';
-import { ArtistRepo, SubmissionRepo } from '../typeorm.config';
+import { ArtistRepo, SubmissionRepo, LabelRepo, FolderRepo, CharacterRepo } from '../typeorm.config';
 import sizeOf from 'image-size';
 
 
@@ -79,12 +79,9 @@ router.get('/uploads/:submissionId', async (req: Request, res: Response) => {
     return res.sendFile(filePath);
 });
 
-
-
-
 router.post('/', uploadSubmissions.single("file"), async (req: Request, res: Response) => {
 
-    var { title, description } = req.body;
+    var { title, description, rating, artist, folders, labels, characters } = req.body;
     var file = req.file;
 
     if (!file) {
@@ -98,9 +95,58 @@ router.post('/', uploadSubmissions.single("file"), async (req: Request, res: Res
 
     const submission = SubmissionRepo.create(
         {
-            title: title, description: description, width: dimensions.width, height: dimensions.height, format: dimensions.type
+            title: title, description: description, rating: rating,
+            width: dimensions.width, height: dimensions.height,
+            format: dimensions.type
         }
     );
+    if (artist) {
+        var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
+        if (artistObj) {
+            submission.artist = artistObj;
+        }
+
+    }
+
+    if (folders) {
+        if (!Array.isArray(folders)) {
+            folders = [folders];
+        }
+        for (var i = 0; i < folders.length; i++) {
+            var folderObj = await FolderRepo.findOne({ where: { id: folders[i] } });
+            if (folderObj) {
+                folders[i] = folderObj;
+            }
+        }
+        submission.folders = folders;
+    }
+
+    if (labels) {
+        if (!Array.isArray(labels)) {
+            labels = [labels];
+        }
+        for (var i = 0; i < labels.length; i++) {
+            var labelObj = await LabelRepo.findOne({ where: { id: labels[i] } });
+            if (labelObj) {
+                labels[i] = labelObj;
+            }
+        }
+        submission.labels = labels;
+    }
+
+    if (characters) {
+        if (!Array.isArray(characters)) {
+            characters = [characters];
+        }
+        for (var i = 0; i < characters.length; i++) {
+            var characterObj = await CharacterRepo.findOne({ where: { id: characters[i] } });
+            console.log(characterObj);
+            if (characterObj) {
+                characters[i] = characterObj;
+            }
+        }
+        submission.characters = characters;
+    }
 
     var id = await SubmissionRepo.save(submission).then((submission) => {
         return submission.id;
@@ -155,23 +201,21 @@ router.put('/:submissionId', async (req: Request, res: Response) => {
         return;
     }
 
-    var { title, description, rating, artist } = req.body;
+    var { title, description, rating, artist, labels } = req.body;
+    await SubmissionRepo.update(submission, { title: title, description: description, rating: rating, artist: artist });
 
-    switch (true) {
-        case title != null:
-            submission.title = title;
-        case description != null:
-            submission.description = description;
-        case rating != null:
-            submission.rating = rating;
-        case artist != null:
-            submission.artist = artist;
-            break;
-        default:
-            break;
+    if (labels) {
+        for (var i = 0; i < labels.length; i++) {
+            var labelObj = await LabelRepo.findOne({ where: { id: labels[i] } });
+            if (labelObj) {
+                console.log(labelObj);
+                labels[i] = labelObj;
+            }
+        }
+        submission.labels = labels;
+        await SubmissionRepo.save(submission);
     }
 
-    await SubmissionRepo.save(submission);
     res.send(submission);
 });
 
