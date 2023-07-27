@@ -25,8 +25,14 @@ export default function Gallery(props: GalleryProps) {
 
 
     return (
-        <Paper >
+        <Paper sx={{ minHeight: '100vh' }}>
             <div className="gallery">
+                {props.submissions.length == 0 && <Stack direction="column" spacing={1} justifyContent="center" alignItems="center">
+
+                    <Typography variant="h1">No submissions yet</Typography>
+
+                </Stack>}
+
 
                 {props.submissions.map((image) => (
                     <motion.div className="pics"
