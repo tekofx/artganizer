@@ -6,7 +6,7 @@
     -webkit-column-width: 33%;
     -moz-column-width: 33%; */
   
-    columns: 8;
+    columns: 3;
     /* column-width: 33%; */
     padding: 0 12px;
   }
@@ -40,7 +40,7 @@
     .gallery {
       /* -webkit-column-count: 2;
       -moz-column-count: 2; */
-      column-count: 5;
+      column-count: 2;
     }
   }
   
@@ -52,6 +52,6 @@
       -webkit-column-width: 100%;
       -moz-column-width: 100%;
       column-width: 100%; */
-      columns: 3;
+      columns: 1;
     }
   }
