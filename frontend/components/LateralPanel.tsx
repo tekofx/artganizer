@@ -1,9 +1,10 @@
-import { Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList, Divider, Accordion, AccordionSummary, AccordionDetails, Icon } from "@mui/material"
+import { Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList, Divider, Accordion, AccordionSummary, AccordionDetails, Icon, TextField } from "@mui/material"
 import { useState, MouseEvent, useEffect } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import FolderIcon from '@mui/icons-material/Folder';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from "axios";
 
 
@@ -44,11 +45,32 @@ interface Folder {
 function FolderAccordion() {
     const [folders, setFolders] = useState<Folder[]>([]);
     const [expanded, setExpanded] = useState<boolean>(true);
+    const [newFolder, setNewFolder] = useState<string>("");
+    const [showCreateFolder, setShowCreateFolder] = useState<boolean>(false);
 
     const onClick = () => {
         setExpanded(!expanded);
     }
 
+    async function createFolder() {
+        console.log(newFolder);
+        await axios.post("http://localhost:3001/folders", {
+
+            name: newFolder,
+
+        })
+            .then((response) => {
+                setFolders(response.data);
+                setNewFolder("");
+
+            }
+            )
+            .catch((error) => {
+                console.log(error);
+            }
+            );
+
+    }
     useEffect(() => {
         axios.get("http://localhost:3001/folders", {
             headers: {
@@ -67,12 +89,18 @@ function FolderAccordion() {
     return (
         <Accordion expanded={expanded}>
             <AccordionSummary
-                expandIcon={<AddIcon />}
+                expandIcon={<ExpandMoreIcon onClick={onClick} />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
-                onClick={onClick}
+                sx={{ flexDirection: "row-reverse", justifyContent: "space-between" }}
             >
-                <Typography>Folders</Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+
+                    <Typography onClick={onClick}>Folders</Typography>
+                    <IconButton onClick={() => setShowCreateFolder(true)}>
+                        <AddIcon />
+                    </IconButton>
+                </Stack>
             </AccordionSummary>
             <AccordionDetails>
                 <Stack direction="column">
@@ -87,6 +115,24 @@ function FolderAccordion() {
                             </Stack>
                         </MenuItem>
                     ))}
+                    {showCreateFolder && (
+                        <MenuItem>
+                            <Stack direction="row">
+
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Folder name"
+                                    variant="outlined"
+                                    fullWidth={false}
+                                    value={newFolder}
+                                    onChange={(e) => setNewFolder(e.target.value)}
+                                />
+                                <IconButton onClick={createFolder} >
+                                    <AddIcon />
+                                </IconButton>
+                            </Stack>
+                        </MenuItem>
+                    )}
                 </Stack>
             </AccordionDetails>
         </Accordion>
@@ -118,7 +164,7 @@ function LabelAccordion() {
     return (
         <Accordion expanded={expanded}>
             <AccordionSummary
-                expandIcon={<AddIcon />}
+                expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 onClick={onClick}
