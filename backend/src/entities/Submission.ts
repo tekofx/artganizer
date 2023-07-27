@@ -11,7 +11,7 @@ export class Submission {
     /* @OneToMany(() => User, user => user.favorites) */
     id: number;
 
-    @Column({ length: 50 })
+    @Column({ length: 50, default: "Untitled" })
     title: string;
 
     @Column({ length: 500 })
