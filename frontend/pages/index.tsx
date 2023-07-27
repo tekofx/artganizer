@@ -39,6 +39,9 @@ export default function Home() {
           alignItems: 'center',
         }}
       >
+        <Typography variant="h4" component="h1" gutterBottom>
+          Welcome to the gallery
+        </Typography>
         <Gallery submissions={submissions} />
         <Link href="/about" color="secondary">
           Go to the about page
