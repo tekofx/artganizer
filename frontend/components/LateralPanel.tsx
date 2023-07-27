@@ -37,8 +37,69 @@ interface Label {
     color: string;
 }
 
+interface Folder {
+    name: string;
+    description: string;
+}
+function FolderAccordion() {
+    const [folders, setFolders] = useState<Folder[]>([]);
+    const [expanded, setExpanded] = useState<boolean>(true);
+
+    const onClick = () => {
+        setExpanded(!expanded);
+    }
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/folders", {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => {
+                setFolders(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    return (
+        <Accordion expanded={expanded}>
+            <AccordionSummary
+                expandIcon={<AddIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={onClick}
+            >
+                <Typography>Folders</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <Stack direction="column">
+                    {folders.map((folder) => (
+                        <MenuItem>
+                            <Stack direction="row" spacing={1}>
+                                <Icon >
+                                    <FolderIcon />
+                                </Icon>
+
+                                <Typography>{folder.name}</Typography>
+                            </Stack>
+                        </MenuItem>
+                    ))}
+                </Stack>
+            </AccordionDetails>
+        </Accordion>
+    )
+}
 function LabelAccordion() {
     const [labels, setLabels] = useState<Label[]>([]);
+    const [expanded, setExpanded] = useState<boolean>(true);
+
+    const onClick = () => {
+        setExpanded(!expanded);
+    }
+
     useEffect(() => {
         axios.get("http://localhost:3001/labels", {
             headers: {
@@ -55,11 +116,12 @@ function LabelAccordion() {
     }, []);
 
     return (
-        <Accordion>
+        <Accordion expanded={expanded}>
             <AccordionSummary
                 expandIcon={<AddIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
+                onClick={onClick}
             >
                 <Typography>Labels</Typography>
             </AccordionSummary>
@@ -141,6 +203,7 @@ export default function LateralPanel() {
                 <Grid item lg={12}>
                     <MenuList>
                         <LabelAccordion />
+                        <FolderAccordion />
                         <Divider />
                         <MenuItem>
                             <Stack direction="row" >
