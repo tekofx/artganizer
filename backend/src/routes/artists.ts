@@ -38,7 +38,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     // Add image URL
     artists.forEach((artist) => {
-        artist.image = "/api/artists/uploads/" + artist.id;
+        artist.image = process.env.URL + "/artists/uploads/" + artist.id;
     }
     );
     res.send(artists);

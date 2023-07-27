@@ -50,7 +50,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     // Add image URL
     submissions.forEach((submission) => {
-        submission.image = "/api/submissions/uploads/" + submission.id;
+        submission.image = process.env.URL + "/submissions/uploads/" + submission.id;
     });
     res.send(submissions);
 });

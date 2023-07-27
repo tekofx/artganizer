@@ -1,6 +1,6 @@
 import "dotenv/config";
 interface Config {
-    JWT_SECRET: string;
+    URL: string;
 }
 
 let config: Config;
@@ -13,7 +13,7 @@ try {
 } catch (error) {
     console.log("Using environment variables");
     config = {
-        JWT_SECRET: process.env.JWT_SECRET || "",
+        URL: process.env.URL || "localhost:3001",
     };
 }
 
