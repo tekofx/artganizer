@@ -1,12 +1,15 @@
-import { Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList, Divider } from "@mui/material"
-import { useState, MouseEvent } from "react";
+import { Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList, Divider, Accordion, AccordionSummary, AccordionDetails, Icon } from "@mui/material"
+import { useState, MouseEvent, useEffect } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import FolderIcon from '@mui/icons-material/Folder';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import axios from "axios";
+
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const pages = [
+const defaultPages = [
     {
         name: 'Todo',
         icon: <FolderIcon />
@@ -24,7 +27,60 @@ const pages = [
     },
 ]
 
+interface Page {
+    name: string;
+    icon: JSX.Element;
+}
 
+interface Label {
+    name: string;
+    color: string;
+}
+
+function LabelAccordion() {
+    const [labels, setLabels] = useState<Label[]>([]);
+    useEffect(() => {
+        axios.get("http://localhost:3001/labels", {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => {
+                setLabels(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    return (
+        <Accordion>
+            <AccordionSummary
+                expandIcon={<AddIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography>Labels</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <Stack direction="column">
+                    {labels.map((label) => (
+                        <MenuItem>
+                            <Stack direction="row" spacing={1}>
+                                <Icon sx={{ color: label.color }}>
+                                    <LocalOfferIcon />
+                                </Icon>
+
+                                <Typography>{label.name}</Typography>
+                            </Stack>
+                        </MenuItem>
+                    ))}
+                </Stack>
+            </AccordionDetails>
+        </Accordion>
+    )
+}
 
 export default function LateralPanel() {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -44,6 +100,7 @@ export default function LateralPanel() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
     return (
         <Paper>
             <Grid container sx={{ p: 2 }}>
@@ -83,15 +140,10 @@ export default function LateralPanel() {
                 </Grid>
                 <Grid item lg={12}>
                     <MenuList>
-                        {pages.map((page) => (
-                            <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                                {page.icon}
-                                <Typography textAlign="center">{page.name}</Typography>
-                            </MenuItem>
-                        ))}
+                        <LabelAccordion />
                         <Divider />
                         <MenuItem>
-                            <Stack direction="row">
+                            <Stack direction="row" >
                                 <Typography>Carpetas</Typography>
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                     <AddIcon />
