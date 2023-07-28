@@ -2,7 +2,7 @@ import {
     Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList,
     Divider, Accordion, AccordionSummary, AccordionDetails, Icon, TextField, Dialog, Button
 } from "@mui/material"
-import { useState, MouseEvent, useEffect } from "react";
+import { useState, MouseEvent, useEffect, useContext } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -13,21 +13,13 @@ import ClearIcon from '@mui/icons-material/Clear';
 import PaletteIcon from '@mui/icons-material/Palette';
 import { useRouter } from 'next/router'
 import axios from "axios";
+import { DataContext } from "../pages/_app";
 import Label from "../interfaces/Label";
 import { TwitterPicker } from 'react-color';
+import { Folder } from "../interfaces/Folder";
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-interface Page {
-    name: string;
-    icon: JSX.Element;
-}
 
-
-interface Folder {
-    id: number;
-    name: string;
-    description: string;
-}
 function FolderAccordion() {
     const [folders, setFolders] = useState<Folder[]>([]);
     const [expanded, setExpanded] = useState<boolean>(true);
@@ -46,11 +38,11 @@ function FolderAccordion() {
 
     async function createFolder() {
         await axios.post("http://localhost:3001/folders", {
-
             name: newFolder,
-
         }).then((response) => {
             setFolders(response.data);
+            data.folders = response.data;
+            setData(data);
             setNewFolder("");
 
         }).catch((error) => {
@@ -68,11 +60,14 @@ function FolderAccordion() {
         })
             .then((response) => {
                 setFolders(response.data);
+
             })
             .catch((error) => {
                 console.log(error);
             });
     }, []);
+
+    const { data, setData } = useContext(DataContext);
 
     return (
         <Accordion expanded={expanded}>
@@ -91,7 +86,7 @@ function FolderAccordion() {
             </AccordionSummary>
             <AccordionDetails>
                 <Stack direction="column">
-                    {folders.map((folder) => (
+                    {data.folders.map((folder) => (
                         <MenuItem key={folder.id}>
                             <Stack direction="row" spacing={1}>
                                 <Icon >
@@ -136,6 +131,7 @@ function LabelAccordion() {
     const [colorSelect, setColorSelect] = useState(false);
     const [color, setColor] = useState<string>("#ffffff");
     const [textFieldError, setTextFieldError] = useState<boolean>(false);
+    const { data, setData } = useContext(DataContext);
 
     const toggleColorSelect = () => {
         setColorSelect(!colorSelect);
@@ -215,7 +211,7 @@ function LabelAccordion() {
             </AccordionSummary>
             <AccordionDetails>
                 <Stack direction="column">
-                    {labels.map((label) => (
+                    {data.labels.map((label) => (
                         <MenuItem key={label.id} onClick={() => navigateToLabel(label)}>
                             <Stack direction="row" spacing={1}>
                                 <Icon sx={{ color: label.color }}>

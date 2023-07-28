@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -7,10 +7,12 @@ import axios from 'axios';
 import Image from '../interfaces/Image';
 import Gallery from '../components/Gallery';
 import Submission from '../interfaces/Submission';
+import { DataContext } from "../pages/_app";
 
 export default function Home() {
 
   const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const { data, setData } = useContext(DataContext);
 
   useEffect(() => {
 
@@ -46,6 +48,12 @@ export default function Home() {
         <Link href="/about" color="secondary">
           Go to the about page
         </Link>
+        {
+          data.labels.map((label) => {
+            return <Typography variant="h4" component="h1" gutterBottom>{label.name}</Typography>
+          }
+          )
+        }
       </Box>
     </Container>
   );

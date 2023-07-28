@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { Icon, IconButton, Paper, Stack, Typography, Grid, Dialog, DialogTitle, TextField, DialogContent, Button } from '@mui/material'
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import EditIcon from '@mui/icons-material/Edit';
@@ -11,6 +11,8 @@ import Gallery from '../../components/Gallery';
 import Submission from '../../interfaces/Submission';
 import { TwitterPicker } from 'react-color';
 
+import { DataContext } from "../_app";
+import { parse } from 'path';
 
 export default function Page() {
     const [label, setLabel] = useState<Label>();
@@ -19,6 +21,8 @@ export default function Page() {
     const [color, setColor] = useState('#fff');
     const [textFieldError, setTextFieldError] = useState<boolean>(false);
     const [newLabel, setNewLabel] = useState<string>("New Name");
+    const { data, setData } = useContext(DataContext);
+
 
     const router = useRouter()
 
