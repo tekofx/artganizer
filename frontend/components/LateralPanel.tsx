@@ -21,7 +21,6 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 
 function FolderAccordion() {
-    const [folders, setFolders] = useState<Folder[]>([]);
     const [expanded, setExpanded] = useState<boolean>(true);
     const [newFolder, setNewFolder] = useState<string>("Folder");
     const [showCreateFolder, setShowCreateFolder] = useState<boolean>(false);
@@ -40,7 +39,6 @@ function FolderAccordion() {
         await axios.post("http://localhost:3001/folders", {
             name: newFolder,
         }).then((response) => {
-            setFolders(response.data);
             data.folders = response.data;
             setData(data);
             setNewFolder("");
@@ -49,23 +47,7 @@ function FolderAccordion() {
             console.log(error);
         });
         setShowCreateFolder(false);
-
     }
-    useEffect(() => {
-        axios.get("http://localhost:3001/folders", {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => {
-                setFolders(response.data);
-
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
 
     const { data, setData } = useContext(DataContext);
 
@@ -123,7 +105,6 @@ function FolderAccordion() {
     )
 }
 function LabelAccordion() {
-    const [labels, setLabels] = useState<Label[]>([]);
     const [expanded, setExpanded] = useState<boolean>(true);
     const [newLabel, setNewLabel] = useState<string>("Label");
     const [showCreateLabel, setShowCreateLabel] = useState<boolean>(false);
@@ -157,12 +138,11 @@ function LabelAccordion() {
         }
 
         await axios.post("http://localhost:3001/labels", {
-
             name: newLabel,
             color: color
-
         }).then((response) => {
-            setLabels(response.data);
+            data.labels = response.data;
+            setData(data);
             setNewLabel("");
 
         }).catch((error) => {
@@ -178,20 +158,6 @@ function LabelAccordion() {
         router.push(`/label/${label.id}`);
     }
 
-    useEffect(() => {
-        axios.get("http://localhost:3001/labels", {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => {
-                setLabels(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
 
     return (
         <Accordion expanded={expanded}>
