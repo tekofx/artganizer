@@ -16,10 +16,12 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@types/react-color": "^3.0.6",
     "axios": "^1.4.0",
     "framer-motion": "^10.12.22",
     "next": "latest",
     "react": "latest",
+    "react-color": "^2.19.3",
     "react-dom": "latest"
   },
   "devDependencies": {
