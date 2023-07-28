@@ -227,32 +227,11 @@ function LabelAccordion() {
                         </MenuItem>
                     ))}
                     {showCreateLabel && (
-                        <MenuItem >
+                        <>
                             <Stack direction="row">
                                 <IconButton onClick={toggleColorSelect}  >
                                     <PaletteIcon sx={{ color: color }} />
                                 </IconButton>
-
-                                <Dialog open={colorSelect} onClose={toggleColorSelect} maxWidth="lg" PaperProps={{
-                                    style: {
-                                        backgroundColor: 'transparent',
-                                        backgroundImage: "unset",
-                                        boxShadow: 'none',
-                                    },
-                                }}>
-                                    <TwitterPicker onChange={handleColorChange} color={color} />
-                                    <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
-                                        <Button variant="contained" startIcon={<CheckIcon />} onClick={toggleColorSelect} >
-                                            Ok
-                                        </Button>
-                                        <Button variant="contained" startIcon={<ClearIcon />} onClick={resetColor}>
-                                            Cancel
-                                        </Button>
-                                    </Stack>
-                                </Dialog>
-
-
-
 
                                 <TextField
                                     id="outlined-basic"
@@ -266,7 +245,8 @@ function LabelAccordion() {
                                     <AddIcon />
                                 </IconButton>
                             </Stack>
-                        </MenuItem>
+                            <TwitterPicker onChange={handleColorChange} color={color} />
+                        </>
                     )}
                 </Stack>
             </AccordionDetails>
