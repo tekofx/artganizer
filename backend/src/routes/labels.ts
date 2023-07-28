@@ -28,4 +28,19 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(labels);
 });
 
+router.put('/:id', async (req: Request, res: Response) => {
+    var id = parseInt(req.params.id);
+    const { name, color } = req.body;
+    const label = await LabelRepo.findOne({ where: { id: id } });
+    if(label==null){
+        return res.status(404).send("label not found");
+    }
+    await LabelRepo.update(label, { name: name, color: color });
+    
+    // Return updated label
+    const updatedLabel = await LabelRepo.findOne({ where: { id: id } });
+    res.send(updatedLabel);
+
+});
+
 export default router;
