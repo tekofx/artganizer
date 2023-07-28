@@ -121,11 +121,12 @@ function FolderAccordion() {
 function LabelAccordion() {
     const [labels, setLabels] = useState<Label[]>([]);
     const [expanded, setExpanded] = useState<boolean>(true);
-    const [newLabel, setNewLabel] = useState<string>("");
+    const [newLabel, setNewLabel] = useState<string>("Label");
     const [showCreateLabel, setShowCreateLabel] = useState<boolean>(false);
     const router = useRouter()
     const [colorSelect, setColorSelect] = useState(false);
     const [color, setColor] = useState<string>("#ffffff");
+    const [textFieldError, setTextFieldError] = useState<boolean>(false);
 
     const toggleColorSelect = () => {
         setColorSelect(!colorSelect);
@@ -135,8 +136,21 @@ function LabelAccordion() {
         setColor(color.hex);
     };
 
+    const onTextFieldChange = (event: any) => {
+        setNewLabel(event.target.value);
+        if (event.target.value == "") {
+            setTextFieldError(true);
+        } else {
+            setTextFieldError(false);
+        }
+    };
+
 
     async function createLabel() {
+        if (newLabel == "") {
+            return;
+        }
+
         await axios.post("http://localhost:3001/labels", {
 
             name: newLabel,
@@ -214,9 +228,11 @@ function LabelAccordion() {
                                     id="outlined-basic"
                                     label="Label name"
                                     variant="outlined"
+                                    error={textFieldError}
+                                    helperText={textFieldError ? "Label name cannot be empty" : ""}
                                     fullWidth={false}
                                     value={newLabel}
-                                    onChange={(e) => setNewLabel(e.target.value)}
+                                    onChange={onTextFieldChange}
                                 />
                                 <IconButton onClick={createLabel} >
                                     <CheckIcon />
