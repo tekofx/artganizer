@@ -6,7 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import theme from '../src/theme';
 import createEmotionCache from '../src/createEmotionCache';
-import NavBar from '../components/NavBar';
 import { Grid } from '@mui/material';
 import LateralPanel from '../components/LateralPanel';
 import Label from '../interfaces/Label';
