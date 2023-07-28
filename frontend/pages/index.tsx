@@ -14,22 +14,7 @@ export default function Home() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const { data, setData } = useContext(DataContext);
 
-  useEffect(() => {
 
-    axios.get("http://localhost:3001/submissions", {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      },
-
-    }).then((response) => {
-      setSubmissions(response.data);
-    }).catch((error) => {
-      console.log(error);
-    });
-
-
-  }, []);
   return (
     <Container maxWidth={false}>
       <Box
@@ -44,16 +29,8 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Welcome to the gallery
         </Typography>
-        <Gallery submissions={submissions} />
-        <Link href="/about" color="secondary">
-          Go to the about page
-        </Link>
-        {
-          data.labels.map((label) => {
-            return <Typography variant="h4" component="h1" gutterBottom>{label.name}</Typography>
-          }
-          )
-        }
+        <Gallery submissions={data.submissions} />
+
       </Box>
     </Container>
   );
