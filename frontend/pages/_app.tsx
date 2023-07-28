@@ -19,7 +19,40 @@ const clientSideEmotionCache = createEmotionCache();
 
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
+  labels: Label[];
+  folders: Folder[];
+  submissions: Submission[];
 }
+
+
+// Inital props
+MyApp.getInitialProps = async () => {
+  const labelsResponse = await axios.get<Label[]>("http://localhost:3001/labels", {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
+    }
+  });
+  const labels = labelsResponse.data;
+
+  const foldersResponse = await axios.get<Folder[]>("http://localhost:3001/folders", {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
+    }
+  });
+  const folders = foldersResponse.data;
+
+  const submissionsResponse = await axios.get<Submission[]>("http://localhost:3001/submissions", {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
+    }
+  });
+  const submissions = submissionsResponse.data;
+
+  return { labels, folders, submissions };
+};
 
 
 interface DataContextType {
@@ -39,47 +72,11 @@ export const DataContext = createContext<DataContextType>({
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const [data, setData] = useState<{ labels: Label[], folders: Folder[], submissions: Submission[] }>({ labels: [], folders: [], submissions: [] });
-
-  useEffect(() => {
-    axios.get("http://localhost:3001/labels", {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      }
-    }).then((response) => {
-      data.labels = response.data;
-      setData(data)
-    }).catch((error) => {
-      console.log(error);
-    });
-
-    axios.get("http://localhost:3001/folders", {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      }
-    }).then((response) => {
-      data.folders = response.data;
-      setData(data)
-    }).catch((error) => {
-      console.log(error);
-    });
-
-    axios.get("http://localhost:3001/submissions", {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      }
-    }).then((response) => {
-      data.submissions = response.data;
-      setData(data)
-    }).catch((error) => {
-      console.log(error);
-    });
-
-
-  }, []);
+  const [data, setData] = useState<{ labels: Label[]; folders: Folder[]; submissions: Submission[] }>({
+    labels: props.labels,
+    folders: props.folders,
+    submissions: props.submissions
+  });
 
   return (
     <CacheProvider value={emotionCache}>
