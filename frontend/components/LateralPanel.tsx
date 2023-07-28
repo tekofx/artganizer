@@ -31,25 +31,32 @@ interface Folder {
 function FolderAccordion() {
     const [folders, setFolders] = useState<Folder[]>([]);
     const [expanded, setExpanded] = useState<boolean>(true);
-    const [newFolder, setNewFolder] = useState<string>("");
+    const [newFolder, setNewFolder] = useState<string>("Folder");
     const [showCreateFolder, setShowCreateFolder] = useState<boolean>(false);
+    const [textFieldError, setTextFieldError] = useState<boolean>(false);
+
+    const onTextFieldChange = (event: any) => {
+        setNewFolder(event.target.value);
+        if (event.target.value == "") {
+            setTextFieldError(true);
+        } else {
+            setTextFieldError(false);
+        }
+    };
 
     async function createFolder() {
         await axios.post("http://localhost:3001/folders", {
 
             name: newFolder,
 
-        })
-            .then((response) => {
-                setFolders(response.data);
-                setNewFolder("");
+        }).then((response) => {
+            setFolders(response.data);
+            setNewFolder("");
 
-            }
-            )
-            .catch((error) => {
-                console.log(error);
-            }
-            );
+        }).catch((error) => {
+            console.log(error);
+        });
+        setShowCreateFolder(false);
 
     }
     useEffect(() => {
@@ -104,8 +111,10 @@ function FolderAccordion() {
                                     label="Folder name"
                                     variant="outlined"
                                     fullWidth={false}
+                                    error={textFieldError}
+                                    helperText={textFieldError ? "Folder name cannot be empty" : ""}
                                     value={newFolder}
-                                    onChange={(e) => setNewFolder(e.target.value)}
+                                    onChange={onTextFieldChange}
                                 />
                                 <IconButton onClick={createFolder} >
                                     <AddIcon />
