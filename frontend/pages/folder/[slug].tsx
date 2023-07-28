@@ -6,21 +6,21 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import axios from 'axios'
-import Label from '../../interfaces/Label'
+import Folder from '../../interfaces/Folder'
 import Gallery from '../../components/Gallery';
 import Submission from '../../interfaces/Submission';
 import { TwitterPicker } from 'react-color';
+import FolderIcon from '@mui/icons-material/Folder';
 
 import { DataContext } from "../_app";
-import { parse } from 'path';
 
 export default function Page() {
-    const [label, setLabel] = useState<Label>();
+    const [folder, setFolder] = useState<Folder>();
     const [submissions, setSubmissions] = useState<Submission[]>([]);
     const [open, setOpen] = useState(false);
     const [color, setColor] = useState('#fff');
     const [textFieldError, setTextFieldError] = useState<boolean>(false);
-    const [newLabel, setNewLabel] = useState<string>("New Name");
+    const [newFolder, setNewFolder] = useState<string>("New Name");
     const { data, setData } = useContext(DataContext);
 
 
@@ -31,7 +31,7 @@ export default function Page() {
     };
 
     const onTextFieldChange = (event: any) => {
-        setNewLabel(event.target.value);
+        setNewFolder(event.target.value);
         if (event.target.value == "") {
             setTextFieldError(true);
         } else {
@@ -41,9 +41,8 @@ export default function Page() {
 
 
     async function editLabel() {
-        const response = await axios.put(`http://localhost:3001/labels/${router.query.slug}`, {
-            name: newLabel,
-            color: color
+        const response = await axios.put(`http://localhost:3001/folders/${router.query.slug}`, {
+            name: newFolder,
         }, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -51,42 +50,24 @@ export default function Page() {
             },
 
         });
-        setLabel(response.data);
+        setFolder(response.data);
         setOpen(false);
     }
 
     useEffect(() => {
         const slug = router.query.slug;
         if (slug) {
+            var id = parseInt(slug.toString());
 
-            axios.get(`http://localhost:3001/labels/${router.query.slug}`, {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
-                },
-
-            }).then((response) => {
-                setLabel(response.data);
-                setColor(response.data.color);
-            }).catch((error) => {
-                console.log(error);
-            });
-
-            axios.get('http://localhost:3001/submissions/', {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
-                }, params: {
-                    labels: [router.query.slug]
+            // Get folder
+            data.folders.filter((folder: Folder) => {
+                if (folder.id == id) {
+                    setFolder(folder);
                 }
-            }).then((response) => {
-                setSubmissions(response.data);
-            }).catch((error) => {
-                console.log(error);
             });
+
+            // TODO: Get submissions
         }
-
-
     }, [router.query.slug]);
 
     return (
@@ -94,9 +75,9 @@ export default function Page() {
             <Grid container justifyContent="space-between" alignItems="center">
                 <Grid item>
                     <Stack spacing={2} direction="row">
-                        <LocalOfferIcon sx={{ color: label?.color }} style={{ fontSize: "4rem" }} />
+                        <FolderIcon style={{ fontSize: "4rem" }} />
                         <Typography variant="h1">
-                            {label?.name}
+                            {folder?.name}
                         </Typography>
                     </Stack>
                 </Grid>
@@ -108,7 +89,7 @@ export default function Page() {
             </Grid>
 
             <Dialog open={open}>
-                <DialogTitle>Edit label</DialogTitle>
+                <DialogTitle>Edit folder</DialogTitle>
                 <DialogContent>
                     <Stack spacing={2} direction="column">
                         <Typography>Name</Typography>
@@ -116,14 +97,8 @@ export default function Page() {
                             variant="outlined"
                             error={textFieldError}
                             helperText={textFieldError ? "Label name cannot be empty" : ""}
-                            value={newLabel}
+                            value={newFolder}
                             onChange={onTextFieldChange} />
-                    </Stack>
-                    <br />
-                    <Stack spacing={2} direction="column">
-                        <Typography>Color</Typography>
-                        <Paper sx={{ backgroundColor: color, width: "100%", height: "2rem" }} />
-                        <TwitterPicker triangle='hide' color={color} onChange={handleColorChange} />
                     </Stack>
                     <br />
                     <Stack spacing={2} direction="row" justifyContent="center">

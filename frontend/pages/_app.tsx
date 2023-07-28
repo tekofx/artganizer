@@ -12,7 +12,7 @@ import Label from '../interfaces/Label';
 import "../styles/styles.css";
 import axios from 'axios';
 import Submission from '../interfaces/Submission';
-import { Folder } from '../interfaces/Folder';
+import Folder from '../interfaces/Folder';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 

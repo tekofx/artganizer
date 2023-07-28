@@ -16,7 +16,7 @@ import axios from "axios";
 import { DataContext } from "../pages/_app";
 import Label from "../interfaces/Label";
 import { TwitterPicker } from 'react-color';
-import { Folder } from "../interfaces/Folder";
+import Folder from "../interfaces/Folder";
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 
@@ -25,6 +25,13 @@ function FolderAccordion() {
     const [newFolder, setNewFolder] = useState<string>("Folder");
     const [showCreateFolder, setShowCreateFolder] = useState<boolean>(false);
     const [textFieldError, setTextFieldError] = useState<boolean>(false);
+    const router = useRouter()
+
+
+    const navigateToFolder = (folder: Folder) => {
+        console.log(folder);
+        router.push(`/folder/${folder.id}`);
+    }
 
     const onTextFieldChange = (event: any) => {
         setNewFolder(event.target.value);
@@ -69,7 +76,7 @@ function FolderAccordion() {
             <AccordionDetails>
                 <Stack direction="column">
                     {data.folders.map((folder) => (
-                        <MenuItem key={folder.id}>
+                        <MenuItem key={folder.id} onClick={() => navigateToFolder(folder)}>
                             <Stack direction="row" spacing={1}>
                                 <Icon >
                                     <FolderIcon />
@@ -108,7 +115,6 @@ function LabelAccordion() {
     const [expanded, setExpanded] = useState<boolean>(true);
     const [newLabel, setNewLabel] = useState<string>("Label");
     const [showCreateLabel, setShowCreateLabel] = useState<boolean>(false);
-    const router = useRouter()
     const [colorSelect, setColorSelect] = useState(false);
     const [color, setColor] = useState<string>("#ffffff");
     const [textFieldError, setTextFieldError] = useState<boolean>(false);
@@ -153,10 +159,7 @@ function LabelAccordion() {
 
     }
 
-    const navigateToLabel = (label: Label) => {
-        console.log(label);
-        router.push(`/label/${label.id}`);
-    }
+
 
 
     return (
@@ -178,7 +181,7 @@ function LabelAccordion() {
             <AccordionDetails>
                 <Stack direction="column">
                     {data.labels.map((label) => (
-                        <MenuItem key={label.id} onClick={() => navigateToLabel(label)}>
+                        <MenuItem key={label.id} >
                             <Stack direction="row" spacing={1}>
                                 <Icon sx={{ color: label.color }}>
                                     <LocalOfferIcon />
