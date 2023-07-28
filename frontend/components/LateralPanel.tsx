@@ -1,14 +1,20 @@
-import { Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList, Divider, Accordion, AccordionSummary, AccordionDetails, Icon, TextField } from "@mui/material"
+import {
+    Stack, Grid, MenuItem, Typography, Menu, Tooltip, Avatar, IconButton, Paper, MenuList,
+    Divider, Accordion, AccordionSummary, AccordionDetails, Icon, TextField, Dialog, Button
+} from "@mui/material"
 import { useState, MouseEvent, useEffect } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import FolderIcon from '@mui/icons-material/Folder';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import PaletteIcon from '@mui/icons-material/Palette';
 import { useRouter } from 'next/router'
 import axios from "axios";
 import Label from "../interfaces/Label";
-
+import { TwitterPicker } from 'react-color';
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const defaultPages = [
@@ -136,24 +142,38 @@ function LabelAccordion() {
     const [newLabel, setNewLabel] = useState<string>("");
     const [showCreateLabel, setShowCreateLabel] = useState<boolean>(false);
     const router = useRouter()
+    const [colorSelect, setColorSelect] = useState(false);
+    const [color, setColor] = useState<string>("#ffffff");
+
+    const toggleColorSelect = () => {
+        setColorSelect(!colorSelect);
+    };
+
+    const handleColorChange = (color: any, event: any) => {
+        setColor(color.hex);
+    };
+
+    const resetColor = () => {
+        setColor("#ffffff");
+        setColorSelect(false);
+    };
 
 
     async function createLabel() {
         await axios.post("http://localhost:3001/labels", {
 
             name: newLabel,
+            color: color
 
-        })
-            .then((response) => {
-                setLabels(response.data);
-                setNewLabel("");
+        }).then((response) => {
+            setLabels(response.data);
+            setNewLabel("");
 
-            }
-            )
-            .catch((error) => {
-                console.log(error);
-            }
-            );
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        setShowCreateLabel(false);
 
     }
 
@@ -209,6 +229,30 @@ function LabelAccordion() {
                     {showCreateLabel && (
                         <MenuItem >
                             <Stack direction="row">
+                                <IconButton onClick={toggleColorSelect}  >
+                                    <PaletteIcon sx={{ color: color }} />
+                                </IconButton>
+
+                                <Dialog open={colorSelect} onClose={toggleColorSelect} maxWidth="lg" PaperProps={{
+                                    style: {
+                                        backgroundColor: 'transparent',
+                                        backgroundImage: "unset",
+                                        boxShadow: 'none',
+                                    },
+                                }}>
+                                    <TwitterPicker onChange={handleColorChange} color={color} />
+                                    <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+                                        <Button variant="contained" startIcon={<CheckIcon />} onClick={toggleColorSelect} >
+                                            Ok
+                                        </Button>
+                                        <Button variant="contained" startIcon={<ClearIcon />} onClick={resetColor}>
+                                            Cancel
+                                        </Button>
+                                    </Stack>
+                                </Dialog>
+
+
+
 
                                 <TextField
                                     id="outlined-basic"
