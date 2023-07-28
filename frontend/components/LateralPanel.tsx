@@ -17,24 +17,6 @@ import Label from "../interfaces/Label";
 import { TwitterPicker } from 'react-color';
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const defaultPages = [
-    {
-        name: 'Todo',
-        icon: <FolderIcon />
-
-    },
-    {
-        name: 'Etiquetas',
-        icon: <LocalOfferIcon />
-
-    },
-    {
-        name: 'Todo',
-        icon: <AddIcon />
-
-    },
-]
-
 interface Page {
     name: string;
     icon: JSX.Element;
@@ -153,11 +135,6 @@ function LabelAccordion() {
         setColor(color.hex);
     };
 
-    const resetColor = () => {
-        setColor("#ffffff");
-        setColorSelect(false);
-    };
-
 
     async function createLabel() {
         await axios.post("http://localhost:3001/labels", {
@@ -228,7 +205,7 @@ function LabelAccordion() {
                     ))}
                     {showCreateLabel && (
                         <>
-                            <Stack direction="row">
+                            <Stack direction="row" sx={{ paddingBottom: "2%" }}>
                                 <IconButton onClick={toggleColorSelect}  >
                                     <PaletteIcon sx={{ color: color }} />
                                 </IconButton>
@@ -242,7 +219,10 @@ function LabelAccordion() {
                                     onChange={(e) => setNewLabel(e.target.value)}
                                 />
                                 <IconButton onClick={createLabel} >
-                                    <AddIcon />
+                                    <CheckIcon />
+                                </IconButton>
+                                <IconButton onClick={() => setShowCreateLabel(false)} >
+                                    <ClearIcon />
                                 </IconButton>
                             </Stack>
                             <TwitterPicker onChange={handleColorChange} color={color} />
