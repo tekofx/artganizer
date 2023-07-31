@@ -7,7 +7,7 @@ import multer, { FileFilterCallback } from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
 import sharp from 'sharp';
-import { ArtistRepo, SubmissionRepo, LabelRepo, FolderRepo, CharacterRepo } from '../typeorm.config';
+import { ArtistRepo, SubmissionRepo, TagRepo, FolderRepo, CharacterRepo } from '../typeorm.config';
 import sizeOf from 'image-size';
 
 
@@ -46,13 +46,13 @@ const uploadSubmissions = multer({ storage: submissionsStorage, fileFilter: file
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-    var { labels, folders, characters, artist } = req.query;
+    var { tags, folders, characters, artist } = req.query;
 
     const queryBuilder = SubmissionRepo.createQueryBuilder('submission');
 
-    if (labels) {
+    if (tags) {
 
-        queryBuilder.innerJoinAndSelect('submission.labels', 'label', 'label.id IN (:...labels)', { labels });
+        queryBuilder.innerJoinAndSelect('submission.tags', 'tag', 'tag.id IN (:...tags)', { tags });
     }
 
     if (folders) {
@@ -104,7 +104,7 @@ router.get('/uploads/:submissionId', async (req: Request, res: Response) => {
 
 router.post('/', uploadSubmissions.single("file"), async (req: Request, res: Response) => {
 
-    var { title, description, rating, artist, folders, labels, characters } = req.body;
+    var { title, description, rating, artist, folders, tags, characters } = req.body;
     var file = req.file;
     if (!file) {
         res.status(400).send("File not provided or not an image");
@@ -144,18 +144,18 @@ router.post('/', uploadSubmissions.single("file"), async (req: Request, res: Res
             submission.folders = folderOjs;
         }
 
-        if (labels) {
-            if (!Array.isArray(labels)) {
-                labels = [labels];
+        if (tags) {
+            if (!Array.isArray(tags)) {
+                tags = [tags];
             }
-            var labelObjs = [];
-            for (var i = 0; i < labels.length; i++) {
-                var labelObj = await LabelRepo.findOne({ where: { id: labels[i] } });
-                if (labelObj) {
-                    labelObjs.push(labelObj);
+            var tagObjs = [];
+            for (var i = 0; i < tags.length; i++) {
+                var tagObj = await TagRepo.findOne({ where: { id: tags[i] } });
+                if (tagObj) {
+                    tagObjs.push(tagObj);
                 }
             }
-            submission.labels = labelObjs;
+            submission.tags = tagObjs;
         }
 
         if (characters) {
@@ -231,18 +231,18 @@ router.put('/:submissionId', async (req: Request, res: Response) => {
         return;
     }
 
-    var { title, description, rating, artist, labels } = req.body;
+    var { title, description, rating, artist, tags } = req.body;
     await SubmissionRepo.update(submission, { title: title, description: description, rating: rating, artist: artist });
 
-    if (labels) {
-        for (var i = 0; i < labels.length; i++) {
-            var labelObj = await LabelRepo.findOne({ where: { id: labels[i] } });
-            if (labelObj) {
-                console.log(labelObj);
-                labels[i] = labelObj;
+    if (tags) {
+        for (var i = 0; i < tags.length; i++) {
+            var tagObj = await TagRepo.findOne({ where: { id: tags[i] } });
+            if (tagObj) {
+                console.log(tagObj);
+                tags[i] = tagObj;
             }
         }
-        submission.labels = labels;
+        submission.tags = tags;
         await SubmissionRepo.save(submission);
     }
 

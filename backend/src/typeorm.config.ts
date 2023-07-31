@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { Artist } from './entities/Artist';
 import { Submission } from './entities/Submission';
 import { Folder } from './entities/Folder';
-import { Label } from './entities/Label';
+import { Tag } from './entities/Tag';
 import { Character } from './entities/Character';
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
     username: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-    entities: [Artist, Submission, Folder, Label, Character],
+    entities: [Artist, Submission, Folder, Tag, Character],
     synchronize: true,
     logging: false,
 });
@@ -26,5 +26,5 @@ export const AppDataSource = new DataSource({
 export const ArtistRepo = AppDataSource.manager.getRepository(Artist);
 export const SubmissionRepo = AppDataSource.manager.getRepository(Submission);
 export const FolderRepo = AppDataSource.manager.getRepository(Folder);
-export const LabelRepo = AppDataSource.manager.getRepository(Label);
+export const TagRepo = AppDataSource.manager.getRepository(Tag);
 export const CharacterRepo = AppDataSource.manager.getRepository(Character);

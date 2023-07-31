@@ -14,7 +14,7 @@ import { AppDataSource, ArtistRepo, SubmissionRepo } from './typeorm.config';
 import artist from './routes/artists';
 import submission from './routes/submissions';
 import folders from './routes/folders';
-import labels from './routes/labels';
+import tags from './routes/tags';
 import characters from './routes/characters';
 import cors from 'cors';
 
@@ -40,7 +40,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use("/artists", artist);
 app.use("/submissions", submission);
 app.use("/folders", folders);
-app.use("/labels", labels);
+app.use("/tags", tags);
 app.use("/characters", characters);
 
 app.listen(port, () => {

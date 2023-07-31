@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, PrimaryColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
 import { Artist } from "./Artist";
 import { Folder } from "./Folder";
-import { Label } from "./Label";
+import { Tag } from "./Tag";
 import { Character } from "./Character";
 
 
@@ -36,9 +36,9 @@ export class Submission {
     @JoinTable()
     folders: Folder[];
 
-    @ManyToMany(() => Label)
+    @ManyToMany(() => Tag)
     @JoinTable()
-    labels: Label[];
+    tags: Tag[];
 
     @ManyToMany(() => Character)
     @JoinTable()
