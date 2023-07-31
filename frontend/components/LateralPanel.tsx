@@ -21,6 +21,32 @@ import { Tag } from "@mui/icons-material";
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 
+function FolderList() {
+    const { data, setData } = useContext(DataContext);
+    return (
+        <>
+            {data.folders.length == 0 && (
+
+                <Typography>No folders</Typography>
+            )
+            }
+            {
+                data.folders.map((folder) => (
+                    <MenuItem key={folder.id} >
+                        <Stack direction="row" spacing={1}>
+                            <Icon >
+                                <FolderIcon />
+                            </Icon>
+
+                            <Typography>{folder.name}</Typography>
+                        </Stack>
+                    </MenuItem>
+                ))
+            }
+        </>
+    )
+}
+
 function FolderAccordion() {
     const [expanded, setExpanded] = useState<boolean>(true);
     const [newFolder, setNewFolder] = useState<string>("Folder");
@@ -76,17 +102,7 @@ function FolderAccordion() {
             </AccordionSummary>
             <AccordionDetails>
                 <Stack direction="column">
-                    {data.folders.map((folder) => (
-                        <MenuItem key={folder.id} onClick={() => navigateToFolder(folder)}>
-                            <Stack direction="row" spacing={1}>
-                                <Icon >
-                                    <FolderIcon />
-                                </Icon>
-
-                                <Typography>{folder.name}</Typography>
-                            </Stack>
-                        </MenuItem>
-                    ))}
+                    <FolderList />
                     {showCreateFolder && (
                         <MenuItem>
                             <Stack direction="row">
@@ -117,6 +133,11 @@ function TagList() {
     const { data, setData } = useContext(DataContext);
     return (
         <>
+            {data.tags.length == 0 && (
+
+                <Typography>No tags</Typography>
+            )
+            }
             {
                 data.tags.map((tag) => (
                     <MenuItem key={tag.id} >
