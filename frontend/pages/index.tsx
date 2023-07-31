@@ -32,7 +32,7 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Welcome to the gallery
         </Typography>
-        <Gallery submissions={data.submissions} />
+        <Gallery />
 
       </Box>
     </Container>

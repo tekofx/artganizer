@@ -1,3 +1,5 @@
+import Tag from "./Tag";
+
 export default interface Submission {
     id: number;
     title: string;
@@ -8,7 +10,7 @@ export default interface Submission {
     height: number;
     artist: string;
     folders: number[];
-    labels: number[];
+    tags: Tag[];
     characters: number[];
     format: string;
     image: string;

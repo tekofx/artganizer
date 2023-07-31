@@ -5,7 +5,7 @@ import { DataContext } from "../pages/_app";
 import Tag from "../interfaces/Tag";
 function RatingFilter() {
     const { data, setData } = useContext(DataContext);
-    const [value, setValue] = useState<number | null>(2);
+    const [value, setValue] = useState<number | null>(data.filters.rating);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -39,10 +39,12 @@ function RatingFilter() {
                 <MenuItem onClick={handleClose}>
                     <Rating
                         name="simple-controlled"
-                        value={value}
+                        value={data.filters.rating}
                         onChange={(event, newValue) => {
-                            data.filters.rating = newValue || 0;
-                            setData(data);
+                            const newData = { ...data };
+                            newData.filters.rating = newValue || -1;
+                            console.log(`Rating filter: ${newValue}`);
+                            setData(newData);
                         }} />
                 </MenuItem>
             </Menu>
@@ -65,13 +67,19 @@ function TagFilter() {
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, tag: Tag) => {
         if (event.target.checked) {
-            data.filters.tags = [...data.filters.tags, tag];
-            setData(data);
+            const newData = { ...data };
+            newData.filters.tags.push(tag);
+            setData(newData);
+            console.log("Tag filter: Added tag " + tag.name)
+
 
         } else {
-            data.filters.tags = data.filters.tags.filter((t) => t.id !== tag.id);
-            setData(data);
+            const newData = { ...data };
+            newData.filters.tags = newData.filters.tags.filter(t => t.id != tag.id);
+            setData(newData);
+            console.log("Tag filter: Removed tag " + tag.name)
         }
+        console.log("Tag filter " + data.filters)
     };
 
 
@@ -98,7 +106,7 @@ function TagFilter() {
                 }}
             >
                 {data.tags.map((tag) => (
-                    <MenuItem>
+                    <MenuItem key={tag.id}>
                         <Checkbox
                             value={tag}
                             onChange={(event) => {

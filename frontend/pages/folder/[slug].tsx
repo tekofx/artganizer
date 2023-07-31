@@ -108,7 +108,7 @@ export default function Page() {
                 </DialogContent>
             </Dialog>
 
-            <Gallery submissions={submissions} />
+            <Gallery />
         </Paper>
     )
 

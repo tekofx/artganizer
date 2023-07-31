@@ -55,6 +55,7 @@ MyApp.getInitialProps = async () => {
     }
   });
   const submissions = submissionsResponse.data;
+  console.log("initial props")
 
   return { tags, folders, submissions };
 };
@@ -65,16 +66,13 @@ interface DataContextType {
     tags: Tag[];
     folders: Folder[];
     submissions: Submission[];
-    filters: {
-      rating: number;
-      tags: Tag[];
-    };
+    filters: Filters;
   };
   setData: (data: DataContextType["data"]) => void;
 }
 
 export const DataContext = createContext<DataContextType>({
-  data: { tags: [], folders: [], submissions: [], filters: { rating: 0, tags: [] } },
+  data: { tags: [], folders: [], submissions: [], filters: { rating: -1, tags: [] } },
   setData: () => { }
 });
 
@@ -85,8 +83,9 @@ export default function MyApp(props: MyAppProps) {
     tags: props.tags,
     folders: props.folders,
     submissions: props.submissions,
-    filters: props.filters || { rating: 0, tags: [] }
+    filters: props.filters || { rating: -1, tags: [] }
   });
+  console.log(data.filters)
 
   return (
     <CacheProvider value={emotionCache}>
