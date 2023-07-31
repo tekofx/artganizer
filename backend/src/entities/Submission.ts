@@ -14,7 +14,7 @@ export class Submission {
     @Column({ length: 50, default: "Untitled" })
     title: string;
 
-    @Column({ length: 500 })
+    @Column({ length: 500,default:"" })
     description: string;
 
     @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
