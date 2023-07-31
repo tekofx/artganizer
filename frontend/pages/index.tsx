@@ -8,7 +8,8 @@ import Image from '../interfaces/Image';
 import Gallery from '../components/Gallery';
 import Submission from '../interfaces/Submission';
 import { DataContext } from "../pages/_app";
-
+import Search from '../components/Search';
+import Filters from '../components/Filters';
 export default function Home() {
 
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -19,13 +20,15 @@ export default function Home() {
     <Container maxWidth={false}>
       <Box
         sx={{
-          my: 4,
+          my: 1,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
+        <Search />
+        <Filters />
         <Typography variant="h4" component="h1" gutterBottom>
           Welcome to the gallery
         </Typography>
