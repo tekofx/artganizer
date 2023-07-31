@@ -15,6 +15,18 @@ export default function Home() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const { data, setData } = useContext(DataContext);
 
+  useEffect(() => {
+    // Reset filters
+    const newData = { ...data };
+    newData.filters = {
+      rating: -1,
+      tags: [],
+      folders: [],
+    };
+    setData(newData);
+
+  }, []);
+
 
   return (
     <Container maxWidth={false}>
