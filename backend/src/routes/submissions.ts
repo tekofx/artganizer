@@ -53,6 +53,9 @@ router.get('/', async (req: Request, res: Response) => {
     // Use leftJoinAndSelect to join the submission and tags tables and select the related tags
     queryBuilder.leftJoinAndSelect('submission.tags', 'tag');
 
+    // Use leftJoinAndSelect to join the submission and folders tables and select the related folders
+    queryBuilder.leftJoinAndSelect('submission.folders', 'folder');
+
     if (tags) {
 
         queryBuilder.innerJoinAndSelect('submission.tags', 'tag', 'tag.id IN (:...tags)', { tags });
@@ -234,7 +237,7 @@ router.put('/:submissionId', async (req: Request, res: Response) => {
         return;
     }
 
-    var { title, description, rating, artist, tags } = req.body;
+    var { title, description, rating, artist, tags,folders } = req.body;
     await SubmissionRepo.update(submission, { title: title, description: description, rating: rating, artist: artist });
 
     if (tags) {
@@ -246,6 +249,18 @@ router.put('/:submissionId', async (req: Request, res: Response) => {
             }
         }
         submission.tags = tags;
+        await SubmissionRepo.save(submission);
+    }
+
+    if (folders){
+        for (var i = 0; i < folders.length; i++) {
+            var folderObj = await FolderRepo.findOne({ where: { id: folders[i] } });
+            if (folderObj) {
+                console.log(folderObj);
+                folders[i] = folderObj;
+            }
+        }
+        submission.folders = folders;
         await SubmissionRepo.save(submission);
     }
 
