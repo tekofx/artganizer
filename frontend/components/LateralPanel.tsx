@@ -17,6 +17,7 @@ import { DataContext } from "../pages/_app";
 
 import { TwitterPicker } from 'react-color';
 import Folder from "../interfaces/Folder";
+import { Tag } from "@mui/icons-material";
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 
@@ -111,6 +112,28 @@ function FolderAccordion() {
         </Accordion >
     )
 }
+
+function TagList() {
+    const { data, setData } = useContext(DataContext);
+    return (
+        <>
+            {
+                data.tags.map((tag) => (
+                    <MenuItem key={tag.id} >
+                        <Stack direction="row" spacing={1}>
+                            <Icon sx={{ color: tag.color }}>
+                                <LocalOfferIcon />
+                            </Icon>
+
+                            <Typography>{tag.name}</Typography>
+                        </Stack>
+                    </MenuItem>
+                ))
+            }
+        </>
+    )
+}
+
 function TagAccordion() {
     const [expanded, setExpanded] = useState<boolean>(true);
     const [newTag, setNewTag] = useState<string>("Tag");
@@ -180,17 +203,7 @@ function TagAccordion() {
             </AccordionSummary>
             <AccordionDetails>
                 <Stack direction="column">
-                    {data.tags.map((tag) => (
-                        <MenuItem key={tag.id} >
-                            <Stack direction="row" spacing={1}>
-                                <Icon sx={{ color: tag.color }}>
-                                    <LocalOfferIcon />
-                                </Icon>
-
-                                <Typography>{tag.name}</Typography>
-                            </Stack>
-                        </MenuItem>
-                    ))}
+                    <TagList />
                     {showCreateTag && (
                         <>
                             <Stack direction="row" sx={{ paddingBottom: "2%" }}>
