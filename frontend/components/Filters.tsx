@@ -4,6 +4,7 @@ import { useState, MouseEvent, useContext } from "react";
 import { DataContext } from "../pages/_app";
 import Tag from "../interfaces/Tag";
 function RatingFilter() {
+    const { data, setData } = useContext(DataContext);
     const [value, setValue] = useState<number | null>(2);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -40,7 +41,8 @@ function RatingFilter() {
                         name="simple-controlled"
                         value={value}
                         onChange={(event, newValue) => {
-                            setValue(newValue);
+                            data.filters.rating = newValue || 0;
+                            setData(data);
                         }} />
                 </MenuItem>
             </Menu>
@@ -50,7 +52,6 @@ function RatingFilter() {
 
 function TagFilter() {
     const { data, setData } = useContext(DataContext);
-    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
     const [value, setValue] = useState<number | null>(2);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -64,9 +65,12 @@ function TagFilter() {
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, tag: Tag) => {
         if (event.target.checked) {
-            setSelectedTags([...selectedTags, tag]);
+            data.filters.tags = [...data.filters.tags, tag];
+            setData(data);
+
         } else {
-            setSelectedTags(selectedTags.filter((tag) => tag !== tag));
+            data.filters.tags = data.filters.tags.filter((t) => t.id !== tag.id);
+            setData(data);
         }
     };
 

@@ -16,11 +16,17 @@ import Folder from '../interfaces/Folder';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
+interface Filters {
+  rating: number;
+  tags: Tag[];
+}
+
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
   tags: Tag[];
   folders: Folder[];
   submissions: Submission[];
+  filters: Filters;
 }
 
 
@@ -59,22 +65,27 @@ interface DataContextType {
     tags: Tag[];
     folders: Folder[];
     submissions: Submission[];
+    filters: {
+      rating: number;
+      tags: Tag[];
+    };
   };
   setData: (data: DataContextType["data"]) => void;
 }
 
 export const DataContext = createContext<DataContextType>({
-  data: { tags: [], folders: [], submissions: [] },
+  data: { tags: [], folders: [], submissions: [], filters: { rating: 0, tags: [] } },
   setData: () => { }
 });
 
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const [data, setData] = useState<{ tags: Tag[]; folders: Folder[]; submissions: Submission[] }>({
+  const [data, setData] = useState<{ tags: Tag[]; folders: Folder[]; submissions: Submission[], filters: Filters }>({
     tags: props.tags,
     folders: props.folders,
-    submissions: props.submissions
+    submissions: props.submissions,
+    filters: props.filters || { rating: 0, tags: [] }
   });
 
   return (
