@@ -86,7 +86,6 @@ export default function MyApp(props: MyAppProps) {
     submissions: props.submissions,
     filters: props.filters || { rating: -1, tags: [], folders: [] }
   });
-  console.log(data.filters)
 
   return (
     <CacheProvider value={emotionCache}>

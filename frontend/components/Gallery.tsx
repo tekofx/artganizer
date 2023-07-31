@@ -29,35 +29,22 @@ export default function Gallery() {
 
 
     useEffect(() => {
-        console.log("Gallery useEffect")
         var temp = data.submissions;
         if (data.filters.rating > -1) {
-            console.log(`Filtering submissions with rating ${data.filters.rating}`)
             temp = submissions.filter(submission => submission.rating >= data.filters.rating)
-            console.log(`Found ${submissions.length} submissions`)
         }
 
         if (data.filters.tags.length > 0) {
-            console.log("Gallery useEffect tags ")
-            console.log(data.filters.tags)
-            console.log("Gallery useEffect tags ")
-            console.log(submissions)
             temp = submissions.filter(submission => submission.tags?.some(tag => data.filters.tags.some(filterTag => filterTag.id === tag.id)));
-
         }
 
         if (data.filters.folders.length > 0) {
-            console.log("Gallery useEffect folders ")
-            console.log(data.filters.folders)
-            console.log("Gallery useEffect folders ")
-            console.log(submissions)
             temp = submissions.filter(submission => submission.folders?.some(folder => data.filters.folders.some(filterFolder => filterFolder.id === folder.id)));
         }
 
         if (temp !== submissions) {
 
             setSubmissions(temp);
-            console.log("Setting submissions")
         }
     }, [data.filters.rating, data.filters.tags, data.filters.folders])
 
