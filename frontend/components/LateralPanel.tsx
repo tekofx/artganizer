@@ -14,7 +14,7 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import { useRouter } from 'next/router'
 import axios from "axios";
 import { DataContext } from "../pages/_app";
-import Label from "../interfaces/Label";
+
 import { TwitterPicker } from 'react-color';
 import Folder from "../interfaces/Folder";
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -111,10 +111,10 @@ function FolderAccordion() {
         </Accordion >
     )
 }
-function LabelAccordion() {
+function TagAccordion() {
     const [expanded, setExpanded] = useState<boolean>(true);
-    const [newLabel, setNewLabel] = useState<string>("Label");
-    const [showCreateLabel, setShowCreateLabel] = useState<boolean>(false);
+    const [newTag, setNewTag] = useState<string>("Tag");
+    const [showCreateTag, setShowCreateTag] = useState<boolean>(false);
     const [colorSelect, setColorSelect] = useState(false);
     const [color, setColor] = useState<string>("#ffffff");
     const [textFieldError, setTextFieldError] = useState<boolean>(false);
@@ -129,7 +129,7 @@ function LabelAccordion() {
     };
 
     const onTextFieldChange = (event: any) => {
-        setNewLabel(event.target.value);
+        setNewTag(event.target.value);
         if (event.target.value == "") {
             setTextFieldError(true);
         } else {
@@ -138,24 +138,24 @@ function LabelAccordion() {
     };
 
 
-    async function createLabel() {
-        if (newLabel == "") {
+    async function createTag() {
+        if (newTag == "") {
             return;
         }
 
-        await axios.post("http://localhost:3001/labels", {
-            name: newLabel,
+        await axios.post("http://localhost:3001/tags", {
+            name: newTag,
             color: color
         }).then((response) => {
-            data.labels = response.data;
+            data.tags = response.data;
             setData(data);
-            setNewLabel("");
+            setNewTag("");
 
         }).catch((error) => {
             console.log(error);
         });
 
-        setShowCreateLabel(false);
+        setShowCreateTag(false);
 
     }
 
@@ -172,26 +172,26 @@ function LabelAccordion() {
             >
                 <Stack direction="row" spacing={1} alignItems="center">
 
-                    <Typography onClick={() => setExpanded(!expanded)}>Labels</Typography>
-                    <IconButton onClick={() => setShowCreateLabel(true)}>
+                    <Typography onClick={() => setExpanded(!expanded)}>Tags</Typography>
+                    <IconButton onClick={() => setShowCreateTag(true)}>
                         <AddIcon />
                     </IconButton>
                 </Stack>
             </AccordionSummary>
             <AccordionDetails>
                 <Stack direction="column">
-                    {data.labels.map((label) => (
-                        <MenuItem key={label.id} >
+                    {data.tags.map((tag) => (
+                        <MenuItem key={tag.id} >
                             <Stack direction="row" spacing={1}>
-                                <Icon sx={{ color: label.color }}>
+                                <Icon sx={{ color: tag.color }}>
                                     <LocalOfferIcon />
                                 </Icon>
 
-                                <Typography>{label.name}</Typography>
+                                <Typography>{tag.name}</Typography>
                             </Stack>
                         </MenuItem>
                     ))}
-                    {showCreateLabel && (
+                    {showCreateTag && (
                         <>
                             <Stack direction="row" sx={{ paddingBottom: "2%" }}>
                                 <IconButton onClick={toggleColorSelect}  >
@@ -203,15 +203,15 @@ function LabelAccordion() {
                                     label="Label name"
                                     variant="outlined"
                                     error={textFieldError}
-                                    helperText={textFieldError ? "Label name cannot be empty" : ""}
+                                    helperText={textFieldError ? "Tag name cannot be empty" : ""}
                                     fullWidth={false}
-                                    value={newLabel}
+                                    value={newTag}
                                     onChange={onTextFieldChange}
                                 />
-                                <IconButton onClick={createLabel} >
+                                <IconButton onClick={createTag} >
                                     <CheckIcon />
                                 </IconButton>
-                                <IconButton onClick={() => setShowCreateLabel(false)} >
+                                <IconButton onClick={() => setShowCreateTag(false)} >
                                     <ClearIcon />
                                 </IconButton>
                             </Stack>
@@ -295,7 +295,7 @@ export default function LateralPanel() {
                 </Grid>
                 <Grid item lg={12}>
                     <MenuList>
-                        <LabelAccordion />
+                        <TagAccordion />
                         <FolderAccordion />
 
                     </MenuList>

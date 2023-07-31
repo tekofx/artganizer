@@ -1,4 +1,4 @@
-export default interface Label {
+export default interface Tag {
     id: number;
     name: string;
     color: string;

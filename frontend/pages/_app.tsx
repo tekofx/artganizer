@@ -8,7 +8,7 @@ import theme from '../src/theme';
 import createEmotionCache from '../src/createEmotionCache';
 import { Grid } from '@mui/material';
 import LateralPanel from '../components/LateralPanel';
-import Label from '../interfaces/Label';
+import Tag from '../interfaces/Tag';
 import "../styles/styles.css";
 import axios from 'axios';
 import Submission from '../interfaces/Submission';
@@ -18,7 +18,7 @@ const clientSideEmotionCache = createEmotionCache();
 
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
-  labels: Label[];
+  tags: Tag[];
   folders: Folder[];
   submissions: Submission[];
 }
@@ -26,13 +26,13 @@ export interface MyAppProps extends AppProps {
 
 // Inital props
 MyApp.getInitialProps = async () => {
-  const labelsResponse = await axios.get<Label[]>("http://localhost:3001/labels", {
+  const tagsResponse = await axios.get<Tag[]>("http://localhost:3001/tags", {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json"
     }
   });
-  const labels = labelsResponse.data;
+  const tags = tagsResponse.data;
 
   const foldersResponse = await axios.get<Folder[]>("http://localhost:3001/folders", {
     headers: {
@@ -50,13 +50,13 @@ MyApp.getInitialProps = async () => {
   });
   const submissions = submissionsResponse.data;
 
-  return { labels, folders, submissions };
+  return { tags, folders, submissions };
 };
 
 
 interface DataContextType {
   data: {
-    labels: Label[];
+    tags: Tag[];
     folders: Folder[];
     submissions: Submission[];
   };
@@ -64,15 +64,15 @@ interface DataContextType {
 }
 
 export const DataContext = createContext<DataContextType>({
-  data: { labels: [], folders: [], submissions: [] },
+  data: { tags: [], folders: [], submissions: [] },
   setData: () => { }
 });
 
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const [data, setData] = useState<{ labels: Label[]; folders: Folder[]; submissions: Submission[] }>({
-    labels: props.labels,
+  const [data, setData] = useState<{ tags: Tag[]; folders: Folder[]; submissions: Submission[] }>({
+    tags: props.tags,
     folders: props.folders,
     submissions: props.submissions
   });
