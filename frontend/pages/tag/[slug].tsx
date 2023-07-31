@@ -40,8 +40,9 @@ export default function Page() {
 
 
     async function editLabel() {
-        const response = await axios.put(`http://localhost:3001/tag/${router.query.slug}`, {
+        const response = await axios.put(`http://localhost:3001/tags/${router.query.slug}`, {
             name: newTag,
+            color: color,
         }, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -50,6 +51,14 @@ export default function Page() {
 
         });
         setTag(response.data);
+        data.tags.filter((tag: Tag) => {
+            if (tag.id == response.data.id) {
+                const newData = { ...data };
+                newData.tags[data.tags.indexOf(tag)] = response.data;
+                setData(newData);
+
+            }
+        });
         setOpen(false);
     }
 
@@ -62,6 +71,7 @@ export default function Page() {
             data.tags.filter((tag: Tag) => {
                 if (tag.id == id) {
                     setTag(tag);
+                    setNewTag(tag.name);
                     // If tag not in filters add it
                     if (!data.filters.tags.some(filterTag => filterTag.id === tag.id)) {
                         const newData = { ...data };
@@ -78,7 +88,7 @@ export default function Page() {
             <Grid container justifyContent="space-between" alignItems="center">
                 <Grid item>
                     <Stack spacing={2} direction="row">
-                        <FolderIcon style={{ fontSize: "4rem" }} />
+                        <LocalOfferIcon style={{ fontSize: "4rem", color: tag?.color }} />
                         <Typography variant="h1">
                             {tag?.name}
                         </Typography>
@@ -94,7 +104,7 @@ export default function Page() {
             <Dialog open={open}>
                 <DialogTitle>Edit Tag</DialogTitle>
                 <DialogContent>
-                    <Stack spacing={2} direction="column">
+                    <Stack spacing={2} direction="row" alignItems="center">
                         <Typography>Name</Typography>
                         <TextField fullWidth
                             variant="outlined"
@@ -104,6 +114,14 @@ export default function Page() {
                             onChange={onTextFieldChange} />
                     </Stack>
                     <br />
+
+                    <Stack spacing={2} direction="row" alignItems="center">
+
+                        <Typography>Color</Typography>
+                        <TwitterPicker onChange={handleColorChange} color={color} triangle='hide' />
+                    </Stack>
+                    <br />
+
                     <Stack spacing={2} direction="row" justifyContent="center">
                         <Button startIcon={<CheckIcon />} onClick={editLabel}>Save</Button>
                         <Button startIcon={<ClearIcon />} onClick={() => setOpen(false)}>Cancel</Button>
