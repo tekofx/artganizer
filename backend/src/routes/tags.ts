@@ -43,4 +43,14 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 });
 
+router.delete('/:id', async (req: Request, res: Response) => {
+    var id = parseInt(req.params.id);
+    const tag = await TagRepo.findOne({ where: { id: id } });
+    if(tag==null){
+        return res.status(404).send("tag not found");
+    }
+    await TagRepo.delete(tag);
+    res.send("tag deleted");
+});
+
 export default router;
