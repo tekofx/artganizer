@@ -23,6 +23,8 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function FolderList() {
     const { data, setData } = useContext(DataContext);
+    const router = useRouter()
+
     return (
         <>
             {data.folders.length == 0 && (
@@ -32,15 +34,15 @@ function FolderList() {
             }
             {
                 data.folders.map((folder) => (
-                    <MenuItem key={folder.id} >
-                        <Stack direction="row" spacing={1}>
+                    <MenuItem key={folder.id} onClick={() => router.push(`/folder/${folder.id}`)} >
+                        < Stack direction="row" spacing={1} >
                             <Icon >
                                 <FolderIcon />
                             </Icon>
 
                             <Typography>{folder.name}</Typography>
-                        </Stack>
-                    </MenuItem>
+                        </Stack >
+                    </MenuItem >
                 ))
             }
         </>
@@ -131,6 +133,8 @@ function FolderAccordion() {
 
 function TagList() {
     const { data, setData } = useContext(DataContext);
+    const router = useRouter()
+
     return (
         <>
             {data.tags.length == 0 && (
@@ -140,7 +144,7 @@ function TagList() {
             }
             {
                 data.tags.map((tag) => (
-                    <MenuItem key={tag.id} >
+                    <MenuItem key={tag.id} onClick={() => router.push(`/tag/${tag.id}`)} >
                         <Stack direction="row" spacing={1}>
                             <Icon sx={{ color: tag.color }}>
                                 <LocalOfferIcon />
