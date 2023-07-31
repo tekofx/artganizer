@@ -63,10 +63,11 @@ export default function Page() {
             data.folders.filter((folder: Folder) => {
                 if (folder.id == id) {
                     setFolder(folder);
+                    const newData = { ...data };
+                    newData.filters.folders = [...data.filters.folders, folder];
+                    setData(newData);
                 }
             });
-
-            // TODO: Get submissions
         }
     }, [router.query.slug]);
 

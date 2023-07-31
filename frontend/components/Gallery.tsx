@@ -45,12 +45,21 @@ export default function Gallery() {
             temp = submissions.filter(submission => submission.tags?.some(tag => data.filters.tags.some(filterTag => filterTag.id === tag.id)));
 
         }
+
+        if (data.filters.folders.length > 0) {
+            console.log("Gallery useEffect folders ")
+            console.log(data.filters.folders)
+            console.log("Gallery useEffect folders ")
+            console.log(submissions)
+            temp = submissions.filter(submission => submission.folders?.some(folder => data.filters.folders.some(filterFolder => filterFolder.id === folder.id)));
+        }
+
         if (temp !== submissions) {
 
             setSubmissions(temp);
             console.log("Setting submissions")
         }
-    }, [data.filters.rating, data.filters.tags])
+    }, [data.filters.rating, data.filters.tags, data.filters.folders])
 
 
 
