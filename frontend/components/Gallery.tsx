@@ -38,7 +38,12 @@ export default function Gallery() {
         }
 
         if (data.filters.tags.length > 0) {
-            temp = submissions.filter(submission => submission.tags.some(tag => data.filters.tags.includes(tag)));
+            console.log("Gallery useEffect tags ")
+            console.log(data.filters.tags)
+            console.log("Gallery useEffect tags ")
+            console.log(submissions)
+            temp = submissions.filter(submission => submission.tags?.some(tag => data.filters.tags.some(filterTag => filterTag.id === tag.id)));
+
         }
         if (temp !== submissions) {
 

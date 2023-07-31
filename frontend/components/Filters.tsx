@@ -68,8 +68,9 @@ function TagFilter() {
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, tag: Tag) => {
         if (event.target.checked) {
             const newData = { ...data };
-            newData.filters.tags.push(tag);
+            newData.filters.tags = [...data.filters.tags, tag];
             setData(newData);
+
             console.log("Tag filter: Added tag " + tag.name)
 
 

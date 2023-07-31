@@ -50,6 +50,9 @@ router.get('/', async (req: Request, res: Response) => {
 
     const queryBuilder = SubmissionRepo.createQueryBuilder('submission');
 
+    // Use leftJoinAndSelect to join the submission and tags tables and select the related tags
+    queryBuilder.leftJoinAndSelect('submission.tags', 'tag');
+
     if (tags) {
 
         queryBuilder.innerJoinAndSelect('submission.tags', 'tag', 'tag.id IN (:...tags)', { tags });
