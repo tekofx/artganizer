@@ -104,7 +104,7 @@ function FolderAccordion() {
                 <Stack direction="column">
                     <FolderList />
                     {showCreateFolder && (
-                        <MenuItem>
+                        <>
                             <Stack direction="row">
 
                                 <TextField
@@ -121,7 +121,7 @@ function FolderAccordion() {
                                     <AddIcon />
                                 </IconButton>
                             </Stack>
-                        </MenuItem>
+                        </>
                     )}
                 </Stack>
             </AccordionDetails>
