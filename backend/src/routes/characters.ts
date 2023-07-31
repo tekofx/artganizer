@@ -9,7 +9,7 @@ import sharp from 'sharp';
 import multer, { FileFilterCallback } from 'multer';
 const charactersDir = path.join(__dirname, '../../uploads/characters');
 if (!fs.existsSync(charactersDir)) {
-    fs.mkdirSync(charactersDir);
+    fs.mkdirSync(charactersDir,{recursive:true});
 }
 
 

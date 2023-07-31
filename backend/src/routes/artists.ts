@@ -11,7 +11,7 @@ import { ArtistRepo, SubmissionRepo } from '../typeorm.config';
 
 const artistsPicsDir = path.join(__dirname, '../../uploads/artistPics');
 if (!fs.existsSync(artistsPicsDir)) {
-    fs.mkdirSync(artistsPicsDir);
+    fs.mkdirSync(artistsPicsDir,{recursive:true});
 }
 
 
