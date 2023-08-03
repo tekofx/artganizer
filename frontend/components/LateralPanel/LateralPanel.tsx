@@ -33,6 +33,7 @@ import axios from "axios";
 import { DataContext } from "../../pages/_app";
 import TagAccordion from "./TagAccordion";
 import FolderAccordion from "./FolderAccordion";
+import ArtistAccordion from "./ArtistAccordion";
 
 import { TwitterPicker } from "react-color";
 import Folder from "../../interfaces/Folder";
@@ -114,6 +115,7 @@ export default function LateralPanel() {
           <MenuList>
             <TagAccordion />
             <FolderAccordion />
+            <ArtistAccordion />
           </MenuList>
         </Grid>
       </Grid>

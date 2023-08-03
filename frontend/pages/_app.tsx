@@ -13,6 +13,7 @@ import "../styles/styles.css";
 import axios from "axios";
 import Submission from "../interfaces/Submission";
 import Folder from "../interfaces/Folder";
+import Artist from "../interfaces/Artist";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -20,6 +21,7 @@ interface Filters {
   rating: number;
   tags: Tag[];
   folders: Folder[];
+  artists: Artist[];
 }
 
 export interface MyAppProps extends AppProps {
@@ -27,6 +29,7 @@ export interface MyAppProps extends AppProps {
   tags: Tag[];
   folders: Folder[];
   submissions: Submission[];
+  artists: Artist[];
   filters: Filters;
 }
 
@@ -61,9 +64,23 @@ MyApp.getInitialProps = async () => {
     }
   );
   const submissions = submissionsResponse.data;
-  console.log("initial props");
 
-  return { tags, folders, submissions };
+  const artistsResponse = await axios.get<Submission[]>(
+    "http://localhost:3001/artists",
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const artists = artistsResponse.data;
+  console.log("Initial props");
+  /* console.log(tags);
+  console.log(folders);
+  console.log(submissions);
+  console.log(artists); */
+  return { tags, folders, submissions, artists };
 };
 
 interface DataContextType {
@@ -72,6 +89,7 @@ interface DataContextType {
     folders: Folder[];
     submissions: Submission[];
     filters: Filters;
+    artists: Artist[];
   };
   setData: (data: DataContextType["data"]) => void;
 }
@@ -81,7 +99,8 @@ export const DataContext = createContext<DataContextType>({
     tags: [],
     folders: [],
     submissions: [],
-    filters: { rating: -1, tags: [], folders: [] },
+    filters: { rating: -1, tags: [], folders: [], artists: [] },
+    artists: [],
   },
   setData: () => {},
 });
@@ -93,11 +112,18 @@ export default function MyApp(props: MyAppProps) {
     folders: Folder[];
     submissions: Submission[];
     filters: Filters;
+    artists: Artist[];
   }>({
     tags: props.tags,
     folders: props.folders,
     submissions: props.submissions,
-    filters: props.filters || { rating: -1, tags: [], folders: [] },
+    artists: props.artists,
+    filters: props.filters || {
+      rating: -1,
+      tags: [],
+      folders: [],
+      artists: [],
+    },
   });
 
   return (
