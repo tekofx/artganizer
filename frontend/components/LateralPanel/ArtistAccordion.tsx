@@ -23,6 +23,7 @@ import { useState, MouseEvent, useEffect, useContext } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import PersonIcon from "@mui/icons-material/Person";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import PaletteIcon from "@mui/icons-material/Palette";
@@ -44,6 +45,7 @@ function ArtistList() {
           onClick={() => router.push(`/artist/${artist.id}`)}
         >
           <Stack direction="row" spacing={1}>
+            <PersonIcon />
             <Typography>{artist.name}</Typography>
           </Stack>
         </MenuItem>
