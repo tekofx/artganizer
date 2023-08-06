@@ -1,18 +1,33 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
-import { Grid, Paper, Typography, Stack, MenuItem, Icon } from "@mui/material";
+import {
+  Grid,
+  Paper,
+  Typography,
+  Stack,
+  MenuItem,
+  Icon,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import Folder from "../../interfaces/Folder";
 import Submission from "../../interfaces/Submission";
 import Tag from "../../interfaces/Tag";
 import { DataContext } from "../_app";
 import { TempleBuddhist } from "@mui/icons-material";
+import SubmissionForm from "../../components/SubmissionForm";
+
 import TagList from "../../components/TagList";
 import CharacterList from "../../components/CharacterList";
 import ArtistList from "../../components/ArtistList";
 
 export default function Page() {
   const [submission, setSubmission] = useState<Submission>();
+  const [open, setOpen] = useState<boolean>(false);
   const { data, setData } = useContext(DataContext);
 
   const router = useRouter();
@@ -34,13 +49,24 @@ export default function Page() {
 
   return (
     <Paper>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item lg={8}>
           <img src={submission?.image} width="100%" />
           <Typography>{submission?.title}</Typography>
           <Typography>{submission?.description}</Typography>
         </Grid>
         <Grid item>
+          <Button onClick={() => setOpen(true)}>Edit</Button>
+          <Dialog open={open}>
+            <DialogContent>
+              <SubmissionForm submission={submission} />
+            </DialogContent>
+            <DialogActions>
+              <Button>Confirm</Button>
+              <Button>Cancel</Button>
+            </DialogActions>
+          </Dialog>
+
           <Typography>Tags</Typography>
           <TagList tags={submission?.tags} />
           <Typography>Characters</Typography>

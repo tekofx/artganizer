@@ -17,6 +17,7 @@ import {
   Box,
   Chip,
 } from "@mui/material";
+import axios from "axios";
 import Checkbox from "@mui/material/Checkbox";
 import { Theme, useTheme } from "@mui/material/styles";
 import { DataContext } from "../pages/_app";
@@ -70,6 +71,26 @@ export default function SubmissionForm(props: SubmissionFormProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     props.submission?.tags || []
   );
+
+  async function saveSubmission() {
+    if (props.submission === undefined) {
+      // Create submission
+      try {
+        const response = await axios.post(`/api/submissions`, submission);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      // Update submission
+      try {
+        const response = await axios.put(`/api/submissions`, submission);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 
   return (
     <Paper>
