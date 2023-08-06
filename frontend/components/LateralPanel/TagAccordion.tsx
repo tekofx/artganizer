@@ -1,21 +1,11 @@
 import {
   Stack,
-  Grid,
-  MenuItem,
   Typography,
-  Menu,
-  Tooltip,
-  Avatar,
   IconButton,
-  Paper,
-  MenuList,
-  Divider,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Icon,
   TextField,
-  Dialog,
   Button,
   Popover,
 } from "@mui/material";
@@ -30,28 +20,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
 import { TwitterPicker } from "react-color";
-
-function TagList() {
-  const { data, setData } = useContext(DataContext);
-  const router = useRouter();
-
-  return (
-    <>
-      {data.tags.length == 0 && <Typography>No tags</Typography>}
-      {data.tags.map((tag) => (
-        <MenuItem key={tag.id} onClick={() => router.push(`/tag/${tag.id}`)}>
-          <Stack direction="row" spacing={1}>
-            <Icon sx={{ color: tag.color }}>
-              <LocalOfferIcon />
-            </Icon>
-
-            <Typography>{tag.name}</Typography>
-          </Stack>
-        </MenuItem>
-      ))}
-    </>
-  );
-}
+import TagList from "../TagList";
 
 export default function TagAccordion() {
   const [expanded, setExpanded] = useState<boolean>(true);
@@ -127,7 +96,7 @@ export default function TagAccordion() {
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction="column">
-          <TagList />
+          <TagList tags={data.tags} />
           {showCreateTag && (
             <>
               <Stack direction="row" sx={{ paddingBottom: "2%" }}>
