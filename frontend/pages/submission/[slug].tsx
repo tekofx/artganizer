@@ -9,6 +9,7 @@ import { DataContext } from "../_app";
 import { TempleBuddhist } from "@mui/icons-material";
 import TagList from "../../components/TagList";
 import CharacterList from "../../components/CharacterList";
+import ArtistList from "../../components/ArtistList";
 
 export default function Page() {
   const [submission, setSubmission] = useState<Submission>();
@@ -45,6 +46,7 @@ export default function Page() {
           <Typography>Characters</Typography>
           <CharacterList characters={submission?.characters} />
           <Typography>Artist</Typography>
+          <ArtistList artists={submission?.artists} />
         </Grid>
       </Grid>
 
