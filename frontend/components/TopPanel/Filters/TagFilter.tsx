@@ -19,10 +19,17 @@ import Tag from "../../../interfaces/Tag";
 
 export default function TagFilter() {
   const { data, setData } = useContext(DataContext);
-
-  const [value, setValue] = useState<number | null>(2);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [searchedTags, setSearchedTags] = useState<Tag[]>(data.tags);
+
   const open = Boolean(anchorEl);
+
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    var temp = data.tags.filter((tag) => tag.name.includes(event.target.value));
+    console.log(temp);
+    setSearchedTags(temp);
+  };
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -75,20 +82,27 @@ export default function TagFilter() {
             <Grid item lg={6}>
               <Typography>Selected Tags</Typography>
               {data.filters.tags.map((tag) => (
-                <Chip label={tag.name} />
+                <Chip label={tag.name} sx={{ backgroundColor: tag.color }} />
               ))}
             </Grid>
             <Grid item lg={6}>
-              <TextField label="Search tags" size="small" />
-              {data.tags.map((tag) => (
+              <TextField
+                label="Search tags"
+                size="small"
+                onChange={onSearchChange}
+              />
+              {searchedTags.map((tag) => (
                 <MenuItem key={tag.id} sx={{ p: 0 }}>
-                  <Checkbox
-                    value={tag}
-                    onChange={(event) => {
-                      handleCheckboxChange(event, tag);
-                    }}
-                  />
-                  {tag.name}
+                  <Stack direction="row">
+                    <Checkbox
+                      value={tag}
+                      onChange={(event) => {
+                        handleCheckboxChange(event, tag);
+                      }}
+                    />
+                    {tag.name}
+                    <Chip label={tag.submissionCount} size="small" />
+                  </Stack>
                 </MenuItem>
               ))}
             </Grid>
