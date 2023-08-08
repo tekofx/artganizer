@@ -7,7 +7,7 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import { Grid } from "@mui/material";
-import LateralPanel from "../components/LateralPanel/LateralPanel";
+import LateralPanel from "../components/LeftPanel/LeftPanel";
 import Tag from "../interfaces/Tag";
 import "../styles/styles.css";
 import axios from "axios";

@@ -39,7 +39,7 @@ import Folder from "../../interfaces/Folder";
 import { Tag } from "@mui/icons-material";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-export default function LateralPanel() {
+export default function LeftPanel() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const router = useRouter();
