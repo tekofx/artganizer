@@ -6,6 +6,11 @@ import {
   MenuItem,
   Stack,
   Paper,
+  Popover,
+  Grid,
+  Typography,
+  Chip,
+  TextField,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext } from "react";
@@ -56,27 +61,40 @@ export default function TagFilter() {
       >
         Tags
       </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
+      <Popover
         open={open}
+        anchorEl={anchorEl}
         onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
         }}
       >
-        {data.tags.map((tag) => (
-          <MenuItem key={tag.id}>
-            <Checkbox
-              value={tag}
-              onChange={(event) => {
-                handleCheckboxChange(event, tag);
-              }}
-            />
-            {tag.name}
-          </MenuItem>
-        ))}
-      </Menu>
+        <Paper sx={{ p: 2 }}>
+          <Grid container spacing={2}>
+            <Grid item lg={6}>
+              <Typography>Selected Tags</Typography>
+              {data.filters.tags.map((tag) => (
+                <Chip label={tag.name} />
+              ))}
+            </Grid>
+            <Grid item lg={6}>
+              <TextField label="Search tags" size="small" />
+              {data.tags.map((tag) => (
+                <MenuItem key={tag.id} sx={{ p: 0 }}>
+                  <Checkbox
+                    value={tag}
+                    onChange={(event) => {
+                      handleCheckboxChange(event, tag);
+                    }}
+                  />
+                  {tag.name}
+                </MenuItem>
+              ))}
+            </Grid>
+          </Grid>
+        </Paper>
+      </Popover>
     </div>
   );
 }
