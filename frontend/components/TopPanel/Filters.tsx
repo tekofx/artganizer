@@ -1,8 +1,8 @@
 import { Checkbox, Rating, Button, Menu, MenuItem, Stack, Paper } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState, MouseEvent, useContext } from "react";
-import { DataContext } from "../pages/_app";
-import Tag from "../interfaces/Tag";
+import { DataContext } from "../../pages/_app";
+import Tag from "../../interfaces/Tag";
 function RatingFilter() {
     const { data, setData } = useContext(DataContext);
     const [value, setValue] = useState<number | null>(data.filters.rating);
