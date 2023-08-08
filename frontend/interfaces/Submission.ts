@@ -16,4 +16,5 @@ export default interface Submission {
   characters: Character[];
   format: string;
   image: string;
+  colorPalette: string[];
 }
