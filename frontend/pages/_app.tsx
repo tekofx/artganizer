@@ -83,14 +83,16 @@ MyApp.getInitialProps = async () => {
   return { tags, folders, submissions, artists };
 };
 
+export interface DataType {
+  tags: Tag[];
+  folders: Folder[];
+  submissions: Submission[];
+  filters: Filters;
+  artists: Artist[];
+}
+
 interface DataContextType {
-  data: {
-    tags: Tag[];
-    folders: Folder[];
-    submissions: Submission[];
-    filters: Filters;
-    artists: Artist[];
-  };
+  data: DataType;
   setData: (data: DataContextType["data"]) => void;
 }
 
