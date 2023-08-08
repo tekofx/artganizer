@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import RightPanel from "../../components/RightPanel/RightPanel";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import Folder from "../../interfaces/Folder";
 import Submission from "../../interfaces/Submission";
@@ -57,30 +58,7 @@ export default function Page() {
           <img src={submission?.image} width="100%" />
         </Grid>
         <Grid item lg={3}>
-          <Button onClick={() => setOpen(true)}>Edit</Button>
-          <Dialog open={open} fullScreen>
-            <SubmissionForm
-              submission={submission}
-              setSubmission={setSubmission}
-              setOpen={setOpen}
-              open={open}
-            />
-          </Dialog>
-          <Typography>{submission?.title}</Typography>
-          <Typography>{submission?.description}</Typography>
-          <Rating value={submission?.rating} readOnly />
-          <Typography>{submission?.date.toString()}</Typography>
-          <Typography>
-            {submission?.width}x{submission?.height}
-          </Typography>
-          <Typography>{submission?.format.toUpperCase()}</Typography>
-          <Typography>Tags</Typography>
-          <TagList tags={submission?.tags} />
-          <Typography>Characters</Typography>
-          <CharacterList characters={submission?.characters} />
-          <Typography>Artist</Typography>
-          <ArtistList artists={submission?.artists} />
-          <ColorPalette colors={submission?.colors} />
+          <RightPanel submission={submission} />
         </Grid>
       </Grid>
     </Paper>
