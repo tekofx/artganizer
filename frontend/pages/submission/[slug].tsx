@@ -9,6 +9,7 @@ import {
   Rating,
   Icon,
   Button,
+  Chip,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -20,6 +21,7 @@ import Submission from "../../interfaces/Submission";
 import Tag from "../../interfaces/Tag";
 import { DataContext } from "../_app";
 import { TempleBuddhist } from "@mui/icons-material";
+import ColorPalette from "../../components/ColorPalette";
 import SubmissionForm from "../../components/SubmissionForm";
 
 import TagList from "../../components/TagList";
@@ -42,6 +44,7 @@ export default function Page() {
       data.submissions.filter((sub: Submission) => {
         if (sub.id == id) {
           setSubmission(sub);
+          console.log(sub);
         }
       });
     }
@@ -77,6 +80,7 @@ export default function Page() {
           <CharacterList characters={submission?.characters} />
           <Typography>Artist</Typography>
           <ArtistList artists={submission?.artists} />
+          <ColorPalette colors={submission?.colors} />
         </Grid>
       </Grid>
     </Paper>
