@@ -6,6 +6,7 @@ import {
   Typography,
   Stack,
   MenuItem,
+  Rating,
   Icon,
   Button,
   Dialog,
@@ -53,6 +54,12 @@ export default function Page() {
           <img src={submission?.image} width="100%" />
           <Typography>{submission?.title}</Typography>
           <Typography>{submission?.description}</Typography>
+          <Rating value={submission?.rating} readOnly />
+          <Typography>{submission?.date.toString()}</Typography>
+          <Typography>
+            {submission?.width}x{submission?.height}
+          </Typography>
+          <Typography>{submission?.format.toUpperCase()}</Typography>
         </Grid>
         <Grid item>
           <Button onClick={() => setOpen(true)}>Edit</Button>
@@ -73,8 +80,6 @@ export default function Page() {
           <ArtistList artists={submission?.artists} />
         </Grid>
       </Grid>
-
-      {router.query.slug}
     </Paper>
   );
 }
