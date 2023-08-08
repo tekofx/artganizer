@@ -62,5 +62,9 @@ export class Submission {
   @Column({ type: "simple-array" })
   colors: string[];
 
+  // File size in bytes
+  @Column()
+  size: number;
+
   image: string;
 }

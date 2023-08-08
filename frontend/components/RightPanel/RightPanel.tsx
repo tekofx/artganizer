@@ -56,6 +56,16 @@ function formatDate(date: Date | undefined) {
   );
 }
 
+function convertBytes(bytes: number) {
+  if (bytes > 1000000) {
+    var mb = bytes / 1000000;
+    return `${mb} MB`;
+  } else {
+    var kb = bytes / 1000;
+    return `${kb} KB`;
+  }
+}
+
 export default function RightPanel(props: RightPanelProps) {
   const [submission, setSubmission] = useState<Submission>();
   const { data, setData } = useContext(DataContext);
@@ -97,12 +107,18 @@ export default function RightPanel(props: RightPanelProps) {
             </Grid>
 
             <Grid item lg={4}>
-              Size
+              Dimensions
             </Grid>
             <Grid item lg={8}>
               <Typography>
                 {props.submission?.width}x{props.submission?.height}
               </Typography>
+            </Grid>
+            <Grid item lg={4}>
+              Size
+            </Grid>
+            <Grid item lg={8}>
+              {convertBytes(props.submission?.size)}
             </Grid>
 
             <Grid item lg={4}>

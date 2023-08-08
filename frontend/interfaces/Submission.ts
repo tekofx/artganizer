@@ -17,4 +17,5 @@ export default interface Submission {
   format: string;
   image: string;
   colors: string[];
+  size: number;
 }

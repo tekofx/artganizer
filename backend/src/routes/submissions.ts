@@ -160,6 +160,7 @@ router.post(
     }
     var colorsArray: string[] = [];
 
+    // Get colors
     await Vibrant.from(file.path).getPalette((err, palette) => {
       for (const colorName in palette) {
         const color = palette[colorName];
@@ -182,6 +183,7 @@ router.post(
         height: dimensions.height,
         format: dimensions.type,
         colors: colorsArray,
+        size: file.size,
       });
       if (artist) {
         var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
