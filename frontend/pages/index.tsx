@@ -11,7 +11,6 @@ import { DataContext } from "../pages/_app";
 import Search from "../components/TopPanel/Search";
 import TopPanel from "../components/TopPanel/TopPanel";
 
-import Filters from "../components/TopPanel/Filters";
 export default function Home() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const { data, setData } = useContext(DataContext);
@@ -23,7 +22,7 @@ export default function Home() {
       rating: -1,
       tags: [],
       folders: [],
-      artists:[],
+      artists: [],
     };
     setData(newData);
   }, []);
