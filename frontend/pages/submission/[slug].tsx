@@ -50,18 +50,10 @@ export default function Page() {
   return (
     <Paper>
       <Grid container spacing={2}>
-        <Grid item lg={8}>
+        <Grid item lg={9}>
           <img src={submission?.image} width="100%" />
-          <Typography>{submission?.title}</Typography>
-          <Typography>{submission?.description}</Typography>
-          <Rating value={submission?.rating} readOnly />
-          <Typography>{submission?.date.toString()}</Typography>
-          <Typography>
-            {submission?.width}x{submission?.height}
-          </Typography>
-          <Typography>{submission?.format.toUpperCase()}</Typography>
         </Grid>
-        <Grid item>
+        <Grid item lg={3}>
           <Button onClick={() => setOpen(true)}>Edit</Button>
           <Dialog open={open} fullScreen>
             <SubmissionForm
@@ -71,7 +63,14 @@ export default function Page() {
               open={open}
             />
           </Dialog>
-
+          <Typography>{submission?.title}</Typography>
+          <Typography>{submission?.description}</Typography>
+          <Rating value={submission?.rating} readOnly />
+          <Typography>{submission?.date.toString()}</Typography>
+          <Typography>
+            {submission?.width}x{submission?.height}
+          </Typography>
+          <Typography>{submission?.format.toUpperCase()}</Typography>
           <Typography>Tags</Typography>
           <TagList tags={submission?.tags} />
           <Typography>Characters</Typography>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { Typography, Stack, MenuItem, Icon } from "@mui/material";
+import { Typography, Stack, MenuItem, Icon, Chip } from "@mui/material";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import Tag from "../interfaces/Tag";
 
@@ -15,15 +15,9 @@ export default function TagList(props: TagListProps) {
       {props.tags == undefined && <Typography>No tags</Typography>}
       {props.tags?.length == 0 && <Typography>No tags</Typography>}
       {props.tags?.map((tag) => (
-        <MenuItem key={tag.id} onClick={() => router.push(`/tag/${tag.id}`)}>
-          <Stack direction="row" spacing={1}>
-            <Icon sx={{ color: tag.color }}>
-              <LocalOfferIcon />
-            </Icon>
-
-            <Typography>{tag.name}</Typography>
-          </Stack>
-        </MenuItem>
+        <Stack direction="row" spacing={1}>
+          <Chip label={tag.name} sx={{ backgroundColor: tag.color }} />
+        </Stack>
       ))}
     </>
   );

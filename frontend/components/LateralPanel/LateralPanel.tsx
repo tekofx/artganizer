@@ -31,7 +31,6 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
-import TagAccordion from "./TagAccordion";
 import FolderAccordion from "./FolderAccordion";
 import ArtistAccordion from "./ArtistAccordion";
 
@@ -113,7 +112,6 @@ export default function LateralPanel() {
         </Grid>
         <Grid item lg={12}>
           <MenuList>
-            <TagAccordion />
             <FolderAccordion />
             <ArtistAccordion />
           </MenuList>
