@@ -10,9 +10,9 @@ router.get("/", async (req: Request, res: Response) => {
   //const tags = await TagRepo.find();
   const tags = await TagRepo.createQueryBuilder("tag")
     .select([
-      "tag.id",
-      "tag.name",
-      "tag.color",
+      "tag.id AS id",
+      "tag.name AS name",
+      "tag.color AS color",
       "(SELECT COUNT(*) FROM submission_tags_tag WHERE submission_tags_tag.tagId = tag.id) AS submissionCount",
     ])
     .getRawMany();
