@@ -1,4 +1,10 @@
-import { useState, useContext, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  useContext,
+  Dispatch,
+  SetStateAction,
+  Fragment,
+} from "react";
 import {
   Paper,
   Typography,
@@ -16,6 +22,7 @@ import {
   ListItemText,
   Box,
   Chip,
+  Autocomplete,
 } from "@mui/material";
 import axios from "axios";
 import { DataType } from "../pages/_app";
@@ -24,7 +31,7 @@ import { Theme, useTheme } from "@mui/material/styles";
 import { DataContext } from "../pages/_app";
 import Tag from "../interfaces/Tag";
 import Submission from "../interfaces/Submission";
-
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 interface TagSelectProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   selectedTags: Tag[];
@@ -35,13 +42,42 @@ function TagSelect(props: TagSelectProps) {
   return (
     <Paper>
       <Typography>Tag select</Typography>
-      {data.tags.map((tag) => (
-        <Chip
-          key={tag.id}
-          label={tag.name}
-          sx={{ backgroundColor: tag.color }}
-        />
-      ))}
+      <Stack spacing={1} direction="row">
+        {data.tags.map((tag) => (
+          <Chip
+            key={tag.id}
+            label={tag.name}
+            sx={{ backgroundColor: tag.color }}
+          />
+        ))}
+      </Stack>
+
+      <Autocomplete
+        multiple
+        id="tags-standard"
+        options={data.tags}
+        getOptionLabel={(option) => option.name}
+        value={props.selectedTags}
+        onChange={(event, value) => props.setSelectedTags(value)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="standard"
+            label="Multiple values"
+            placeholder="Favorites"
+          />
+        )}
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip
+              variant="outlined"
+              label={option.name}
+              style={{ backgroundColor: option.color }}
+              {...getTagProps({ index })}
+            />
+          ))
+        }
+      />
     </Paper>
   );
 }
@@ -123,11 +159,13 @@ export default function SubmissionForm(props: SubmissionFormProps) {
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Typography>Create Submission</Typography>
       <Grid container spacing={2}>
+        <Grid item md={12}>
+          <Typography>Create Submission</Typography>
+        </Grid>
         <Grid item xs={6}>
           <FormControl fullWidth>
-            <Stack>
+            <Stack spacing={2}>
               <TextField
                 label="Title"
                 value={submission.title}
