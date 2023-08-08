@@ -107,6 +107,7 @@ router.get("/", async (req: Request, res: Response) => {
   }
 
   const submissions = await queryBuilder.getMany();
+  console.log(submissions);
 
   // Add image URL
   submissions.forEach((submission) => {
@@ -157,20 +158,19 @@ router.post(
       res.status(400).send("File not provided or not an image");
       return;
     }
+    var colorsArray: string[] = [];
 
-    var colors = <any>[];
-
-    Vibrant.from(file.path)
-      .getPalette()
-      .then((palette) => {
-        for (const colorName in palette) {
-          const color = palette[colorName];
-          if (color) {
-            const hex = color.hex;
-            colors.push(hex);
-          }
+    await Vibrant.from(file.path).getPalette((err, palette) => {
+      for (const colorName in palette) {
+        const color = palette[colorName];
+        if (color) {
+          const hex = color.hex;
+          colorsArray.push(hex);
         }
-      });
+      }
+    });
+
+    var colors = colorsArray.join(",");
 
     try {
       // Obtener las dimensiones de la imagen
@@ -183,7 +183,7 @@ router.post(
         width: dimensions.width,
         height: dimensions.height,
         format: dimensions.type,
-        colorPalette: colors,
+        colors: colors,
       });
       if (artist) {
         var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
@@ -292,7 +292,6 @@ router.delete("/:submissionId", async (req: Request, res: Response) => {
 });
 
 router.put("/:submissionId", async (req: Request, res: Response) => {
-  console.log("PUT submission");
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
     return;
@@ -303,7 +302,6 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
     where: { id: submissionId },
     relations: ["tags", "folders"],
   });
-  console.log(submission);
 
   if (submission == null) {
     res.status(404).send("submission not found");

@@ -58,7 +58,9 @@ export class Submission {
   @Column({ length: 10 })
   format: string;
 
-  @Column({ type: "json" })
-  colorPalette: string;
+  // Each color delimited by a comma (,)
+  @Column()
+  colors: string;
+
   image: string;
 }
