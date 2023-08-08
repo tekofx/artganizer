@@ -41,7 +41,6 @@ export default function Page() {
       data.submissions.filter((sub: Submission) => {
         if (sub.id == id) {
           setSubmission(sub);
-          // If tag not in filters add it
         }
       });
     }
@@ -57,14 +56,13 @@ export default function Page() {
         </Grid>
         <Grid item>
           <Button onClick={() => setOpen(true)}>Edit</Button>
-          <Dialog open={open}>
-            <DialogContent>
-              <SubmissionForm submission={submission} />
-            </DialogContent>
-            <DialogActions>
-              <Button>Confirm</Button>
-              <Button>Cancel</Button>
-            </DialogActions>
+          <Dialog open={open} fullScreen>
+            <SubmissionForm
+              submission={submission}
+              setSubmission={setSubmission}
+              setOpen={setOpen}
+              open={open}
+            />
           </Dialog>
 
           <Typography>Tags</Typography>

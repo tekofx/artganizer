@@ -18,6 +18,7 @@ import {
   Chip,
 } from "@mui/material";
 import axios from "axios";
+import { DataType } from "../pages/_app";
 import Checkbox from "@mui/material/Checkbox";
 import { Theme, useTheme } from "@mui/material/styles";
 import { DataContext } from "../pages/_app";
@@ -35,7 +36,11 @@ function TagSelect(props: TagSelectProps) {
     <Paper>
       <Typography>Tag select</Typography>
       {data.tags.map((tag) => (
-        <Chip label={tag.name} sx={{ backgroundColor: tag.color }} />
+        <Chip
+          key={tag.id}
+          label={tag.name}
+          sx={{ backgroundColor: tag.color }}
+        />
       ))}
     </Paper>
   );
@@ -56,10 +61,11 @@ const emptySubmission: Submission = {
   image: "",
 };
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 interface SubmissionFormProps {
   submission?: Submission;
+  setSubmission?: Dispatch<SetStateAction<Submission | undefined>>;
+  open?: boolean;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function SubmissionForm(props: SubmissionFormProps) {
@@ -72,51 +78,100 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     props.submission?.tags || []
   );
 
+  function onCancel() {
+    if (props.setOpen != undefined) {
+      props.setOpen(false);
+    }
+  }
+
   async function saveSubmission() {
+    console.log(submission);
     if (props.submission === undefined) {
       // Create submission
       try {
-        const response = await axios.post(`/api/submissions`, submission);
-        console.log(response.data);
+        const response = await axios.post(
+          `http://localhost:3001/submissions`,
+          submission
+        );
       } catch (error) {
         console.error(error);
       }
     } else {
       // Update submission
       try {
-        const response = await axios.put(`/api/submissions`, submission);
-        console.log(response.data);
+        const response = await axios.put(
+          `http://localhost:3001/submissions/${submission.id}`,
+          submission
+        );
+        // Update data
+        var newData = { ...data };
+        newData.submissions = data.submissions.map((sub) =>
+          sub.id === submission.id ? submission : sub
+        );
+        console.log(newData);
+        setData(newData);
+        setSubmission(submission);
       } catch (error) {
         console.error(error);
       }
     }
+
+    if (props.setOpen != undefined) {
+      props.setOpen(false);
+    }
   }
 
   return (
-    <Paper>
+    <Paper sx={{ p: 2 }}>
       <Typography>Create Submission</Typography>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <FormControl fullWidth>
             <Stack>
-              <TextField label="Title" value={submission.title} />
-              <TextField label="Description" value={submission.description} />
+              <TextField
+                label="Title"
+                value={submission.title}
+                onChange={(event) => {
+                  setSubmission((prevSubmission) => ({
+                    ...prevSubmission,
+                    title: event.target.value,
+                  }));
+                }}
+              />
+              <TextField
+                label="Description"
+                value={submission.description}
+                onChange={(event) => {
+                  setSubmission((prevSubmission) => ({
+                    ...prevSubmission,
+                    description: event.target.value,
+                  }));
+                }}
+              />
               <TagSelect
                 selectedTags={selectedTags}
                 setSelectedTags={setSelectedTags}
               />
-              <Rating />
-              <Button>Submit</Button>
+              <Rating
+                value={submission.rating}
+                onChange={(event, newValue) => {
+                  setSubmission((prevSubmission) => ({
+                    ...prevSubmission,
+                    rating: newValue || 0,
+                  }));
+                }}
+              />
             </Stack>
           </FormControl>
         </Grid>
         <Grid item xs={6}>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/04/Labrador_Retriever_%281210559%29.jpg"
-            width="100%"
-          />
+          <img src={submission.image} width="100%" />
         </Grid>
       </Grid>
+      <Stack direction="row">
+        <Button onClick={() => saveSubmission()}>Ok</Button>
+        <Button onClick={() => onCancel()}>Cancel</Button>
+      </Stack>
     </Paper>
   );
 }
