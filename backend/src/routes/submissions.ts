@@ -64,7 +64,6 @@ const uploadSubmissions = multer({
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  console.log("uu");
   var { tags, folders, characters, artist } = req.query;
 
   const queryBuilder = SubmissionRepo.createQueryBuilder("submission");
@@ -276,6 +275,7 @@ router.delete("/:submissionId", async (req: Request, res: Response) => {
 });
 
 router.put("/:submissionId", async (req: Request, res: Response) => {
+  console.log("PUT submission");
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
     return;
@@ -286,6 +286,7 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
     where: { id: submissionId },
     relations: ["tags", "folders"],
   });
+  console.log(submission);
 
   if (submission == null) {
     res.status(404).send("submission not found");
