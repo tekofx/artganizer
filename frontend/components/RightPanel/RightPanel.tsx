@@ -1,4 +1,11 @@
-import { Grid, Typography, Paper, Rating } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Paper,
+  Rating,
+  Stack,
+  Container,
+} from "@mui/material";
 import { useState, MouseEvent, useEffect, useContext } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
@@ -56,7 +63,7 @@ export default function RightPanel(props: RightPanelProps) {
   const router = useRouter();
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <div>
       <Grid container spacing={2}>
         <Grid item lg={12}>
           <img src={props.submission?.image} width="100%" />
@@ -67,23 +74,46 @@ export default function RightPanel(props: RightPanelProps) {
           <Typography>{props.submission?.description}</Typography>
           <Typography>Tags</Typography>
           <TagList tags={props.submission?.tags} />
-        </Grid>
-        <Grid item lg={12}>
-          <Typography variant="h4">Information</Typography>
-
-          <Rating value={props.submission?.rating} readOnly />
-          <Typography>{formatDate(props.submission?.date)}</Typography>
-          <Typography>
-            {props.submission?.width}x{props.submission?.height}
-          </Typography>
-          <Typography>{props.submission?.format.toUpperCase()}</Typography>
-
           <Typography>Characters</Typography>
           <CharacterList characters={props.submission?.characters} />
           <Typography>Artist</Typography>
           <ArtistList artist={props.submission?.artist} />
         </Grid>
+        <Grid item lg={12}>
+          <Typography variant="h4">Information</Typography>
+          <Grid container>
+            <Grid item lg={4}>
+              <Typography>Rating</Typography>
+            </Grid>
+            <Grid item lg={8}>
+              <Rating value={props.submission?.rating} readOnly />
+            </Grid>
+            <Grid item lg={4}>
+              Date
+            </Grid>
+
+            <Grid item lg={8}>
+              <Typography>{formatDate(props.submission?.date)}</Typography>
+            </Grid>
+
+            <Grid item lg={4}>
+              Size
+            </Grid>
+            <Grid item lg={8}>
+              <Typography>
+                {props.submission?.width}x{props.submission?.height}
+              </Typography>
+            </Grid>
+
+            <Grid item lg={4}>
+              Format
+            </Grid>
+            <Grid item lg={8}>
+              <Typography>{props.submission?.format.toUpperCase()}</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
-    </Paper>
+    </div>
   );
 }
