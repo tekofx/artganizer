@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource, In } from "typeorm";
 import { Artist } from "../entities/Artist";
 import { Submission } from "../entities/Submission";
 import multer, { FileFilterCallback } from "multer";
@@ -284,6 +284,7 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
   var submissionId: number = parseInt(req.params.submissionId);
   const submission = await SubmissionRepo.findOne({
     where: { id: submissionId },
+    relations: ["tags", "folders"],
   });
 
   if (submission == null) {
@@ -292,34 +293,31 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
   }
 
   var { title, description, rating, artist, tags, folders } = req.body;
-  await SubmissionRepo.update(submission, {
-    title: title,
-    description: description,
-    rating: rating,
-    artist: artist,
-  });
 
-  if (tags) {
-    for (var i = 0; i < tags.length; i++) {
-      var tagObj = await TagRepo.findOne({ where: { id: tags[i] } });
-      if (tagObj) {
-        console.log(tagObj);
-        tags[i] = tagObj;
-      }
-    }
-    submission.tags = tags;
-    await SubmissionRepo.save(submission);
-  }
+  if (submission) {
+    submission.title = title;
+    submission.description = description;
+    submission.rating = rating;
+    submission.artist = artist;
 
-  if (folders) {
-    for (var i = 0; i < folders.length; i++) {
-      var folderObj = await FolderRepo.findOne({ where: { id: folders[i] } });
-      if (folderObj) {
-        console.log(folderObj);
-        folders[i] = folderObj;
-      }
+    if (tags) {
+      const tagEntities = await TagRepo.find({
+        where: {
+          id: In(tags),
+        },
+      });
+      submission.tags = tagEntities;
     }
-    submission.folders = folders;
+
+    if (folders) {
+      const folderEntities = await FolderRepo.find({
+        where: {
+          id: In(folders),
+        },
+      });
+      submission.folders = folderEntities;
+    }
+
     await SubmissionRepo.save(submission);
   }
 
