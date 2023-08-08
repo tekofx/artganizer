@@ -1,153 +1,162 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { DataSource } from 'typeorm';
-import { Artist } from '../entities/Artist';
-import { Submission } from '../entities/Submission';
-import multer, { FileFilterCallback } from 'multer';
-import * as fs from 'fs';
-import * as path from 'path';
-import sharp from 'sharp';
-import { ArtistRepo, SubmissionRepo } from '../typeorm.config';
+import { DataSource } from "typeorm";
+import { Artist } from "../entities/Artist";
+import { Submission } from "../entities/Submission";
+import multer, { FileFilterCallback } from "multer";
+import * as fs from "fs";
+import * as path from "path";
+import sharp from "sharp";
+import { ArtistRepo, SubmissionRepo } from "../typeorm.config";
 
-const artistsPicsDir = path.join(__dirname, '../../uploads/artistPics');
+const artistsPicsDir = path.join(__dirname, "../../uploads/artistPics");
 if (!fs.existsSync(artistsPicsDir)) {
-    fs.mkdirSync(artistsPicsDir,{recursive:true});
+  fs.mkdirSync(artistsPicsDir, { recursive: true });
 }
-
-
-
 
 const router = express.Router();
 // Multer config
 
 // Función de filtro de archivos
-const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFilterCallback) => {
-    // Verificar si el archivo es una imagen
-    if (file.mimetype.startsWith('image/')) {
-        // Aceptar el archivo
-        cb(null, true);
-    } else {
-        // Rechazar el archivo
-        cb(null, false);
-    }
-}
+const fileFilter = (
+  req: Express.Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+) => {
+  // Verificar si el archivo es una imagen
+  if (file.mimetype.startsWith("image/")) {
+    // Aceptar el archivo
+    cb(null, true);
+  } else {
+    // Rechazar el archivo
+    cb(null, false);
+  }
+};
 
-const uploadArtistPics = multer({ dest: artistsPicsDir, fileFilter: fileFilter });
-router.get('/', async (req: Request, res: Response) => {
-    const artists = await ArtistRepo.find();
+const uploadArtistPics = multer({
+  dest: artistsPicsDir,
+  fileFilter: fileFilter,
+});
+router.get("/", async (req: Request, res: Response) => {
+  const artists = await ArtistRepo.find();
 
-    // Add image URL
-    artists.forEach((artist) => {
-        artist.image = process.env.URL + "/artists/uploads/" + artist.id;
-    }
-    );
-    res.send(artists);
+  // Add image URL
+  artists.forEach((artist) => {
+    artist.image = process.env.URL + "/artists/uploads/" + artist.id;
+  });
+  res.send(artists);
 });
 
-router.post('/', uploadArtistPics.single("file"), async (req: Request, res: Response) => {
-
+router.post(
+  "/",
+  uploadArtistPics.single("file"),
+  async (req: Request, res: Response) => {
     var { name, description, socials } = req.body;
     var file = req.file;
     if (name == null) {
-        res.status(400).send("name not provided");
-        return;
+      res.status(400).send("name not provided");
+      return;
     }
 
     const artist = ArtistRepo.create({ name, description, socials });
 
-    var id = await ArtistRepo.save(artist).then((artist) => {
+    var id = await ArtistRepo.save(artist)
+      .then((artist) => {
         return artist.id;
-    }).catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
-    });
-
+      });
 
     // Convertir a JPG y Renombrar el archivo con el ID generado
     if (file) {
-        sharp(file.path)
-            .jpeg()
-            .toFile(path.join(artistsPicsDir, id + ".jpg")).then(() => {
-                // Eliminar el archivo temporal
-                if (file?.path) {
-                    fs.unlinkSync(file.path);
-                }
-            }).catch((error) => {
-                console.log(error);
-            }
-            );
+      sharp(file.path)
+        .jpeg()
+        .toFile(path.join(artistsPicsDir, id + ".jpg"))
+        .then(() => {
+          // Eliminar el archivo temporal
+          if (file?.path) {
+            fs.unlinkSync(file.path);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     res.send(artist);
+  }
+);
+
+router.get("/", async (req: Request, res: Response) => {
+  const artists = await ArtistRepo.find();
+  res.send(artists);
 });
 
-router.get('/', async (req: Request, res: Response) => {
-    const artists = await ArtistRepo.find();
-    res.send(artists);
+router.get("/:artistId", async (req: Request, res: Response) => {
+  if (req.params.artistId == null) {
+    res.status(400).send("artist ID not provided");
+    return;
+  }
+
+  var artistId: number = parseInt(req.params.artistId);
+  const artist = await ArtistRepo.findOne({
+    where: { id: artistId },
+    relations: ["submissions"],
+  });
+
+  if (artist == null) {
+    res.status(404).send("artist not found");
+    return;
+  }
+
+  res.send(artist);
 });
 
-router.get('/:artistId', async (req: Request, res: Response) => {
-    if (req.params.artistId == null) {
-        res.status(400).send("artist ID not provided");
-        return;
-    }
+router.delete("/:artistId", async (req: Request, res: Response) => {
+  if (req.params.artistId == null) {
+    res.status(400).send("artist ID not provided");
+    return;
+  }
 
-    var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({ where: { id: artistId }, relations: ["submissions"] });
+  var artistId: number = parseInt(req.params.artistId);
+  const artist = await ArtistRepo.findOne({ where: { id: artistId } });
 
+  if (artist == null) {
+    res.status(404).send("artist not found");
+    return;
+  }
 
-    if (artist == null) {
-        res.status(404).send("artist not found");
-        return;
-    }
+  // Remove from uploads folder
+  const filePath = path.join(artistsPicsDir, artistId + ".jpg");
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
 
-    res.send(artist);
+  // Remove from database
+  await ArtistRepo.remove(artist);
+
+  res.send(artist);
 });
 
-router.delete('/:artistId', async (req: Request, res: Response) => {
-    if (req.params.artistId == null) {
-        res.status(400).send("artist ID not provided");
-        return;
-    }
+router.get("/:artistId/submissions", async (req: Request, res: Response) => {
+  if (req.params.artistId == null) {
+    res.status(400).send("artist ID not provided");
+    return;
+  }
 
-    var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({ where: { id: artistId } });
+  var artistId: number = parseInt(req.params.artistId);
+  const submissions = await SubmissionRepo.createQueryBuilder("submission")
+    .leftJoinAndSelect("submission.artist", "artist")
+    .where("artist.id = :id", { id: artistId })
+    .getMany();
 
-    if (artist == null) {
-        res.status(404).send("artist not found");
-        return;
-    }
+  if (submissions.length === 0) {
+    res.status(404).send("artist not found or no submissions found for artist");
+    return;
+  }
 
-    // Remove from uploads folder
-    const filePath = path.join(artistsPicsDir, artistId + ".jpg");
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-    }
-
-    // Remove from database
-    await ArtistRepo.remove(artist);
-
-    res.send(artist);
+  res.send(submissions);
 });
-
-router.get('/:artistId/submissions', async (req: Request, res: Response) => {
-    if (req.params.artistId == null) {
-        res.status(400).send("artist ID not provided");
-        return;
-    }
-
-    var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({ where: { id: artistId } });
-
-    if (artist == null) {
-        res.status(404).send("artist not found");
-        return;
-    }
-    const submissions = await SubmissionRepo.findBy({ artist: artist });
-
-
-    res.send(submissions);
-});
-
-
 
 export default router;
