@@ -39,9 +39,6 @@ export default function Home() {
         }}
       >
         <TopPanel />
-        <Typography variant="h4" component="h1" gutterBottom>
-          Welcome to the gallery
-        </Typography>
         <Gallery />
       </Box>
     </Container>
