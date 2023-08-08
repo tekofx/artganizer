@@ -7,6 +7,7 @@ import multer, { FileFilterCallback } from "multer";
 import * as fs from "fs";
 import * as path from "path";
 import sharp from "sharp";
+import Vibrant from "node-vibrant";
 import {
   ArtistRepo,
   SubmissionRepo,
@@ -156,6 +157,21 @@ router.post(
       res.status(400).send("File not provided or not an image");
       return;
     }
+
+    var colors = <any>[];
+
+    Vibrant.from(file.path)
+      .getPalette()
+      .then((palette) => {
+        for (const colorName in palette) {
+          const color = palette[colorName];
+          if (color) {
+            const hex = color.hex;
+            colors.push(hex);
+          }
+        }
+      });
+
     try {
       // Obtener las dimensiones de la imagen
       const dimensions = sizeOf(file.path);
@@ -167,6 +183,7 @@ router.post(
         width: dimensions.width,
         height: dimensions.height,
         format: dimensions.type,
+        colorPalette: colors,
       });
       if (artist) {
         var artistObj = await ArtistRepo.findOne({ where: { id: artist } });

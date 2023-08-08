@@ -1,52 +1,64 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, PrimaryColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+  PrimaryColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { Artist } from "./Artist";
 import { Folder } from "./Folder";
 import { Tag } from "./Tag";
 import { Character } from "./Character";
 
-
 @Entity()
 export class Submission {
-    @PrimaryGeneratedColumn()
-    /* @OneToMany(() => User, user => user.favorites) */
-    id: number;
+  @PrimaryGeneratedColumn()
+  /* @OneToMany(() => User, user => user.favorites) */
+  id: number;
 
-    @Column({ length: 50, default: "Untitled" })
-    title: string;
+  @Column({ length: 50, default: "Untitled" })
+  title: string;
 
-    @Column({ length: 500,default:"" })
-    description: string;
+  @Column({ length: 500, default: "" })
+  description: string;
 
-    @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
-    date: Date;
+  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
+  date: Date;
 
-    @Column({ type: "tinyint", default: 0 })
-    rating: number;
+  @Column({ type: "tinyint", default: 0 })
+  rating: number;
 
-    @Column()
-    width: number;
+  @Column()
+  width: number;
 
-    @Column()
-    height: number;
+  @Column()
+  height: number;
 
-    @ManyToOne(() => Artist, (artist) => artist.submissions)
-    artist: Artist;
+  @ManyToOne(() => Artist, (artist) => artist.submissions)
+  artist: Artist;
 
-    @ManyToMany(() => Folder)
-    @JoinTable()
-    folders: Folder[];
+  @ManyToMany(() => Folder)
+  @JoinTable()
+  folders: Folder[];
 
-    @ManyToMany(() => Tag)
-    @JoinTable()
-    tags: Tag[];
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  tags: Tag[];
 
-    @ManyToMany(() => Character)
-    @JoinTable()
-    characters: Character[];
+  @ManyToMany(() => Character)
+  @JoinTable()
+  characters: Character[];
 
-    // Image format
-    @Column({ length: 10 })
-    format: string;
+  // Image format
+  @Column({ length: 10 })
+  format: string;
 
-    image: string;
+  @Column({ type: "json" })
+  colorPalette: string;
+  image: string;
 }
