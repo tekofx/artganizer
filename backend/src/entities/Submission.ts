@@ -59,8 +59,8 @@ export class Submission {
   format: string;
 
   // Each color delimited by a comma (,)
-  @Column()
-  colors: string;
+  @Column({ type: "simple-array" })
+  colors: string[];
 
   image: string;
 }

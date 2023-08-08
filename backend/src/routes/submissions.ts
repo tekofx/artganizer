@@ -170,8 +170,6 @@ router.post(
       }
     });
 
-    var colors = colorsArray.join(",");
-
     try {
       // Obtener las dimensiones de la imagen
       const dimensions = sizeOf(file.path);
@@ -183,7 +181,7 @@ router.post(
         width: dimensions.width,
         height: dimensions.height,
         format: dimensions.type,
-        colors: colors,
+        colors: colorsArray,
       });
       if (artist) {
         var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
