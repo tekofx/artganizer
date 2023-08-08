@@ -110,7 +110,7 @@ export default function SubmissionForm(props: SubmissionFormProps) {
         );
         console.log(newData);
         setData(newData);
-        setSubmission(submission);
+        props.setSubmission && props.setSubmission(submission);
       } catch (error) {
         console.error(error);
       }
@@ -166,6 +166,10 @@ export default function SubmissionForm(props: SubmissionFormProps) {
         </Grid>
         <Grid item xs={6}>
           <img src={submission.image} width="100%" />
+          <Button variant="contained" component="label">
+            Upload File
+            <input type="file" hidden />
+          </Button>
         </Grid>
       </Grid>
       <Stack direction="row">
