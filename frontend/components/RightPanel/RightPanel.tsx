@@ -50,10 +50,6 @@ export default function RightPanel(props: RightPanelProps) {
   return (
     <Grid container spacing={2} alignContent="center">
       <Grid item lg={12}>
-        <img src={props.submission?.image} width="100%" />
-        <ColorPalette colors={props.submission?.colors} />
-      </Grid>
-      <Grid item lg={12}>
         <Typography>{props.submission?.title}</Typography>
         <Typography>{props.submission?.description}</Typography>
         <Typography>Tags</Typography>
@@ -62,6 +58,9 @@ export default function RightPanel(props: RightPanelProps) {
         <CharacterList characters={props.submission?.characters} />
         <Typography>Artist</Typography>
         <ArtistList artist={props.submission?.artist} />
+      </Grid>
+      <Grid item lg={12}>
+        <ColorPalette colors={props.submission?.colors} />
       </Grid>
       <Grid item lg={12}>
         <Typography variant="h5">Information</Typography>
@@ -102,10 +101,12 @@ export default function RightPanel(props: RightPanelProps) {
             <Typography>{props.submission?.format.toUpperCase()}</Typography>
           </Grid>
         </Grid>
-        <Stack>
-          <Button>Edit</Button>
-          <Button> Remove</Button>
-        </Stack>
+        <Grid item lg={12}>
+          <Stack direction="row" width="100%">
+            <Button>Edit</Button>
+            <Button>Remove</Button>
+          </Stack>
+        </Grid>
       </Grid>
     </Grid>
   );
