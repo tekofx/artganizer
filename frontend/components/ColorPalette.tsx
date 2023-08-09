@@ -8,7 +8,7 @@ export default function ColorPalette(props: ColorPaletteProps) {
     <>
       <Grid container>
         {props.colors?.map((color) => (
-          <Grid item xs>
+          <Grid item xs key={color}>
             <Tooltip
               TransitionComponent={Grow}
               title={

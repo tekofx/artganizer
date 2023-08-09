@@ -1,10 +1,4 @@
-import {
-  useState,
-  useContext,
-  Dispatch,
-  SetStateAction,
-  Fragment,
-} from "react";
+import { useState, useContext, Dispatch, SetStateAction } from "react";
 import {
   Paper,
   Typography,
@@ -12,32 +6,21 @@ import {
   TextField,
   Stack,
   FormControl,
-  Select,
   Rating,
   Grid,
-  MenuItem,
-  SelectChangeEvent,
-  OutlinedInput,
-  InputLabel,
-  ListItemText,
-  Box,
   Chip,
   Autocomplete,
 } from "@mui/material";
 import axios from "axios";
-import { DataType } from "../pages/_app";
-import Checkbox from "@mui/material/Checkbox";
-import { Theme, useTheme } from "@mui/material/styles";
 import { DataContext } from "../pages/_app";
 import Tag from "../interfaces/Tag";
 import Submission from "../interfaces/Submission";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 interface TagSelectProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   selectedTags: Tag[];
 }
 function TagSelect(props: TagSelectProps) {
-  const { data, setData } = useContext(DataContext);
+  const { data } = useContext(DataContext);
 
   return (
     <Paper>
@@ -70,6 +53,7 @@ function TagSelect(props: TagSelectProps) {
         renderTags={(value, getTagProps) =>
           value.map((option, index) => (
             <Chip
+              key={option.id}
               variant="outlined"
               label={option.name}
               style={{ backgroundColor: option.color }}
@@ -125,17 +109,14 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     if (props.submission === undefined) {
       // Create submission
       try {
-        const response = await axios.post(
-          `http://localhost:3001/submissions`,
-          submission
-        );
+        await axios.post(`http://localhost:3001/submissions`, submission);
       } catch (error) {
         console.error(error);
       }
     } else {
       // Update submission
       try {
-        const response = await axios.put(
+        await axios.put(
           `http://localhost:3001/submissions/${submission.id}`,
           submission
         );

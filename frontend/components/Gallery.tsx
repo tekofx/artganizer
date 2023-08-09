@@ -1,27 +1,18 @@
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import {
-  Grid,
   Typography,
   Paper,
   Stack,
   Dialog,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
-import { Skeleton } from "@mui/material";
-import axios from "axios";
 import Image from "../interfaces/Image";
 import Submission from "../interfaces/Submission";
 import { DataContext } from "../pages/_app";
 import { useRouter } from "next/router";
 
-type GalleryProps = {
-  submissions: Submission[];
-};
 export default function Gallery() {
-  const { data, setData } = useContext(DataContext);
+  const { data } = useContext(DataContext);
   const [submissions, setSubmissions] = useState<Submission[]>(
     data.submissions
   );

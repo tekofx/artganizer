@@ -1,8 +1,6 @@
 import {
   Checkbox,
-  Rating,
   Button,
-  Menu,
   MenuItem,
   Stack,
   Paper,
@@ -82,7 +80,11 @@ export default function TagFilter() {
             <Grid item lg={6}>
               <Typography>Selected Tags</Typography>
               {data.filters.tags.map((tag) => (
-                <Chip label={tag.name} sx={{ backgroundColor: tag.color }} />
+                <Chip
+                  label={tag.name}
+                  sx={{ backgroundColor: tag.color }}
+                  key={tag.id}
+                />
               ))}
             </Grid>
             <Grid item lg={6}>

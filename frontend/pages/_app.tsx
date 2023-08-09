@@ -1,4 +1,4 @@
-import { useEffect, createContext, useState } from "react";
+import { createContext, useState } from "react";
 import Head from "next/head";
 import { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
@@ -93,7 +93,7 @@ export interface DataType {
 
 interface DataContextType {
   data: DataType;
-  setData: (data: DataContextType["data"]) => void;
+  setData: (DataType) => void;
 }
 
 export const DataContext = createContext<DataContextType>({

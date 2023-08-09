@@ -1,6 +1,6 @@
-import { Paper, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { DataContext } from "../../../pages/_app";
-import { useState, MouseEvent, useContext } from "react";
+import { useContext } from "react";
 
 export default function ClearFilters() {
   const { data, setData } = useContext(DataContext);

@@ -1,4 +1,4 @@
-import { Paper, TextField, IconButton, Icon } from "@mui/material"
+import { Paper, TextField, IconButton } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
 export default function Search() {
     return (

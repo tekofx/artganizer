@@ -1,25 +1,15 @@
 import {
   Stack,
-  Grid,
   MenuItem,
   Typography,
-  Menu,
-  Tooltip,
-  Avatar,
   IconButton,
-  Paper,
-  MenuList,
-  Divider,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Icon,
   TextField,
-  Dialog,
-  Button,
-  Popover,
 } from "@mui/material";
-import { useState, MouseEvent, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import FolderIcon from "@mui/icons-material/Folder";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -27,10 +17,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
 
-import Folder from "../../interfaces/Folder";
-
 function FolderList() {
-  const { data, setData } = useContext(DataContext);
+  const { data } = useContext(DataContext);
   const router = useRouter();
 
   return (
@@ -59,12 +47,6 @@ export default function FolderAccordion() {
   const [newFolder, setNewFolder] = useState<string>("Folder");
   const [showCreateFolder, setShowCreateFolder] = useState<boolean>(false);
   const [textFieldError, setTextFieldError] = useState<boolean>(false);
-  const router = useRouter();
-
-  const navigateToFolder = (folder: Folder) => {
-    console.log(folder);
-    router.push(`/folder/${folder.id}`);
-  };
 
   const onTextFieldChange = (event: any) => {
     setNewFolder(event.target.value);

@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
-import { Typography, Stack, MenuItem, Icon } from "@mui/material";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { Typography, Stack, MenuItem } from "@mui/material";
 import Character from "../interfaces/Character";
 
 interface CharacterListProps {
