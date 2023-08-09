@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext } from "react";
 import { DataContext } from "../../../pages/_app";
 import Tag from "../../../interfaces/Tag";
+import TagChip from "../../Tag/TagChip";
 
 export default function TagFilter() {
   const { data, setData } = useContext(DataContext);
@@ -80,11 +81,7 @@ export default function TagFilter() {
             <Grid item lg={6}>
               <Typography>Selected Tags</Typography>
               {data.filters.tags.map((tag) => (
-                <Chip
-                  label={tag.name}
-                  sx={{ backgroundColor: tag.color }}
-                  key={tag.id}
-                />
+                <TagChip key={tag.id} tag={tag} />
               ))}
             </Grid>
             <Grid item lg={6}>

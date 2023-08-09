@@ -11,6 +11,7 @@ import {
   Chip,
   Autocomplete,
 } from "@mui/material";
+import TagChip from "../Tag/TagChip";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
 import Tag from "../../interfaces/Tag";
@@ -27,11 +28,7 @@ function TagSelect(props: TagSelectProps) {
       <Typography>Tag select</Typography>
       <Stack spacing={1} direction="row">
         {data.tags.map((tag) => (
-          <Chip
-            key={tag.id}
-            label={tag.name}
-            sx={{ backgroundColor: tag.color }}
-          />
+          <TagChip key={tag.id} tag={tag} />
         ))}
       </Stack>
 
