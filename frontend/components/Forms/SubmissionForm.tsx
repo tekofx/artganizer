@@ -12,9 +12,9 @@ import {
   Autocomplete,
 } from "@mui/material";
 import axios from "axios";
-import { DataContext } from "../pages/_app";
-import Tag from "../interfaces/Tag";
-import Submission from "../interfaces/Submission";
+import { DataContext } from "../../pages/_app";
+import Tag from "../../interfaces/Tag";
+import Submission from "../../interfaces/Submission";
 interface TagSelectProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   selectedTags: Tag[];
