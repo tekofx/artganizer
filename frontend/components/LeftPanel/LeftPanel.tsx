@@ -17,8 +17,21 @@ import ArtistAccordion from "./ArtistAccordion";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
+interface createOption {
+  name: string;
+  navigate: string;
+}
+const createOptions = [
+  { name: "Submission", navigate: "/createSubmission" },
+  { name: "Artist", navigate: "/createArtist" },
+];
+
 export default function LeftPanel() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [anchorCreateMenu, setAnchorCreateMenu] = useState<null | HTMLElement>(
+    null
+  );
+
   const router = useRouter();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -27,6 +40,15 @@ export default function LeftPanel() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleOpenCreateMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorCreateMenu(event.currentTarget);
+  };
+
+  const handleCloseCreateMenu = (option: createOption) => {
+    setAnchorCreateMenu(null);
+    router.push(option.navigate);
   };
 
   return (
@@ -74,10 +96,38 @@ export default function LeftPanel() {
               </Typography>
             </Grid>
             <Grid item>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <AddIcon />
-              </IconButton>
+              <Tooltip title="Create">
+                <IconButton onClick={handleOpenCreateMenu} sx={{ p: 0 }}>
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
             </Grid>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorCreateMenu}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorCreateMenu)}
+              onClose={handleCloseCreateMenu}
+              color="white"
+            >
+              {createOptions.map((option: createOption) => (
+                <MenuItem
+                  key={option.name}
+                  onClick={()=>handleCloseCreateMenu(option)}
+                >
+                  <Typography textAlign="center">{option.name}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
           </Grid>
         </Grid>
         <Grid item lg={12}>
