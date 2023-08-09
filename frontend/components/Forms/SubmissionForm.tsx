@@ -75,7 +75,7 @@ const emptySubmission: Submission = {
   tags: [],
   characters: [],
   format: "",
-  image: "",
+  image: "/placeholder.jpg",
 };
 
 interface SubmissionFormProps {
