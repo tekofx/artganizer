@@ -22,8 +22,9 @@ interface createOption {
   navigate: string;
 }
 const createOptions = [
-  { name: "Submission", navigate: "/createSubmission" },
-  { name: "Artist", navigate: "/createArtist" },
+  { name: "Submission", navigate: "/create/submission" },
+  { name: "Artist", navigate: "/create/artist" },
+  { name: "Tag", navigate: "/create/tag" },
 ];
 
 export default function LeftPanel() {
@@ -122,7 +123,7 @@ export default function LeftPanel() {
               {createOptions.map((option: createOption) => (
                 <MenuItem
                   key={option.name}
-                  onClick={()=>handleCloseCreateMenu(option)}
+                  onClick={() => handleCloseCreateMenu(option)}
                 >
                   <Typography textAlign="center">{option.name}</Typography>
                 </MenuItem>
