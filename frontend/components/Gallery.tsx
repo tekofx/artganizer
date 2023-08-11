@@ -1,12 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
-import {
-  Typography,
-  Paper,
-  Stack,
-  Dialog,
-} from "@mui/material";
-import Image from "../interfaces/Image";
+import { Typography, Paper, Stack } from "@mui/material";
 import Submission from "../interfaces/Submission";
 import { DataContext } from "../pages/_app";
 import { useRouter } from "next/router";
@@ -18,17 +12,6 @@ export default function Gallery() {
   );
   const router = useRouter();
 
-  const [value, setValue] = useState<Image>();
-  const [open, setOpen] = useState(false);
-
-  const toggleOpen = () => {
-    setOpen(!open);
-  };
-
-  const onImageClick = (image: Image) => {
-    setValue(image);
-    setOpen(true);
-  };
 
   useEffect(() => {
     var temp = data.submissions;
@@ -79,7 +62,7 @@ export default function Gallery() {
               alignItems="center"
             >
               <img src={image.image} className="pic" />
-              <Typography variant="image_title">{image.title}</Typography>
+              <Typography>{image.title}</Typography>
               <Typography>
                 {image.width}x{image.height}
               </Typography>
@@ -105,25 +88,6 @@ export default function Gallery() {
         )}
         <ImageList />
       </div>
-
-      <Dialog
-        open={open}
-        onClose={toggleOpen}
-        maxWidth="lg"
-        PaperProps={{
-          style: {
-            backgroundColor: "transparent",
-            backgroundImage: "unset",
-            boxShadow: "none",
-          },
-        }}
-      >
-        <img
-          src={value?.image}
-          style={{ height: "100%", width: "100%", objectFit: "contain" }}
-          onClick={toggleOpen}
-        />
-      </Dialog>
     </Paper>
   );
 }

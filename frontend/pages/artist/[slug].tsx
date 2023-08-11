@@ -4,7 +4,6 @@ import {
   Avatar,
   Grid,
   Paper,
-  Stack,
   Typography,
   Skeleton,
 } from "@mui/material";

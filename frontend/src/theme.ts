@@ -1,14 +1,12 @@
 import { Roboto } from "next/font/google";
 import { createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
-
 export const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
   fallback: ["Helvetica", "Arial", "sans-serif"],
 });
-
 // Create a theme instance.
 const theme = createTheme({
   palette: {
@@ -73,16 +71,6 @@ theme.typography.h3 = {
   fontSize: "1.5rem",
   [theme.breakpoints.up("md")]: {
     fontSize: "2rem",
-  },
-};
-
-theme.typography.image_title = {
-  fontSize: "1rem",
-  fontWeight: 500,
-  letterSpacing: "-0.05rem",
-
-  [theme.breakpoints.up("md")]: {
-    fontSize: "1.2rem",
   },
 };
 

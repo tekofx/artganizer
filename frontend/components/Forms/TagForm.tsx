@@ -13,7 +13,6 @@ import TagChip from "../Tag/TagChip";
 import TagLabel from "../Tag/TagLabel";
 import Tag from "../../interfaces/Tag";
 import { useState } from "react";
-import AlertMessage from "./AlertMessage";
 import axios from "axios";
 import { TwitterPicker, ColorResult } from "react-color";
 interface AlertMessage {

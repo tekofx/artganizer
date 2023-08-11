@@ -16,6 +16,7 @@ import axios from "axios";
 import { DataContext } from "../../pages/_app";
 import Tag from "../../interfaces/Tag";
 import Submission from "../../interfaces/Submission";
+import Artist from "../../interfaces/Artist";
 interface TagSelectProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   selectedTags: Tag[];
@@ -49,8 +50,8 @@ function TagSelect(props: TagSelectProps) {
         )}
         renderTags={(value, getTagProps) =>
           value.map((option, index) => (
+            // eslint-disable-next-line react/jsx-key
             <Chip
-              key={option.id}
               variant="outlined"
               label={option.name}
               style={{ backgroundColor: option.color }}
@@ -62,6 +63,15 @@ function TagSelect(props: TagSelectProps) {
     </Paper>
   );
 }
+
+const emptyArtist: Artist = {
+  id: -1,
+  description: "",
+  name: "",
+  image: "",
+  socials: "",
+  submissions: [],
+};
 const emptySubmission: Submission = {
   id: 0,
   title: "",
@@ -70,10 +80,12 @@ const emptySubmission: Submission = {
   rating: 0,
   width: 0,
   height: 0,
-  artists: [],
   folders: [],
   tags: [],
   characters: [],
+  artist: emptyArtist,
+  colors: [],
+  size: 0,
   format: "",
   image: "/placeholder.jpg",
 };
