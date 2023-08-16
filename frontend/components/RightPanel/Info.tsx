@@ -1,4 +1,4 @@
-import { Grid, Typography, Rating, Stack } from "@mui/material";
+import { Grid, Typography, Rating, Stack, Avatar } from "@mui/material";
 import TagList from "../TagList";
 import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
@@ -20,13 +20,27 @@ export default function Info(props: InfoProps) {
           </Typography>
           <Typography>Rating</Typography>
           <Rating value={props.submission?.rating} readOnly />
-
-          <Typography>Tags</Typography>
-          <TagList tags={props.submission?.tags} />
-          <Typography>Characters</Typography>
-          <CharacterList characters={props.submission?.characters} />
-          <Typography>Artist</Typography>
-          <ArtistList artist={props.submission?.artist} />
+          {props.submission?.tags && (
+            <>
+              <Typography>Tags</Typography>
+              <TagList tags={props.submission?.tags} />
+            </>
+          )}
+          {props.submission?.characters && (
+            <>
+              <Typography>Characters</Typography>
+              <CharacterList characters={props.submission?.characters} />
+            </>
+          )}
+          {props.submission?.artist && (
+            <>
+              <Typography>Artist</Typography>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Avatar src={props.submission?.artist?.image} />
+                <Typography>{props.submission?.artist?.name}</Typography>
+              </Stack>
+            </>
+          )}
         </Stack>
       </Grid>
       <Grid item lg={12}>
