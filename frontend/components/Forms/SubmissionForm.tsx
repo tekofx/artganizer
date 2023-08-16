@@ -186,6 +186,18 @@ export default function SubmissionForm(props: SubmissionFormProps) {
                 />
               </Grid>
               <Grid item xs={12}>
+                <Typography variant="h6">Rating</Typography>
+                <Rating
+                  value={submission.rating}
+                  onChange={(event, newValue) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      rating: newValue || 0,
+                    }));
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
                 <Typography variant="h6">Advanced Info</Typography>
               </Grid>
 
@@ -200,18 +212,6 @@ export default function SubmissionForm(props: SubmissionFormProps) {
                 <ArtistSelect
                   selectedArtist={selectedArtist}
                   setSelectedArtist={setSelectedArtist}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6">Rating</Typography>
-                <Rating
-                  value={submission.rating}
-                  onChange={(event, newValue) => {
-                    setSubmission((prevSubmission) => ({
-                      ...prevSubmission,
-                      rating: newValue || 0,
-                    }));
-                  }}
                 />
               </Grid>
             </Grid>
