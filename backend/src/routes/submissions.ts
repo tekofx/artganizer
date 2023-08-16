@@ -149,19 +149,21 @@ router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
 
 router.post(
   "/",
-  uploadSubmissions.single("file"),
+  uploadSubmissions.single("image"),
   async (req: Request, res: Response) => {
     var { title, description, rating, artist, folders, tags, characters } =
       req.body;
-    var file = req.file;
-    if (!file) {
-      res.status(400).send("File not provided or not an image");
+    console.log(req.file);
+    console.log(req.body);
+    var image = req.file;
+    if (!image) {
+      res.status(400).send("image not provided or not an image");
       return;
     }
     var colorsArray: string[] = [];
 
     // Get colors
-    await Vibrant.from(file.path).getPalette((err, palette) => {
+    await Vibrant.from(image.path).getPalette((err, palette) => {
       for (const colorName in palette) {
         const color = palette[colorName];
         if (color) {
@@ -173,7 +175,7 @@ router.post(
 
     try {
       // Obtener las dimensiones de la imagen
-      const dimensions = sizeOf(file.path);
+      const dimensions = sizeOf(image.path);
 
       const submission = SubmissionRepo.create({
         title: title,
@@ -183,7 +185,7 @@ router.post(
         height: dimensions.height,
         format: dimensions.type,
         colors: colorsArray,
-        size: file.size,
+        size: image.size,
       });
       if (artist) {
         var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
@@ -246,16 +248,16 @@ router.post(
           console.log(error);
         });
       // Renombrar el archivo con el ID generado
-      const tempPath = file.path;
+      const tempPath = image.path;
       const newPath = path.join(
         "uploads/submissions",
-        id + path.extname(file.originalname)
+        id + path.extname(image.originalname)
       );
       fs.renameSync(tempPath, newPath);
 
       res.send(submission);
     } catch (error) {
-      fs.unlinkSync(file.path);
+      fs.unlinkSync(image.path);
       console.log("error");
       return res.status(500).send("error");
     }
