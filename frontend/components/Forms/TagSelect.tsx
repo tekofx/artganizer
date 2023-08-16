@@ -30,7 +30,7 @@ export default function TagSelect(props: TagSelectProps) {
           <TextField
             {...params}
             variant="standard"
-            label="Multiple values"
+            label="Search Tags"
             placeholder="Favorites"
           />
         )}

@@ -97,20 +97,20 @@ export default function ArtistSelect(props: ArtistSelectProps) {
             </IconButton>
           </Stack>
         ) : (
-          // Aquí puedes agregar el componente que quieres mostrar cuando selectedArtist es undefined
-          <Typography>No artist selected</Typography>
+          <>
+            <Typography>No artist selected</Typography>
+            <TextField
+              label="Search artist"
+              variant="standard"
+              size="small"
+              value={filter}
+              onClick={handleClick}
+              onChange={(event) => {
+                setFilter(event.target.value);
+              }}
+            />
+          </>
         )}
-
-        <TextField
-          label="Search artist"
-          variant="standard"
-          size="small"
-          value={filter}
-          onClick={handleClick}
-          onChange={(event) => {
-            setFilter(event.target.value);
-          }}
-        />
       </Stack>
       <Popper open={open} anchorEl={anchorEl}>
         <Paper sx={{ width: "200px" }}>
