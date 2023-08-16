@@ -15,7 +15,6 @@ export default function Page() {
     const slug = router.query.slug;
     if (slug) {
       var id = parseInt(slug.toString());
-      console.log(data.submissions);
       // Get submission
       data.submissions.filter((sub: Submission) => {
         if (sub.id == id) {

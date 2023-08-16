@@ -17,7 +17,10 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import { DataContext } from "../../pages/_app";
-
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ClearIcon from "@mui/icons-material/Clear";
+import EditIcon from "@mui/icons-material/Edit";
+import DoneIcon from "@mui/icons-material/Done";
 interface RightPanelProps {
   submission: Submission;
 }
@@ -65,6 +68,7 @@ export default function RightPanel(props: RightPanelProps) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
+    console.log(props.submission.rating);
     setOpen(true);
   };
   const handleClose = () => {
@@ -140,9 +144,18 @@ export default function RightPanel(props: RightPanelProps) {
           </Grid>
         </Grid>
         <Grid item lg={12}>
-          <Stack direction="row" width="100%">
-            <Button>Edit</Button>
-            <Button onClick={handleClickOpen}>Remove</Button>
+          <Stack direction="row" width="100%" spacing={2}>
+            <Button variant="contained" startIcon={<EditIcon />}>
+              Edit
+            </Button>
+
+            <Button
+              variant="contained"
+              startIcon={<DeleteForeverIcon />}
+              onClick={handleClickOpen}
+            >
+              Remove
+            </Button>
           </Stack>
         </Grid>
       </Grid>
@@ -153,9 +166,23 @@ export default function RightPanel(props: RightPanelProps) {
           </Typography>
         </DialogTitle>
         <DialogActions>
-          <Stack direction="row" width="100%">
-            <Button onClick={removeSubmission}>Yes</Button>
-            <Button onClick={handleClose}>No</Button>
+          <Stack direction="row" width="100%" spacing={2}>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<DoneIcon />}
+              onClick={removeSubmission}
+            >
+              Yes
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<ClearIcon />}
+              onClick={handleClose}
+            >
+              No
+            </Button>
           </Stack>
         </DialogActions>
       </Dialog>
