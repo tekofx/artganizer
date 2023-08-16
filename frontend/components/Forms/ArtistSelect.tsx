@@ -13,11 +13,13 @@ import {
   MenuItem,
   Stack,
   Grid,
+  IconButton,
+  Avatar,
 } from "@mui/material";
 import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
 import { useRouter } from "next/router";
-
+import ClearIcon from "@mui/icons-material/Clear";
 interface ArtistListProps {
   selectedArtist: Artist | undefined;
   setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
@@ -85,21 +87,19 @@ export default function ArtistSelect(props: ArtistSelectProps) {
   return (
     <Paper>
       <Typography>Artist select</Typography>
-      <Stack direction="row" spacing={2}>
+      <Stack direction="row">
         {selectedArtist != undefined ? (
-          <Grid container spacing={2}>
-            <Grid item xs={2}>
-              <img
-                loading="lazy"
-                width="20"
-                src={selectedArtist.image}
-                alt=""
-              />
-            </Grid>
-            <Grid item xs={10}>
-              <Typography>{selectedArtist.name}</Typography>
-            </Grid>
-          </Grid>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Avatar src={selectedArtist.image} />
+            <Typography>{selectedArtist.name}</Typography>
+            <IconButton
+              onClick={() => {
+                setSelectedArtist(undefined);
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+          </Stack>
         ) : (
           // Aquí puedes agregar el componente que quieres mostrar cuando selectedArtist es undefined
           <Typography>No artist selected</Typography>
