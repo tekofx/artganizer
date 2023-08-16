@@ -100,7 +100,11 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     formData.append("description", submission.description);
     formData.append("rating", submission.rating.toString());
     formData.append("folders", JSON.stringify(submission.folders));
-    formData.append("tags", JSON.stringify(selectedTags));
+    if (selectedTags != undefined) {
+      selectedTags.forEach((tag) => {
+        formData.append("tags", tag.id.toString());
+      });
+    }
     if (selectedArtist != undefined) {
       formData.append("artist", selectedArtist.id.toString());
     }
