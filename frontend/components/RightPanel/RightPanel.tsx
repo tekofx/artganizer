@@ -1,4 +1,13 @@
-import { Grid, Typography, Rating, Stack, Button } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Rating,
+  Stack,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from "@mui/material";
 import TagList from "../TagList";
 import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
@@ -6,7 +15,7 @@ import ColorPalette from "../ColorPalette";
 import ArtistList from "../ArtistList";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DataContext } from "../../pages/_app";
 
 interface RightPanelProps {
@@ -53,6 +62,14 @@ function convertBytes(bytes: number | undefined) {
 export default function RightPanel(props: RightPanelProps) {
   const router = useRouter();
   const { data, setData } = useContext(DataContext);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   async function removeSubmission() {
     var submission = props.submission;
@@ -125,10 +142,23 @@ export default function RightPanel(props: RightPanelProps) {
         <Grid item lg={12}>
           <Stack direction="row" width="100%">
             <Button>Edit</Button>
-            <Button onClick={removeSubmission}>Remove</Button>
+            <Button onClick={handleClickOpen}>Remove</Button>
           </Stack>
         </Grid>
       </Grid>
+      <Dialog open={open}>
+        <DialogTitle>
+          <Typography>
+            Are you sure you want to remove this submission?
+          </Typography>
+        </DialogTitle>
+        <DialogActions>
+          <Stack direction="row" width="100%">
+            <Button onClick={removeSubmission}>Yes</Button>
+            <Button onClick={handleClose}>No</Button>
+          </Stack>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 }
