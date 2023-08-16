@@ -12,7 +12,6 @@ export default function Gallery() {
   );
   const router = useRouter();
 
-
   useEffect(() => {
     var temp = data.submissions;
     if (data.filters.rating > -1) {
