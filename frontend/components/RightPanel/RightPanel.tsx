@@ -4,9 +4,13 @@ import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
 import ColorPalette from "../ColorPalette";
 import ArtistList from "../ArtistList";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { DataContext } from "../../pages/_app";
 
 interface RightPanelProps {
-  submission: Submission | undefined;
+  submission: Submission;
 }
 
 function padTo2Digits(num: number) {
@@ -47,6 +51,23 @@ function convertBytes(bytes: number | undefined) {
 }
 
 export default function RightPanel(props: RightPanelProps) {
+  const router = useRouter();
+  const { data, setData } = useContext(DataContext);
+
+  async function removeSubmission() {
+    var submission = props.submission;
+    await axios.delete(`http://localhost:3001/submissions/${submission.id}`);
+
+    // Remove submission from data
+    const newData = { ...data };
+    newData.submissions = newData.submissions.filter(
+      (sub: Submission) => sub.id != submission.id
+    );
+    setData(newData);
+
+    router.push("/");
+  }
+
   return (
     <Grid container spacing={2} alignContent="center">
       <Grid item lg={12}>
@@ -104,7 +125,7 @@ export default function RightPanel(props: RightPanelProps) {
         <Grid item lg={12}>
           <Stack direction="row" width="100%">
             <Button>Edit</Button>
-            <Button>Remove</Button>
+            <Button onClick={removeSubmission}>Remove</Button>
           </Stack>
         </Grid>
       </Grid>
