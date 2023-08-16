@@ -160,50 +160,66 @@ export default function SubmissionForm(props: SubmissionFormProps) {
   return (
     <Paper sx={{ p: 2 }}>
       <Grid container spacing={2}>
-        <Grid item md={12}>
-          <Typography>Create Submission</Typography>
-        </Grid>
         <Grid item xs={6}>
           <FormControl fullWidth>
-            <Stack spacing={2}>
-              <TextField
-                label="Title"
-                value={submission.title}
-                onChange={(event) => {
-                  setSubmission((prevSubmission) => ({
-                    ...prevSubmission,
-                    title: event.target.value,
-                  }));
-                }}
-              />
-              <TextField
-                label="Description"
-                value={submission.description}
-                onChange={(event) => {
-                  setSubmission((prevSubmission) => ({
-                    ...prevSubmission,
-                    description: event.target.value,
-                  }));
-                }}
-              />
-              <TagSelect
-                selectedTags={selectedTags}
-                setSelectedTags={setSelectedTags}
-              />
-              <ArtistSelect
-                selectedArtist={selectedArtist}
-                setSelectedArtist={setSelectedArtist}
-              />
-              <Rating
-                value={submission.rating}
-                onChange={(event, newValue) => {
-                  setSubmission((prevSubmission) => ({
-                    ...prevSubmission,
-                    rating: newValue || 0,
-                  }));
-                }}
-              />
-            </Stack>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h6">Basic Info</Typography>
+                <TextField
+                  label="Title"
+                  fullWidth
+                  value={submission.title}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      title: event.target.value,
+                    }));
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Description"
+                  fullWidth
+                  value={submission.description}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      description: event.target.value,
+                    }));
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h6">Advanced Info</Typography>
+              </Grid>
+
+              <Grid item xs={6}>
+                <TagSelect
+                  selectedTags={selectedTags}
+                  setSelectedTags={setSelectedTags}
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <ArtistSelect
+                  selectedArtist={selectedArtist}
+                  setSelectedArtist={setSelectedArtist}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h6">Rating</Typography>
+                <Rating
+                  value={submission.rating}
+                  onChange={(event, newValue) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      rating: newValue || 0,
+                    }));
+                  }}
+                />
+              </Grid>
+            </Grid>
           </FormControl>
         </Grid>
         <Grid item xs={6}>

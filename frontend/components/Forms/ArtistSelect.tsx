@@ -81,7 +81,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
   };
 
   return (
-    <Paper>
+    <>
       <Typography>Artist select</Typography>
       <Stack direction="row" spacing={2} alignItems="center">
         {selectedArtist != undefined ? (
@@ -122,6 +122,6 @@ export default function ArtistSelect(props: ArtistSelectProps) {
           />
         </Paper>
       </Popper>
-    </Paper>
+    </>
   );
 }
