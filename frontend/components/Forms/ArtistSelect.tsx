@@ -12,13 +12,11 @@ import {
   Popper,
   MenuItem,
   Stack,
-  Grid,
   IconButton,
   Avatar,
 } from "@mui/material";
 import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
-import { useRouter } from "next/router";
 import ClearIcon from "@mui/icons-material/Clear";
 interface ArtistListProps {
   selectedArtist: Artist | undefined;
@@ -28,7 +26,6 @@ interface ArtistListProps {
 }
 
 export function ArtistList(props: ArtistListProps) {
-  const router = useRouter();
   const { data } = useContext(DataContext);
 
   function handleClick(artist: Artist) {
@@ -54,7 +51,7 @@ export function ArtistList(props: ArtistListProps) {
             onClick={() => handleClick(artist)}
           >
             <Stack direction="row" spacing={1}>
-              <img loading="lazy" width="20" src={artist.image} alt="" />
+              <Avatar src={artist.image} />
               <Typography>{artist.name}</Typography>
             </Stack>
           </MenuItem>
@@ -68,7 +65,6 @@ interface ArtistSelectProps {
   selectedArtist: Artist | undefined;
 }
 export default function ArtistSelect(props: ArtistSelectProps) {
-  const { data } = useContext(DataContext);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
@@ -87,7 +83,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
   return (
     <Paper>
       <Typography>Artist select</Typography>
-      <Stack direction="row">
+      <Stack direction="row" spacing={2} alignItems="center">
         {selectedArtist != undefined ? (
           <Stack direction="row" spacing={2} alignItems="center">
             <Avatar src={selectedArtist.image} />
@@ -108,16 +104,16 @@ export default function ArtistSelect(props: ArtistSelectProps) {
         <TextField
           label="Search artist"
           variant="standard"
-          onClick={handleClick}
           size="small"
           value={filter}
+          onClick={handleClick}
           onChange={(event) => {
             setFilter(event.target.value);
           }}
         />
       </Stack>
       <Popper open={open} anchorEl={anchorEl}>
-        <Paper sx={{ width: "100%" }}>
+        <Paper sx={{ width: "200px" }}>
           <ArtistList
             selectedArtist={selectedArtist}
             setSelectedArtist={setSelectedArtist}
