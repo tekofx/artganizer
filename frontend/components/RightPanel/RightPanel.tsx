@@ -92,21 +92,25 @@ export default function RightPanel(props: RightPanelProps) {
   return (
     <Grid container spacing={2} alignContent="center">
       <Grid item lg={12}>
-        <Typography>{props.submission?.title}</Typography>
-        <Typography>{props.submission?.description}</Typography>
-        <Typography>Tags</Typography>
-        <TagList tags={props.submission?.tags} />
-        <Typography>Characters</Typography>
-        <CharacterList characters={props.submission?.characters} />
-        <Typography>Artist</Typography>
-        <ArtistList artist={props.submission?.artist} />
+        <Stack spacing={1}>
+          <Typography variant="h4">{props.submission?.title}</Typography>
+          <Typography variant="body1">
+            {props.submission?.description}
+          </Typography>
+          <Typography>Tags</Typography>
+          <TagList tags={props.submission?.tags} />
+          <Typography>Characters</Typography>
+          <CharacterList characters={props.submission?.characters} />
+          <Typography>Artist</Typography>
+          <ArtistList artist={props.submission?.artist} />
+        </Stack>
       </Grid>
       <Grid item lg={12}>
         <ColorPalette colors={props.submission?.colors} />
       </Grid>
       <Grid item lg={12}>
         <Typography variant="h5">Information</Typography>
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item lg={4}>
             <Typography>Rating</Typography>
           </Grid>
@@ -143,8 +147,14 @@ export default function RightPanel(props: RightPanelProps) {
             <Typography>{props.submission?.format.toUpperCase()}</Typography>
           </Grid>
         </Grid>
+        <br/>
         <Grid item lg={12}>
-          <Stack direction="row" width="100%" spacing={2}>
+          <Stack
+            direction="row"
+            width="100%"
+            spacing={2}
+            justifyContent="center"
+          >
             <Button variant="contained" startIcon={<EditIcon />}>
               Edit
             </Button>
