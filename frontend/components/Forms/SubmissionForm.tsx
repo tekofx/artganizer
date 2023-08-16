@@ -16,7 +16,6 @@ import axios from "axios";
 import { DataContext } from "../../pages/_app";
 import Tag from "../../interfaces/Tag";
 import Submission from "../../interfaces/Submission";
-import Artist from "../../interfaces/Artist";
 interface TagSelectProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   selectedTags: Tag[];
@@ -64,14 +63,6 @@ function TagSelect(props: TagSelectProps) {
   );
 }
 
-const emptyArtist: Artist = {
-  id: -1,
-  description: "",
-  name: "",
-  image: "",
-  socials: "",
-  submissions: [],
-};
 const emptySubmission: Submission = {
   id: 0,
   title: "",
@@ -83,7 +74,7 @@ const emptySubmission: Submission = {
   folders: [],
   tags: [],
   characters: [],
-  artist: emptyArtist,
+  artist: undefined,
   colors: [],
   size: 0,
   format: "",
@@ -102,6 +93,7 @@ export default function SubmissionForm(props: SubmissionFormProps) {
   const [submission, setSubmission] = useState<Submission>(
     props.submission || emptySubmission
   );
+  const [image, setImage] = useState<string>("/placeholder.jpg");
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     props.submission?.tags || []
@@ -113,14 +105,38 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     }
   }
 
+  function onImageUpload(event: any) {
+    console.log(event.target.files[0]);
+    const newSubmission = { ...submission };
+    newSubmission.image = event.target.files[0];
+    setSubmission(newSubmission);
+    setImage(URL.createObjectURL(event.target.files[0]));
+    console.log(submission);
+  }
+
   async function saveSubmission() {
     console.log(submission);
+    const formData = new FormData();
+    formData.append("image", submission.image);
+    formData.append("title", submission.title);
+    formData.append("description", submission.description);
+    formData.append("rating", submission.rating.toString());
+    formData.append("folders", JSON.stringify(submission.folders));
+    formData.append("tags", JSON.stringify(selectedTags));
+    formData.append("artist", JSON.stringify(submission.artist));
+    formData.append("characters", JSON.stringify(submission.characters));
+
     if (props.submission === undefined) {
       // Create submission
       try {
-        await axios.post(`http://localhost:3001/submissions`, submission);
+        await axios.post(`http://localhost:3001/submissions`, formData);
       } catch (error) {
         console.error(error);
+      } finally {
+        // Update data
+        var newData = { ...data };
+        newData.submissions.push(submission);
+        setData(newData);
       }
     } else {
       // Update submission
@@ -193,10 +209,10 @@ export default function SubmissionForm(props: SubmissionFormProps) {
           </FormControl>
         </Grid>
         <Grid item xs={6}>
-          <img src={submission.image} width="100%" />
+          <img src={image} width="100%" />
           <Button variant="contained" component="label">
             Upload File
-            <input type="file" hidden />
+            <input type="file" hidden onChange={(e) => onImageUpload(e)} />
           </Button>
         </Grid>
       </Grid>

@@ -10,7 +10,7 @@ export default interface Submission {
   rating: number;
   width: number;
   height: number;
-  artist: Artist;
+  artist: Artist | undefined;
   folders: Folder[];
   tags: Tag[];
   characters: Character[];
