@@ -20,6 +20,7 @@ export default function TagFilter() {
   const { data, setData } = useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [searchedTags, setSearchedTags] = useState<Tag[]>(data.tags);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   const open = Boolean(anchorEl);
 
@@ -35,6 +36,20 @@ export default function TagFilter() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  function onClick(tag: Tag) {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((t) => t.id != tag.id));
+      const newData = { ...data };
+      newData.filters.tags = newData.filters.tags.filter((t) => t.id != tag.id);
+      setData(newData);
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+      const newData = { ...data };
+      newData.filters.tags = [...data.filters.tags, tag];
+      setData(newData);
+    }
+  }
 
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -92,14 +107,14 @@ export default function TagFilter() {
               />
               {searchedTags.map((tag) => (
                 <MenuItem key={tag.id} sx={{ p: 0 }}>
-                  <Stack direction="row">
+                  <Stack direction="row" alignItems="center" spacing={1}>
                     <Checkbox
                       value={tag}
-                      onChange={(event) => {
-                        handleCheckboxChange(event, tag);
-                      }}
+                      checked={selectedTags.includes(tag)}
                     />
-                    {tag.name}
+                    <Typography onClick={() => onClick(tag)}>
+                      {tag.name}
+                    </Typography>
                     <Chip label={tag.submissionCount} size="small" />
                   </Stack>
                 </MenuItem>
