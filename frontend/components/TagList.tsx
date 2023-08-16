@@ -1,21 +1,20 @@
-import { Typography, Stack, Chip } from "@mui/material";
+import { Typography, Stack } from "@mui/material";
 import Tag from "../interfaces/Tag";
-
+import TagChip from "./Tag/TagChip";
 interface TagListProps {
   tags: Tag[] | undefined;
 }
 
 export default function TagList(props: TagListProps) {
-
   return (
     <>
       {props.tags == undefined && <Typography>No tags</Typography>}
       {props.tags?.length == 0 && <Typography>No tags</Typography>}
-      {props.tags?.map((tag) => (
-        <Stack direction="row" spacing={1} key={tag.id}>
-          <Chip label={tag.name} sx={{ backgroundColor: tag.color }} />
-        </Stack>
-      ))}
+      <Stack direction="row" spacing={1} >
+        {props.tags?.map((tag) => (
+          <TagChip key={tag.id} tag={tag} />
+        ))}
+      </Stack>
     </>
   );
 }
