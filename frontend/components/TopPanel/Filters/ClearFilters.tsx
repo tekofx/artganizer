@@ -8,7 +8,7 @@ export default function ClearFilters() {
     rating: -1,
     tags: [],
     folders: [],
-    artists: [],
+    artist: undefined,
   };
 
   function clearFilters() {
@@ -20,7 +20,7 @@ const filtersAreEmpty =
   data.filters.rating === emptyFilters.rating &&
   data.filters.tags.length === emptyFilters.tags.length &&
   data.filters.folders.length === emptyFilters.folders.length &&
-  data.filters.artists.length === emptyFilters.artists.length;
+  data.filters.artist === emptyFilters.artist;
 
   return (
     <div>
