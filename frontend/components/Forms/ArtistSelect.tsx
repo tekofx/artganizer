@@ -67,9 +67,6 @@ interface ArtistSelectProps {
 export default function ArtistSelect(props: ArtistSelectProps) {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
-    props.selectedArtist
-  );
 
   const [filter, setFilter] = useState<string>("");
 
@@ -84,13 +81,13 @@ export default function ArtistSelect(props: ArtistSelectProps) {
     <>
       <Typography>Artist select</Typography>
       <Stack direction="row" spacing={2} alignItems="center">
-        {selectedArtist != undefined ? (
+        {props.selectedArtist != undefined ? (
           <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar src={selectedArtist.image} />
-            <Typography>{selectedArtist.name}</Typography>
+            <Avatar src={props.selectedArtist.image} />
+            <Typography>{props.selectedArtist.name}</Typography>
             <IconButton
               onClick={() => {
-                setSelectedArtist(undefined);
+                props.setSelectedArtist(undefined);
               }}
             >
               <ClearIcon />
@@ -115,8 +112,8 @@ export default function ArtistSelect(props: ArtistSelectProps) {
       <Popper open={open} anchorEl={anchorEl}>
         <Paper sx={{ width: "200px" }}>
           <ArtistList
-            selectedArtist={selectedArtist}
-            setSelectedArtist={setSelectedArtist}
+            selectedArtist={props.selectedArtist}
+            setSelectedArtist={props.setSelectedArtist}
             setOpen={setOpen}
             filter={filter}
           />

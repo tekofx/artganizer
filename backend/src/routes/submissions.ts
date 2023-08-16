@@ -153,7 +153,8 @@ router.post(
   async (req: Request, res: Response) => {
     var { title, description, rating, artist, folders, tags, characters } =
       req.body;
-    console.log(req.file);
+
+    console.log("req.body");
     console.log(req.body);
     var image = req.file;
     if (!image) {

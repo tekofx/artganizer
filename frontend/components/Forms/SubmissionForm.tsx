@@ -87,16 +87,13 @@ export default function SubmissionForm(props: SubmissionFormProps) {
   }
 
   function onImageUpload(event: any) {
-    console.log(event.target.files[0]);
     const newSubmission = { ...submission };
     newSubmission.image = event.target.files[0];
     setSubmission(newSubmission);
     setImage(URL.createObjectURL(event.target.files[0]));
-    console.log(submission);
   }
 
   async function saveSubmission() {
-    console.log(submission);
     const formData = new FormData();
     formData.append("image", submission.image);
     formData.append("title", submission.title);
@@ -104,9 +101,8 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     formData.append("rating", submission.rating.toString());
     formData.append("folders", JSON.stringify(submission.folders));
     formData.append("tags", JSON.stringify(selectedTags));
-    if (submission.artist != undefined) {
-      console.log(submission.artist.name);
-      formData.append("artist", submission.artist.id.toString());
+    if (selectedArtist != undefined) {
+      formData.append("artist", selectedArtist.id.toString());
     }
     formData.append("characters", JSON.stringify(submission.characters));
 
@@ -119,10 +115,8 @@ export default function SubmissionForm(props: SubmissionFormProps) {
         );
         var newData = { ...data };
         newData.submissions.push(response.data);
-        console.log(response.data);
         setData(newData);
       } catch (error) {
-        console.error(error);
         setAlertMessage({
           message: "Error creating submission",
           severity: "error",
@@ -144,12 +138,9 @@ export default function SubmissionForm(props: SubmissionFormProps) {
         newData.submissions = data.submissions.map((sub) =>
           sub.id === submission.id ? submission : sub
         );
-        console.log(newData);
         setData(newData);
         props.setSubmission && props.setSubmission(submission);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     }
 
     if (props.setOpen != undefined) {
