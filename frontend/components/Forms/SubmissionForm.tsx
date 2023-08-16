@@ -16,7 +16,8 @@ import { DataContext } from "../../pages/_app";
 import Tag from "../../interfaces/Tag";
 import Submission from "../../interfaces/Submission";
 import TagSelect from "./TagSelect";
-
+import ArtistSelect from "./ArtistSelect";
+import Artist from "../../interfaces/Artist";
 const emptySubmission: Submission = {
   id: 0,
   title: "",
@@ -58,6 +59,10 @@ export default function SubmissionForm(props: SubmissionFormProps) {
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     props.submission?.tags || []
+  );
+
+  const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
+    props.submission?.artist
   );
 
   const [open, setOpen] = useState<boolean>(false);
@@ -184,6 +189,10 @@ export default function SubmissionForm(props: SubmissionFormProps) {
               <TagSelect
                 selectedTags={selectedTags}
                 setSelectedTags={setSelectedTags}
+              />
+              <ArtistSelect
+                selectedArtist={selectedArtist}
+                setSelectedArtist={setSelectedArtist}
               />
               <Rating
                 value={submission.rating}
