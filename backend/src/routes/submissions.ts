@@ -315,6 +315,7 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
 
   var { title, description, rating, artist, tags, folders } =
     req.body.submission;
+  console.log(artist);
 
   if (tags) {
     const tagEntities = await TagRepo.find({
@@ -338,16 +339,20 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
   submission.title = title;
   submission.description = description;
   submission.rating = rating;
-  submission.artist = artist;
-
-  // Guardar el submission actualizado en la base de datos
-  try {
-    await SubmissionRepo.save(submission);
-  } catch (error) {
-    console.log(error);
+  if (artist) {
+    var artistEntity = await ArtistRepo.findOne({ where: { id: artist.id } });
+    if (artistEntity) {
+      console.log("artistEntity");
+      console.log(artistEntity);
+      submission.artist = artistEntity;
+    }
   }
 
+  // Guardar el submission actualizado en la base de datos
+  await SubmissionRepo.save(submission);
+
   // Enviar el submission actualizado como respuesta
+  console.log(submission);
   res.send(submission);
 });
 

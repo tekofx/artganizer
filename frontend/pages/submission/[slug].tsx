@@ -32,7 +32,7 @@ export default function Page() {
           <img src={submission?.image} width="100%" />
         </Grid>
         <Grid item lg={3}>
-          <RightPanel submission={submission} />
+          <RightPanel submission={submission} setSubmission={setSubmission} />
         </Grid>
       </Grid>
     </Paper>
