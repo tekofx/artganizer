@@ -3,7 +3,6 @@ import TagList from "../TagList";
 import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
 import ColorPalette from "../ColorPalette";
-import ArtistList from "../ArtistList";
 import { formatDate, convertBytes } from "../../src/formatters";
 
 interface InfoProps {
@@ -36,7 +35,9 @@ export default function Info(props: InfoProps) {
             <>
               <Typography>Artist</Typography>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Avatar src={props.submission?.artist?.image} />
+                <Avatar
+                  src={`http://localhost:3001/artists/uploads/${props.submission?.artist?.id}`}
+                />
                 <Typography>{props.submission?.artist?.name}</Typography>
               </Stack>
             </>

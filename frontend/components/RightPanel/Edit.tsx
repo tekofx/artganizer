@@ -34,13 +34,8 @@ export default function Edit(props: InfoProps) {
   );
 
   async function editSubmission() {
-    if (selectedTags) {
-      submission.tags = selectedTags;
-    }
-
-    if (selectedArtist) {
-      submission.artist = selectedArtist;
-    }
+    submission.tags = selectedTags;
+    submission.artist = selectedArtist;
     await axios
       .put(`http://localhost:3001/submissions/${submission.id}`, {
         submission,

@@ -75,6 +75,9 @@ router.get("/", async (req: Request, res: Response) => {
   // Use leftJoinAndSelect to join the submission and folders tables and select the related folders
   queryBuilder.leftJoinAndSelect("submission.folders", "folder");
 
+  // Use leftJoinAndSelect to join the submission and artist tables and select the related artist
+  queryBuilder.leftJoinAndSelect("submission.artist", "artist");
+
   if (tags) {
     queryBuilder.innerJoinAndSelect(
       "submission.tags",
@@ -154,8 +157,6 @@ router.post(
     var { title, description, rating, artist, folders, tags, characters } =
       req.body;
 
-    console.log("req.body");
-    console.log(req.body);
     var image = req.file;
     if (!image) {
       res.status(400).send("image not provided or not an image");
@@ -315,45 +316,51 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
 
   var { title, description, rating, artist, tags, folders } =
     req.body.submission;
-  console.log(artist);
 
-  if (tags) {
+  /*  if (tags) {
+    console.log(tags)
     const tagEntities = await TagRepo.find({
       where: {
         id: In(tags),
       },
     });
     submission.tags = tagEntities;
-  }
+    submission.tags = tags;
+  } */
+  submission.tags = tags;
 
-  if (folders) {
+  /*  if (folders) {
     const folderEntities = await FolderRepo.find({
       where: {
         id: In(folders),
       },
     });
     submission.folders = folderEntities;
-  }
+    submission.folders = folders;
+  } */
+  submission.folders = folders;
 
   // Actualizar los campos del submission
   submission.title = title;
   submission.description = description;
   submission.rating = rating;
-  if (artist) {
+  /* if (artist) {
     var artistEntity = await ArtistRepo.findOne({ where: { id: artist.id } });
     if (artistEntity) {
-      console.log("artistEntity");
-      console.log(artistEntity);
       submission.artist = artistEntity;
     }
-  }
+  } */
+  console.log("artist");
+  console.log(artist);
+  submission.artist = artist;
 
   // Guardar el submission actualizado en la base de datos
-  await SubmissionRepo.save(submission);
+  const result = await SubmissionRepo.save(submission);
 
   // Enviar el submission actualizado como respuesta
-  console.log(submission);
-  res.send(submission);
+  console.log("result");
+  console.log(result);
+  res.send(result);
 });
 
 export default router;
