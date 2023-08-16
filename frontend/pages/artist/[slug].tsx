@@ -1,12 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
-import {
-  Avatar,
-  Grid,
-  Paper,
-  Typography,
-  Skeleton,
-} from "@mui/material";
+import { Avatar, Grid, Paper, Typography, Skeleton } from "@mui/material";
 import { DataContext } from "../_app";
 import Artist from "../../interfaces/Artist";
 
@@ -39,7 +33,7 @@ export default function Page() {
           placeholder/oculto
         </Grid>
         <Grid item lg={12}>
-          <Avatar sx={{ width: "6rem", height: "6rem" }} />
+          <Avatar sx={{ width: "6rem", height: "6rem" }} src={artist?.image} />
         </Grid>
         <Grid item lg={12}>
           <Typography variant="h4">{artist?.name}</Typography>
