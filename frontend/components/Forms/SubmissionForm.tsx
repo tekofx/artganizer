@@ -8,62 +8,14 @@ import {
   FormControl,
   Rating,
   Grid,
-  Chip,
-  Autocomplete,
   Alert,
   Snackbar,
 } from "@mui/material";
-import TagChip from "../Tag/TagChip";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
 import Tag from "../../interfaces/Tag";
 import Submission from "../../interfaces/Submission";
-interface TagSelectProps {
-  setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
-  selectedTags: Tag[];
-}
-function TagSelect(props: TagSelectProps) {
-  const { data } = useContext(DataContext);
-
-  return (
-    <Paper>
-      <Typography>Tag select</Typography>
-      <Stack spacing={1} direction="row">
-        {data.tags.map((tag) => (
-          <TagChip key={tag.id} tag={tag} />
-        ))}
-      </Stack>
-
-      <Autocomplete
-        multiple
-        id="tags-standard"
-        options={data.tags}
-        getOptionLabel={(option) => option.name}
-        value={props.selectedTags}
-        onChange={(event, value) => props.setSelectedTags(value)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="standard"
-            label="Multiple values"
-            placeholder="Favorites"
-          />
-        )}
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
-            // eslint-disable-next-line react/jsx-key
-            <Chip
-              variant="outlined"
-              label={option.name}
-              style={{ backgroundColor: option.color }}
-              {...getTagProps({ index })}
-            />
-          ))
-        }
-      />
-    </Paper>
-  );
-}
+import TagSelect from "./TagSelect";
 
 const emptySubmission: Submission = {
   id: 0,
@@ -147,7 +99,10 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     formData.append("rating", submission.rating.toString());
     formData.append("folders", JSON.stringify(submission.folders));
     formData.append("tags", JSON.stringify(selectedTags));
-    formData.append("artist", JSON.stringify(submission.artist));
+    if (submission.artist != undefined) {
+      console.log(submission.artist.name);
+      formData.append("artist", submission.artist.id.toString());
+    }
     formData.append("characters", JSON.stringify(submission.characters));
 
     if (props.submission === undefined) {
