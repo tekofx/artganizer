@@ -60,7 +60,15 @@ export default function ArtistForm() {
   }
 
   async function postArtist(artist: Artist) {
-    const response = await axios.post(`http://localhost:3001/artists`, artist);
+    const formData = new FormData();
+    formData.append("name", artist.name);
+    formData.append("description", artist.description);
+    formData.append("image", artist.image);
+
+    const response = await axios.post(
+      `http://localhost:3001/artists`,
+      formData
+    );
     if (response.status != 200) {
       setAlertMessage({ message: "Error creating artist", severity: "error" });
     }
