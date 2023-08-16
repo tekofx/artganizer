@@ -313,35 +313,41 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
     return;
   }
 
-  var { title, description, rating, artist, tags, folders } = req.body;
+  var { title, description, rating, artist, tags, folders } =
+    req.body.submission;
 
-  if (submission) {
-    submission.title = title;
-    submission.description = description;
-    submission.rating = rating;
-    submission.artist = artist;
-
-    if (tags) {
-      const tagEntities = await TagRepo.find({
-        where: {
-          id: In(tags),
-        },
-      });
-      submission.tags = tagEntities;
-    }
-
-    if (folders) {
-      const folderEntities = await FolderRepo.find({
-        where: {
-          id: In(folders),
-        },
-      });
-      submission.folders = folderEntities;
-    }
-
-    await SubmissionRepo.save(submission);
+  if (tags) {
+    const tagEntities = await TagRepo.find({
+      where: {
+        id: In(tags),
+      },
+    });
+    submission.tags = tagEntities;
   }
 
+  if (folders) {
+    const folderEntities = await FolderRepo.find({
+      where: {
+        id: In(folders),
+      },
+    });
+    submission.folders = folderEntities;
+  }
+
+  // Actualizar los campos del submission
+  submission.title = title;
+  submission.description = description;
+  submission.rating = rating;
+  submission.artist = artist;
+
+  // Guardar el submission actualizado en la base de datos
+  try {
+    await SubmissionRepo.save(submission);
+  } catch (error) {
+    console.log(error);
+  }
+
+  // Enviar el submission actualizado como respuesta
   res.send(submission);
 });
 
