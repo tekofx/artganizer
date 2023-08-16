@@ -20,7 +20,6 @@ export default function TagFilter() {
   const { data, setData } = useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [searchedTags, setSearchedTags] = useState<Tag[]>(data.tags);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   const open = Boolean(anchorEl);
 
@@ -38,37 +37,16 @@ export default function TagFilter() {
   };
 
   function onClick(tag: Tag) {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t.id != tag.id));
+    if (data.filters.tags.includes(tag)) {
       const newData = { ...data };
       newData.filters.tags = newData.filters.tags.filter((t) => t.id != tag.id);
       setData(newData);
     } else {
-      setSelectedTags([...selectedTags, tag]);
       const newData = { ...data };
       newData.filters.tags = [...data.filters.tags, tag];
       setData(newData);
     }
   }
-
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    tag: Tag
-  ) => {
-    if (event.target.checked) {
-      const newData = { ...data };
-      newData.filters.tags = [...data.filters.tags, tag];
-      setData(newData);
-
-      console.log("Tag filter: Added tag " + tag.name);
-    } else {
-      const newData = { ...data };
-      newData.filters.tags = newData.filters.tags.filter((t) => t.id != tag.id);
-      setData(newData);
-      console.log("Tag filter: Removed tag " + tag.name);
-    }
-    console.log("Tag filter " + data.filters);
-  };
 
   return (
     <div>
@@ -110,7 +88,7 @@ export default function TagFilter() {
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Checkbox
                       value={tag}
-                      checked={selectedTags.includes(tag)}
+                      checked={data.filters.tags.includes(tag)}
                     />
                     <Typography onClick={() => onClick(tag)}>
                       {tag.name}
