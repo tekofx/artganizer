@@ -49,7 +49,7 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post(
   "/",
-  uploadArtistPics.single("file"),
+  uploadArtistPics.single("image"),
   async (req: Request, res: Response) => {
     var { name, description, socials } = req.body;
     var file = req.file;
@@ -84,12 +84,16 @@ router.post(
         });
     }
 
+    artist.image = process.env.URL + "/artists/uploads/" + artist.id;
     res.send(artist);
   }
 );
 
 router.get("/", async (req: Request, res: Response) => {
   const artists = await ArtistRepo.find();
+  artists.forEach((artist) => {
+    artist.image = process.env.URL + "/artists/uploads/" + artist.id;
+  });
   res.send(artists);
 });
 
@@ -109,6 +113,7 @@ router.get("/:artistId", async (req: Request, res: Response) => {
     res.status(404).send("artist not found");
     return;
   }
+  artist.image = process.env.URL + "/artists/uploads/" + artist.id;
 
   res.send(artist);
 });
@@ -158,5 +163,29 @@ router.get("/:artistId/submissions", async (req: Request, res: Response) => {
 
   res.send(submissions);
 });
+router.get("/uploads/:artistId", async (req: Request, res: Response) => {
+  if (req.params.artistId == null) {
+    res.status(400).send("Artist ID not provided");
+    return;
+  }
 
+  var artistId: number = parseInt(req.params.artistId);
+  const artist = await ArtistRepo.findOne({
+    where: { id: artistId },
+  });
+
+  if (artist == null) {
+    res.status(404).send("artist not found");
+    return;
+  }
+
+  const filePath = path.join(artistsPicsDir, artistId + ".jpg");
+
+  if (!fs.existsSync(filePath)) {
+    res.status(404).send("artist image not found");
+    return;
+  }
+
+  return res.sendFile(filePath);
+});
 export default router;
