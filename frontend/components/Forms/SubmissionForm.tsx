@@ -246,7 +246,7 @@ export default function SubmissionForm(props: SubmissionFormProps) {
           <img src={image} width="100%" />
           <Button variant="contained" component="label">
             Upload File
-            <input type="file" hidden onChange={(e) => onImageUpload(e)} />
+            <input type="file" hidden onChange={onImageUpload} />
           </Button>
         </Grid>
       </Grid>
