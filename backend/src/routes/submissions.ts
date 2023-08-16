@@ -255,6 +255,8 @@ router.post(
       );
       fs.renameSync(tempPath, newPath);
 
+      submission.image = process.env.URL + "/submissions/uploads/" + id;
+
       res.send(submission);
     } catch (error) {
       fs.unlinkSync(image.path);

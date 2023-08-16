@@ -10,6 +10,8 @@ import {
   Grid,
   Chip,
   Autocomplete,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import TagChip from "../Tag/TagChip";
 import axios from "axios";
@@ -80,6 +82,10 @@ const emptySubmission: Submission = {
   format: "",
   image: "/placeholder.jpg",
 };
+const defaultAlertMessage: AlertMessage = {
+  message: "Submission created",
+  severity: "success",
+};
 
 interface SubmissionFormProps {
   submission?: Submission;
@@ -87,7 +93,10 @@ interface SubmissionFormProps {
   open?: boolean;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }
-
+interface AlertMessage {
+  message: string;
+  severity: "success" | "error" | "info" | "warning";
+}
 export default function SubmissionForm(props: SubmissionFormProps) {
   const { data, setData } = useContext(DataContext);
   const [submission, setSubmission] = useState<Submission>(
@@ -98,6 +107,21 @@ export default function SubmissionForm(props: SubmissionFormProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     props.submission?.tags || []
   );
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] =
+    useState<AlertMessage>(defaultAlertMessage);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   function onCancel() {
     if (props.setOpen != undefined) {
@@ -129,14 +153,24 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     if (props.submission === undefined) {
       // Create submission
       try {
-        await axios.post(`http://localhost:3001/submissions`, formData);
+        const response = await axios.post(
+          `http://localhost:3001/submissions`,
+          formData
+        );
+        var newData = { ...data };
+        newData.submissions.push(response.data);
+        console.log(response.data);
+        setData(newData);
       } catch (error) {
         console.error(error);
+        setAlertMessage({
+          message: "Error creating submission",
+          severity: "error",
+        });
       } finally {
         // Update data
-        var newData = { ...data };
-        newData.submissions.push(submission);
-        setData(newData);
+
+        setOpen(true);
       }
     } else {
       // Update submission
@@ -220,6 +254,20 @@ export default function SubmissionForm(props: SubmissionFormProps) {
         <Button onClick={() => saveSubmission()}>Ok</Button>
         <Button onClick={() => onCancel()}>Cancel</Button>
       </Stack>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={alertMessage.severity}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage.message}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 }
