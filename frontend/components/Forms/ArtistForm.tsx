@@ -34,6 +34,7 @@ const defaultAlertMessage: AlertMessage = {
 export default function ArtistForm() {
   const [artist, setArtist] = useState<Artist>(defaultArtist);
   const [open, setOpen] = useState<boolean>(false);
+  const [image, setImage] = useState<string>("/placeholder.jpg");
   const { data, setData } = useContext(DataContext);
 
   const [alertMessage, setAlertMessage] =
@@ -49,6 +50,14 @@ export default function ArtistForm() {
 
     setOpen(false);
   };
+  function onImageUpload(event: any) {
+    console.log(event.target.files[0]);
+    const newArtist = { ...artist };
+    newArtist.image = event.target.files[0];
+    setArtist(newArtist);
+    setImage(URL.createObjectURL(event.target.files[0]));
+    console.log(artist);
+  }
 
   async function postArtist(artist: Artist) {
     const response = await axios.post(`http://localhost:3001/artists`, artist);
@@ -95,10 +104,10 @@ export default function ArtistForm() {
           <Button onClick={() => postArtist(artist)}>Create</Button>
         </Grid>
         <Grid item lg={4}>
-          <img src={artist.image} width="100%" />
+          <img src={image} width="100%" />
           <Button variant="contained" component="label">
             Upload File
-            <input type="file" hidden />
+            <input type="file" hidden onChange={onImageUpload} />
           </Button>
         </Grid>
       </Grid>
