@@ -43,7 +43,7 @@ export default function Page() {
           <Typography variant="h5">{artist?.description}</Typography>
         </Grid>
         <Grid item lg={12}>
-          <Gallery />
+          <Gallery artist={artist} />
         </Grid>
       </Grid>
     </Paper>

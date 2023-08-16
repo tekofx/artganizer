@@ -4,8 +4,13 @@ import { Typography, Paper, Stack } from "@mui/material";
 import Submission from "../interfaces/Submission";
 import { DataContext } from "../pages/_app";
 import { useRouter } from "next/router";
+import Artist from "../interfaces/Artist";
 
-export default function Gallery() {
+interface GalleryProps {
+  artist?: Artist;
+}
+
+export default function Gallery(props: GalleryProps) {
   const { data } = useContext(DataContext);
   const [submissions, setSubmissions] = useState<Submission[]>(
     data.submissions
@@ -35,6 +40,12 @@ export default function Gallery() {
             (filterFolder) => filterFolder.id === folder.id
           )
         )
+      );
+    }
+    // FIXME: This is not working
+    if (props.artist) {
+      temp = submissions.filter(
+        (submission) => submission.artist?.id === props.artist?.id
       );
     }
 
