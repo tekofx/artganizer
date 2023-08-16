@@ -15,7 +15,7 @@ export default function Page() {
     if (slug) {
       var id = parseInt(slug.toString());
 
-      // Get submission
+      // Get artist from data
       data.artists.filter((artist: Artist) => {
         if (artist.id == id) {
           setArtist(artist);
@@ -37,7 +37,7 @@ export default function Page() {
         </Grid>
         <Grid item lg={12}>
           <Typography variant="h4">{artist?.name}</Typography>
-          {artist?.description}
+          <Typography variant="h5">{artist?.description}</Typography>
         </Grid>
       </Grid>
     </Paper>
