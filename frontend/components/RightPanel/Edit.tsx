@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
-import ColorPalette from "../ColorPalette";
 import { formatDate, convertBytes } from "../../src/formatters";
 import { useState, Dispatch, SetStateAction } from "react";
 import TagSelect from "../Forms/TagSelect";
@@ -17,8 +16,7 @@ import Tag from "../../interfaces/Tag";
 import ArtistSelect from "../Forms/ArtistSelect";
 import Artist from "../../interfaces/Artist";
 import axios from "axios";
-import EditIcon from "@mui/icons-material/Edit";
-
+import DoneIcon from "@mui/icons-material/Done";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
@@ -41,7 +39,7 @@ export default function Edit(props: InfoProps) {
       .put(`http://localhost:3001/submissions/${submission.id}`, {
         submission,
       })
-      .then((response) => {
+      .then(() => {
         props.setSubmission(submission);
       })
       .catch((error) => {
@@ -141,7 +139,7 @@ export default function Edit(props: InfoProps) {
         <Grid item lg={12}>
           <Button
             variant="contained"
-            startIcon={<EditIcon />}
+            startIcon={<DoneIcon />}
             onClick={editSubmission}
           >
             Ok
