@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  Paper,
 } from "@mui/material";
 import Submission from "../../interfaces/Submission";
 import axios from "axios";
@@ -58,29 +59,12 @@ export default function RightPanel(props: RightPanelProps) {
     <>
       {!editShow ? (
         <>
-          <Info submission={props.submission} />
-          <Stack
-            direction="row"
-            width="100%"
-            spacing={2}
-            justifyContent="center"
-          >
-            <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              onClick={toggleEdit}
-            >
-              Edit
-            </Button>
-
-            <Button
-              variant="contained"
-              startIcon={<DeleteForeverIcon />}
-              onClick={handleClickOpenDialog}
-            >
-              Remove
-            </Button>
-          </Stack>
+          <Info
+            submission={props.submission}
+            toggleEdit={toggleEdit}
+            handleClickOpenDialog={handleClickOpenDialog}
+          />
+          
         </>
       ) : (
         <>
