@@ -179,9 +179,15 @@ export default function ArtistForm() {
                   ) : (
                     <img src={value.favicon} width="20px" />
                   )}
-
                   <TextField
-                    label="Social URL"
+                    label="Social Name"
+                    value={value.name}
+                    onChange={(event) => {
+                      handleSocialNameChange(event, i);
+                    }}
+                  />
+                  <TextField
+                    label="URL"
                     value={value.url}
                     InputProps={{
                       startAdornment: (
@@ -194,13 +200,7 @@ export default function ArtistForm() {
                       handleSocialURLChange(event, i);
                     }}
                   />
-                  <TextField
-                    label="Link"
-                    value={value.name}
-                    onChange={(event) => {
-                      handleSocialNameChange(event, i);
-                    }}
-                  />
+
                   <IconButton
                     aria-label="delete"
                     onClick={() => {
