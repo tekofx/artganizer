@@ -27,7 +27,7 @@ export default function Page() {
 
   return (
     <Paper>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item lg={9}>
           <img src={submission?.image} width="100%" />
         </Grid>
