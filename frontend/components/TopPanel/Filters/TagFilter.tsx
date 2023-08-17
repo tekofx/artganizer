@@ -24,7 +24,9 @@ export default function TagFilter() {
   const open = Boolean(anchorEl);
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    var temp = data.tags.filter((tag) => tag.name.includes(event.target.value));
+    var temp = data.tags.filter((tag) =>
+      tag.name.toLowerCase().includes(event.target.value.toLowerCase())
+    );
     console.log(temp);
     setSearchedTags(temp);
   };
