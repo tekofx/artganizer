@@ -15,8 +15,8 @@ import axios from "axios";
 import { DataContext } from "../../pages/_app";
 import Tag from "../../interfaces/Tag";
 import Submission from "../../interfaces/Submission";
-import TagSelect from "./TagSelect";
-import ArtistSelect from "./ArtistSelect";
+import TagSelect from "../Tag/TagSelect";
+import ArtistSelect from "../Artist/ArtistSelect";
 import Artist from "../../interfaces/Artist";
 const emptySubmission: Submission = {
   id: 0,

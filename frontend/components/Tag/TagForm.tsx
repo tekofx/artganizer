@@ -9,8 +9,8 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import TagChip from "../Tag/TagChip";
-import TagLabel from "../Tag/TagLabel";
+import TagChip from "./TagChip";
+import TagLabel from "./TagLabel";
 import Tag from "../../interfaces/Tag";
 import { useState } from "react";
 import axios from "axios";

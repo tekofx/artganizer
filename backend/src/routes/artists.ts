@@ -188,4 +188,24 @@ router.get("/uploads/:artistId", async (req: Request, res: Response) => {
 
   return res.sendFile(filePath);
 });
+
+router.put("/:artistId", async (req: Request, res: Response) => {
+  if (req.params.artistId == null) {
+    res.status(400).send("artist ID not provided");
+    return;
+  }
+  var artistId: number = parseInt(req.params.artistId);
+
+  const artistExists = await ArtistRepo.exist({ where: { id: artistId } });
+
+  if (artistExists == null) {
+    res.status(404).send("artist not found");
+    return;
+  }
+
+  console.log(req.body.artist);
+  var result = await ArtistRepo.save(req.body.artist);
+
+  res.send(result);
+});
 export default router;

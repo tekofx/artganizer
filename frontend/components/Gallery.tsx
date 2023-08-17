@@ -44,6 +44,8 @@ export default function Gallery(props: GalleryProps) {
     }
     // FIXME: This is not working
     if (props.artist) {
+      console.log("artist");
+
       temp = submissions.filter(
         (submission) => submission.artist?.id === props.artist?.id
       );
@@ -52,7 +54,12 @@ export default function Gallery(props: GalleryProps) {
     if (temp !== submissions) {
       setSubmissions(temp);
     }
-  }, [data.filters.rating, data.filters.tags, data.filters.folders]);
+  }, [
+    data.filters.rating,
+    data.filters.tags,
+    data.filters.folders,
+    props.artist,
+  ]);
 
   function ImageList() {
     return (
@@ -86,15 +93,8 @@ export default function Gallery(props: GalleryProps) {
   return (
     <Paper sx={{ minHeight: "100vh" }}>
       <div className="gallery">
-        {data.submissions.length == 0 && (
-          <Stack
-            direction="column"
-            spacing={1}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Typography variant="h1">No submissions yet</Typography>
-          </Stack>
+        {submissions.length == 0 && (
+          <Typography variant="h1">No submissions yet</Typography>
         )}
         <ImageList />
       </div>
