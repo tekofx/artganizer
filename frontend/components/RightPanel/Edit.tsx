@@ -137,15 +137,16 @@ export default function Edit(props: InfoProps) {
             <Typography>{props.submission?.format.toUpperCase()}</Typography>
           </Grid>
         </Grid>
-        <br />
       </Grid>
-      <Button
-        variant="contained"
-        startIcon={<EditIcon />}
-        onClick={editSubmission}
-      >
-        Ok
-      </Button>
+      <Grid item lg={12}>
+        <Button
+          variant="contained"
+          startIcon={<EditIcon />}
+          onClick={editSubmission}
+        >
+          Ok
+        </Button>
+      </Grid>
     </Grid>
   );
 }
