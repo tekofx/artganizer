@@ -67,6 +67,7 @@ export default function Edit(props: InfoProps) {
             />
             <TextField
               label="Description"
+              multiline
               value={submission?.description}
               onChange={(event) => {
                 setSubmission((prevSubmission) => ({
