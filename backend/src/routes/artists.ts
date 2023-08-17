@@ -59,13 +59,16 @@ router.post(
     }
 
     const artist = ArtistRepo.create({ name, description, socials });
-
     var id = await ArtistRepo.save(artist)
       .then((artist) => {
         return artist.id;
       })
       .catch((error) => {
-        console.log(error);
+        if (error.name == "ER_DATA_TOO_LONG") {
+          return res.status(400).send("Data too long");
+        } else {
+          return res.status(400).send("An error ocurred");
+        }
       });
 
     // Convertir a JPG y Renombrar el archivo con el ID generado
