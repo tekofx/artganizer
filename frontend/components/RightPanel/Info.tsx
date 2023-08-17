@@ -3,7 +3,6 @@ import {
   Typography,
   Rating,
   Stack,
-  Avatar,
   Container,
   Paper,
   Button,
@@ -15,6 +14,7 @@ import ColorPalette from "../ColorPalette";
 import { formatDate, convertBytes } from "../../src/formatters";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import ArtistLabel from "../Artist/ArtistLabel";
 interface InfoProps {
   submission: Submission;
   toggleEdit: () => void;
@@ -48,12 +48,7 @@ export default function Info(props: InfoProps) {
               {props.submission?.artist && (
                 <>
                   <Typography>Artist</Typography>
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <Avatar
-                      src={`http://localhost:3001/artists/uploads/${props.submission?.artist?.id}`}
-                    />
-                    <Typography>{props.submission?.artist?.name}</Typography>
-                  </Stack>
+                  <ArtistLabel artist={props.submission?.artist} clickable />
                 </>
               )}
             </Stack>

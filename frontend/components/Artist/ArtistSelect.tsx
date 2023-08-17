@@ -13,11 +13,11 @@ import {
   MenuItem,
   Stack,
   IconButton,
-  Avatar,
 } from "@mui/material";
 import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
 import ClearIcon from "@mui/icons-material/Clear";
+import ArtistLabel from "./ArtistLabel";
 interface ArtistListProps {
   selectedArtist: Artist | undefined;
   setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
@@ -50,10 +50,7 @@ export function ArtistList(props: ArtistListProps) {
             selected={props.selectedArtist?.id == artist.id}
             onClick={() => handleClick(artist)}
           >
-            <Stack direction="row" spacing={1}>
-              <Avatar src={artist.image} />
-              <Typography>{artist.name}</Typography>
-            </Stack>
+            <ArtistLabel artist={artist} />
           </MenuItem>
         ))}
     </>
@@ -83,10 +80,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
       <Stack direction="row" spacing={2} alignItems="center">
         {props.selectedArtist != undefined ? (
           <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar
-              src={`http://localhost:3001/artists/uploads/${props.selectedArtist?.id}`}
-            />
-            <Typography>{props.selectedArtist.name}</Typography>
+            <ArtistLabel artist={props.selectedArtist} />
             <IconButton
               onClick={() => {
                 props.setSelectedArtist(undefined);
