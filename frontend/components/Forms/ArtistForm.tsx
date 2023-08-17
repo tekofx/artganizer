@@ -58,7 +58,6 @@ export default function ArtistForm() {
   const [open, setOpen] = useState<boolean>(false);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [socials, setSocials] = useState<Social[]>(defaultSocials);
-  const [numSocials, setNumSocials] = useState<number>(1);
 
   const { data, setData } = useContext(DataContext);
 
@@ -100,25 +99,29 @@ export default function ArtistForm() {
     console.log(artist);
   }
 
+  function addEmptySocial() {
+    const newSocials = [...socials];
+    newSocials.push({
+      name: "",
+      url: "",
+      favicon: "",
+    });
+    setSocials(newSocials);
+  }
+
+  function removeSocial(index: number) {
+    const newSocials = [...socials];
+    newSocials.splice(index, 1);
+    setSocials(newSocials);
+  }
+
   async function postArtist(artist: Artist) {
     const formData = new FormData();
     formData.append("name", artist.name);
     formData.append("description", artist.description);
     formData.append("image", artist.image);
-    var socials = [
-      {
-        name: "Facebook",
-        url: "https://www.facebook.com/artist",
-        favicon: "https://www.facebook.com/favicon.ico",
-      },
-      {
-        name: "Twitter",
-        url: "https://twitter.com/artist",
-        favicon: "https://abs.twimg.com/favicons/twitter.ico",
-      },
-    ];
+    formData.append("socials", JSON.stringify(socials));
     artist.socials = socials;
-    formData.append("socials", JSON.stringify(artist.socials));
 
     const response = await axios.post(
       `http://localhost:3001/artists`,
@@ -169,17 +172,17 @@ export default function ArtistForm() {
               </Button>
               <Typography>Socials</Typography>
 
-              {Array.from(Array(numSocials).keys()).map((i) => (
+              {socials.map((value, i) => (
                 <Stack direction="row" alignItems="center" spacing={2} key={i}>
-                  {socials[i].favicon == "" ? (
+                  {value.favicon == "" ? (
                     <LanguageIcon />
                   ) : (
-                    <img src={socials[i].favicon} width="20px" />
+                    <img src={value.favicon} width="20px" />
                   )}
 
                   <TextField
                     label="Social URL"
-                    value={socials[i].url}
+                    value={value.url}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -193,7 +196,7 @@ export default function ArtistForm() {
                   />
                   <TextField
                     label="Link"
-                    value={socials[i].name}
+                    value={value.name}
                     onChange={(event) => {
                       handleSocialNameChange(event, i);
                     }}
@@ -201,7 +204,7 @@ export default function ArtistForm() {
                   <IconButton
                     aria-label="delete"
                     onClick={() => {
-                      setNumSocials((prev) => prev - 1);
+                      removeSocial(i);
                     }}
                   >
                     <ClearIcon />
@@ -211,7 +214,7 @@ export default function ArtistForm() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  setNumSocials((prev) => prev + 1);
+                  addEmptySocial();
                 }}
               >
                 Add Social
