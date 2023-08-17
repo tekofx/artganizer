@@ -38,7 +38,7 @@ export default function Page() {
 
   async function removeArtist() {
     await axios.delete(`http://localhost:3001/artists/${artist?.id}`);
-
+    handleCloseDialog();
     // Remove artist from data
     const newData = { ...data };
     newData.artists = newData.artists.filter(
@@ -62,8 +62,6 @@ export default function Page() {
       });
     }
   }, [router.query.slug]);
-
-
 
   return (
     <Paper>
