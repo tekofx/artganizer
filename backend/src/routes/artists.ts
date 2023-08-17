@@ -224,7 +224,6 @@ router.put(
         });
     }
 
-    console.log(req.body);
     var { id, name, description } = req.body;
     artist.name = name;
     artist.description = description;

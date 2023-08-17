@@ -3,7 +3,6 @@ import express, { NextFunction, Request, Response } from 'express';
 
 export default function submissionPostValidation(req: Request, res: Response, next: NextFunction) {
     var { title, description, keywords, category, species, theme, gender } = req.body;
-    console.log(req);
     var file = req.file;
     try {
         // Check fields

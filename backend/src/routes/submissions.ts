@@ -110,7 +110,6 @@ router.get("/", async (req: Request, res: Response) => {
   }
 
   const submissions = await queryBuilder.getMany();
-  console.log(submissions);
 
   // Add image URL
   submissions.forEach((submission) => {
@@ -317,49 +316,20 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
   var { title, description, rating, artist, tags, folders } =
     req.body.submission;
 
-  /*  if (tags) {
-    console.log(tags)
-    const tagEntities = await TagRepo.find({
-      where: {
-        id: In(tags),
-      },
-    });
-    submission.tags = tagEntities;
-    submission.tags = tags;
-  } */
   submission.tags = tags;
-
-  /*  if (folders) {
-    const folderEntities = await FolderRepo.find({
-      where: {
-        id: In(folders),
-      },
-    });
-    submission.folders = folderEntities;
-    submission.folders = folders;
-  } */
   submission.folders = folders;
 
   // Actualizar los campos del submission
   submission.title = title;
   submission.description = description;
   submission.rating = rating;
-  /* if (artist) {
-    var artistEntity = await ArtistRepo.findOne({ where: { id: artist.id } });
-    if (artistEntity) {
-      submission.artist = artistEntity;
-    }
-  } */
-  console.log("artist");
-  console.log(artist);
+
   submission.artist = artist;
 
   // Guardar el submission actualizado en la base de datos
   const result = await SubmissionRepo.save(submission);
 
   // Enviar el submission actualizado como respuesta
-  console.log("result");
-  console.log(result);
   res.send(result);
 });
 
