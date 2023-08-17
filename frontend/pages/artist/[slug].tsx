@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
 import {
-  Avatar,
   Grid,
   Paper,
   Typography,
