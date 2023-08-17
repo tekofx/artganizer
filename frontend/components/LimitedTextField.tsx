@@ -5,7 +5,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 export default function LimitedTextField({ maxLength, ...props }) {
   const [value, setValue] = useState("");
 
-  const handleChange = (event) => {
+  const handleChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setValue(event.target.value);
   };
 
