@@ -18,6 +18,7 @@ import Artist from "../../interfaces/Artist";
 import LanguageIcon from "@mui/icons-material/Language";
 import Social from "../../interfaces/Social";
 import ClearIcon from "@mui/icons-material/Clear";
+import LimitedTextField from "../LimitedTextField";
 interface AlertMessage {
   message: string;
   severity: "success" | "error" | "info" | "warning";
@@ -151,8 +152,9 @@ export default function ArtistForm() {
                   }));
                 }}
               />
-              <TextField
+              <LimitedTextField
                 label="Description"
+                maxLength={200}
                 multiline
                 value={artist.description}
                 onChange={(event) => {
