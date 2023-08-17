@@ -4,7 +4,11 @@ export default interface Artist {
   id: number;
   name: string;
   description: string;
-  socials: string;
+  socials: {
+    favicon: string;
+    url: string;
+    name: string;
+  }[];
   submissions: Submission[];
   image: string;
 }

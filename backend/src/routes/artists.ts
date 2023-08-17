@@ -57,6 +57,7 @@ router.post(
       res.status(400).send("name not provided");
       return;
     }
+    console.log(socials);
 
     const artist = ArtistRepo.create({ name, description, socials });
     var id = await ArtistRepo.save(artist)
@@ -97,6 +98,7 @@ router.get("/", async (req: Request, res: Response) => {
   artists.forEach((artist) => {
     artist.image = process.env.URL + "/artists/uploads/" + artist.id;
   });
+  console.log(artists);
   res.send(artists);
 });
 

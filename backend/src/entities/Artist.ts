@@ -1,22 +1,35 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, PrimaryColumn, ManyToMany, OneToMany } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+  PrimaryColumn,
+  ManyToMany,
+  OneToMany,
+} from "typeorm";
 import { Submission } from "./Submission";
 
 @Entity()
 export class Artist {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ length: 20 })
+  @Column({ length: 20 })
+  name: string;
+
+  @Column({ length: 200, default: "" })
+  description: string;
+
+  @Column({ type: "json" })
+  socials: {
+    favicon: string;
+    url: string;
     name: string;
+  }[];
 
-    @Column({ length: 200, default: "" })
-    description: string;
+  @OneToMany(() => Submission, (submission) => submission.artist)
+  submissions: Submission[];
 
-    @Column({ length: 500, default: "" })
-    socials: string;
-
-    @OneToMany(() => Submission, submission => submission.artist)
-    submissions: Submission[];
-
-    image: string;
+  image: string;
 }
