@@ -83,7 +83,9 @@ export default function ArtistSelect(props: ArtistSelectProps) {
       <Stack direction="row" spacing={2} alignItems="center">
         {props.selectedArtist != undefined ? (
           <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar src={props.selectedArtist.image} />
+            <Avatar
+              src={`http://localhost:3001/artists/uploads/${props.selectedArtist?.id}`}
+            />
             <Typography>{props.selectedArtist.name}</Typography>
             <IconButton
               onClick={() => {
