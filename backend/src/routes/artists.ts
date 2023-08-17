@@ -189,23 +189,45 @@ router.get("/uploads/:artistId", async (req: Request, res: Response) => {
   return res.sendFile(filePath);
 });
 
-router.put("/:artistId", async (req: Request, res: Response) => {
-  if (req.params.artistId == null) {
-    res.status(400).send("artist ID not provided");
-    return;
+router.put(
+  "/:artistId",
+  uploadArtistPics.single("image"),
+  async (req: Request, res: Response) => {
+    if (req.params.artistId == null) {
+      res.status(400).send("artist ID not provided");
+      return;
+    }
+    var artistId: number = parseInt(req.params.artistId);
+    const artist = await ArtistRepo.findOne({ where: { id: artistId } });
+
+    if (artist == null) {
+      res.status(404).send("artist not found");
+      return;
+    }
+    var file = req.file;
+    // Convertir a JPG y Renombrar el archivo con el ID generado
+    if (file) {
+      sharp(file.path)
+        .jpeg()
+        .toFile(path.join(artistsPicsDir, artistId + ".jpg"))
+        .then(() => {
+          // Eliminar el archivo temporal
+          if (file?.path) {
+            fs.unlinkSync(file.path);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    console.log(req.body);
+    var { id, name, description } = req.body;
+    artist.name = name;
+    artist.description = description;
+    var result = await ArtistRepo.save(artist);
+    result.image = process.env.URL + "/artists/uploads/" + result.id;
+    res.send(result);
   }
-  var artistId: number = parseInt(req.params.artistId);
-
-  const artistExists = await ArtistRepo.exist({ where: { id: artistId } });
-
-  if (artistExists == null) {
-    res.status(404).send("artist not found");
-    return;
-  }
-
-  console.log(req.body.artist);
-  var result = await ArtistRepo.save(req.body.artist);
-
-  res.send(result);
-});
+);
 export default router;

@@ -1,9 +1,9 @@
 import { Grid, Avatar, Button, Stack, TextField } from "@mui/material";
 import Artist from "../../interfaces/Artist";
 import DoneIcon from "@mui/icons-material/Done";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import axios from "axios";
-
+import { DataContext } from "../../pages/_app";
 interface ArtistEditProps {
   artist: Artist;
   toggleEdit: () => void;
@@ -12,14 +12,37 @@ interface ArtistEditProps {
 
 export default function ArtistEdit(props: ArtistEditProps) {
   const [artist, setArtist] = useState<Artist>(props.artist);
+  const [image, setImage] = useState<string>(props.artist.image);
+  const { data, setData } = useContext(DataContext);
 
+  function onImageUpload(event: any) {
+    // Change the image in the state
+    const newArtist = { ...artist };
+    setArtist(newArtist);
+    props.artist.image = newArtist.image;
+
+    // Change the image in the preview
+    setImage(URL.createObjectURL(event.target.files[0]));
+  }
   async function editArtist() {
+    const formData = new FormData();
+    formData.append("image", artist.image);
+    formData.append("name", artist.name);
+    formData.append("description", artist.description);
+    formData.append("id", artist.id.toString());
+
     await axios
-      .put(`http://localhost:3001/artists/${artist.id}`, {
-        artist,
-      })
+      .put(`http://localhost:3001/artists/${artist.id}`, formData)
       .then((response) => {
         props.setArtist(response.data);
+        var newData = { ...data };
+        newData.artists = newData.artists.map((artist) => {
+          if (artist.id === response.data.id) {
+            return response.data;
+          }
+          return artist;
+        });
+        setData(newData);
       })
       .catch((error) => {
         console.log(error);
@@ -30,10 +53,13 @@ export default function ArtistEdit(props: ArtistEditProps) {
   return (
     <Grid container spacing={2}>
       <Grid item>
-        <Avatar
-          sx={{ width: "10rem", height: "10rem" }}
-          src={props.artist?.image}
-        />
+        <Stack spacing={2} direction="column">
+          <Avatar sx={{ width: "10rem", height: "10rem" }} src={image} />
+          <Button variant="contained" component="label">
+            Change image
+            <input type="file" hidden onChange={onImageUpload} />
+          </Button>
+        </Stack>
       </Grid>
       <Grid item>
         <Stack spacing={2}>
@@ -65,7 +91,7 @@ export default function ArtistEdit(props: ArtistEditProps) {
           <Button
             variant="contained"
             startIcon={<DoneIcon />}
-            onClick={editArtist}
+            onClick={() => editArtist()}
           >
             Ok
           </Button>
