@@ -84,15 +84,17 @@ export default function TagFilter() {
                 onChange={onSearchChange}
               />
               {searchedTags.map((tag) => (
-                <MenuItem key={tag.id} sx={{ p: 0 }}>
+                <MenuItem
+                  key={tag.id}
+                  sx={{ p: 0 }}
+                  onClick={() => onClick(tag)}
+                >
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Checkbox
                       value={tag}
                       checked={data.filters.tags.includes(tag)}
                     />
-                    <Typography onClick={() => onClick(tag)}>
-                      {tag.name}
-                    </Typography>
+                    <Typography>{tag.name}</Typography>
                     <Chip label={tag.submissionCount} size="small" />
                   </Stack>
                 </MenuItem>
