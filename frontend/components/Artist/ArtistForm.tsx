@@ -99,6 +99,7 @@ export default function ArtistForm() {
               />
               <TextField
                 label="Description"
+                multiline
                 value={artist.description}
                 onChange={(event) => {
                   setArtist((prevSubmission) => ({
@@ -107,9 +108,11 @@ export default function ArtistForm() {
                   }));
                 }}
               />
+              <Button variant="contained" onClick={() => postArtist(artist)}>
+                Create
+              </Button>
             </Stack>
           </FormControl>
-          <Button onClick={() => postArtist(artist)}>Create</Button>
         </Grid>
         <Grid item lg={4}>
           <img src={image} width="100%" />
