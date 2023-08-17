@@ -78,11 +78,12 @@ export default function ArtistForm() {
   function handleSocialURLChange(event: any, index: number) {
     const newSocials = [...socials];
     newSocials[index].url = event.target.value;
-    setSocials(newSocials);
-    var url = "https://" + event.target.value;
-    if (isValidUrl(url)) {
-      newSocials[index].favicon = `${url}/favicon.ico?`;
+    var baseURL = "https://" + event.target.value.split("/")[0];
+
+    if (isValidUrl(baseURL)) {
+      newSocials[index].favicon = `${baseURL}/favicon.ico?`;
     }
+    setSocials(newSocials);
   }
 
   function handleSocialNameChange(event: any, index: number) {
