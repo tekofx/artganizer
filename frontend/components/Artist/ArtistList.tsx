@@ -1,26 +1,24 @@
-import { useRouter } from "next/router";
-import { Typography, Stack, MenuItem } from "@mui/material";
+import { Typography, MenuItem } from "@mui/material";
 import Artist from "../../interfaces/Artist";
+import ArtistLabel from "./ArtistLabel";
+import { useRouter } from "next/router";
 interface ArtistListProps {
-  artist: Artist | undefined;
+  artists: Artist[];
 }
 
 export default function ArtistList(props: ArtistListProps) {
   const router = useRouter();
-
   return (
     <>
-      {props.artist == undefined && <Typography>No artists</Typography>}
-      {props.artist != undefined && (
+      {props.artists.length == 0 && <Typography>No artists</Typography>}
+      {props.artists.map((artist) => (
         <MenuItem
-          key={props.artist?.id}
-          onClick={() => router.push(`/artist/${props.artist?.id}`)}
+          key={artist.id}
+          onClick={() => router.push(`/artist/${artist.id}`)}
         >
-          <Stack direction="row" spacing={1}>
-            <Typography>{props.artist?.name}</Typography>
-          </Stack>
+          <ArtistLabel artist={artist} />
         </MenuItem>
-      )}
+      ))}
     </>
   );
 }

@@ -12,30 +12,10 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useRouter } from "next/router";
 import { DataContext } from "../../pages/_app";
 
-function ArtistList() {
-  const { data } = useContext(DataContext);
-  const router = useRouter();
-
-  return (
-    <>
-      {data.artists.length == 0 && <Typography>No artists</Typography>}
-      {data.artists.map((artist) => (
-        <MenuItem
-          key={artist.id}
-          onClick={() => router.push(`/artist/${artist.id}`)}
-        >
-          <Stack direction="row" spacing={1}>
-            <PersonIcon />
-            <Typography>{artist.name}</Typography>
-          </Stack>
-        </MenuItem>
-      ))}
-    </>
-  );
-}
-
+import ArtistList from "../Artist/ArtistList";
 export default function ArtistAccordion() {
   const [expanded, setExpanded] = useState<boolean>(true);
+  const { data } = useContext(DataContext);
 
   return (
     <Accordion expanded={expanded}>
@@ -49,7 +29,7 @@ export default function ArtistAccordion() {
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction="column">
-          <ArtistList />
+          <ArtistList artists={data.artists} />
         </Stack>
       </AccordionDetails>
     </Accordion>

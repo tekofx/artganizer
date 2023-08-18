@@ -18,44 +18,7 @@ import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArtistLabel from "./ArtistLabel";
-interface ArtistListProps {
-  selectedArtist: Artist | undefined;
-  setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  filter: string;
-}
-
-export function ArtistList(props: ArtistListProps) {
-  const { data } = useContext(DataContext);
-
-  function handleClick(artist: Artist) {
-    props.setSelectedArtist(artist);
-    props.setOpen(false);
-  }
-
-  return (
-    <>
-      {data.artists.filter((artist) =>
-        artist.name.toLowerCase().includes(props.filter.toLowerCase())
-      ).length == 0 && <Typography>No artists</Typography>}
-      {data.artists
-
-        .filter((artist) =>
-          artist.name.toLowerCase().includes(props.filter.toLowerCase())
-        )
-
-        .map((artist) => (
-          <MenuItem
-            key={artist.id}
-            selected={props.selectedArtist?.id == artist.id}
-            onClick={() => handleClick(artist)}
-          >
-            <ArtistLabel artist={artist} />
-          </MenuItem>
-        ))}
-    </>
-  );
-}
+import SelectableArtistList from "./SelectableArtistList";
 
 interface ArtistSelectProps {
   setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
@@ -107,7 +70,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
       </Stack>
       <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>
-          <ArtistList
+          <SelectableArtistList
             selectedArtist={props.selectedArtist}
             setSelectedArtist={props.setSelectedArtist}
             setOpen={setOpen}
