@@ -7,6 +7,7 @@ import {
   IconButton,
   Paper,
   MenuList,
+  Dialog,
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -14,24 +15,20 @@ import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import FolderAccordion from "./FolderAccordion";
 import ArtistAccordion from "./ArtistAccordion";
-
+import ArtistForm from "../Forms/ArtistForm";
+import SubmissionForm from "../Forms/SubmissionForm";
+import TagForm from "../Forms/TagForm";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
-interface createOption {
-  name: string;
-  navigate: string;
-}
-const createOptions = [
-  { name: "Submission", navigate: "/create/submission" },
-  { name: "Artist", navigate: "/create/artist" },
-  { name: "Tag", navigate: "/create/tag" },
-];
 
 export default function LeftPanel() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [anchorCreateMenu, setAnchorCreateMenu] = useState<null | HTMLElement>(
     null
   );
+
+  const [openSubmissionForm, setOpenSubmissionForm] = useState<boolean>(false);
+  const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
+  const [openTagForm, setOpenTagForm] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -47,9 +44,8 @@ export default function LeftPanel() {
     setAnchorCreateMenu(event.currentTarget);
   };
 
-  const handleCloseCreateMenu = (option: createOption) => {
+  const handleCloseCreateMenu = () => {
     setAnchorCreateMenu(null);
-    router.push(option.navigate);
   };
 
   return (
@@ -120,14 +116,15 @@ export default function LeftPanel() {
               onClose={handleCloseCreateMenu}
               color="white"
             >
-              {createOptions.map((option: createOption) => (
-                <MenuItem
-                  key={option.name}
-                  onClick={() => handleCloseCreateMenu(option)}
-                >
-                  <Typography textAlign="center">{option.name}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={() => setOpenArtistForm(true)}>
+                <Typography textAlign="center">Artist</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => setOpenSubmissionForm(true)}>
+                <Typography textAlign="center">Submission</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => setOpenTagForm(true)}>
+                <Typography textAlign="center">Tag</Typography>
+              </MenuItem>
             </Menu>
           </Grid>
         </Grid>
@@ -138,6 +135,12 @@ export default function LeftPanel() {
           </MenuList>
         </Grid>
       </Grid>
+      <ArtistForm open={openArtistForm} setOpen={setOpenArtistForm} />
+      <SubmissionForm
+        open={openSubmissionForm}
+        setOpen={setOpenSubmissionForm}
+      />
+      <TagForm open={openTagForm} setOpen={setOpenTagForm} />
     </Paper>
   );
 }

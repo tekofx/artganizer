@@ -10,6 +10,7 @@ import {
   Grid,
   Alert,
   Snackbar,
+  Dialog,
 } from "@mui/material";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
@@ -40,29 +41,24 @@ const defaultAlertMessage: AlertMessage = {
   severity: "success",
 };
 
-interface SubmissionFormProps {
-  submission?: Submission;
-  setSubmission?: Dispatch<SetStateAction<Submission | undefined>>;
-  open?: boolean;
-  setOpen?: Dispatch<SetStateAction<boolean>>;
-}
 interface AlertMessage {
   message: string;
   severity: "success" | "error" | "info" | "warning";
 }
-export default function SubmissionForm(props: SubmissionFormProps) {
+
+interface Props {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+export default function SubmissionForm(props: Props) {
   const { data, setData } = useContext(DataContext);
-  const [submission, setSubmission] = useState<Submission>(
-    props.submission || emptySubmission
-  );
+  const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const [image, setImage] = useState<string>("/placeholder.jpg");
 
-  const [selectedTags, setSelectedTags] = useState<Tag[]>(
-    props.submission?.tags || []
-  );
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
-    props.submission?.artist
+    undefined
   );
 
   const [open, setOpen] = useState<boolean>(false);
@@ -110,139 +106,120 @@ export default function SubmissionForm(props: SubmissionFormProps) {
     }
     formData.append("characters", JSON.stringify(submission.characters));
 
-    if (props.submission === undefined) {
-      // Create submission
-      try {
-        const response = await axios.post(
-          `http://localhost:3001/submissions`,
-          formData
-        );
-        var newData = { ...data };
-        newData.submissions.push(response.data);
-        setData(newData);
-      } catch (error) {
-        setAlertMessage({
-          message: "Error creating submission",
-          severity: "error",
-        });
-      } finally {
-        // Update data
+    // Create submission
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/submissions`,
+        formData
+      );
+      var newData = { ...data };
+      newData.submissions.push(response.data);
+      setData(newData);
+    } catch (error) {
+      setAlertMessage({
+        message: "Error creating submission",
+        severity: "error",
+      });
+    } finally {
+      // Update data
 
-        setOpen(true);
-      }
-    } else {
-      // Update submission
-      try {
-        await axios.put(
-          `http://localhost:3001/submissions/${submission.id}`,
-          submission
-        );
-        // Update data
-        var newData = { ...data };
-        newData.submissions = data.submissions.map((sub) =>
-          sub.id === submission.id ? submission : sub
-        );
-        setData(newData);
-        props.setSubmission && props.setSubmission(submission);
-      } catch (error) {}
-    }
-
-    if (props.setOpen != undefined) {
-      props.setOpen(false);
+      setOpen(true);
     }
   }
 
   return (
-    <Paper sx={{ p: 2 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <FormControl fullWidth>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h6">Basic Info</Typography>
-                <TextField
-                  label="Title"
-                  fullWidth
-                  value={submission.title}
-                  onChange={(event) => {
-                    setSubmission((prevSubmission) => ({
-                      ...prevSubmission,
-                      title: event.target.value,
-                    }));
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Description"
-                  fullWidth
-                  value={submission.description}
-                  onChange={(event) => {
-                    setSubmission((prevSubmission) => ({
-                      ...prevSubmission,
-                      description: event.target.value,
-                    }));
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6">Rating</Typography>
-                <Rating
-                  value={submission.rating}
-                  onChange={(event, newValue) => {
-                    setSubmission((prevSubmission) => ({
-                      ...prevSubmission,
-                      rating: newValue || 0,
-                    }));
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6">Advanced Info</Typography>
-              </Grid>
+    <Dialog open={props.open} onClose={() => props.setOpen(false)}>
+      <Paper sx={{ p: 2 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <FormControl fullWidth>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="h6">Basic Info</Typography>
+                  <TextField
+                    label="Title"
+                    fullWidth
+                    value={submission.title}
+                    onChange={(event) => {
+                      setSubmission((prevSubmission) => ({
+                        ...prevSubmission,
+                        title: event.target.value,
+                      }));
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Description"
+                    fullWidth
+                    value={submission.description}
+                    onChange={(event) => {
+                      setSubmission((prevSubmission) => ({
+                        ...prevSubmission,
+                        description: event.target.value,
+                      }));
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6">Rating</Typography>
+                  <Rating
+                    value={submission.rating}
+                    onChange={(event, newValue) => {
+                      setSubmission((prevSubmission) => ({
+                        ...prevSubmission,
+                        rating: newValue || 0,
+                      }));
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6">Advanced Info</Typography>
+                </Grid>
 
-              <Grid item xs={6}>
-                <TagSelect
-                  selectedTags={selectedTags}
-                  setSelectedTags={setSelectedTags}
-                />
-              </Grid>
+                <Grid item xs={6}>
+                  <TagSelect
+                    selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags}
+                  />
+                </Grid>
 
-              <Grid item xs={6}>
-                <ArtistSelect
-                  selectedArtist={selectedArtist}
-                  setSelectedArtist={setSelectedArtist}
-                />
+                <Grid item xs={6}>
+                  <ArtistSelect
+                    selectedArtist={selectedArtist}
+                    setSelectedArtist={setSelectedArtist}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </FormControl>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <img src={image} width="100%" />
+            <Button variant="contained" component="label">
+              Upload File
+              <input type="file" hidden onChange={onImageUpload} />
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <img src={image} width="100%" />
-          <Button variant="contained" component="label">
-            Upload File
-            <input type="file" hidden onChange={onImageUpload} />
-          </Button>
-        </Grid>
-      </Grid>
-      <Stack direction="row">
-        <Button onClick={() => saveSubmission()}>Ok</Button>
-        <Button onClick={() => onCancel()}>Cancel</Button>
-      </Stack>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
+        <Stack direction="row">
+          <Button onClick={() => saveSubmission()}>Ok</Button>
+          <Button onClick={() => onCancel()}>Cancel</Button>
+        </Stack>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
           onClose={handleClose}
-          severity={alertMessage.severity}
-          sx={{ width: "100%" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          {alertMessage.message}
-        </Alert>
-      </Snackbar>
-    </Paper>
+          <Alert
+            onClose={handleClose}
+            severity={alertMessage.severity}
+            sx={{ width: "100%" }}
+          >
+            {alertMessage.message}
+          </Alert>
+        </Snackbar>
+      </Paper>
+    </Dialog>
   );
 }
