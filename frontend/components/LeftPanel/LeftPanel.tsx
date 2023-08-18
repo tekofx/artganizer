@@ -25,7 +25,7 @@ export default function LeftPanel() {
     null
   );
 
-  const [openArtistForm, setOpenArtistForm] = useState<boolean>(true);
+  const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
   const [openSubmissionForm, setOpenSubmissionForm] = useState<boolean>(false);
   const [openTagForm, setOpenTagForm] = useState<boolean>(false);
 

@@ -9,19 +9,24 @@ import {
   Snackbar,
   Alert,
   Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import TagChip from "../Tag/TagChip";
 import TagLabel from "../Tag/TagLabel";
 import Tag from "../../interfaces/Tag";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { TwitterPicker, ColorResult } from "react-color";
+import { DataContext } from "../../pages/_app";
+
 interface AlertMessage {
   message: string;
   severity: "success" | "error" | "info" | "warning";
 }
 const defaultTag: Tag = {
-  name: "Tag",
+  name: "",
   color: "#FFFFFF",
   id: -1,
   submissionCount: 0,
@@ -36,11 +41,14 @@ interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 export default function TagForm(props: Props) {
   const [tag, setTag] = useState<Tag>(defaultTag);
   const [open, setOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] =
     useState<AlertMessage>(defaultAlertMessage);
+
+  const { data, setData } = useContext(DataContext);
 
   const handleChangeComplete = (color: ColorResult) => {
     setTag((prevTag) => ({
@@ -65,65 +73,82 @@ export default function TagForm(props: Props) {
     if (response.status != 200) {
       setAlertMessage({ message: "Error creating tag", severity: "error" });
     }
+
+    const newData = { ...data };
+    newData.tags.push(response.data);
+    setData(newData);
     setOpen(true);
+    props.setOpen(false);
   }
 
   return (
-    <Dialog open={props.open} onClose={() => props.setOpen(false)}>
-      <Paper sx={{ p: 2 }}>
-        <Grid container spacing={2}>
-          <Grid item lg={12}>
-            <Typography>Create Tag</Typography>
-          </Grid>
-          <Grid item lg={4}>
-            <FormControl fullWidth>
-              <Stack spacing={2}>
-                <TextField
-                  label="Name"
-                  value={tag.name}
-                  onChange={(event) => {
-                    setTag((prevSubmission) => ({
-                      ...prevSubmission,
-                      name: event.target.value,
-                    }));
-                  }}
-                />
-                <TwitterPicker
-                  triangle="hide"
-                  color={tag.color}
-                  onChangeComplete={handleChangeComplete}
-                />
+    <>
+      <Dialog open={props.open} onClose={() => props.setOpen(false)}>
+        <DialogTitle>Create Tag</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} paddingTop={2}>
+            <Grid item lg={6}>
+              <TextField
+                label="Name"
+                value={tag.name}
+                fullWidth
+                onChange={(event) => {
+                  setTag((prevSubmission) => ({
+                    ...prevSubmission,
+                    name: event.target.value,
+                  }));
+                }}
+              />
+            </Grid>
+            <Grid item lg={6}>
+              <TwitterPicker
+                triangle="hide"
+                color={tag.color}
+                onChangeComplete={handleChangeComplete}
+                styles={{
+                  default: {
+                    card: {
+                      boxShadow: "none",
+                      backgroundColor: "transparent",
+                    },
+                    body: {
+                      padding: 0,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item lg={6}>
+              <Typography>Preview</Typography>
+              <Stack direction="row" spacing={5}>
+                <TagLabel tag={tag} />
+                <TagChip tag={tag} />
               </Stack>
-            </FormControl>
-            <Button onClick={() => postTag(tag)}>Create</Button>
+            </Grid>
           </Grid>
-          <Grid item lg={4}>
-            <Typography>Preview</Typography>
-            <Stack direction="row" spacing={5}>
-              <TagLabel tag={tag} />
-              <TagChip tag={tag} />
-            </Stack>
-          </Grid>
-          <Grid item lg={4}>
-            Tag List
-          </Grid>
-        </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => postTag(tag)}>
+            Create
+          </Button>
 
-        <Snackbar
-          open={open}
-          autoHideDuration={6000}
+          <Button onClick={() => props.setOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
           onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          severity={alertMessage.severity}
+          sx={{ width: "100%" }}
         >
-          <Alert
-            onClose={handleClose}
-            severity={alertMessage.severity}
-            sx={{ width: "100%" }}
-          >
-            {alertMessage.message}
-          </Alert>
-        </Snackbar>
-      </Paper>
-    </Dialog>
+          {alertMessage.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
