@@ -11,12 +11,11 @@ import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
 import { formatDate, convertBytes } from "../../src/formatters";
 import { useState, Dispatch, SetStateAction } from "react";
-import TagSelect from "../Tag/TagSelect";
-import Tag from "../../interfaces/Tag";
 import ArtistSelect from "../Artist/ArtistSelect";
 import Artist from "../../interfaces/Artist";
 import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
+import TagSelect from "../Tag/TagSelect";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
@@ -84,6 +83,7 @@ export default function Edit(props: InfoProps) {
                 }));
               }}
             />
+
             <TagSelect
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}

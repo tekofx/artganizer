@@ -1,7 +1,9 @@
 import { Chip } from "@mui/material";
 import Tag from "../../interfaces/Tag";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 interface TagChipProps {
   tag: Tag;
+  onDelete?: any;
 }
 
 function getTextColor(color: string): string {
@@ -22,8 +24,12 @@ function getTextColor(color: string): string {
 
 export default function TagChip(props: TagChipProps) {
   return (
-    <Chip 
+    <Chip
       label={props.tag.name}
+      deleteIcon={
+        <HighlightOffIcon style={{ color: getTextColor(props.tag.color) }} />
+      }
+      onDelete={props.onDelete}
       sx={{
         backgroundColor: props.tag.color,
         color: getTextColor(props.tag.color),
