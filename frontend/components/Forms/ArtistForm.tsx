@@ -12,6 +12,9 @@ import {
   InputAdornment,
   Avatar,
   Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
 } from "@mui/material";
 import { useState, useContext } from "react";
 import { DataContext } from "../../pages/_app";
@@ -139,109 +142,108 @@ export default function ArtistForm(props: Props) {
       setAlertMessage({ message: "Error creating artist", severity: "error" });
     }
     var newData = { ...data };
-    newData.artists.push(artist);
+    newData.artists.push(response.data);
     setData(newData);
     setOpen(true);
   }
 
   return (
     <Dialog open={props.open} onClose={() => props.setOpen(false)}>
-      <Paper sx={{ p: 2 }}>
+      <DialogTitle>Create Artist</DialogTitle>
+      <DialogContent sx={{ p: 2 }}>
         <Grid container spacing={2}>
-          <Grid item lg={12}>
-            <Typography>Create Artist</Typography>
-          </Grid>
-          <Grid item>
-            <FormControl fullWidth>
-              <Stack spacing={2}>
-                <TextField
-                  label="Name"
-                  value={artist.name}
-                  onChange={(event) => {
-                    setArtist((prevSubmission) => ({
-                      ...prevSubmission,
-                      name: event.target.value,
-                    }));
-                  }}
-                />
-                <LimitedTextField
-                  label="Description"
-                  maxLength={200}
-                  multiline
-                  value={artist.description}
-                  onChange={(event) => {
-                    setArtist((prevSubmission) => ({
-                      ...prevSubmission,
-                      description: event.target.value,
-                    }));
-                  }}
-                />
-                <Button variant="contained" onClick={() => postArtist(artist)}>
-                  Create
-                </Button>
-                <Typography>Socials</Typography>
-
-                {socials.map((value, i) => (
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={2}
-                    key={i}
-                  >
-                    {value.favicon == "" ? (
-                      <LanguageIcon />
-                    ) : (
-                      <img src={value.favicon} width="20px" />
-                    )}
-                    <TextField
-                      label="Social Name"
-                      value={value.name}
-                      onChange={(event) => {
-                        handleSocialNameChange(event, i);
-                      }}
-                    />
-                    <TextField
-                      label="URL"
-                      value={value.url}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            https://
-                          </InputAdornment>
-                        ),
-                      }}
-                      onChange={(event) => {
-                        handleSocialURLChange(event, i);
-                      }}
-                    />
-
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => {
-                        removeSocial(i);
-                      }}
-                    >
-                      <ClearIcon />
-                    </IconButton>
-                  </Stack>
-                ))}
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    addEmptySocial();
-                  }}
-                >
-                  Add Social
-                </Button>
-              </Stack>
-            </FormControl>
-          </Grid>
           <Grid item lg={4}>
+            <input
+              accept="image/*"
+              id="contained-button-file"
+              multiple
+              type="file"
+              hidden
+              onChange={onImageUpload}
+            />
+            <label htmlFor="contained-button-file">
+              <IconButton component="span">
+                <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
+              </IconButton>
+            </label>
+          </Grid>
+          <Grid item lg={8}>
             <Stack spacing={2}>
-              <Avatar src={image} sx={{ width: "10rem", height: "10rem" }} />
-              <Button variant="contained" component="label">
-                Upload File
-                <input type="file" hidden onChange={onImageUpload} />
+              <TextField
+                label="Name"
+                value={artist.name}
+                onChange={(event) => {
+                  setArtist((prevSubmission) => ({
+                    ...prevSubmission,
+                    name: event.target.value,
+                  }));
+                }}
+              />
+              <LimitedTextField
+                label="Description"
+                maxLength={200}
+                multiline
+                value={artist.description}
+                onChange={(event) => {
+                  setArtist((prevSubmission) => ({
+                    ...prevSubmission,
+                    description: event.target.value,
+                  }));
+                }}
+              />
+            </Stack>
+          </Grid>
+
+          <Grid item lg={12}>
+            <Stack spacing={2}>
+              <Typography>Socials</Typography>
+
+              {socials.map((value, i) => (
+                <Stack direction="row" alignItems="center" spacing={2} key={i}>
+                  {value.favicon == "" ? (
+                    <LanguageIcon />
+                  ) : (
+                    <img src={value.favicon} width="20px" />
+                  )}
+                  <TextField
+                    label="Social Name"
+                    value={value.name}
+                    onChange={(event) => {
+                      handleSocialNameChange(event, i);
+                    }}
+                  />
+                  <TextField
+                    label="URL"
+                    value={value.url}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          https://
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={(event) => {
+                      handleSocialURLChange(event, i);
+                    }}
+                  />
+
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => {
+                      removeSocial(i);
+                    }}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                </Stack>
+              ))}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addEmptySocial();
+                }}
+              >
+                Add Social
               </Button>
             </Stack>
           </Grid>
@@ -261,7 +263,19 @@ export default function ArtistForm(props: Props) {
             {alertMessage.message}
           </Alert>
         </Snackbar>
-      </Paper>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="contained"
+          onClick={() => {
+            postArtist(artist);
+            props.setOpen(false);
+          }}
+        >
+          Create
+        </Button>
+        <Button onClick={() => props.setOpen(false)}>Cancel</Button>
+      </DialogActions>
     </Dialog>
   );
 }

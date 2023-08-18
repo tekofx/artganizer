@@ -7,7 +7,6 @@ import {
   IconButton,
   Paper,
   MenuList,
-  Dialog,
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -26,8 +25,8 @@ export default function LeftPanel() {
     null
   );
 
+  const [openArtistForm, setOpenArtistForm] = useState<boolean>(true);
   const [openSubmissionForm, setOpenSubmissionForm] = useState<boolean>(false);
-  const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
   const [openTagForm, setOpenTagForm] = useState<boolean>(false);
 
   const router = useRouter();
@@ -116,13 +115,28 @@ export default function LeftPanel() {
               onClose={handleCloseCreateMenu}
               color="white"
             >
-              <MenuItem onClick={() => setOpenArtistForm(true)}>
+              <MenuItem
+                onClick={() => {
+                  setOpenArtistForm(true);
+                  handleCloseCreateMenu();
+                }}
+              >
                 <Typography textAlign="center">Artist</Typography>
               </MenuItem>
-              <MenuItem onClick={() => setOpenSubmissionForm(true)}>
+              <MenuItem
+                onClick={() => {
+                  setOpenSubmissionForm(true);
+                  handleCloseCreateMenu();
+                }}
+              >
                 <Typography textAlign="center">Submission</Typography>
               </MenuItem>
-              <MenuItem onClick={() => setOpenTagForm(true)}>
+              <MenuItem
+                onClick={() => {
+                  setOpenTagForm(true);
+                  handleCloseCreateMenu();
+                }}
+              >
                 <Typography textAlign="center">Tag</Typography>
               </MenuItem>
             </Menu>
