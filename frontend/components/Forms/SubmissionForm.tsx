@@ -11,6 +11,10 @@ import {
   Alert,
   Snackbar,
   Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
 } from "@mui/material";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
@@ -128,83 +132,87 @@ export default function SubmissionForm(props: Props) {
   }
 
   return (
-    <Dialog open={props.open} onClose={() => props.setOpen(false)}>
-      <Paper sx={{ p: 2 }}>
+    <Dialog open={props.open} onClose={() => props.setOpen(false)} fullScreen>
+      <DialogTitle>Create Submission</DialogTitle>
+      <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <FormControl fullWidth>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Typography variant="h6">Basic Info</Typography>
-                  <TextField
-                    label="Title"
-                    fullWidth
-                    value={submission.title}
-                    onChange={(event) => {
-                      setSubmission((prevSubmission) => ({
-                        ...prevSubmission,
-                        title: event.target.value,
-                      }));
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Description"
-                    fullWidth
-                    value={submission.description}
-                    onChange={(event) => {
-                      setSubmission((prevSubmission) => ({
-                        ...prevSubmission,
-                        description: event.target.value,
-                      }));
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="h6">Rating</Typography>
-                  <Rating
-                    value={submission.rating}
-                    onChange={(event, newValue) => {
-                      setSubmission((prevSubmission) => ({
-                        ...prevSubmission,
-                        rating: newValue || 0,
-                      }));
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="h6">Advanced Info</Typography>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TagSelect
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <ArtistSelect
-                    selectedArtist={selectedArtist}
-                    setSelectedArtist={setSelectedArtist}
-                  />
-                </Grid>
-              </Grid>
-            </FormControl>
+            <input
+              accept="image/*"
+              id="contained-button-file"
+              multiple
+              type="file"
+              hidden
+              onChange={onImageUpload}
+            />
+            <label htmlFor="contained-button-file">
+              <IconButton component="span">
+                <img src={image} width="100%" />
+              </IconButton>
+            </label>
           </Grid>
           <Grid item xs={6}>
-            <img src={image} width="100%" />
-            <Button variant="contained" component="label">
-              Upload File
-              <input type="file" hidden onChange={onImageUpload} />
-            </Button>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h6">Basic Info</Typography>
+                <TextField
+                  label="Title"
+                  fullWidth
+                  value={submission.title}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      title: event.target.value,
+                    }));
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Description"
+                  fullWidth
+                  value={submission.description}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      description: event.target.value,
+                    }));
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h6">Rating</Typography>
+                <Rating
+                  value={submission.rating}
+                  onChange={(event, newValue) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      rating: newValue || 0,
+                    }));
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h6">Advanced Info</Typography>
+              </Grid>
+
+              <Grid item xs={6}>
+                <TagSelect
+                  selectedTags={selectedTags}
+                  setSelectedTags={setSelectedTags}
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <ArtistSelect
+                  selectedArtist={selectedArtist}
+                  setSelectedArtist={setSelectedArtist}
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
-        <Stack direction="row">
-          <Button onClick={() => saveSubmission()}>Ok</Button>
-          <Button onClick={() => onCancel()}>Cancel</Button>
-        </Stack>
+
         <Snackbar
           open={open}
           autoHideDuration={6000}
@@ -219,7 +227,15 @@ export default function SubmissionForm(props: Props) {
             {alertMessage.message}
           </Alert>
         </Snackbar>
-      </Paper>
+      </DialogContent>
+      <DialogActions>
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" onClick={() => saveSubmission()}>
+            Ok
+          </Button>
+          <Button onClick={() => onCancel()}>Cancel</Button>
+        </Stack>
+      </DialogActions>
     </Dialog>
   );
 }
