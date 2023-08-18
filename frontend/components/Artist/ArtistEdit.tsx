@@ -4,6 +4,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
+import { useRouter } from "next/router";
 interface ArtistEditProps {
   artist: Artist;
   toggleEdit: () => void;
@@ -13,20 +14,20 @@ interface ArtistEditProps {
 export default function ArtistEdit(props: ArtistEditProps) {
   const [artist, setArtist] = useState<Artist>(props.artist);
   const [image, setImage] = useState<string>(props.artist.image);
+  const [imageData, setImageData] = useState<any>();
   const { data, setData } = useContext(DataContext);
+  const router = useRouter();
 
   function onImageUpload(event: any) {
-    // Change the image in the state
-    const newArtist = { ...artist };
-    setArtist(newArtist);
-    props.artist.image = newArtist.image;
+    setImageData(event.target.files[0]);
 
     // Change the image in the preview
     setImage(URL.createObjectURL(event.target.files[0]));
   }
   async function editArtist() {
+    console.log(artist.image);
     const formData = new FormData();
-    formData.append("image", artist.image);
+    formData.append("image", imageData);
     formData.append("name", artist.name);
     formData.append("description", artist.description);
     formData.append("id", artist.id.toString());
@@ -48,6 +49,9 @@ export default function ArtistEdit(props: ArtistEditProps) {
         console.log(error);
       });
     props.toggleEdit();
+
+    // Reload the page
+    router.reload();
   }
 
   return (
