@@ -1,6 +1,5 @@
 import {
   Stack,
-  MenuItem,
   Typography,
   Accordion,
   AccordionSummary,
@@ -8,8 +7,6 @@ import {
 } from "@mui/material";
 import { useState, useContext } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import PersonIcon from "@mui/icons-material/Person";
-import { useRouter } from "next/router";
 import { DataContext } from "../../pages/_app";
 
 import ArtistList from "../Artist/ArtistList";

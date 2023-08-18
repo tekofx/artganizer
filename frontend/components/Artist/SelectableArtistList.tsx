@@ -1,22 +1,7 @@
-import {
-  useContext,
-  Dispatch,
-  SetStateAction,
-  useState,
-  MouseEvent,
-} from "react";
-import {
-  Paper,
-  Typography,
-  TextField,
-  Popper,
-  MenuItem,
-  Stack,
-  IconButton,
-} from "@mui/material";
+import { useContext, Dispatch, SetStateAction } from "react";
+import { Typography, MenuItem } from "@mui/material";
 import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
-import ClearIcon from "@mui/icons-material/Clear";
 import ArtistLabel from "./ArtistLabel";
 interface ArtistListProps {
   selectedArtist: Artist | undefined;

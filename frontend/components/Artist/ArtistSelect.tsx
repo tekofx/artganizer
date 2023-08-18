@@ -1,5 +1,4 @@
 import {
-  useContext,
   Dispatch,
   SetStateAction,
   useState,
@@ -10,11 +9,9 @@ import {
   Typography,
   TextField,
   Popper,
-  MenuItem,
   Stack,
   IconButton,
 } from "@mui/material";
-import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArtistLabel from "./ArtistLabel";

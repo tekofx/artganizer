@@ -7,7 +7,7 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-import TagList from "../TagList";
+import TagList from "../Tag/TagList";
 import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
 import ColorPalette from "../ColorPalette";

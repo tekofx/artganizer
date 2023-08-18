@@ -5,16 +5,13 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
-  Paper,
 } from "@mui/material";
 import Submission from "../../interfaces/Submission";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { DataContext } from "../../pages/_app";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearIcon from "@mui/icons-material/Clear";
-import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import Info from "./Info";
 import Edit from "./Edit";
