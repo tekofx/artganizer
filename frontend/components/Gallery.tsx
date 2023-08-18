@@ -57,7 +57,7 @@ export default function Gallery(props: GalleryProps) {
     data.filters.rating,
     data.filters.tags,
     data.filters.folders,
-    data
+    data.filters.title,
     props.artist,
   ]);
 
