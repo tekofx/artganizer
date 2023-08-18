@@ -18,15 +18,16 @@ export default function Gallery(props: GalleryProps) {
   const router = useRouter();
 
   useEffect(() => {
-    var temp = data.submissions;
+    let temp = data.submissions;
     if (data.filters.rating > -1) {
-      temp = submissions.filter(
+      temp = temp.filter(
         (submission) => submission.rating >= data.filters.rating
       );
     }
 
     if (data.filters.tags.length > 0) {
-      temp = submissions.filter((submission) =>
+      // Get all submissions that have at least one of the tags
+      temp = temp.filter((submission) =>
         submission.tags?.some((tag) =>
           data.filters.tags.some((filterTag) => filterTag.id === tag.id)
         )
@@ -34,7 +35,7 @@ export default function Gallery(props: GalleryProps) {
     }
 
     if (data.filters.folders.length > 0) {
-      temp = submissions.filter((submission) =>
+      temp = temp.filter((submission) =>
         submission.folders?.some((folder) =>
           data.filters.folders.some(
             (filterFolder) => filterFolder.id === folder.id
@@ -43,7 +44,7 @@ export default function Gallery(props: GalleryProps) {
       );
     }
     if (data.filters.title.length > 0) {
-      temp = submissions.filter((submission) =>
+      temp = temp.filter((submission) =>
         submission.title
           .toLowerCase()
           .includes(data.filters.title.toLowerCase())
