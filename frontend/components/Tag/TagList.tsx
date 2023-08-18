@@ -1,4 +1,4 @@
-import { Typography, Stack } from "@mui/material";
+import { Typography, Stack, Grid } from "@mui/material";
 import Tag from "../../interfaces/Tag";
 import TagChip from "./TagChip";
 interface TagListProps {
@@ -7,14 +7,14 @@ interface TagListProps {
 
 export default function TagList(props: TagListProps) {
   return (
-    <>
+    <Grid container spacing={1}>
       {props.tags == undefined && <Typography>No tags</Typography>}
       {props.tags?.length == 0 && <Typography>No tags</Typography>}
-      <Stack direction="row" spacing={1}>
-        {props.tags?.map((tag) => (
-          <TagChip key={tag.id} tag={tag} />
-        ))}
-      </Stack>
-    </>
+      {props.tags?.map((tag) => (
+        <Grid item key={tag.id}>
+          <TagChip tag={tag} />
+        </Grid>
+      ))}
+    </Grid>
   );
 }
