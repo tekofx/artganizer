@@ -33,9 +33,9 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   const { name, color } = req.body;
   const label = TagRepo.create({ name: name, color: color });
-  await TagRepo.save(label);
-  var tags = await TagRepo.find();
-  res.send(tags);
+  const tag = await TagRepo.save(label);
+  tag.submissionCount = 0;
+  res.send(tag);
 });
 
 router.put("/:id", async (req: Request, res: Response) => {
