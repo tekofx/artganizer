@@ -14,9 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import FolderAccordion from "./FolderAccordion";
 import ArtistAccordion from "./ArtistAccordion";
-import ArtistForm from "../Forms/ArtistForm";
-import SubmissionForm from "../Forms/SubmissionForm";
-import TagForm from "../Forms/TagForm";
+import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function LeftPanel() {
