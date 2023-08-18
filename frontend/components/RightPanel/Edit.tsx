@@ -17,6 +17,8 @@ import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
 import TagSelect from "../Tag/TagSelect";
 import Tag from "../../interfaces/Tag";
+import { useContext } from "react";
+import { DataContext } from "../../pages/_app";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
@@ -28,19 +30,33 @@ export default function Edit(props: InfoProps) {
     props.submission.tags
   );
 
+  const { setData } = useContext(DataContext);
+
   const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
     props.submission?.artist
   );
 
   async function editSubmission() {
+    console.log(submission);
     submission.tags = selectedTags;
     submission.artist = selectedArtist;
     await axios
       .put(`http://localhost:3001/submissions/${submission.id}`, {
         submission,
       })
-      .then(() => {
-        props.setSubmission(submission);
+      .then((response) => {
+        console.log(response.data);
+        props.setSubmission(response.data);
+        setData((prevData) => ({
+          ...prevData,
+          submissions: prevData.submissions.map((submission) => {
+            if (submission.id === response.data.id) {
+              return response.data;
+            } else {
+              return submission;
+            }
+          }),
+        }));
       })
       .catch((error) => {
         console.log(error);
