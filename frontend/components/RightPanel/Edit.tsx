@@ -16,6 +16,7 @@ import Artist from "../../interfaces/Artist";
 import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
 import TagSelect from "../Tag/TagSelect";
+import Tag from "../../interfaces/Tag";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
