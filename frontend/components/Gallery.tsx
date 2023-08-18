@@ -42,12 +42,11 @@ export default function Gallery(props: GalleryProps) {
         )
       );
     }
-    // FIXME: This is not working
-    if (props.artist) {
-      console.log("artist");
-
-      temp = submissions.filter(
-        (submission) => submission.artist?.id === props.artist?.id
+    if (data.filters.title.length > 0) {
+      temp = submissions.filter((submission) =>
+        submission.title
+          .toLowerCase()
+          .includes(data.filters.title.toLowerCase())
       );
     }
 
@@ -58,6 +57,7 @@ export default function Gallery(props: GalleryProps) {
     data.filters.rating,
     data.filters.tags,
     data.filters.folders,
+    data
     props.artist,
   ]);
 

@@ -9,6 +9,7 @@ export default function ClearFilters() {
     tags: [],
     folders: [],
     artist: undefined,
+    title: "",
   };
 
   function clearFilters() {
@@ -16,12 +17,12 @@ export default function ClearFilters() {
     newData.filters = emptyFilters;
     setData(newData);
   }
-const filtersAreEmpty =
-  data.filters.rating === emptyFilters.rating &&
-  data.filters.tags.length === emptyFilters.tags.length &&
-  data.filters.folders.length === emptyFilters.folders.length &&
-  data.filters.artist === emptyFilters.artist;
-
+  const filtersAreEmpty =
+    data.filters.rating === emptyFilters.rating &&
+    data.filters.tags.length === emptyFilters.tags.length &&
+    data.filters.folders.length === emptyFilters.folders.length &&
+    data.filters.artist === emptyFilters.artist &&
+    data.filters.title === emptyFilters.title;
   return (
     <div>
       {!filtersAreEmpty && (

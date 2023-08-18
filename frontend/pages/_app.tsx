@@ -22,6 +22,7 @@ interface Filters {
   tags: Tag[];
   folders: Folder[];
   artist: Artist | undefined;
+  title: string;
 }
 
 export interface MyAppProps extends AppProps {
@@ -109,7 +110,13 @@ export const DataContext = createContext<DataContextType>({
     tags: [],
     folders: [],
     submissions: [],
-    filters: { rating: -1, tags: [], folders: [], artist: undefined },
+    filters: {
+      rating: -1,
+      tags: [],
+      folders: [],
+      artist: undefined,
+      title: "",
+    },
     artists: [],
   },
   setData: () => {},
@@ -133,6 +140,7 @@ export default function MyApp(props: MyAppProps) {
       tags: [],
       folders: [],
       artists: [],
+      title: "",
     },
   });
 

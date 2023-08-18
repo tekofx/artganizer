@@ -16,6 +16,7 @@ export default function Home() {
       tags: [],
       folders: [],
       artist: undefined,
+      title: "",
     };
     setData(newData);
   }, []);

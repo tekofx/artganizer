@@ -1,18 +1,28 @@
-import { Paper, TextField, IconButton } from "@mui/material"
-import SearchIcon from '@mui/icons-material/Search';
+import { Paper, TextField, IconButton } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { useContext } from "react";
+import { DataContext } from "../../pages/_app";
 export default function Search() {
-    return (
-        <Paper>
-            <IconButton>
-                <SearchIcon />
-            </IconButton>
-            <TextField
-                id="outlined-basic"
-                label="Search"
-                variant="outlined"
-                size="small"
-            />
+  const { data, setData } = useContext(DataContext);
+  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
+    var newData = { ...data };
+    newData.filters.title = event.target.value;
+    setData(newData);
+  }
 
-        </Paper>
-    )
+  return (
+    <Paper>
+      <IconButton>
+        <SearchIcon />
+      </IconButton>
+      <TextField
+        id="outlined-basic"
+        label="Search"
+        variant="outlined"
+        size="small"
+        value={data.filters.title}
+        onChange={onChange}
+      />
+    </Paper>
+  );
 }
