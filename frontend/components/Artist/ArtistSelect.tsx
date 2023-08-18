@@ -105,7 +105,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
           </>
         )}
       </Stack>
-      <Popper open={open} anchorEl={anchorEl}>
+      <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>
           <ArtistList
             selectedArtist={props.selectedArtist}
