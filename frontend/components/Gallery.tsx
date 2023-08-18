@@ -78,6 +78,7 @@ export default function Gallery(props: GalleryProps) {
               spacing={1}
               justifyContent="center"
               alignItems="center"
+              className="pic"
             >
               <img src={image.image} className="pic" />
               <Typography>{image.title}</Typography>
