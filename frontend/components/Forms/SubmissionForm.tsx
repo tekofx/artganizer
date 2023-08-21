@@ -6,8 +6,6 @@ import {
   Stack,
   Rating,
   Grid,
-  Alert,
-  Snackbar,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -21,6 +19,7 @@ import Submission from "../../interfaces/Submission";
 import TagSelect from "../Tag/TagSelect";
 import ArtistSelect from "../Artist/ArtistSelect";
 import Artist from "../../interfaces/Artist";
+import AlertMessage from "../../interfaces/AlertMessage";
 const emptySubmission: Submission = {
   id: 0,
   title: "",
@@ -38,19 +37,12 @@ const emptySubmission: Submission = {
   format: "",
   image: "/placeholder.jpg",
 };
-const defaultAlertMessage: AlertMessage = {
-  message: "Submission created",
-  severity: "success",
-};
-
-interface AlertMessage {
-  message: string;
-  severity: "success" | "error" | "info" | "warning";
-}
 
 interface Props {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpenSnack: Dispatch<SetStateAction<boolean>>;
+  setAlertMessage: Dispatch<SetStateAction<AlertMessage>>;
 }
 export default function SubmissionForm(props: Props) {
   const { data, setData } = useContext(DataContext);
@@ -62,21 +54,6 @@ export default function SubmissionForm(props: Props) {
   const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
     undefined
   );
-
-  const [open, setOpen] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] =
-    useState<AlertMessage>(defaultAlertMessage);
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   function onCancel() {
     if (props.setOpen != undefined) {
@@ -117,15 +94,20 @@ export default function SubmissionForm(props: Props) {
       var newData = { ...data };
       newData.submissions.push(response.data);
       setData(newData);
+      props.setAlertMessage({
+        message: "Submission created",
+        severity: "success",
+      });
     } catch (error) {
-      setAlertMessage({
+      props.setAlertMessage({
         message: "Error creating submission",
         severity: "error",
       });
     } finally {
       // Update data
 
-      setOpen(true);
+      props.setOpen(false);
+      props.setOpenSnack(true);
     }
   }
 
@@ -210,21 +192,6 @@ export default function SubmissionForm(props: Props) {
             </Grid>
           </Grid>
         </Grid>
-
-        <Snackbar
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={handleClose}
-            severity={alertMessage.severity}
-            sx={{ width: "100%" }}
-          >
-            {alertMessage.message}
-          </Alert>
-        </Snackbar>
       </DialogContent>
       <DialogActions>
         <Stack direction="row" spacing={2}>

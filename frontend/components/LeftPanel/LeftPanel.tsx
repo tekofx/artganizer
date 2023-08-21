@@ -14,6 +14,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import FolderAccordion from "./FolderAccordion";
 import ArtistAccordion from "./ArtistAccordion";
+import Snack from "../Snack";
+import AlertMessage from "../../interfaces/AlertMessage";
 import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -26,6 +28,11 @@ export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
   const [openSubmissionForm, setOpenSubmissionForm] = useState<boolean>(false);
   const [openTagForm, setOpenTagForm] = useState<boolean>(false);
+  const [openSnack, setOpenSnack] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    message: "Submission created",
+    severity: "success",
+  });
 
   const router = useRouter();
 
@@ -147,12 +154,30 @@ export default function LeftPanel() {
           </MenuList>
         </Grid>
       </Grid>
-      <ArtistForm open={openArtistForm} setOpen={setOpenArtistForm} />
+      <ArtistForm
+        open={openArtistForm}
+        setOpen={setOpenArtistForm}
+        setAlertMessage={setAlertMessage}
+        setOpenSnack={setOpenSnack}
+      />
       <SubmissionForm
         open={openSubmissionForm}
         setOpen={setOpenSubmissionForm}
+        setOpenSnack={setOpenSnack}
+        setAlertMessage={setAlertMessage}
       />
-      <TagForm open={openTagForm} setOpen={setOpenTagForm} />
+
+      <TagForm
+        open={openTagForm}
+        setOpen={setOpenTagForm}
+        setAlertMessage={setAlertMessage}
+        setOpenSnack={setOpenSnack}
+      />
+      <Snack
+        open={openSnack}
+        setOpen={setOpenSnack}
+        alertMessage={alertMessage}
+      />
     </Paper>
   );
 }

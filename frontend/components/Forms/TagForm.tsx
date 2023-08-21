@@ -4,8 +4,6 @@ import {
   Grid,
   Typography,
   Button,
-  Snackbar,
-  Alert,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -18,11 +16,8 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { TwitterPicker, ColorResult } from "react-color";
 import { DataContext } from "../../pages/_app";
+import AlertMessage from "../../interfaces/AlertMessage";
 
-interface AlertMessage {
-  message: string;
-  severity: "success" | "error" | "info" | "warning";
-}
 const defaultTag: Tag = {
   name: "",
   color: "#FFFFFF",
@@ -30,21 +25,15 @@ const defaultTag: Tag = {
   submissionCount: 0,
 };
 
-const defaultAlertMessage: AlertMessage = {
-  message: "Tag created",
-  severity: "success",
-};
-
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertMessage: React.Dispatch<React.SetStateAction<AlertMessage>>;
+  setOpenSnack: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TagForm(props: Props) {
   const [tag, setTag] = useState<Tag>(defaultTag);
-  const [open, setOpen] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] =
-    useState<AlertMessage>(defaultAlertMessage);
 
   const { data, setData } = useContext(DataContext);
 
@@ -55,28 +44,30 @@ export default function TagForm(props: Props) {
     }));
   };
 
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-
   async function postTag(tag: Tag) {
-    const response = await axios.post(`http://localhost:3001/tags`, tag);
-    if (response.status != 200) {
-      setAlertMessage({ message: "Error creating tag", severity: "error" });
-    }
+    await axios
+      .post(`http://localhost:3001/tags`, tag)
+      .then((response) => {
+        const newData = { ...data };
+        newData.tags.push(response.data);
+        setData(newData);
+        props.setAlertMessage({
+          message: "Tag created",
+          severity: "success",
+        });
+      })
+      .catch((error) => {
+        props.setAlertMessage({
+          message: "Error creating tag",
+          severity: "error",
+        });
 
-    const newData = { ...data };
-    newData.tags.push(response.data);
-    setData(newData);
-    setOpen(true);
-    props.setOpen(false);
+        console.log(error);
+      })
+      .finally(() => {
+        props.setOpenSnack(true);
+        props.setOpen(false);
+      });
   }
 
   return (
@@ -133,20 +124,6 @@ export default function TagForm(props: Props) {
           <Button onClick={() => props.setOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={alertMessage.severity}
-          sx={{ width: "100%" }}
-        >
-          {alertMessage.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 }

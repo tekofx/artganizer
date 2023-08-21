@@ -4,8 +4,6 @@ import {
   Grid,
   Typography,
   Button,
-  Snackbar,
-  Alert,
   IconButton,
   InputAdornment,
   Avatar,
@@ -35,11 +33,6 @@ const defaultArtist: Artist = {
   image: "/placeholder.jpg",
 };
 
-const defaultAlertMessage: AlertMessage = {
-  message: "Artist created",
-  severity: "success",
-};
-
 const defaultSocials: Social[] = [
   {
     name: "",
@@ -59,29 +52,16 @@ function isValidUrl(string: string) {
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenSnack: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertMessage: React.Dispatch<React.SetStateAction<AlertMessage>>;
 }
 
 export default function ArtistForm(props: Props) {
   const [artist, setArtist] = useState<Artist>(defaultArtist);
-  const [open, setOpen] = useState<boolean>(false);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [socials, setSocials] = useState<Social[]>(defaultSocials);
 
   const { data, setData } = useContext(DataContext);
-
-  const [alertMessage, setAlertMessage] =
-    useState<AlertMessage>(defaultAlertMessage);
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   function handleSocialURLChange(event: any, index: number) {
     const newSocials = [...socials];
@@ -132,17 +112,28 @@ export default function ArtistForm(props: Props) {
     formData.append("socials", JSON.stringify(socials));
     artist.socials = socials;
 
-    const response = await axios.post(
-      `http://localhost:3001/artists`,
-      formData
-    );
-    if (response.status != 200) {
-      setAlertMessage({ message: "Error creating artist", severity: "error" });
-    }
-    var newData = { ...data };
-    newData.artists.push(response.data);
-    setData(newData);
-    setOpen(true);
+    await axios
+      .post("http://localhost:3001/artists", formData)
+      .then((response) => {
+        var newData = { ...data };
+        newData.artists.push(response.data);
+        setData(newData);
+        props.setAlertMessage({
+          message: "Artist created",
+          severity: "success",
+        });
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        props.setAlertMessage({
+          message: "Error creating artist",
+          severity: "error",
+        });
+      })
+      .finally(() => {
+        props.setOpenSnack(true);
+      });
   }
 
   return (
@@ -246,21 +237,6 @@ export default function ArtistForm(props: Props) {
             </Stack>
           </Grid>
         </Grid>
-
-        <Snackbar
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={handleClose}
-            severity={alertMessage.severity}
-            sx={{ width: "100%" }}
-          >
-            {alertMessage.message}
-          </Alert>
-        </Snackbar>
       </DialogContent>
       <DialogActions>
         <Button
