@@ -1,4 +1,5 @@
 import {
+  Chip,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -32,6 +33,18 @@ export default function ManageTags(props: ManageTagsProps) {
   const { data, setData } = useContext(DataContext);
   const [tags, setTags] = useState<Tag[]>(data.tags);
 
+  async function onClickRemoveTag(tag: Tag) {
+    await axios
+      .delete(`http://localhost:3001/tags/${tag.id}`)
+      .then(() => {
+        setTags(tags.filter((t) => t.id != tag.id));
+        setData({ ...data, tags: data.tags.filter((t) => t.id != tag.id) });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <Dialog open={props.open} sx={{ p: 2 }}>
       <DialogTitle>
@@ -58,13 +71,18 @@ export default function ManageTags(props: ManageTagsProps) {
             spacing={1}
             key={tag.id}
             justifyContent="space-between"
+            alignItems="center"
           >
-            <TagLabel tag={tag} />
+            <TagLabel tag={tag} showSubmissions />
             <div>
               <IconButton size="small">
                 <EditIcon />
               </IconButton>
-              <IconButton size="small" color="error">
+              <IconButton
+                size="small"
+                color="error"
+                onClick={() => onClickRemoveTag(tag)}
+              >
                 <DeleteIcon />
               </IconButton>
             </div>
