@@ -1,8 +1,16 @@
-import { IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import ManageTags from "../Forms/ManageTags";
-
+import SettingsIcon from "@mui/icons-material/Settings";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -13,6 +21,25 @@ export default function SettingMenu() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const Settings = [
+    {
+      name: "Manage Tags",
+      icon: <LocalOfferIcon />,
+      onclick: () => {
+        handleCloseUserMenu();
+        setOpenTagManager(true);
+      },
+    },
+    {
+      name: "Settings",
+      icon: <SettingsIcon />,
+      onclick: () => {
+        handleCloseUserMenu();
+        setOpenTagManager(true);
+      },
+    },
+  ];
+
   return (
     <>
       <Tooltip title="Open settings">
@@ -37,14 +64,14 @@ export default function SettingMenu() {
         onClose={handleCloseUserMenu}
         color="white"
       >
-        <MenuItem
-          onClick={() => {
-            handleCloseUserMenu();
-            setOpenTagManager(true);
-          }}
-        >
-          <Typography textAlign="center">Manage Tags</Typography>
-        </MenuItem>
+        {Settings.map((setting) => (
+          <MenuItem onClick={setting.onclick} key={setting.name}>
+            <Stack direction="row" spacing={1}>
+              {setting.icon}
+              <Typography textAlign="center">{setting.name}</Typography>
+            </Stack>
+          </MenuItem>
+        ))}
       </Menu>
       <ManageTags open={openTagManager} setOpen={setOpenTagManager} />
     </>
