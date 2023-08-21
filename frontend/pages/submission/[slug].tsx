@@ -29,7 +29,21 @@ export default function Page() {
     <Paper>
       <Grid container>
         <Grid item lg={9}>
-          <img src={submission?.image} width="100%" />
+          <Paper
+            elevation={3}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <img
+              src={submission?.image}
+              width="auto"
+              style={{ maxHeight: "100vh", maxWidth: "100%" }}
+            />
+          </Paper>
         </Grid>
         <Grid item lg={3}>
           <RightPanel submission={submission} setSubmission={setSubmission} />
