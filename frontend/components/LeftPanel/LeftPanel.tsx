@@ -7,6 +7,7 @@ import {
   IconButton,
   Paper,
   MenuList,
+  Stack,
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -17,6 +18,9 @@ import ArtistAccordion from "./ArtistAccordion";
 import Snack from "../Snack";
 import AlertMessage from "../../interfaces/AlertMessage";
 import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
+import PersonIcon from "@mui/icons-material/Person";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import PhotoIcon from "@mui/icons-material/Photo";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function LeftPanel() {
@@ -126,7 +130,10 @@ export default function LeftPanel() {
                   handleCloseCreateMenu();
                 }}
               >
-                <Typography textAlign="center">Artist</Typography>
+                <Stack direction="row" spacing={2}>
+                  <PersonIcon />
+                  <Typography textAlign="center">Artist</Typography>
+                </Stack>
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -134,7 +141,10 @@ export default function LeftPanel() {
                   handleCloseCreateMenu();
                 }}
               >
-                <Typography textAlign="center">Submission</Typography>
+                <Stack direction="row" spacing={2}>
+                  <PhotoIcon />
+                  <Typography textAlign="center">Submission</Typography>
+                </Stack>
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -142,7 +152,10 @@ export default function LeftPanel() {
                   handleCloseCreateMenu();
                 }}
               >
-                <Typography textAlign="center">Tag</Typography>
+                <Stack direction="row" spacing={2}>
+                  <LocalOfferIcon />
+                  <Typography textAlign="center">Tag</Typography>
+                </Stack>
               </MenuItem>
             </Menu>
           </Grid>
