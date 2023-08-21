@@ -8,6 +8,7 @@ import AlertMessage from "../../interfaces/AlertMessage";
 import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
 import CreateMenu from "./CreateMenu";
 import SettingsMenu from "./SettingsMenu";
+import ManageTags from "../Forms/ManageTags";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);

@@ -1,6 +1,7 @@
 import { IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import ManageTags from "../Forms/ManageTags";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function SettingMenu() {
@@ -8,6 +9,7 @@ export default function SettingMenu() {
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
+  const [openTagManager, setOpenTagManager] = useState<boolean>(false);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -36,12 +38,16 @@ export default function SettingMenu() {
         onClose={handleCloseUserMenu}
         color="white"
       >
-        {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography textAlign="center">{setting}</Typography>
-          </MenuItem>
-        ))}
+        <MenuItem
+          onClick={() => {
+            handleCloseUserMenu();
+            setOpenTagManager(true);
+          }}
+        >
+          <Typography textAlign="center">Manage Tags</Typography>
+        </MenuItem>
       </Menu>
+      <ManageTags open={openTagManager} setOpen={setOpenTagManager} />
     </>
   );
 }
