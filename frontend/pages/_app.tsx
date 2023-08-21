@@ -76,11 +76,6 @@ MyApp.getInitialProps = async () => {
     }
   );
   const artists = artistsResponse.data;
-  console.log("Initial props");
-  /* console.log(tags);
-  console.log(folders);
-  console.log(submissions);
-  console.log(artists); */
   return { tags, folders, submissions, artists };
 };
 
