@@ -27,37 +27,47 @@ export default function Info(props: InfoProps) {
         <Grid item lg={12}>
           <Stack spacing={1}>
             <Paper elevation={0} sx={{ padding: 2 }}>
-              <Typography variant="h4">{props.submission.title}</Typography>
-              <Typography variant="body1">
-                {props.submission.description}
-              </Typography>
-              <Typography>Rating</Typography>
-              <Rating value={props.submission.rating} readOnly />
+              <Stack spacing="1">
+                <Typography variant="h4">{props.submission.title}</Typography>
+                <Typography variant="body1">
+                  {props.submission.description}
+                </Typography>
+                <Typography>Rating</Typography>
+                <Rating value={props.submission.rating} readOnly />
+              </Stack>
             </Paper>
             {props.submission.tags && (
               <Paper elevation={0} sx={{ padding: 2 }}>
-                <Typography>Tags</Typography>
-                <TagList tags={props.submission.tags} />
+                <Stack spacing={1}>
+                  <Typography>Tags</Typography>
+                  <TagList tags={props.submission.tags} />
+                </Stack>
               </Paper>
             )}
             {props.submission.characters && (
               <Paper elevation={0} sx={{ padding: 2 }}>
-                <Typography>Characters</Typography>
-                <CharacterList characters={props.submission.characters} />
+                <Stack spacing={1}>
+                  <Typography>Characters</Typography>
+                  <CharacterList characters={props.submission.characters} />
+                </Stack>
               </Paper>
             )}
             {props.submission.artist && (
               <Paper elevation={0} sx={{ padding: 2 }}>
-                <Typography>Artist</Typography>
-                <ArtistLabel artist={props.submission.artist} clickable />
+                <Stack spacing={1}>
+                  <Typography>Artist</Typography>
+                  <ArtistLabel artist={props.submission.artist} clickable />
+                </Stack>
               </Paper>
             )}
           </Stack>
         </Grid>
         <Grid item lg={12}>
           <Paper elevation={0} sx={{ padding: 2 }}>
-            <Typography>Colors</Typography>
-            <ColorPalette colors={props.submission.colors} />
+            <Stack spacing={1}>
+              <Typography>Colors</Typography>
+              <ColorPalette colors={props.submission.colors} />
+            </Stack>
           </Paper>
         </Grid>
         <Grid item lg={12}>
