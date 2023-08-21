@@ -149,10 +149,10 @@ export default function MyApp(props: MyAppProps) {
         <CssBaseline />
         <DataContext.Provider value={{ data, setData }}>
           <Grid container>
-            <Grid item lg={2}>
+            <Grid item lg={2} position="fixed">
               <LateralPanel />
             </Grid>
-            <Grid item lg={10}>
+            <Grid item lg={10} style={{ marginLeft: "16.66%" }}>
               <Component {...pageProps} />
             </Grid>
           </Grid>
