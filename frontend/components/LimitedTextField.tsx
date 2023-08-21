@@ -2,8 +2,17 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 
-export default function LimitedTextField({ maxLength, ...props }) {
-  const [value, setValue] = useState("");
+interface Props {
+  maxLength: number;
+  label: string;
+  multiline: boolean;
+  value: string;
+  // eslint-disable-next-line no-unused-vars
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export default function LimitedTextField(props: Props) {
+  const [value, setValue] = useState(props.value);
 
   const handleChange = (event: {
     target: { value: React.SetStateAction<string> };
@@ -13,14 +22,15 @@ export default function LimitedTextField({ maxLength, ...props }) {
 
   return (
     <TextField
-      {...props}
+      label={props.label}
+      multiline={props.multiline}
       value={value}
       onChange={handleChange}
-      inputProps={{ maxLength }}
+      inputProps={{ maxLength: props.maxLength }}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            {maxLength - value.length}
+            {props.maxLength - value.length}
           </InputAdornment>
         ),
       }}

@@ -4,9 +4,9 @@ import { Grid, Paper } from "@mui/material";
 import RightPanel from "../../components/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
 import { DataContext } from "../_app";
-
+import { emptySubmission } from "../../src/utils";
 export default function Page() {
-  const [submission, setSubmission] = useState<Submission>();
+  const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const { data } = useContext(DataContext);
 
   const router = useRouter();

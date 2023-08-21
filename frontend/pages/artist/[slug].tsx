@@ -19,8 +19,9 @@ import ArtistEdit from "../../components/Artist/ArtistEdit";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
+import { emptyArtist } from "../../src/utils";
 export default function Page() {
-  const [artist, setArtist] = useState<Artist>();
+  const [artist, setArtist] = useState<Artist>(emptyArtist);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { data, setData } = useContext(DataContext);

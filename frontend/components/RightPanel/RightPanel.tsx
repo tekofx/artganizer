@@ -18,7 +18,7 @@ import Edit from "./Edit";
 
 interface RightPanelProps {
   submission: Submission;
-  setSubmission: Dispatch<SetStateAction<Submission | undefined>>;
+  setSubmission: Dispatch<SetStateAction<Submission>>;
 }
 
 export default function RightPanel(props: RightPanelProps) {
@@ -61,7 +61,6 @@ export default function RightPanel(props: RightPanelProps) {
             toggleEdit={toggleEdit}
             handleClickOpenDialog={handleClickOpenDialog}
           />
-          
         </>
       ) : (
         <>

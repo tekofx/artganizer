@@ -47,7 +47,7 @@ const defaultSocials: Social[] = [
     favicon: "",
   },
 ];
-function isValidUrl(string) {
+function isValidUrl(string: string) {
   try {
     new URL(string);
     return true;
@@ -182,7 +182,7 @@ export default function ArtistForm(props: Props) {
                 maxLength={200}
                 multiline
                 value={artist.description}
-                onChange={(event) => {
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setArtist((prevSubmission) => ({
                     ...prevSubmission,
                     description: event.target.value,

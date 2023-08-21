@@ -22,7 +22,7 @@ import { DataContext } from "../../pages/_app";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
-  setSubmission: Dispatch<SetStateAction<Submission | undefined>>;
+  setSubmission: Dispatch<SetStateAction<Submission >>;
 }
 export default function Edit(props: InfoProps) {
   const [submission, setSubmission] = useState<Submission>(props.submission);

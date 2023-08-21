@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 interface ArtistEditProps {
   artist: Artist;
   toggleEdit: () => void;
-  setArtist: Dispatch<SetStateAction<Artist | undefined>>;
+  setArtist: Dispatch<SetStateAction<Artist>>;
 }
 
 export default function ArtistEdit(props: ArtistEditProps) {
@@ -25,12 +25,12 @@ export default function ArtistEdit(props: ArtistEditProps) {
     setImage(URL.createObjectURL(event.target.files[0]));
   }
   async function editArtist() {
-    console.log(artist.image);
+    console.log(artist?.image);
     const formData = new FormData();
     formData.append("image", imageData);
     formData.append("name", artist.name);
     formData.append("description", artist.description);
-    formData.append("id", artist.id.toString());
+    formData.append("id", artist?.id.toString());
 
     await axios
       .put(`http://localhost:3001/artists/${artist.id}`, formData)
@@ -69,23 +69,28 @@ export default function ArtistEdit(props: ArtistEditProps) {
         <Stack spacing={2}>
           <TextField
             label="Name"
-            value={artist.name}
+            value={artist?.name}
             onChange={(event) => {
-              setArtist((prevSubmission) => ({
-                ...prevSubmission,
-                name: event.target.value,
-              }));
+              if (artist) {
+                setArtist((prevSubmission) => ({
+                  ...prevSubmission,
+                  name: event.target.value,
+                }));
+              }
             }}
           />
+
           <TextField
             label="Description"
             multiline
-            value={artist.description}
+            value={artist?.description}
             onChange={(event) => {
-              setArtist((prevSubmission) => ({
-                ...prevSubmission,
-                description: event.target.value,
-              }));
+              if (artist) {
+                setArtist((prevSubmission) => ({
+                  ...prevSubmission,
+                  description: event.target.value,
+                }));
+              }
             }}
           />
         </Stack>
