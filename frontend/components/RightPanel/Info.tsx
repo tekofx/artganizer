@@ -27,29 +27,29 @@ export default function Info(props: InfoProps) {
         <Grid item lg={12}>
           <Stack spacing={1}>
             <Paper elevation={0} sx={{ padding: 2 }}>
-              <Typography variant="h4">{props.submission?.title}</Typography>
+              <Typography variant="h4">{props.submission.title}</Typography>
               <Typography variant="body1">
-                {props.submission?.description}
+                {props.submission.description}
               </Typography>
               <Typography>Rating</Typography>
-              <Rating value={props.submission?.rating} readOnly />
+              <Rating value={props.submission.rating} readOnly />
             </Paper>
-            {props.submission?.tags && (
+            {props.submission.tags && (
               <Paper elevation={0} sx={{ padding: 2 }}>
                 <Typography>Tags</Typography>
-                <TagList tags={props.submission?.tags} />
+                <TagList tags={props.submission.tags} />
               </Paper>
             )}
-            {props.submission?.characters && (
+            {props.submission.characters && (
               <Paper elevation={0} sx={{ padding: 2 }}>
                 <Typography>Characters</Typography>
-                <CharacterList characters={props.submission?.characters} />
+                <CharacterList characters={props.submission.characters} />
               </Paper>
             )}
-            {props.submission?.artist && (
+            {props.submission.artist && (
               <Paper elevation={0} sx={{ padding: 2 }}>
                 <Typography>Artist</Typography>
-                <ArtistLabel artist={props.submission?.artist} clickable />
+                <ArtistLabel artist={props.submission.artist} clickable />
               </Paper>
             )}
           </Stack>
@@ -57,7 +57,7 @@ export default function Info(props: InfoProps) {
         <Grid item lg={12}>
           <Paper elevation={0} sx={{ padding: 2 }}>
             <Typography>Colors</Typography>
-            <ColorPalette colors={props.submission?.colors} />
+            <ColorPalette colors={props.submission.colors} />
           </Paper>
         </Grid>
         <Grid item lg={12}>
@@ -69,7 +69,7 @@ export default function Info(props: InfoProps) {
               </Grid>
 
               <Grid item lg={8}>
-                <Typography>{formatDate(props.submission?.date)}</Typography>
+                <Typography>{formatDate(props.submission.date)}</Typography>
               </Grid>
 
               <Grid item lg={4}>
@@ -77,23 +77,21 @@ export default function Info(props: InfoProps) {
               </Grid>
               <Grid item lg={8}>
                 <Typography>
-                  {props.submission?.width}x{props.submission?.height}
+                  {props.submission.width}x{props.submission.height}
                 </Typography>
               </Grid>
               <Grid item lg={4}>
                 Size
               </Grid>
               <Grid item lg={8}>
-                {convertBytes(props.submission?.size)}
+                {convertBytes(props.submission.size)}
               </Grid>
 
               <Grid item lg={4}>
                 Format
               </Grid>
               <Grid item lg={8}>
-                <Typography>
-                  {props.submission?.format.toUpperCase()}
-                </Typography>
+                <Typography>{props.submission.format.toUpperCase()}</Typography>
               </Grid>
             </Grid>
           </Paper>
