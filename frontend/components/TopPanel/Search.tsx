@@ -1,4 +1,4 @@
-import { Paper, TextField, IconButton } from "@mui/material";
+import { TextField, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
 import { DataContext } from "../../pages/_app";
@@ -11,7 +11,7 @@ export default function Search() {
   }
 
   return (
-    <Paper>
+    <div>
       <IconButton>
         <SearchIcon />
       </IconButton>
@@ -23,6 +23,6 @@ export default function Search() {
         value={data.filters.title}
         onChange={onChange}
       />
-    </Paper>
+    </div>
   );
 }
