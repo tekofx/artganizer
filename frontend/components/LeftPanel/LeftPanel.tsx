@@ -22,7 +22,7 @@ export default function LeftPanel() {
   const router = useRouter();
 
   return (
-    <Paper>
+    <Paper sx={{ minHeight: "100vh" }} elevation={0}>
       <Grid container sx={{ p: 2 }}>
         {/* Superior bar */}
         <Grid item lg={12}>

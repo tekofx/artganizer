@@ -22,19 +22,9 @@ export default function Home() {
   }, []);
 
   return (
-    <Container maxWidth={false}>
-      <Box
-        sx={{
-          my: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <TopPanel />
-        <Gallery />
-      </Box>
-    </Container>
+    <>
+      <TopPanel />
+      <Gallery />
+    </>
   );
 }
