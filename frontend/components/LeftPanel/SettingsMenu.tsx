@@ -2,7 +2,6 @@ import { IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import ManageTags from "../Forms/ManageTags";
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);

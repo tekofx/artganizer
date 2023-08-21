@@ -28,12 +28,13 @@ const defaultTag: Tag = {
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAlertMessage: React.Dispatch<React.SetStateAction<AlertMessage>>;
-  setOpenSnack: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
+  setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
+  tag?: Tag;
 }
 
 export default function TagForm(props: Props) {
-  const [tag, setTag] = useState<Tag>(defaultTag);
+  const [tag, setTag] = useState<Tag>(props.tag ?? defaultTag);
 
   const { data, setData } = useContext(DataContext);
 
@@ -45,29 +46,56 @@ export default function TagForm(props: Props) {
   };
 
   async function postTag(tag: Tag) {
-    await axios
-      .post(`http://localhost:3001/tags`, tag)
-      .then((response) => {
-        const newData = { ...data };
-        newData.tags.push(response.data);
-        setData(newData);
-        props.setAlertMessage({
-          message: "Tag created",
-          severity: "success",
-        });
-      })
-      .catch((error) => {
-        props.setAlertMessage({
-          message: "Error creating tag",
-          severity: "error",
-        });
+    if (props.tag == undefined) {
+      await axios
+        .post(`http://localhost:3001/tags`, tag)
+        .then((response) => {
+          const newData = { ...data };
+          newData.tags.push(response.data);
+          setData(newData);
+          props.setAlertMessage?.({
+            message: "Tag created",
+            severity: "success",
+          });
+        })
+        .catch((error) => {
+          props.setAlertMessage?.({
+            message: "Error creating tag",
+            severity: "error",
+          });
 
-        console.log(error);
-      })
-      .finally(() => {
-        props.setOpenSnack(true);
-        props.setOpen(false);
-      });
+          console.log(error);
+        })
+        .finally(() => {
+          props.setOpenSnack?.(true);
+          props.setOpen(false);
+        });
+    } else {
+      await axios
+        .put(`http://localhost:3001/tags/${tag.id}`, tag)
+        .then((response) => {
+          const newData = { ...data };
+          const index = newData.tags.findIndex((t) => t.id == tag.id);
+          newData.tags[index] = response.data;
+          setData(newData);
+          props.setAlertMessage?.({
+            message: "Tag updated",
+            severity: "success",
+          });
+        })
+        .catch((error) => {
+          props.setAlertMessage?.({
+            message: "Error updating tag",
+            severity: "error",
+          });
+
+          console.log(error);
+        })
+        .finally(() => {
+          props.setOpenSnack?.(true);
+          props.setOpen(false);
+        });
+    }
   }
 
   return (
@@ -107,9 +135,9 @@ export default function TagForm(props: Props) {
                 }}
               />
             </Grid>
-            <Grid item lg={6}>
+            <Grid item>
               <Typography>Preview</Typography>
-              <Stack direction="row" spacing={5}>
+              <Stack direction="column" spacing={2}>
                 <TagLabel tag={tag} />
                 <TagChip tag={tag} />
               </Stack>
@@ -118,7 +146,7 @@ export default function TagForm(props: Props) {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={() => postTag(tag)}>
-            Create
+            {props.tag == undefined ? "Create" : "Update"}
           </Button>
 
           <Button onClick={() => props.setOpen(false)}>Close</Button>
