@@ -47,8 +47,18 @@ router.put("/:id", async (req: Request, res: Response) => {
   }
   await TagRepo.update(label, { name: name, color: color });
 
-  // Return updated label
-  const updatedLabel = await TagRepo.findOne({ where: { id: id } });
+  // Return updated label with submission count
+  const updatedLabel = await TagRepo.createQueryBuilder("tag")
+    .select([
+      "tag.id AS id",
+      "tag.name AS name",
+      "tag.color AS color",
+      "(SELECT COUNT(*) FROM submission_tags_tag WHERE submission_tags_tag.tagId = tag.id) AS submissionCount",
+    ])
+    .where("tag.id = :id", { id: id })
+    .getRawOne();
+
+  updatedLabel.submissionCount = parseInt(updatedLabel.submissionCount);
   res.send(updatedLabel);
 });
 
