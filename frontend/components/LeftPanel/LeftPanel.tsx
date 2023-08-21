@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import FolderAccordion from "./FolderAccordion";
 import ArtistAccordion from "./ArtistAccordion";
@@ -22,9 +21,6 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function LeftPanel() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [anchorCreateMenu, setAnchorCreateMenu] = useState<null | HTMLElement>(
-    null
-  );
 
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
   const [openSubmissionForm, setOpenSubmissionForm] = useState<boolean>(false);
@@ -43,10 +39,6 @@ export default function LeftPanel() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-  };
-
-  const handleOpenCreateMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorCreateMenu(event.currentTarget);
   };
 
   return (
@@ -94,19 +86,12 @@ export default function LeftPanel() {
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title="Create">
-                <IconButton onClick={handleOpenCreateMenu} sx={{ p: 0 }}>
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
+              <CreateMenu
+                setOpenArtistForm={setOpenArtistForm}
+                setOpenSubmissionForm={setOpenSubmissionForm}
+                setOpenTagForm={setOpenTagForm}
+              />
             </Grid>
-            <CreateMenu
-              setOpenArtistForm={setOpenArtistForm}
-              setOpenSubmissionForm={setOpenSubmissionForm}
-              setOpenTagForm={setOpenTagForm}
-              anchorCreateMenu={anchorCreateMenu}
-              setAnchorCreateMenu={setAnchorCreateMenu}
-            />
           </Grid>
         </Grid>
         <Grid item lg={12}>
