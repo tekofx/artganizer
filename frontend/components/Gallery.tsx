@@ -19,6 +19,12 @@ export default function Gallery(props: GalleryProps) {
 
   useEffect(() => {
     let temp = data.submissions;
+    if (props.artist != undefined) {
+      temp = temp.filter(
+        (submission) => submission.artist?.id == props.artist?.id
+      );
+    }
+
     if (data.filters.rating > -1) {
       temp = temp.filter(
         (submission) => submission.rating >= data.filters.rating
