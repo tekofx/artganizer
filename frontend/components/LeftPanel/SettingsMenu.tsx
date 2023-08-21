@@ -18,7 +18,7 @@ export default function SettingMenu() {
     setAnchorElUser(event.currentTarget);
   };
   const [openTagManager, setOpenTagManager] = useState<boolean>(false);
-  const [openSettings, setOpenSettings] = useState<boolean>(true);
+  const [openSettings, setOpenSettings] = useState<boolean>(false);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
