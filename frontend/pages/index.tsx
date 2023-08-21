@@ -1,6 +1,4 @@
 import { useEffect, useContext } from "react";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
 import Gallery from "../components/Gallery";
 import { DataContext } from "../pages/_app";
 import TopPanel from "../components/TopPanel/TopPanel";
