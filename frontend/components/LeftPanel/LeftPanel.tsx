@@ -7,7 +7,6 @@ import {
   IconButton,
   Paper,
   MenuList,
-  Stack,
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -18,9 +17,7 @@ import ArtistAccordion from "./ArtistAccordion";
 import Snack from "../Snack";
 import AlertMessage from "../../interfaces/AlertMessage";
 import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
-import PersonIcon from "@mui/icons-material/Person";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import PhotoIcon from "@mui/icons-material/Photo";
+import CreateMenu from "./CreateMenu";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function LeftPanel() {
@@ -50,10 +47,6 @@ export default function LeftPanel() {
 
   const handleOpenCreateMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorCreateMenu(event.currentTarget);
-  };
-
-  const handleCloseCreateMenu = () => {
-    setAnchorCreateMenu(null);
   };
 
   return (
@@ -107,57 +100,13 @@ export default function LeftPanel() {
                 </IconButton>
               </Tooltip>
             </Grid>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorCreateMenu}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorCreateMenu)}
-              onClose={handleCloseCreateMenu}
-              color="white"
-            >
-              <MenuItem
-                onClick={() => {
-                  setOpenArtistForm(true);
-                  handleCloseCreateMenu();
-                }}
-              >
-                <Stack direction="row" spacing={2}>
-                  <PersonIcon />
-                  <Typography textAlign="center">Artist</Typography>
-                </Stack>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setOpenSubmissionForm(true);
-                  handleCloseCreateMenu();
-                }}
-              >
-                <Stack direction="row" spacing={2}>
-                  <PhotoIcon />
-                  <Typography textAlign="center">Submission</Typography>
-                </Stack>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setOpenTagForm(true);
-                  handleCloseCreateMenu();
-                }}
-              >
-                <Stack direction="row" spacing={2}>
-                  <LocalOfferIcon />
-                  <Typography textAlign="center">Tag</Typography>
-                </Stack>
-              </MenuItem>
-            </Menu>
+            <CreateMenu
+              setOpenArtistForm={setOpenArtistForm}
+              setOpenSubmissionForm={setOpenSubmissionForm}
+              setOpenTagForm={setOpenTagForm}
+              anchorCreateMenu={anchorCreateMenu}
+              setAnchorCreateMenu={setAnchorCreateMenu}
+            />
           </Grid>
         </Grid>
         <Grid item lg={12}>
