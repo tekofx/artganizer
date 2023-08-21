@@ -1,4 +1,4 @@
-import { Stack, Avatar, Typography } from "@mui/material";
+import { Stack, Avatar, Typography, MenuItem } from "@mui/material";
 import Artist from "../../interfaces/Artist";
 import { useRouter } from "next/router";
 interface ArtistLabelProps {
@@ -14,18 +14,16 @@ export default function Page(props: ArtistLabelProps) {
     }
   }
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      spacing={2}
-      // If clickable, go to artist page
+    <MenuItem
       onClick={handleClick}
       sx={{ cursor: props.clickable ? "pointer" : "default" }}
     >
-      <Avatar
-        src={`http://localhost:3001/artists/uploads/${props.artist.id}`}
-      />
-      <Typography>{props.artist.name}</Typography>
-    </Stack>
+      <Stack direction="row" alignItems="center" spacing={2}>
+        <Avatar
+          src={`http://localhost:3001/artists/uploads/${props.artist.id}`}
+        />
+        <Typography>{props.artist.name}</Typography>
+      </Stack>
+    </MenuItem>
   );
 }
