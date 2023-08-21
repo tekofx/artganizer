@@ -15,7 +15,7 @@ import { useState, MouseEvent, useContext } from "react";
 import { DataContext } from "../../../pages/_app";
 import Tag from "../../../interfaces/Tag";
 import TagChip from "../../Tag/TagChip";
-
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 export default function TagFilter() {
   const { data, setData } = useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -59,6 +59,7 @@ export default function TagFilter() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
+        startIcon={<LocalOfferIcon />}
       >
         Tags
       </Button>

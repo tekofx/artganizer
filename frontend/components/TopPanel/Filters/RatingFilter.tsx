@@ -1,12 +1,8 @@
-import {
-  Rating,
-  Button,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { Rating, Button, Menu, MenuItem } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext } from "react";
 import { DataContext } from "../../../pages/_app";
+import GradeIcon from "@mui/icons-material/Grade";
 export default function RatingFilter() {
   const { data, setData } = useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -26,6 +22,7 @@ export default function RatingFilter() {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        startIcon={<GradeIcon />}
         endIcon={<ExpandMoreIcon />}
       >
         Rating

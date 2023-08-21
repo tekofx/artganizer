@@ -2,7 +2,7 @@ import { Button, Menu } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent } from "react";
 import { ChromePicker } from "react-color";
-
+import ColorLensIcon from "@mui/icons-material/ColorLens";
 export default function RatingFilter() {
   const [color, setColor] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -27,6 +27,7 @@ export default function RatingFilter() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
+        startIcon={<ColorLensIcon />}
       >
         Colors
       </Button>
