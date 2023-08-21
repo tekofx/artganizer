@@ -11,12 +11,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ManageTags from "../Forms/ManageTags";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import SettingsDialog from "../SettingsDialog";
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
   const [openTagManager, setOpenTagManager] = useState<boolean>(false);
+  const [openSettings, setOpenSettings] = useState<boolean>(true);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -35,7 +37,7 @@ export default function SettingMenu() {
       icon: <SettingsIcon />,
       onclick: () => {
         handleCloseUserMenu();
-        setOpenTagManager(true);
+        setOpenSettings(true);
       },
     },
   ];
@@ -74,6 +76,7 @@ export default function SettingMenu() {
         ))}
       </Menu>
       <ManageTags open={openTagManager} setOpen={setOpenTagManager} />
+      <SettingsDialog open={openSettings} setOpen={setOpenSettings} />
     </>
   );
 }
