@@ -7,7 +7,6 @@ import {
   Button,
   Rating,
 } from "@mui/material";
-import Rating2 from "../Rating";
 import TagList from "../Tag/TagList";
 import Submission from "../../interfaces/Submission";
 import CharacterList from "../CharacterList";
@@ -34,7 +33,6 @@ export default function Info(props: InfoProps) {
               </Typography>
               <Typography>Rating</Typography>
               <Rating value={props.submission?.rating} readOnly />
-              <Rating2  value={props.submission?.rating} />
             </Paper>
             {props.submission?.tags && (
               <Paper elevation={0} sx={{ padding: 2 }}>
