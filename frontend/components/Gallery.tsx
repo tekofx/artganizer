@@ -99,7 +99,9 @@ export default function Gallery(props: GalleryProps) {
   }
 
   return (
-    <Paper sx={{ minHeight: "100vh", overflowY: "auto", maxHeight: "100vh" }}>
+    <Paper
+      sx={{ minHeight: "100vh", overflowY: "auto", maxHeight: "100vh", p: 2 }}
+    >
       <div className="gallery">
         {submissions.length == 0 && (
           <Typography variant="h1">No submissions yet</Typography>
