@@ -151,7 +151,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         <Button onClick={updateSettings} variant="contained" color="primary">
           Save
         </Button>
-        <Button onClick={resetSettings} variant="contained" color="primary">
+        <Button onClick={resetSettings} variant="outlined" color="primary">
           Reset to default
         </Button>
         <Button variant="outlined" onClick={() => props.setOpen(false)}>
