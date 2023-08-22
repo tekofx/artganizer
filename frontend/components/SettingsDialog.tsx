@@ -43,6 +43,24 @@ export default function SettingsDialog(props: SettingsDialogProps) {
       });
   }
 
+  async function resetSettings() {
+    await axios
+      .delete("http://localhost:3001/settings")
+      .then((res) => {
+        setData({
+          ...data,
+          settings: res.data,
+        });
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        props.setOpen(false);
+      });
+  }
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, field: string) {
     setSettings({
       ...settings,
@@ -132,6 +150,9 @@ export default function SettingsDialog(props: SettingsDialogProps) {
       <DialogActions>
         <Button onClick={updateSettings} variant="contained" color="primary">
           Save
+        </Button>
+        <Button onClick={resetSettings} variant="contained" color="primary">
+          Reset to default
         </Button>
         <Button variant="outlined" onClick={() => props.setOpen(false)}>
           Close

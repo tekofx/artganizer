@@ -35,4 +35,10 @@ router.put("/", async (req: Request, res: Response) => {
   res.send(newSettings);
 });
 
+router.delete("/", async (req: Request, res: Response) => {
+  // Reset settings.json
+  fs.writeFileSync(settingsFile, JSON.stringify(defaultSettings));
+  res.send(defaultSettings);
+});
+
 export default router;
