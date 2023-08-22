@@ -58,6 +58,7 @@ export default function Page() {
       // Get character from data
       data.characters.filter((character: Character) => {
         if (character.id == id) {
+          console.log(character);
           setCharacter(character);
         }
       });

@@ -91,9 +91,20 @@ MyApp.getInitialProps = async () => {
       },
     }
   );
-
   const settings = settingsResponse.data;
-  return { tags, folders, submissions, artists, settings };
+
+  const charactersResponse = await axios.get<Character[]>(
+    "http://localhost:3001/characters",
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const characters = charactersResponse.data;
+
+  return { tags, folders, submissions, artists, settings, characters };
 };
 
 export interface DataType {
@@ -155,7 +166,7 @@ export default function MyApp(props: MyAppProps) {
     folders: props.folders,
     submissions: props.submissions,
     artists: props.artists,
-    characters: [],
+    characters: props.characters,
     filters: props.filters || {
       rating: -1,
       tags: [],

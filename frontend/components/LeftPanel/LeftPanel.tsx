@@ -8,11 +8,13 @@ import AlertMessage from "../../interfaces/AlertMessage";
 import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
 import CreateMenu from "./CreateMenu";
 import SettingsMenu from "./SettingsMenu";
+import CharacterForm from "../Forms/CharacterForm";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
   const [openSubmissionForm, setOpenSubmissionForm] = useState<boolean>(false);
   const [openTagForm, setOpenTagForm] = useState<boolean>(false);
+  const [openCharacterForm, setOpenCharacterForm] = useState<boolean>(false);
   const [openSnack, setOpenSnack] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
     message: "Submission created",
@@ -45,6 +47,7 @@ export default function LeftPanel() {
                 setOpenArtistForm={setOpenArtistForm}
                 setOpenSubmissionForm={setOpenSubmissionForm}
                 setOpenTagForm={setOpenTagForm}
+                setOpenCharacterForm={setOpenCharacterForm}
               />
             </Grid>
           </Grid>
@@ -72,6 +75,12 @@ export default function LeftPanel() {
       <TagForm
         open={openTagForm}
         setOpen={setOpenTagForm}
+        setAlertMessage={setAlertMessage}
+        setOpenSnack={setOpenSnack}
+      />
+      <CharacterForm
+        open={openCharacterForm}
+        setOpen={setOpenCharacterForm}
         setAlertMessage={setAlertMessage}
         setOpenSnack={setOpenSnack}
       />

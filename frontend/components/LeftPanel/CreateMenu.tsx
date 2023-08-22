@@ -16,6 +16,7 @@ interface Props {
   setOpenArtistForm: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenSubmissionForm: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenTagForm: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenCharacterForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export default function CreateMenu(props: Props) {
   const [anchorCreateMenu, setAnchorCreateMenu] = useState<null | HTMLElement>(
@@ -83,6 +84,17 @@ export default function CreateMenu(props: Props) {
           <Stack direction="row" spacing={2}>
             <LocalOfferIcon />
             <Typography textAlign="center">Tag</Typography>
+          </Stack>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            props.setOpenCharacterForm(true);
+            handleCloseCreateMenu();
+          }}
+        >
+          <Stack direction="row" spacing={2}>
+            <LocalOfferIcon />
+            <Typography textAlign="center">Character</Typography>
           </Stack>
         </MenuItem>
       </Menu>

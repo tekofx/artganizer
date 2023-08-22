@@ -53,16 +53,44 @@ const uploadCharacterPic = multer({
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const folders = await CharacterRepo.find();
-  res.send(folders);
+  const characters = await CharacterRepo.find();
+  res.send(characters);
 });
 
-router.post("/", async (req: Request, res: Response) => {
-  const { name, description } = req.body;
-  const folder = CharacterRepo.create({ name, description });
-  await CharacterRepo.save(folder);
-  res.send(folder);
-});
+router.post(
+  "/",
+  uploadCharacterPic.single("image"),
+  async (req: Request, res: Response) => {
+    const { name, description } = req.body;
+    var file = req.file;
+    const character = CharacterRepo.create({ name, description });
+    var id = await CharacterRepo.save(character)
+      .then((character) => {
+        return character.id;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    if (file) {
+      sharp(file.path)
+        .jpeg()
+        .toFile(path.join(charactersDir, id + ".jpg"))
+        .then(() => {
+          // Eliminar el archivo temporal
+          if (file?.path) {
+            fs.unlinkSync(file.path);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    character.image = process.env.URL + "/characters/" + id;
+    res.send(character);
+  }
+);
 
 router.put(
   "/:id",
