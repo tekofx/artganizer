@@ -32,6 +32,7 @@ const defaultSettings: Settings = {
   galleryInfo: {
     title: true,
     tags: false,
+    rating: false,
     characters: false,
     artist: false,
     dimensions: true,
