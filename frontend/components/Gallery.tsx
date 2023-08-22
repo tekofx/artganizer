@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
-import { Typography, Paper, Stack, Rating, Grid } from "@mui/material";
+import { Typography, Paper, Rating, Grid } from "@mui/material";
 import Submission from "../interfaces/Submission";
 import { DataContext, DataType } from "../pages/_app";
 import { useRouter } from "next/router";
@@ -17,51 +17,71 @@ interface ImageInfoProps {
 }
 
 function ImageInfo(props: ImageInfoProps) {
+  function gallerySettingsAllFalse() {
+    return (
+      !props.data.settings.galleryInfo.artist &&
+      !props.data.settings.galleryInfo.date &&
+      !props.data.settings.galleryInfo.dimensions &&
+      !props.data.settings.galleryInfo.rating &&
+      !props.data.settings.galleryInfo.tags &&
+      !props.data.settings.galleryInfo.title
+    );
+  }
+
   return (
-    <Paper elevation={0}>
-      <Stack
-        direction="column"
-        spacing={0}
+    <Paper elevation={0} sx={{ display: "inline-block" }}>
+      <img src={props.image.image} className="pic" />
+      <Grid
+        container
+        spacing={1}
         justifyContent="center"
         alignItems="center"
-        sx={{ display: "inline-block" }}
+        sx={{
+          paddingBottom: 2,
+          display: gallerySettingsAllFalse() == true ? "none" : "block",
+        }}
       >
-        <img src={props.image.image} className="pic" />
-        <Grid container spacing={1} justifyContent="center" alignItems="center">
+        {props.data.settings.galleryInfo.title && (
           <Grid item xs={12}>
             <Typography>{props.image.title}</Typography>
           </Grid>
+        )}
+
+        {props.data.settings.galleryInfo.date && (
           <Grid item>
-            {props.data.settings.galleryInfo.date && (
-              <Typography>{formatDate(props.image.date)}</Typography>
-            )}
+            <Typography>{formatDate(props.image.date)}</Typography>
           </Grid>
+        )}
+        {props.data.settings.galleryInfo.rating && (
           <Grid item>
-            {props.data.settings.galleryInfo.rating && (
-              <Rating value={props.image.rating} readOnly />
-            )}
+            <Rating value={props.image.rating} readOnly />
           </Grid>
+        )}
+        {props.data.settings.galleryInfo.dimensions && (
           <Grid item>
             <Typography>
               {props.image.width}x{props.image.height}
             </Typography>
           </Grid>
-          <Grid item xs={12}></Grid>
-          <Grid item>
-            {props.data.settings.galleryInfo.artist &&
-              props.image.artist != undefined && (
-                <ArtistLabel artist={props.image.artist} />
-              )}
-          </Grid>
+        )}
 
-          <Grid item>
-            {props.data.settings.galleryInfo.tags &&
-              props.image.tags.length > 0 && (
-                <TagList tags={props.image.tags} />
-              )}
-          </Grid>
-        </Grid>
-      </Stack>
+        {props.data.settings.galleryInfo.artist &&
+          props.image.artist != undefined && (
+            <>
+              <Grid item xs={12}></Grid>
+              <Grid item>
+                <ArtistLabel artist={props.image.artist} />
+              </Grid>
+            </>
+          )}
+
+        {props.data.settings.galleryInfo.tags &&
+          props.image.tags.length > 0 && (
+            <Grid item>
+              <TagList tags={props.image.tags} />
+            </Grid>
+          )}
+      </Grid>
     </Paper>
   );
 }
