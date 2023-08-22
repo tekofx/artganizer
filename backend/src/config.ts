@@ -19,7 +19,7 @@ try {
     MYSQL_DATABASE: process.env.MYSQL_DATABASE || "db",
     MYSQL_PASSWORD: process.env.MYSQL_PASSWORD || "Contraseña",
     MYSQL_USER: process.env.MYSQL_USER || "tekofx",
-    MYSQL_HOST: process.env.MYSQL_HOST || "localhost"
+    MYSQL_HOST: process.env.MYSQL_HOST || "localhost",
   };
 }
 

@@ -17,7 +17,7 @@ import {
 } from "../typeorm.config";
 import sizeOf from "image-size";
 
-const submissionsDir = path.join(__dirname, "../../uploads/submissions");
+const submissionsDir = path.join(__dirname, "../../data/uploads/submissions");
 if (!fs.existsSync(submissionsDir)) {
   fs.mkdirSync(submissionsDir, { recursive: true });
 }

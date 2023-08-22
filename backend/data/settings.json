@@ -1,0 +1,11 @@
+{
+    "galleryInfo": {
+        "title": true,
+        "dimensions": true,
+        "tags": false,
+        "characters": false,
+        "artist": false,
+        "date": false,
+        "colors": false
+    }
+}
