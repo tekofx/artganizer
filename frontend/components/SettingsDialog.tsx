@@ -9,16 +9,50 @@ import {
   IconButton,
   Stack,
   Typography,
+  Checkbox,
 } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
-import { CheckBox } from "@mui/icons-material";
-
+import axios from "axios";
+import { useState, useContext } from "react";
+import Settings from "../interfaces/Settings";
+import { DataContext } from "../pages/_app";
 interface SettingsDialogProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function SettingsDialog(props: SettingsDialogProps) {
+  const { data, setData } = useContext(DataContext);
+  const [settings, setSettings] = useState<Settings>(data.settings);
+
+  async function updateSettings() {
+    await axios
+      .put("http://localhost:3001/settings", settings)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setData({
+          ...data,
+          settings: settings,
+        });
+        props.setOpen(false);
+      });
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>, field: string) {
+    setSettings({
+      ...settings,
+      galleryInfo: {
+        ...settings.galleryInfo,
+        [field]: e.target.checked,
+      },
+    });
+  }
+
   return (
     <Dialog open={props.open}>
       <DialogTitle>
@@ -35,16 +69,58 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         </Stack>
       </DialogTitle>
       <DialogContent>
+        <Typography variant="h6">General</Typography>
         <FormGroup>
-          <FormControlLabel label="Show lateral menu" control={<CheckBox />} />
+          <FormControlLabel label="Show lateral menu" control={<Checkbox />} />
           <FormControlLabel
             label="Show number of submissions in tags"
-            control={<CheckBox />}
+            control={<Checkbox />}
+          />
+        </FormGroup>
+        <Typography variant="h6">Content</Typography>
+        <Typography variant="body2">
+          What info will be displayed in the submissions gallery for each
+          submission
+        </Typography>
+        <FormGroup>
+          <FormControlLabel
+            label="Title"
+            control={<Checkbox onChange={(e) => handleChange(e, "title")} />}
+            checked={settings.galleryInfo.title}
+          />
+          <FormControlLabel
+            label="Tags"
+            control={<Checkbox onChange={(e) => handleChange(e, "tags")} />}
+            checked={settings.galleryInfo.tags}
+          />
+          <FormControlLabel
+            label="Characters"
+            control={
+              <Checkbox onChange={(e) => handleChange(e, "characters")} />
+            }
+            checked={settings.galleryInfo.characters}
+          />
+          <FormControlLabel
+            label="Dimensions"
+            control={
+              <Checkbox onChange={(e) => handleChange(e, "dimensions")} />
+            }
+            checked={settings.galleryInfo.dimensions}
+          />
+          <FormControlLabel
+            label="Date"
+            control={<Checkbox onChange={(e) => handleChange(e, "date")} />}
+            checked={settings.galleryInfo.date}
+          />
+          <FormControlLabel
+            label="Colors"
+            control={<Checkbox onChange={(e) => handleChange(e, "colors")} />}
+            checked={settings.galleryInfo.colors}
           />
         </FormGroup>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" color="primary">
+        <Button onClick={updateSettings} variant="contained" color="primary">
           Save
         </Button>
         <Button variant="outlined" onClick={() => props.setOpen(false)}>

@@ -14,6 +14,8 @@ import axios from "axios";
 import Submission from "../interfaces/Submission";
 import Folder from "../interfaces/Folder";
 import Artist from "../interfaces/Artist";
+import Settings from "../interfaces/Settings";
+import { defaultSettings } from "../src/utils";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -32,6 +34,7 @@ export interface MyAppProps extends AppProps {
   submissions: Submission[];
   artists: Artist[];
   filters: Filters;
+  settings: Settings;
 }
 
 // Inital props
@@ -76,7 +79,19 @@ MyApp.getInitialProps = async () => {
     }
   );
   const artists = artistsResponse.data;
-  return { tags, folders, submissions, artists };
+
+  const settingsResponse = await axios.get<Settings>(
+    "http://localhost:3001/settings",
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const settings = settingsResponse.data;
+  return { tags, folders, submissions, artists, settings };
 };
 
 export interface DataType {
@@ -85,6 +100,7 @@ export interface DataType {
   submissions: Submission[];
   filters: Filters;
   artists: Artist[];
+  settings: Settings;
 }
 
 interface DataContextType {
@@ -96,6 +112,7 @@ interface DataContextType {
       submissions: Submission[];
       filters: Filters;
       artists: Artist[];
+      settings: Settings;
     }>
   >;
 }
@@ -113,6 +130,7 @@ export const DataContext = createContext<DataContextType>({
       title: "",
     },
     artists: [],
+    settings: defaultSettings,
   },
   setData: () => {},
 });
@@ -125,6 +143,7 @@ export default function MyApp(props: MyAppProps) {
     submissions: Submission[];
     filters: Filters;
     artists: Artist[];
+    settings: Settings;
   }>({
     tags: props.tags,
     folders: props.folders,
@@ -137,6 +156,7 @@ export default function MyApp(props: MyAppProps) {
       artists: [],
       title: "",
     },
+    settings: props.settings,
   });
 
   return (

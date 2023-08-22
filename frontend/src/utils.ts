@@ -1,4 +1,5 @@
 import Artist from "../interfaces/Artist";
+import Settings from "../interfaces/Settings";
 import Submission from "../interfaces/Submission";
 const emptyArtist: Artist = {
   id: 0,
@@ -27,4 +28,15 @@ const emptySubmission: Submission = {
   size: 0,
 };
 
-export { emptyArtist, emptySubmission };
+const defaultSettings: Settings = {
+  galleryInfo: {
+    title: true,
+    tags: false,
+    characters: false,
+    artist: false,
+    dimensions: true,
+    date: false,
+    colors: false,
+  },
+};
+export { emptyArtist, emptySubmission, defaultSettings };
