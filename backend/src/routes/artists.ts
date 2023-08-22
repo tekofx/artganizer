@@ -166,7 +166,7 @@ router.get("/:artistId/submissions", async (req: Request, res: Response) => {
 
   res.send(submissions);
 });
-router.get("/data/uploads/:artistId", async (req: Request, res: Response) => {
+router.get("/uploads/:artistId", async (req: Request, res: Response) => {
   if (req.params.artistId == null) {
     res.status(400).send("Artist ID not provided");
     return;
