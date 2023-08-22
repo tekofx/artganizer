@@ -89,6 +89,11 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             checked={settings.galleryInfo.title}
           />
           <FormControlLabel
+            label="Rating"
+            control={<Checkbox onChange={(e) => handleChange(e, "rating")} />}
+            checked={settings.galleryInfo.rating}
+          />
+          <FormControlLabel
             label="Tags"
             control={<Checkbox onChange={(e) => handleChange(e, "tags")} />}
             checked={settings.galleryInfo.tags}

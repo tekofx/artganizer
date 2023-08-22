@@ -13,6 +13,7 @@ const defaultSettings = {
     dimensions: true,
     date: false,
     colors: false,
+    rating: false,
   },
 };
 const settingsFile = path.join(__dirname, "../../data/settings.json");
