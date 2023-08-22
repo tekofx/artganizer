@@ -1,4 +1,5 @@
 import Artist from "../interfaces/Artist";
+import Character from "../interfaces/Character";
 import Settings from "../interfaces/Settings";
 import Submission from "../interfaces/Submission";
 const emptyArtist: Artist = {
@@ -8,6 +9,12 @@ const emptyArtist: Artist = {
   image: "/placeholder.jpg",
   submissions: [],
   socials: [],
+};
+const emptyCharacter: Character = {
+  id: 0,
+  name: "",
+  description: "",
+  image: "/placeholder.jpg",
 };
 
 const emptySubmission: Submission = {
@@ -40,4 +47,4 @@ const defaultSettings: Settings = {
     colors: false,
   },
 };
-export { emptyArtist, emptySubmission, defaultSettings };
+export { emptyArtist, emptySubmission, defaultSettings, emptyCharacter };

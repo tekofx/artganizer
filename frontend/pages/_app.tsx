@@ -16,6 +16,7 @@ import Folder from "../interfaces/Folder";
 import Artist from "../interfaces/Artist";
 import Settings from "../interfaces/Settings";
 import { defaultSettings } from "../src/utils";
+import Character from "../interfaces/Character";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -33,6 +34,7 @@ export interface MyAppProps extends AppProps {
   folders: Folder[];
   submissions: Submission[];
   artists: Artist[];
+  characters: Character[];
   filters: Filters;
   settings: Settings;
 }
@@ -100,6 +102,7 @@ export interface DataType {
   submissions: Submission[];
   filters: Filters;
   artists: Artist[];
+  characters: Character[];
   settings: Settings;
 }
 
@@ -111,6 +114,7 @@ interface DataContextType {
       folders: Folder[];
       submissions: Submission[];
       filters: Filters;
+      characters: Character[];
       artists: Artist[];
       settings: Settings;
     }>
@@ -130,6 +134,7 @@ export const DataContext = createContext<DataContextType>({
       title: "",
     },
     artists: [],
+    characters: [],
     settings: defaultSettings,
   },
   setData: () => {},
@@ -143,12 +148,14 @@ export default function MyApp(props: MyAppProps) {
     submissions: Submission[];
     filters: Filters;
     artists: Artist[];
+    characters: Character[];
     settings: Settings;
   }>({
     tags: props.tags,
     folders: props.folders,
     submissions: props.submissions,
     artists: props.artists,
+    characters: [],
     filters: props.filters || {
       rating: -1,
       tags: [],

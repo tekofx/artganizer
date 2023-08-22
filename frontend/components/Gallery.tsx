@@ -8,8 +8,10 @@ import Artist from "../interfaces/Artist";
 import { formatDate } from "../src/formatters";
 import TagList from "./Tag/TagList";
 import ArtistLabel from "./Artist/ArtistLabel";
+import Character from "../interfaces/Character";
 interface GalleryProps {
   artist?: Artist;
+  character?: Character;
 }
 interface ImageInfoProps {
   image: Submission;
@@ -98,6 +100,15 @@ export default function Gallery(props: GalleryProps) {
     if (props.artist != undefined) {
       temp = temp.filter(
         (submission) => submission.artist?.id == props.artist?.id
+      );
+    }
+
+    if (props.character != undefined) {
+      temp = temp.filter(
+        (submission) =>
+          submission.characters?.some(
+            (character) => character.id == props.character?.id
+          ) == true
       );
     }
 
