@@ -78,6 +78,9 @@ router.get("/", async (req: Request, res: Response) => {
   // Use leftJoinAndSelect to join the submission and artist tables and select the related artist
   queryBuilder.leftJoinAndSelect("submission.artist", "artist");
 
+  // Use leftJoinAndSelect to join the submission and characters tables and select the related characters
+  queryBuilder.leftJoinAndSelect("submission.characters", "character");
+
   if (tags) {
     queryBuilder.innerJoinAndSelect(
       "submission.tags",
