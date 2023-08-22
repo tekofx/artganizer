@@ -316,11 +316,12 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
     return;
   }
 
-  var { title, description, rating, artist, tags, folders } =
+  var { title, description, rating, artist, tags, folders, characters } =
     req.body.submission;
 
   submission.tags = tags;
   submission.folders = folders;
+  submission.characters = characters;
 
   // Actualizar los campos del submission
   submission.title = title;

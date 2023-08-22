@@ -92,9 +92,35 @@ router.post(
   }
 );
 
+router.get("/uploads/:characterId", async (req: Request, res: Response) => {
+  if (req.params.characterId == null) {
+    res.status(400).send("Character ID not provided");
+    return;
+  }
+
+  var characterId: number = parseInt(req.params.characterId);
+  const Character = await CharacterRepo.findOne({
+    where: { id: characterId },
+  });
+
+  if (Character == null) {
+    res.status(404).send("Character not found");
+    return;
+  }
+
+  const filePath = path.join(charactersDir, characterId + ".jpg");
+
+  if (!fs.existsSync(filePath)) {
+    res.status(404).send("character image not found");
+    return;
+  }
+
+  return res.sendFile(filePath);
+});
+
 router.put(
   "/:id",
-  uploadCharacterPic.single("file"),
+  uploadCharacterPic.single("image"),
   async (req: Request, res: Response) => {
     if (req.params.id == null) {
       res.status(400).send("submission ID not provided");
@@ -108,16 +134,20 @@ router.put(
 
     var character = await CharacterRepo.findOne({
       where: { id: characterId },
-    }).then((character) => {
-      if (character == null) {
-        res.status(404).send("character not found");
-        if (file?.path) {
-          fs.unlinkSync(file.path);
-        }
-        return;
-      }
-      return character;
     });
+
+    if (character == null) {
+      res.status(404).send("character not found");
+      if (file?.path) {
+        fs.unlinkSync(file.path);
+      }
+      return;
+    }
+    // Remove old image
+    const filePath = path.join(charactersDir, characterId + ".jpg");
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
 
     // Convertir a JPG y Renombrar el archivo con el ID generado
     if (file) {
@@ -135,7 +165,13 @@ router.put(
         });
     }
 
-    res.send(character);
+    var { id, name, description } = req.body;
+    character.name = name;
+    character.description = description;
+    var result = await CharacterRepo.save(character);
+    result.image = process.env.URL + "/characters/uploads" + characterId;
+
+    res.send(result);
   }
 );
 

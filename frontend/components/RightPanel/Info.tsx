@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import TagList from "../Tag/TagList";
 import Submission from "../../interfaces/Submission";
-import CharacterList from "../CharacterList";
+import CharacterList from "../Character/CharacterList";
 import ColorPalette from "../ColorPalette";
 import { formatDate, convertBytes } from "../../src/formatters";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";

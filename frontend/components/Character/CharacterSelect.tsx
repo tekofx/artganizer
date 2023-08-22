@@ -5,14 +5,11 @@ import {
   TextField,
   Popper,
   Stack,
-  IconButton,
+  Grid,
 } from "@mui/material";
-import Artist from "../../interfaces/Artist";
-import ClearIcon from "@mui/icons-material/Clear";
-import CharacterLabel from "./CharacterLabel";
-import SelectableCharacterList from "./SelectableCharacterList";
 import Character from "../../interfaces/Character";
-
+import SelectableCharacterList from "./SelectableCharacterList";
+import CharacterLabel from "./CharacterLabel";
 interface CharacterSelectProps {
   setSelectedCharacters: Dispatch<SetStateAction<Character[]>>;
   selectedCharacters: Character[];
@@ -30,47 +27,57 @@ export default function CharacterSelect(props: CharacterSelectProps) {
     }
   };
 
+  function removeCharacter(char: Character) {
+    props.setSelectedCharacters(
+      props.selectedCharacters.filter((t) => t.id !== char.id)
+    );
+  }
+
   return (
-    <>
-      <Typography>Character select</Typography>
-      <Stack direction="row" spacing={2} alignItems="center">
-        {props.selectedCharacters.length > 0 ? (
-          <Stack direction="row" spacing={2} alignItems="center">
-            <CharacterLabel character={props.selectedCharacter} />
-            <IconButton
-              onClick={() => {
-                props.setSelectedCharacter(undefined);
-              }}
-            >
-              <ClearIcon />
-            </IconButton>
-          </Stack>
-        ) : (
-          <>
-            <Typography>No artist selected</Typography>
-            <TextField
-              label="Search artist"
-              variant="standard"
-              size="small"
-              value={filter}
-              onClick={handleClick}
-              onChange={(event) => {
-                setFilter(event.target.value);
-              }}
-            />
-          </>
-        )}
-      </Stack>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography>Character select</Typography>
+      </Grid>
+      <Grid container spacing={1}>
+        {props.selectedCharacters.map((char) => (
+          <Grid item key={char.id}>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <CharacterLabel
+                character={char}
+                onDelete={() => removeCharacter(char)}
+              />
+            </Stack>
+          </Grid>
+        ))}
+      </Grid>
+
+      {props.selectedCharacters.length < 1 && (
+        <>
+          <Typography>No characters selected</Typography>
+        </>
+      )}
+      <Grid item xs={12}>
+        <TextField
+          label="Search characters"
+          variant="standard"
+          size="small"
+          value={filter}
+          onClick={handleClick}
+          onChange={(event) => {
+            setFilter(event.target.value);
+          }}
+        />
+      </Grid>
       <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>
           <SelectableCharacterList
-            selectedCharacters={props.selectedCharacter}
-            setSelectedCharacter={props.setSelectedCharacter}
+            selectedCharacters={props.selectedCharacters}
+            setSelectedCharacters={props.setSelectedCharacters}
             setOpen={setOpen}
             filter={filter}
           />
         </Paper>
       </Popper>
-    </>
+    </Grid>
   );
 }

@@ -235,7 +235,7 @@ router.put(
     artist.name = name;
     artist.description = description;
     var result = await ArtistRepo.save(artist);
-    result.image = process.env.URL + "/artists/data/uploads/" + result.id;
+    result.image = process.env.URL + "/artists/uploads/" + result.id;
     res.send(result);
   }
 );

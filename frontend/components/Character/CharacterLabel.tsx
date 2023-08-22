@@ -1,10 +1,12 @@
-import { Stack, Avatar, Typography } from "@mui/material";
+import { Stack, Avatar, Typography, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Character from "../../interfaces/Character";
+import ClearIcon from "@mui/icons-material/Clear";
 interface CharacterLabelProps {
   character: Character;
   clickable?: boolean;
+  onDelete?: () => void;
 }
 export default function Page(props: CharacterLabelProps) {
   const router = useRouter();
@@ -46,6 +48,11 @@ export default function Page(props: CharacterLabelProps) {
         src={`http://localhost:3001/characters/uploads/${props.character.id}`}
       />
       <Typography>{props.character.name}</Typography>
+      {props.onDelete && (
+        <IconButton onClick={props.onDelete}>
+          <ClearIcon />
+        </IconButton>
+      )}
     </Stack>
   );
 }

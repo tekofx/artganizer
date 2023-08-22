@@ -8,7 +8,6 @@ import {
   Container,
 } from "@mui/material";
 import Submission from "../../interfaces/Submission";
-import CharacterList from "../CharacterList";
 import { formatDate, convertBytes } from "../../src/formatters";
 import { useState, Dispatch, SetStateAction } from "react";
 import ArtistSelect from "../Artist/ArtistSelect";
@@ -19,16 +18,22 @@ import TagSelect from "../Tag/TagSelect";
 import Tag from "../../interfaces/Tag";
 import { useContext } from "react";
 import { DataContext } from "../../pages/_app";
+import CharacterSelect from "../Character/CharacterSelect";
+import Character from "../../interfaces/Character";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
-  setSubmission: Dispatch<SetStateAction<Submission >>;
+  setSubmission: Dispatch<SetStateAction<Submission>>;
 }
 export default function Edit(props: InfoProps) {
   const [submission, setSubmission] = useState<Submission>(props.submission);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     props.submission.tags
   );
+  const [selectedCharacters, setSelectedCharacters] = useState<Character[]>(
+    props.submission.characters
+  );
+  console.log(props.submission);
 
   const { setData } = useContext(DataContext);
 
@@ -40,6 +45,7 @@ export default function Edit(props: InfoProps) {
     console.log(submission);
     submission.tags = selectedTags;
     submission.artist = selectedArtist;
+    submission.characters = selectedCharacters;
     await axios
       .put(`http://localhost:3001/submissions/${submission.id}`, {
         submission,
@@ -106,7 +112,10 @@ export default function Edit(props: InfoProps) {
               setSelectedTags={setSelectedTags}
             />
             <Typography>Characters</Typography>
-            <CharacterList characters={props.submission?.characters} />
+            <CharacterSelect
+              selectedCharacters={selectedCharacters}
+              setSelectedCharacters={setSelectedCharacters}
+            />
             <ArtistSelect
               selectedArtist={selectedArtist}
               setSelectedArtist={setSelectedArtist}
