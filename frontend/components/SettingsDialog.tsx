@@ -106,6 +106,11 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             checked={settings.galleryInfo.characters}
           />
           <FormControlLabel
+            label="Artist"
+            control={<Checkbox onChange={(e) => handleChange(e, "artist")} />}
+            checked={settings.galleryInfo.artist}
+          />
+          <FormControlLabel
             label="Dimensions"
             control={
               <Checkbox onChange={(e) => handleChange(e, "dimensions")} />
