@@ -30,7 +30,19 @@ export default function ManageTags(props: ManageTagsProps) {
       .delete(`http://localhost:3001/tags/${tag.id}`)
       .then(() => {
         setTags(tags.filter((t) => t.id != tag.id));
-        setData({ ...data, tags: data.tags.filter((t) => t.id != tag.id) });
+        var submissionUpdated = data.submissions.map((s) => {
+          var index = s.tags.findIndex((t) => t.id == tag.id);
+          if (index != -1) {
+            s.tags.splice(index, 1);
+          }
+          return s;
+        });
+
+        setData({
+          ...data,
+          tags: data.tags.filter((t) => t.id != tag.id),
+          submissions: submissionUpdated,
+        });
       })
       .catch((err) => {
         console.log(err);

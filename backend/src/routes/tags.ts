@@ -68,16 +68,20 @@ router.delete("/:id", async (req: Request, res: Response) => {
   if (tag == null) {
     return res.status(404).send("tag not found");
   }
-  // Encuentra todas las submissions que contienen la etiqueta
+
   const submissions = await SubmissionRepo.createQueryBuilder("submission")
     .leftJoinAndSelect("submission.tags", "tag")
-    .where("tag.id = :id", { id: id })
     .getMany();
 
   // Elimina la etiqueta de cada submission
   for (const submission of submissions) {
-    submission.tags = submission.tags.filter((t) => t.id !== id);
-    await SubmissionRepo.save(submission);
+    if (submission.tags.length == 0) continue;
+    const index = submission.tags.findIndex((t) => t.id == id);
+    if (index != -1) {
+      submission.tags.splice(index, 1);
+
+      await SubmissionRepo.save(submission);
+    }
   }
 
   // Elimina la etiqueta
