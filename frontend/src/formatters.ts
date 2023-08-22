@@ -12,7 +12,7 @@ export function formatDate(date: Date | undefined) {
       padTo2Digits(date.getDate()),
       padTo2Digits(date.getMonth() + 1),
       date.getFullYear(),
-    ].join("-") +
+    ].join("/") +
     " " +
     [
       padTo2Digits(date.getHours()),
