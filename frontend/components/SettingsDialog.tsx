@@ -107,10 +107,23 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             checked={settings.galleryInfo.title}
           />
           <FormControlLabel
+            label="Date"
+            control={<Checkbox onChange={(e) => handleChange(e, "date")} />}
+            checked={settings.galleryInfo.date}
+          />
+          <FormControlLabel
             label="Rating"
             control={<Checkbox onChange={(e) => handleChange(e, "rating")} />}
             checked={settings.galleryInfo.rating}
           />
+          <FormControlLabel
+            label="Dimensions"
+            control={
+              <Checkbox onChange={(e) => handleChange(e, "dimensions")} />
+            }
+            checked={settings.galleryInfo.dimensions}
+          />
+
           <FormControlLabel
             label="Tags"
             control={<Checkbox onChange={(e) => handleChange(e, "tags")} />}
@@ -128,18 +141,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             control={<Checkbox onChange={(e) => handleChange(e, "artist")} />}
             checked={settings.galleryInfo.artist}
           />
-          <FormControlLabel
-            label="Dimensions"
-            control={
-              <Checkbox onChange={(e) => handleChange(e, "dimensions")} />
-            }
-            checked={settings.galleryInfo.dimensions}
-          />
-          <FormControlLabel
-            label="Date"
-            control={<Checkbox onChange={(e) => handleChange(e, "date")} />}
-            checked={settings.galleryInfo.date}
-          />
+
           <FormControlLabel
             label="Colors"
             control={<Checkbox onChange={(e) => handleChange(e, "colors")} />}
