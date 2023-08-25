@@ -67,8 +67,7 @@ export default function ArtistAccordion() {
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction="column">
-          {showSearchBar && <SearchBar onChange={onChange} />}
-
+          <SearchBar onChange={onChange} show={showSearchBar} />
           <ArtistList artists={artists} clickable />
         </Stack>
       </AccordionDetails>
