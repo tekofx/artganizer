@@ -23,7 +23,7 @@ interface InfoProps {
 export default function Info(props: InfoProps) {
   return (
     <Container sx={{ paddingLeft: "0" }}>
-      <Grid container spacing={2} alignContent="center">
+      <Grid container spacing={2}>
         <Grid item lg={12}>
           <Stack spacing={1}>
             <Paper elevation={0} sx={{ padding: 2 }}>

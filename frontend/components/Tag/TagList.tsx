@@ -7,7 +7,7 @@ interface TagListProps {
 
 export default function TagList(props: TagListProps) {
   return (
-    <Grid container spacing={1} alignItems="center" justifyContent="center">
+    <Grid container spacing={1}>
       {props.tags == undefined && <Typography>No tags</Typography>}
       {props.tags?.length == 0 && <Typography>No tags</Typography>}
       {props.tags?.map((tag) => (
