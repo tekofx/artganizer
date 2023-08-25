@@ -2,10 +2,9 @@ import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext, useEffect } from "react";
 import { DataContext } from "../../../pages/_app";
-import BrushIcon from "@mui/icons-material/Brush";
 import Character from "../../../interfaces/Character";
 import CharacterSelect from "../../Character/CharacterSelect";
-
+import PersonIcon from "@mui/icons-material/Person";
 export default function CharacterFilter() {
   const { data, setData } = useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -47,7 +46,7 @@ export default function CharacterFilter() {
         endIcon={<ExpandMoreIcon />}
         startIcon={
           <Badge variant="dot" color="error" invisible={invisible}>
-            <BrushIcon />
+            <PersonIcon />
           </Badge>
         }
       >

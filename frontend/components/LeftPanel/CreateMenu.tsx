@@ -11,6 +11,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import PhotoIcon from "@mui/icons-material/Photo";
 import { useState, MouseEvent } from "react";
+import BrushIcon from "@mui/icons-material/Brush";
 
 interface Props {
   setOpenArtistForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,8 +61,19 @@ export default function CreateMenu(props: Props) {
           }}
         >
           <Stack direction="row" spacing={2}>
-            <PersonIcon />
+            <BrushIcon />
             <Typography textAlign="center">Artist</Typography>
+          </Stack>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            props.setOpenCharacterForm(true);
+            handleCloseCreateMenu();
+          }}
+        >
+          <Stack direction="row" spacing={2}>
+            <PersonIcon />
+            <Typography textAlign="center">Character</Typography>
           </Stack>
         </MenuItem>
         <MenuItem
@@ -84,17 +96,6 @@ export default function CreateMenu(props: Props) {
           <Stack direction="row" spacing={2}>
             <LocalOfferIcon />
             <Typography textAlign="center">Tag</Typography>
-          </Stack>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            props.setOpenCharacterForm(true);
-            handleCloseCreateMenu();
-          }}
-        >
-          <Stack direction="row" spacing={2}>
-            <LocalOfferIcon />
-            <Typography textAlign="center">Character</Typography>
           </Stack>
         </MenuItem>
       </Menu>
