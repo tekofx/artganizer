@@ -9,9 +9,10 @@ import {
   Typography,
   Chip,
   TextField,
+  Badge,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext } from "react";
+import { useState, MouseEvent, useContext, useEffect } from "react";
 import { DataContext } from "../../../pages/_app";
 import Tag from "../../../interfaces/Tag";
 import TagChip from "../../Tag/TagChip";
@@ -20,6 +21,7 @@ export default function TagFilter() {
   const { data, setData } = useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [searchedTags, setSearchedTags] = useState<Tag[]>(data.tags);
+  const [invisible, setInvisible] = useState<boolean>(true);
 
   const open = Boolean(anchorEl);
 
@@ -50,6 +52,14 @@ export default function TagFilter() {
     }
   }
 
+  useEffect(() => {
+    if (data.filters.tags.length == 0) {
+      setInvisible(true);
+    } else {
+      setInvisible(false);
+    }
+  }, [data.filters.tags]);
+
   return (
     <div>
       <Button
@@ -59,7 +69,11 @@ export default function TagFilter() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
-        startIcon={<LocalOfferIcon />}
+        startIcon={
+          <Badge variant="dot" color="error" invisible={invisible}>
+            <LocalOfferIcon />
+          </Badge>
+        }
       >
         Tags
       </Button>
