@@ -68,12 +68,6 @@ export default function Page() {
     <Paper>
       <Grid container spacing={2}>
         <Grid item lg={12}>
-          <Skeleton variant="rectangular" width="100%" height={118} />
-          Banner. Generado a partir de las submissions del artista. Si no
-          placeholder/oculto
-        </Grid>
-
-        <Grid item lg={12}>
           {!editShow ? (
             <>
               <ArtistInfo
