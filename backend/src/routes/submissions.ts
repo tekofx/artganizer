@@ -177,11 +177,12 @@ router.post(
       }
     });
 
+    var submission;
     try {
       // Obtener las dimensiones de la imagen
       const dimensions = sizeOf(image.path);
 
-      const submission = SubmissionRepo.create({
+      submission = SubmissionRepo.create({
         title: title,
         description: description,
         rating: rating,
@@ -191,43 +192,48 @@ router.post(
         colors: colorsArray,
         size: image.size,
       });
-      if (artist) {
-        var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
-        if (artistObj) {
-          submission.artist = artistObj;
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send("Error creating submission");
+    }
+    if (artist) {
+      var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
+      if (artistObj) {
+        submission.artist = artistObj;
+      }
+    }
+
+    if (folders) {
+      if (!Array.isArray(folders)) {
+        folders = [folders];
+      }
+      var folderOjs = [];
+      for (var i = 0; i < folders.length; i++) {
+        var folderObj = await FolderRepo.findOne({
+          where: { id: folders[i] },
+        });
+        if (folderObj) {
+          folderOjs.push(folderObj);
         }
       }
+      submission.folders = folderOjs;
+    }
 
-      if (folders) {
-        if (!Array.isArray(folders)) {
-          folders = [folders];
-        }
-        var folderOjs = [];
-        for (var i = 0; i < folders.length; i++) {
-          var folderObj = await FolderRepo.findOne({
-            where: { id: folders[i] },
-          });
-          if (folderObj) {
-            folderOjs.push(folderObj);
-          }
-        }
-        submission.folders = folderOjs;
+    if (tags) {
+      if (!Array.isArray(tags)) {
+        tags = [tags];
       }
-
-      if (tags) {
-        if (!Array.isArray(tags)) {
-          tags = [tags];
+      var tagObjs = [];
+      for (var i = 0; i < tags.length; i++) {
+        var tagObj = await TagRepo.findOne({ where: { id: tags[i] } });
+        if (tagObj) {
+          tagObjs.push(tagObj);
         }
-        var tagObjs = [];
-        for (var i = 0; i < tags.length; i++) {
-          var tagObj = await TagRepo.findOne({ where: { id: tags[i] } });
-          if (tagObj) {
-            tagObjs.push(tagObj);
-          }
-        }
-        submission.tags = tagObjs;
       }
+      submission.tags = tagObjs;
+    }
 
+    try {
       if (characters) {
         if (!Array.isArray(characters)) {
           characters = [characters];
@@ -243,30 +249,28 @@ router.post(
         }
         submission.characters = characterObjs;
       }
-
-      var id = await SubmissionRepo.save(submission)
-        .then((submission) => {
-          return submission.id;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      // Renombrar el archivo con el ID generado
-      const tempPath = image.path;
-      const newPath = path.join(
-        "uploads/submissions",
-        id + path.extname(image.originalname)
-      );
-      fs.renameSync(tempPath, newPath);
-
-      submission.image = process.env.URL + "/submissions/uploads/" + id;
-
-      res.send(submission);
     } catch (error) {
-      fs.unlinkSync(image.path);
-      console.log("error");
-      return res.status(500).send("error");
+      console.log(error);
     }
+
+    var id = await SubmissionRepo.save(submission)
+      .then((submission) => {
+        return submission.id;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // Renombrar el archivo con el ID generado
+    const tempPath = image.path;
+    const newPath = path.join(
+      "data/uploads/submissions",
+      id + path.extname(image.originalname)
+    );
+    await fs.promises.rename(tempPath, newPath);
+
+    submission.image = process.env.URL + "/submissions/uploads/" + id;
+
+    res.send(submission);
   }
 );
 
@@ -286,12 +290,14 @@ router.delete("/:submissionId", async (req: Request, res: Response) => {
     return;
   }
 
-  // Remove from uploads folder
-  const filePath = path.join(
-    submissionsDir,
-    submissionId + "." + submission.format
-  );
-  fs.unlinkSync(filePath);
+  try {
+    // Remove from uploads folder
+    const filePath = path.join(
+      submissionsDir,
+      submissionId + "." + submission.format
+    );
+    fs.unlinkSync(filePath);
+  } catch (error) {}
 
   // Remove from database
   await SubmissionRepo.remove(submission);

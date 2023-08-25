@@ -18,6 +18,8 @@ import Tag from "../../interfaces/Tag";
 import Submission from "../../interfaces/Submission";
 import TagSelect from "../Tag/TagSelect";
 import ArtistSelect from "../Artist/ArtistSelect";
+import CharacterSelect from "../Character/CharacterSelect";
+import Character from "../../interfaces/Character";
 import Artist from "../../interfaces/Artist";
 import AlertMessage from "../../interfaces/AlertMessage";
 const emptySubmission: Submission = {
@@ -55,6 +57,8 @@ export default function SubmissionForm(props: Props) {
     undefined
   );
 
+  const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
+
   function onCancel() {
     if (props.setOpen != undefined) {
       props.setOpen(false);
@@ -83,7 +87,11 @@ export default function SubmissionForm(props: Props) {
     if (selectedArtist != undefined) {
       formData.append("artist", selectedArtist.id.toString());
     }
-    formData.append("characters", JSON.stringify(submission.characters));
+    if (selectedCharacters != undefined) {
+      selectedCharacters.forEach((character) => {
+        formData.append("characters", character.id.toString());
+      });
+    }
 
     // Create submission
     try {
@@ -187,6 +195,12 @@ export default function SubmissionForm(props: Props) {
                 <ArtistSelect
                   selectedArtist={selectedArtist}
                   setSelectedArtist={setSelectedArtist}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <CharacterSelect
+                  selectedCharacters={selectedCharacters}
+                  setSelectedCharacters={setSelectedCharacters}
                 />
               </Grid>
             </Grid>

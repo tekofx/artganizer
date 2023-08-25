@@ -25,6 +25,7 @@ export default function Snack(props: Props) {
       autoHideDuration={6000}
       onClose={handleClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      sx={{ zIndex: 200000 }}
     >
       <Alert
         onClose={handleClose}
