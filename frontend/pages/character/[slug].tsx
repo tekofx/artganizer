@@ -67,30 +67,20 @@ export default function Page() {
 
   return (
     <Paper>
-      <Grid container spacing={2}>
-        <Grid item lg={12}>
-          <Skeleton variant="rectangular" width="100%" height={118} />
-          Banner. Generado a partir de las submissions del artista. Si no
-          placeholder/oculto
-        </Grid>
-
+      <Grid container spacing={2} sx={{ paddingLeft: 2 }}>
         <Grid item lg={12}>
           {!editShow ? (
-            <>
-              <CharacterInfo
-                character={character}
-                toggleEdit={toggleEdit}
-                handleClickOpenDialog={handleClickOpenDialog}
-              />
-            </>
+            <CharacterInfo
+              character={character}
+              toggleEdit={toggleEdit}
+              handleClickOpenDialog={handleClickOpenDialog}
+            />
           ) : (
-            <>
-              <CharacterEdit
-                character={character}
-                toggleEdit={toggleEdit}
-                setCharacter={setCharacter}
-              />
-            </>
+            <CharacterEdit
+              character={character}
+              toggleEdit={toggleEdit}
+              setCharacter={setCharacter}
+            />
           )}
         </Grid>
         <Grid item lg={12}>

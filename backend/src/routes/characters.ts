@@ -54,6 +54,9 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   const characters = await CharacterRepo.find();
+  for (const character of characters) {
+    character.image = process.env.URL + "/characters/uploads/" + character.id;
+  }
   res.send(characters);
 });
 

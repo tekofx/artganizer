@@ -9,6 +9,7 @@ interface CharacterInfoProps {
 }
 
 export default function CharacterInfo(props: CharacterInfoProps) {
+  console.log(props.character);
   return (
     <Grid container spacing={2}>
       <Grid item>
