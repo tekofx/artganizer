@@ -27,7 +27,6 @@ export default function Page() {
   const { data, setData } = useContext(DataContext);
   const router = useRouter();
   const toggleEdit = () => {
-    console.log("w");
     setEditShow(!editShow);
   };
   const handleClickOpenDialog = () => {
@@ -58,7 +57,6 @@ export default function Page() {
       // Get character from data
       data.characters.filter((character: Character) => {
         if (character.id == id) {
-          console.log(character);
           setCharacter(character);
         }
       });

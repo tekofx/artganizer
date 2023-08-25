@@ -35,7 +35,6 @@ export default function CharacterForm(props: Props) {
   const { data, setData } = useContext(DataContext);
 
   function onImageUpload(event: any) {
-    console.log(event.target.files[0]);
     const newCharacter = { ...character };
     newCharacter.image = event.target.files[0];
     setCharacter(newCharacter);
@@ -58,7 +57,6 @@ export default function CharacterForm(props: Props) {
           message: "Character created",
           severity: "success",
         });
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);

@@ -43,7 +43,6 @@ export default function RatingFilter() {
             onChange={(event, newValue) => {
               const newData = { ...data };
               newData.filters.rating = newValue || -1;
-              console.log(`Rating filter: ${newValue}`);
               setData(newData);
             }}
           />

@@ -19,7 +19,6 @@ export default function Page() {
       data.submissions.filter((sub: Submission) => {
         if (sub.id == id) {
           setSubmission(sub);
-          console.log(sub);
         }
       });
     }

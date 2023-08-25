@@ -80,12 +80,10 @@ export default function ArtistForm(props: Props) {
     setSocials(newSocials);
   }
   function onImageUpload(event: any) {
-    console.log(event.target.files[0]);
     const newArtist = { ...artist };
     newArtist.image = event.target.files[0];
     setArtist(newArtist);
     setImage(URL.createObjectURL(event.target.files[0]));
-    console.log(artist);
   }
 
   function addEmptySocial() {
@@ -122,7 +120,6 @@ export default function ArtistForm(props: Props) {
           message: "Artist created",
           severity: "success",
         });
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);

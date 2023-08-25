@@ -33,7 +33,6 @@ export default function Edit(props: InfoProps) {
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>(
     props.submission.characters
   );
-  console.log(props.submission);
 
   const { setData } = useContext(DataContext);
 
@@ -42,7 +41,6 @@ export default function Edit(props: InfoProps) {
   );
 
   async function editSubmission() {
-    console.log(submission);
     submission.tags = selectedTags;
     submission.artist = selectedArtist;
     submission.characters = selectedCharacters;
@@ -51,7 +49,6 @@ export default function Edit(props: InfoProps) {
         submission,
       })
       .then((response) => {
-        console.log(response.data);
         props.setSubmission(response.data);
         setData((prevData) => ({
           ...prevData,

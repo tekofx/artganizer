@@ -28,17 +28,16 @@ export default function SettingsDialog(props: SettingsDialogProps) {
   async function updateSettings() {
     await axios
       .put("http://localhost:3001/settings", settings)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        setData({
+          ...data,
+          settings: settings,
+        });
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setData({
-          ...data,
-          settings: settings,
-        });
         props.setOpen(false);
       });
   }
@@ -51,7 +50,6 @@ export default function SettingsDialog(props: SettingsDialogProps) {
           ...data,
           settings: res.data,
         });
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);

@@ -25,7 +25,6 @@ export default function ArtistEdit(props: ArtistEditProps) {
     setImage(URL.createObjectURL(event.target.files[0]));
   }
   async function editArtist() {
-    console.log(artist?.image);
     const formData = new FormData();
     formData.append("image", imageData);
     formData.append("name", artist.name);

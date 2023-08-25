@@ -27,7 +27,6 @@ export default function Page() {
   const { data, setData } = useContext(DataContext);
   const router = useRouter();
   const toggleEdit = () => {
-    console.log("w");
     setEditShow(!editShow);
   };
   const handleClickOpenDialog = () => {

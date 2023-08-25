@@ -41,14 +41,12 @@ export default function RightPanel(props: RightPanelProps) {
     router.push("/");
   }
   const handleClickOpenDialog = () => {
-    console.log(props.submission.rating);
     setDialogOpen(true);
   };
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
   const toggleEdit = () => {
-    console.log("w");
     setEditShow(!editShow);
   };
 

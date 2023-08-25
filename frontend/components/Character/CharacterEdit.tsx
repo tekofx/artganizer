@@ -25,7 +25,6 @@ export default function CharacterEdit(props: CharacterEditProps) {
     setImage(URL.createObjectURL(event.target.files[0]));
   }
   async function editCharacter() {
-    console.log(character?.image);
     const formData = new FormData();
     formData.append("image", imageData);
     formData.append("name", character.name);
