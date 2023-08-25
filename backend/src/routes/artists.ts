@@ -41,9 +41,9 @@ router.get("/", async (req: Request, res: Response) => {
   const artists = await ArtistRepo.find();
 
   // Add image URL
-  artists.forEach((artist) => {
-    artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
-  });
+  for (const artist of artists) {
+    artist.image = process.env.URL + "/artists/uploads/" + artist.id;
+  }
   res.send(artists);
 });
 
