@@ -3,14 +3,15 @@ import Artist from "../../interfaces/Artist";
 import ArtistLabel from "./ArtistLabel";
 interface ArtistListProps {
   artists: Artist[];
+  clickable?: boolean;
 }
 
-export default function ArtistList(props: ArtistListProps) {
+export default function ArtistList({ artists, clickable }: ArtistListProps) {
   return (
     <>
-      {props.artists.length == 0 && <Typography>No artists</Typography>}
-      {props.artists.map((artist) => (
-        <ArtistLabel key={artist.id} artist={artist} clickable />
+      {artists.length == 0 && <Typography>No artists</Typography>}
+      {artists.map((artist) => (
+        <ArtistLabel key={artist.id} artist={artist} clickable={clickable} />
       ))}
     </>
   );
