@@ -4,7 +4,6 @@ import {
   Grid,
   Paper,
   Typography,
-  Skeleton,
   Button,
   Dialog,
   DialogActions,
