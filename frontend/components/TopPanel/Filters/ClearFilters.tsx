@@ -29,7 +29,11 @@ export default function ClearFilters() {
   return (
     <div>
       {!filtersAreEmpty && (
-        <Button onClick={() => clearFilters()} startIcon={<ClearIcon />}>
+        <Button
+          onClick={() => clearFilters()}
+          startIcon={<ClearIcon />}
+          variant="outlined"
+        >
           Clear Filters
         </Button>
       )}
