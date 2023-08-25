@@ -9,6 +9,7 @@ import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
 import CreateMenu from "./CreateMenu";
 import SettingsMenu from "./SettingsMenu";
 import CharacterForm from "../Forms/CharacterForm";
+import CharacterAccordion from "./CharacterAccordion";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
@@ -56,6 +57,7 @@ export default function LeftPanel() {
           <MenuList>
             <FolderAccordion />
             <ArtistAccordion />
+            <CharacterAccordion />
           </MenuList>
         </Grid>
       </Grid>
