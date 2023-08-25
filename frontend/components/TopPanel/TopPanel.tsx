@@ -11,7 +11,7 @@ import {
 export default function TopPanel() {
   return (
     <Paper sx={{ width: "100%", p: 1, position: "sticky", top: 0 }}>
-      <Stack direction="row" spacing={3}>
+      <Stack direction="row" spacing={1}>
         <Search />
         <RatingFilter />
         <TagFilter />
