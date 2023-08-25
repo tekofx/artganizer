@@ -4,16 +4,21 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
+  Grid,
 } from "@mui/material";
+import BrushIcon from "@mui/icons-material/Brush";
 import { useState, useContext } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DataContext } from "../../pages/_app";
 import SearchBar from "../SearchBar";
+import SearchIcon from "@mui/icons-material/Search";
 
 import ArtistList from "../Artist/ArtistList";
 export default function ArtistAccordion() {
   const { data } = useContext(DataContext);
   const [artists, setArtists] = useState(data.artists);
+  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(true);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -23,29 +28,42 @@ export default function ArtistAccordion() {
     setArtists(temp);
   }
 
+  function onSearchIconClick() {
+    if (!expanded) setExpanded(!expanded);
+    setShowSearchBar(!showSearchBar);
+  }
+
   return (
     <Accordion expanded={expanded}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon onClick={() => setExpanded(!expanded)} />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-        sx={{ flexDirection: "row-reverse" }}
+        sx={{ height: "auto", maxHeight: "auto" }}
       >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
-          spacing={2}
-        >
-          <Typography onClick={() => setExpanded(!expanded)}>
-            Artists
-          </Typography>
-          <SearchBar onChange={onChange} />
-        </Stack>
+        <Grid container alignItems="center">
+          <Grid item lg={10}>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <BrushIcon />
+              <Typography onClick={() => setExpanded(!expanded)}>
+                Artists
+              </Typography>
+            </Stack>
+          </Grid>
+          <Grid item lg={2}>
+            <IconButton onClick={onSearchIconClick}>
+              <SearchIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction="column">
+          {showSearchBar && <SearchBar onChange={onChange} />}
+
           <ArtistList artists={artists} clickable />
         </Stack>
       </AccordionDetails>
