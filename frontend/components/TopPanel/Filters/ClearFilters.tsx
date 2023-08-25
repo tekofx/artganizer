@@ -10,6 +10,7 @@ export default function ClearFilters() {
     folders: [],
     artist: undefined,
     title: "",
+    characters: [],
   };
 
   function clearFilters() {
@@ -22,7 +23,9 @@ export default function ClearFilters() {
     data.filters.tags.length === emptyFilters.tags.length &&
     data.filters.folders.length === emptyFilters.folders.length &&
     data.filters.artist === emptyFilters.artist &&
-    data.filters.title === emptyFilters.title;
+    data.filters.title === emptyFilters.title &&
+    data.filters.characters.length === emptyFilters.characters.length;
+
   return (
     <div>
       {!filtersAreEmpty && (

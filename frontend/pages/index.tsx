@@ -15,6 +15,7 @@ export default function Home() {
       folders: [],
       artist: undefined,
       title: "",
+      characters: [],
     };
     setData(newData);
   }, []);

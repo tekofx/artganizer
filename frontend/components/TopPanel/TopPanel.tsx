@@ -6,6 +6,7 @@ import {
   ClearFilters,
   TagFilter,
   ArtistFilter,
+  CharacterFilter,
 } from "./Filters";
 export default function TopPanel() {
   return (
@@ -16,6 +17,7 @@ export default function TopPanel() {
         <TagFilter />
         <ColorFilter />
         <ArtistFilter />
+        <CharacterFilter />
         <ClearFilters />
       </Stack>
     </Paper>

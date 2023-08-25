@@ -150,6 +150,17 @@ export default function Gallery(props: GalleryProps) {
       );
     }
 
+    if (data.filters.characters.length > 0) {
+      // Get all submissions that have at least one of the characters
+      temp = temp.filter((submission) =>
+        submission.characters?.some((char) =>
+          data.filters.characters.some(
+            (filterChar) => filterChar.id === char.id
+          )
+        )
+      );
+    }
+
     if (temp !== submissions) {
       setSubmissions(temp);
     }
@@ -159,6 +170,7 @@ export default function Gallery(props: GalleryProps) {
     data.filters.folders,
     data.filters.title,
     data.filters.artist,
+    data.filters.characters,
     props.artist,
   ]);
 
