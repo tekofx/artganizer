@@ -1,12 +1,12 @@
 # Use an official Node.js runtime as the parent image
-FROM node:14
+FROM node:20.5.0
 
 # Set the working directory in the container to /app
 WORKDIR /app
 
 # Copy the package.json files from your local host to the container
-COPY backend/package.json ./backend/
-COPY frontend/package.json ./frontend/
+COPY backend/package.json backend/yarn.lock ./backend/
+COPY frontend/package.json frontend/yarn.lock ./frontend/
 
 # Install dependencies for both backend and frontend
 RUN cd backend && yarn install --network-timeout 100000
