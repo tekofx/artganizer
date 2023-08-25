@@ -29,7 +29,13 @@ export default function ArtistAccordion() {
 
   function onSearchIconClick() {
     if (!expanded) setExpanded(!expanded);
-    setShowSearchBar(!showSearchBar);
+
+    if (!showSearchBar) {
+      setShowSearchBar(true);
+    } else {
+      setShowSearchBar(false);
+      setCharacters(data.characters);
+    }
   }
 
   return (

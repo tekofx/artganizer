@@ -27,10 +27,15 @@ export default function ArtistAccordion() {
     );
     setArtists(temp);
   }
-
   function onSearchIconClick() {
     if (!expanded) setExpanded(!expanded);
-    setShowSearchBar(!showSearchBar);
+
+    if (!showSearchBar) {
+      setShowSearchBar(true);
+    } else {
+      setShowSearchBar(false);
+      setArtists(data.artists);
+    }
   }
 
   return (
