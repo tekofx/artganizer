@@ -144,6 +144,12 @@ export default function Gallery(props: GalleryProps) {
       );
     }
 
+    if (data.filters.artist != undefined) {
+      temp = temp.filter(
+        (submission) => submission.artist?.id == data.filters.artist?.id
+      );
+    }
+
     if (temp !== submissions) {
       setSubmissions(temp);
     }
@@ -152,6 +158,7 @@ export default function Gallery(props: GalleryProps) {
     data.filters.tags,
     data.filters.folders,
     data.filters.title,
+    data.filters.artist,
     props.artist,
   ]);
 

@@ -1,9 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useState,
-  MouseEvent,
-} from "react";
+import { Dispatch, SetStateAction, useState, MouseEvent } from "react";
 import {
   Paper,
   Typography,
@@ -34,6 +29,10 @@ export default function ArtistSelect(props: ArtistSelectProps) {
     }
   };
 
+  function onRemove() {
+    props.setSelectedArtist(undefined);
+  }
+
   return (
     <>
       <Typography>Artist select</Typography>
@@ -41,11 +40,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
         {props.selectedArtist != undefined ? (
           <Stack direction="row" spacing={2} alignItems="center">
             <ArtistLabel artist={props.selectedArtist} />
-            <IconButton
-              onClick={() => {
-                props.setSelectedArtist(undefined);
-              }}
-            >
+            <IconButton onClick={onRemove}>
               <ClearIcon />
             </IconButton>
           </Stack>

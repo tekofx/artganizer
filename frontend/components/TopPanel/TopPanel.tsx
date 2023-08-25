@@ -1,6 +1,12 @@
 import Search from "./Search";
 import { Stack, Paper } from "@mui/material";
-import { RatingFilter, ColorFilter, ClearFilters, TagFilter } from "./Filters";
+import {
+  RatingFilter,
+  ColorFilter,
+  ClearFilters,
+  TagFilter,
+  ArtistFilter,
+} from "./Filters";
 export default function TopPanel() {
   return (
     <Paper sx={{ width: "100%", p: 1, position: "sticky", top: 0 }}>
@@ -9,6 +15,7 @@ export default function TopPanel() {
         <RatingFilter />
         <TagFilter />
         <ColorFilter />
+        <ArtistFilter />
         <ClearFilters />
       </Stack>
     </Paper>
