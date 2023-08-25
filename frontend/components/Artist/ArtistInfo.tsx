@@ -9,9 +9,8 @@ interface ArtistInfoProps {
 }
 
 export default function ArtistInfo(props: ArtistInfoProps) {
-  console.log(props.artist);
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>
         <Avatar
           sx={{ width: "10rem", height: "10rem" }}

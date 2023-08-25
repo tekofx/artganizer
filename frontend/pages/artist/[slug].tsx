@@ -69,21 +69,17 @@ export default function Page() {
       <Grid container spacing={2}>
         <Grid item lg={12}>
           {!editShow ? (
-            <>
-              <ArtistInfo
-                artist={artist}
-                toggleEdit={toggleEdit}
-                handleClickOpenDialog={handleClickOpenDialog}
-              />
-            </>
+            <ArtistInfo
+              artist={artist}
+              toggleEdit={toggleEdit}
+              handleClickOpenDialog={handleClickOpenDialog}
+            />
           ) : (
-            <>
-              <ArtistEdit
-                artist={artist}
-                toggleEdit={toggleEdit}
-                setArtist={setArtist}
-              />
-            </>
+            <ArtistEdit
+              artist={artist}
+              toggleEdit={toggleEdit}
+              setArtist={setArtist}
+            />
           )}
         </Grid>
         <Grid item lg={12}>
