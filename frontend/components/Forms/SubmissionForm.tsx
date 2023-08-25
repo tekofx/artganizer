@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+  Paper,
 } from "@mui/material";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
@@ -140,6 +141,7 @@ export default function SubmissionForm(props: Props) {
             </label>
           </Grid>
           <Grid item xs={6}>
+            {/* Basic info */}
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h6">Basic Info</Typography>
@@ -180,28 +182,38 @@ export default function SubmissionForm(props: Props) {
                   }}
                 />
               </Grid>
+            </Grid>
+
+            {/* Advanced info */}
+            <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Typography variant="h6">Advanced Info</Typography>
               </Grid>
 
               <Grid item xs={6}>
-                <TagSelect
-                  selectedTags={selectedTags}
-                  setSelectedTags={setSelectedTags}
-                />
+                <Paper sx={{ p: 2 }}>
+                  <TagSelect
+                    selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags}
+                  />
+                </Paper>
               </Grid>
 
               <Grid item xs={6}>
-                <ArtistSelect
-                  selectedArtist={selectedArtist}
-                  setSelectedArtist={setSelectedArtist}
-                />
+                <Paper sx={{ p: 2 }}>
+                  <ArtistSelect
+                    selectedArtist={selectedArtist}
+                    setSelectedArtist={setSelectedArtist}
+                  />
+                </Paper>
               </Grid>
               <Grid item xs={12}>
-                <CharacterSelect
-                  selectedCharacters={selectedCharacters}
-                  setSelectedCharacters={setSelectedCharacters}
-                />
+                <Paper sx={{ p: 2 }}>
+                  <CharacterSelect
+                    selectedCharacters={selectedCharacters}
+                    setSelectedCharacters={setSelectedCharacters}
+                  />
+                </Paper>
               </Grid>
             </Grid>
           </Grid>

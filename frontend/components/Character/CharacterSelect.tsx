@@ -6,8 +6,10 @@ import {
   Popper,
   Stack,
   Grid,
+  Avatar,
 } from "@mui/material";
 import Character from "../../interfaces/Character";
+import ClearIcon from "@mui/icons-material/Clear";
 import SelectableCharacterList from "./SelectableCharacterList";
 import CharacterLabel from "./CharacterLabel";
 interface CharacterSelectProps {
@@ -34,7 +36,7 @@ export default function CharacterSelect(props: CharacterSelectProps) {
   }
 
   return (
-    <Grid container>
+    <Grid container spacing={1}>
       <Grid item xs={12}>
         <Typography>Character select</Typography>
       </Grid>
@@ -52,9 +54,14 @@ export default function CharacterSelect(props: CharacterSelectProps) {
       </Grid>
 
       {props.selectedCharacters.length < 1 && (
-        <>
-          <Typography>No characters selected</Typography>
-        </>
+        <Grid item>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Avatar>
+              <ClearIcon />
+            </Avatar>
+            <Typography>No characters selected</Typography>
+          </Stack>
+        </Grid>
       )}
       <Grid item xs={12}>
         <TextField
