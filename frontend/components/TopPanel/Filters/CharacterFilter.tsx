@@ -2,8 +2,6 @@ import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext, useEffect } from "react";
 import { DataContext } from "../../../pages/_app";
-import ArtistSelect from "../../Artist/ArtistSelect";
-import Artist from "../../../interfaces/Artist";
 import BrushIcon from "@mui/icons-material/Brush";
 import Character from "../../../interfaces/Character";
 import CharacterSelect from "../../Character/CharacterSelect";
