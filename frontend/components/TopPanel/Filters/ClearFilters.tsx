@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { DataContext } from "../../../pages/_app";
 import { useContext } from "react";
-
+import ClearIcon from "@mui/icons-material/Clear";
 export default function ClearFilters() {
   const { data, setData } = useContext(DataContext);
   var emptyFilters = {
@@ -29,7 +29,9 @@ export default function ClearFilters() {
   return (
     <div>
       {!filtersAreEmpty && (
-        <Button onClick={() => clearFilters()}>Clear Filters</Button>
+        <Button onClick={() => clearFilters()} startIcon={<ClearIcon />}>
+          Clear Filters
+        </Button>
       )}
     </div>
   );
