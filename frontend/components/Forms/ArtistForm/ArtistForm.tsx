@@ -51,7 +51,12 @@ interface Props {
   setAlertMessage: React.Dispatch<React.SetStateAction<AlertMessage>>;
 }
 
-export default function ArtistForm(props: Props) {
+export default function ArtistForm({
+  open,
+  setOpen,
+  setOpenSnack,
+  setAlertMessage,
+}: Props) {
   const [artist, setArtist] = useState<Artist>(defaultArtist);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [socials, setSocials] = useState<SocialWithIcon[]>(defaultSocials);
@@ -84,25 +89,25 @@ export default function ArtistForm(props: Props) {
         var newData = { ...data };
         newData.artists.push(response.data);
         setData(newData);
-        props.setAlertMessage({
+        setAlertMessage({
           message: "Artist created",
           severity: "success",
         });
       })
       .catch((error) => {
         console.log(error);
-        props.setAlertMessage({
+        setAlertMessage({
           message: "Error creating artist",
           severity: "error",
         });
       })
       .finally(() => {
-        props.setOpenSnack(true);
+        setOpenSnack(true);
       });
   }
 
   return (
-    <Dialog open={props.open} onClose={() => props.setOpen(false)}>
+    <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create Artist</DialogTitle>
       <DialogContent sx={{ p: 2 }}>
         <Grid container spacing={2}>
@@ -158,12 +163,12 @@ export default function ArtistForm(props: Props) {
           variant="contained"
           onClick={() => {
             postArtist(artist);
-            props.setOpen(false);
+            setOpen(false);
           }}
         >
           Create
         </Button>
-        <Button onClick={() => props.setOpen(false)}>Cancel</Button>
+        <Button onClick={() => setOpen(false)}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );
