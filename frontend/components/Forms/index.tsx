@@ -1,4 +1,4 @@
-import ArtistForm from "./ArtistForm";
+import ArtistForm from "./ArtistForm/ArtistForm";
 import SubmissionForm from "./SubmissionForm";
 import TagForm from "./TagForm";
 

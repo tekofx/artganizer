@@ -2,25 +2,21 @@ import {
   Stack,
   TextField,
   Grid,
-  Typography,
   Button,
   IconButton,
-  InputAdornment,
   Avatar,
   Dialog,
   DialogTitle,
   DialogActions,
   DialogContent,
 } from "@mui/material";
-
 import { useState, useContext } from "react";
-import { DataContext } from "../../pages/_app";
+import { DataContext } from "../../../pages/_app";
 import axios from "axios";
-import Artist from "../../interfaces/Artist";
+import Artist from "../../../interfaces/Artist";
 import LanguageIcon from "@mui/icons-material/Language";
-import Social from "../../interfaces/Social";
-import ClearIcon from "@mui/icons-material/Clear";
-import LimitedTextField from "../LimitedTextField";
+import LimitedTextField from "../../LimitedTextField";
+import Socials from "./Socials";
 interface AlertMessage {
   message: string;
   severity: "success" | "error" | "info" | "warning";
@@ -34,20 +30,18 @@ const defaultArtist: Artist = {
   image: "/placeholder.jpg",
 };
 
-const defaultSocials: Social[] = [
+const defaultSocials: SocialWithIcon[] = [
   {
     name: "",
     url: "",
-    favicon: "",
+    icon: <LanguageIcon />,
   },
 ];
-function isValidUrl(string: string) {
-  try {
-    new URL(string);
-    return true;
-  } catch (_) {
-    return false;
-  }
+
+interface SocialWithIcon {
+  name: string;
+  url: string;
+  icon?: JSX.Element;
 }
 
 interface Props {
@@ -60,26 +54,10 @@ interface Props {
 export default function ArtistForm(props: Props) {
   const [artist, setArtist] = useState<Artist>(defaultArtist);
   const [image, setImage] = useState<string>("/placeholder.jpg");
-  const [socials, setSocials] = useState<Social[]>(defaultSocials);
+  const [socials, setSocials] = useState<SocialWithIcon[]>(defaultSocials);
 
   const { data, setData } = useContext(DataContext);
 
-  function handleSocialURLChange(event: any, index: number) {
-    const newSocials = [...socials];
-    newSocials[index].url = event.target.value;
-    var baseURL = "https://" + event.target.value.split("/")[0];
-
-    if (isValidUrl(baseURL)) {
-      newSocials[index].favicon = `${baseURL}/favicon.ico?`;
-    }
-    setSocials(newSocials);
-  }
-
-  function handleSocialNameChange(event: any, index: number) {
-    const newSocials = [...socials];
-    newSocials[index].name = event.target.value;
-    setSocials(newSocials);
-  }
   function onImageUpload(event: any) {
     const newArtist = { ...artist };
     newArtist.image = event.target.files[0];
@@ -87,28 +65,17 @@ export default function ArtistForm(props: Props) {
     setImage(URL.createObjectURL(event.target.files[0]));
   }
 
-  function addEmptySocial() {
-    const newSocials = [...socials];
-    newSocials.push({
-      name: "",
-      url: "",
-      favicon: "",
-    });
-    setSocials(newSocials);
-  }
-
-  function removeSocial(index: number) {
-    const newSocials = [...socials];
-    newSocials.splice(index, 1);
-    setSocials(newSocials);
-  }
-
   async function postArtist(artist: Artist) {
     const formData = new FormData();
     formData.append("name", artist.name);
     formData.append("description", artist.description);
     formData.append("image", artist.image);
-    formData.append("socials", JSON.stringify(socials));
+    // Remove icon from socials
+    for (const social of socials) {
+      const socialWithoutIcon = { ...social };
+      delete socialWithoutIcon.icon;
+      formData.append("socials", JSON.stringify(socialWithoutIcon));
+    }
     artist.socials = socials;
 
     await axios
@@ -182,57 +149,7 @@ export default function ArtistForm(props: Props) {
           </Grid>
 
           <Grid item lg={12}>
-            <Stack spacing={2}>
-              <Typography>Socials</Typography>
-
-              {socials.map((value, i) => (
-                <Stack direction="row" alignItems="center" spacing={2} key={i}>
-                  {value.favicon == "" ? (
-                    <LanguageIcon />
-                  ) : (
-                    <img src={value.favicon} width="20px" />
-                  )}
-                  <TextField
-                    label="Social Name"
-                    value={value.name}
-                    onChange={(event) => {
-                      handleSocialNameChange(event, i);
-                    }}
-                  />
-                  <TextField
-                    label="URL"
-                    value={value.url}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          https://
-                        </InputAdornment>
-                      ),
-                    }}
-                    onChange={(event) => {
-                      handleSocialURLChange(event, i);
-                    }}
-                  />
-
-                  <IconButton
-                    aria-label="delete"
-                    onClick={() => {
-                      removeSocial(i);
-                    }}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                </Stack>
-              ))}
-              <Button
-                variant="contained"
-                onClick={() => {
-                  addEmptySocial();
-                }}
-              >
-                Add Social
-              </Button>
-            </Stack>
+            <Socials socials={socials} setSocials={setSocials} />
           </Grid>
         </Grid>
       </DialogContent>

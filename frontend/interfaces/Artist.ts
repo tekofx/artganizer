@@ -5,7 +5,6 @@ export default interface Artist {
   name: string;
   description: string;
   socials: {
-    favicon: string;
     url: string;
     name: string;
   }[];

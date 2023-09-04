@@ -20,6 +20,7 @@ export default function ArtistInfo(props: ArtistInfoProps) {
       <Grid item>
         <Typography variant="h4">{props.artist?.name}</Typography>
         <Typography variant="h5">{props.artist?.description}</Typography>
+        <Typography variant="h5">{props.artist?.socials}</Typography>
       </Grid>
       <Grid item>
         <Stack direction="row" width="100%" spacing={2} justifyContent="center">
