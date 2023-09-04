@@ -44,11 +44,10 @@ router.get("/", async (req: Request, res: Response) => {
   for (const artist of artists) {
     artist.image = process.env.URL + "/artists/uploads/" + artist.id;
     var temp = JSON.parse(artist.socials.toString());
-    // Add the socials to an array of objects
-    artist.socials = [];
-    for (const social of temp) {
-      artist.socials.push(social);
+    if (!Array.isArray(temp)) {
+      temp = [temp];
     }
+    artist.socials = temp;
 
     console.log(artist.socials);
   }
