@@ -1,7 +1,10 @@
 import { Grid, Avatar, Typography, Button, Stack } from "@mui/material";
-import Artist from "../../interfaces/Artist";
+import Artist from "../../../interfaces/Artist";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+
+import Socials from "./Socials";
+import SocialIcon from "../../SocialIcon";
 interface ArtistInfoProps {
   artist?: Artist;
   toggleEdit: () => void;
@@ -9,6 +12,7 @@ interface ArtistInfoProps {
 }
 
 export default function ArtistInfo(props: ArtistInfoProps) {
+  console.log(props.artist?.socials);
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>
@@ -20,7 +24,13 @@ export default function ArtistInfo(props: ArtistInfoProps) {
       <Grid item>
         <Typography variant="h4">{props.artist?.name}</Typography>
         <Typography variant="h5">{props.artist?.description}</Typography>
-        <Typography variant="h5">{props.artist?.socials}</Typography>
+        <Socials socials={props.artist?.socials} />
+        {props.artist?.socials.map((social, index) => (
+          <div key={index}>
+            {social.name}: {social.url}
+            <SocialIcon socialMediaName={social.name} />
+          </div>
+        ))}
       </Grid>
       <Grid item>
         <Stack direction="row" width="100%" spacing={2} justifyContent="center">
