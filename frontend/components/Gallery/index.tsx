@@ -1,91 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
-import { Typography, Paper, Rating, Grid } from "@mui/material";
-import Submission from "../interfaces/Submission";
-import { DataContext, DataType } from "../pages/_app";
+import { Typography, Paper } from "@mui/material";
+import Submission from "../../interfaces/Submission";
+import { DataContext } from "../../pages/_app";
 import { useRouter } from "next/router";
-import Artist from "../interfaces/Artist";
-import { formatDate } from "../src/formatters";
-import TagList from "./Tag/TagList";
-import ArtistLabel from "./Artist/ArtistLabel";
-import Character from "../interfaces/Character";
+import Artist from "../../interfaces/Artist";
+import Character from "../../interfaces/Character";
+import Image from "./Image";
 interface GalleryProps {
   artist?: Artist;
   character?: Character;
-}
-interface ImageInfoProps {
-  image: Submission;
-  data: DataType;
-}
-
-function ImageInfo(props: ImageInfoProps) {
-  function gallerySettingsAllFalse() {
-    return (
-      !props.data.settings.galleryInfo.artist &&
-      !props.data.settings.galleryInfo.date &&
-      !props.data.settings.galleryInfo.dimensions &&
-      !props.data.settings.galleryInfo.rating &&
-      !props.data.settings.galleryInfo.tags &&
-      !props.data.settings.galleryInfo.title
-    );
-  }
-
-  return (
-    <Paper elevation={0} sx={{ display: "inline-block" }}>
-      <img src={props.image.image} className="pic" />
-      <Grid
-        container
-        spacing={1}
-        justifyContent="center"
-        alignItems="center"
-        sx={{
-          paddingBottom: 2,
-          display: gallerySettingsAllFalse() == true ? "none" : "block",
-        }}
-      >
-        {props.data.settings.galleryInfo.title && (
-          <Grid item xs={12}>
-            <Typography>{props.image.title}</Typography>
-          </Grid>
-        )}
-
-        {props.data.settings.galleryInfo.date && (
-          <Grid item>
-            <Typography>{formatDate(props.image.date)}</Typography>
-          </Grid>
-        )}
-        {props.data.settings.galleryInfo.rating && (
-          <Grid item>
-            <Rating value={props.image.rating} readOnly />
-          </Grid>
-        )}
-        {props.data.settings.galleryInfo.dimensions && (
-          <Grid item>
-            <Typography>
-              {props.image.width}x{props.image.height}
-            </Typography>
-          </Grid>
-        )}
-
-        {props.data.settings.galleryInfo.artist &&
-          props.image.artist != undefined && (
-            <>
-              <Grid item xs={12}></Grid>
-              <Grid item>
-                <ArtistLabel artist={props.image.artist} />
-              </Grid>
-            </>
-          )}
-
-        {props.data.settings.galleryInfo.tags &&
-          props.image.tags.length > 0 && (
-            <Grid item>
-              <TagList tags={props.image.tags} />
-            </Grid>
-          )}
-      </Grid>
-    </Paper>
-  );
 }
 
 export default function Gallery(props: GalleryProps) {
@@ -185,7 +109,7 @@ export default function Gallery(props: GalleryProps) {
             onClick={() => router.push(`/submission/${image.id}`)}
             key={image.id}
           >
-            <ImageInfo image={image} data={data} />
+            <Image image={image} data={data} />
           </motion.div>
         ))}
       </div>
