@@ -11,7 +11,7 @@ import BrushIcon from "@mui/icons-material/Brush";
 import { useState, useContext } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DataContext } from "../../pages/_app";
-import SearchBar from "../SearchBar";
+import SearchBar from "./SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
 
 import ArtistList from "../Artist/ArtistList";

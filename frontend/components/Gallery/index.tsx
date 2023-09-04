@@ -103,7 +103,6 @@ export default function Gallery(props: GalleryProps) {
       <div>
         {submissions.map((image) => (
           <motion.div
-            className="pics"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
             onClick={() => router.push(`/submission/${image.id}`)}

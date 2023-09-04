@@ -10,7 +10,7 @@ import {
 import TagList from "../Tag/TagList";
 import Submission from "../../interfaces/Submission";
 import CharacterList from "../Character/CharacterList";
-import ColorPalette from "../ColorPalette";
+import ColorPalette from "../Artist/ColorPalette";
 import { formatDate, convertBytes } from "../../src/formatters";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
