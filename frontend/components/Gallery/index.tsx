@@ -109,7 +109,7 @@ export default function Gallery(props: GalleryProps) {
             onClick={() => router.push(`/submission/${image.id}`)}
             key={image.id}
           >
-            <Image image={image} data={data} />
+            <Image image={image} />
           </motion.div>
         ))}
       </div>
