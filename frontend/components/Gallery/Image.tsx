@@ -5,11 +5,14 @@ import TagList from "../Tag/TagList";
 import ArtistLabel from "../Artist/ArtistLabel";
 import { useContext } from "react";
 import { DataContext } from "../../pages/_app";
+import Settings from "../../interfaces/Settings";
 interface ImageProps {
   image: Submission;
+  width?: string;
+  predefinedSettings?: Settings;
 }
 
-export default function Image({ image }: ImageProps) {
+export default function Image({ image, width }: ImageProps) {
   const { data } = useContext(DataContext);
   function gallerySettingsAllFalse() {
     return (
@@ -23,15 +26,16 @@ export default function Image({ image }: ImageProps) {
   }
 
   return (
-    <Paper elevation={0} sx={{ display: "inline-block" }}>
-      <img src={image.image} className="pic" />
+    <Paper elevation={0} sx={{ display: "inline-block", width: width }}>
+      <img src={image.image} className="pic" width="100%" />
       <Grid
         container
         spacing={1}
-        justifyContent="center"
-        alignItems="center"
+        alignContent="center"
         sx={{
           paddingBottom: 2,
+          paddingLeft: 2,
+          paddingRight: 2,
           display: gallerySettingsAllFalse() == true ? "none" : "block",
         }}
       >

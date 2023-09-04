@@ -1,15 +1,16 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
-  FormGroup,
+  Grid,
   IconButton,
   Stack,
+  Tab,
+  Tabs,
   Typography,
-  Checkbox,
 } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -23,6 +24,8 @@ interface SettingsDialogProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function SettingsDialog(props: SettingsDialogProps) {
+  const [value, setValue] = React.useState(0);
+
   const { data, setData } = useContext(DataContext);
   const [settings, setSettings] = useState<Settings>(data.settings);
 
@@ -59,9 +62,36 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         props.setOpen(false);
       });
   }
+  interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+  }
 
+  function TabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`vertical-tabpanel-${index}`}
+        aria-labelledby={`vertical-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
   return (
-    <Dialog open={props.open}>
+    <Dialog open={props.open} fullWidth>
       <DialogTitle>
         <Stack
           direction="row"
@@ -76,7 +106,32 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         </Stack>
       </DialogTitle>
       <DialogContent>
-        <GallerySettings settings={settings} setSettings={setSettings} />
+        <Grid container>
+          <Grid item xs={2}>
+            <Tabs
+              orientation="vertical"
+              variant="scrollable"
+              value={value}
+              sx={{ borderRight: 1, borderColor: "divider" }}
+              onChange={handleChange}
+            >
+              <Tab label="Gallery" />
+              <Tab label="Submission" />
+              <Tab label="Artist" />
+            </Tabs>
+          </Grid>
+          <Grid item xs={10}>
+            <TabPanel value={value} index={0}>
+              <GallerySettings settings={settings} setSettings={setSettings} />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              Item Two
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              Item Three
+            </TabPanel>
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={updateSettings} variant="contained" color="primary">

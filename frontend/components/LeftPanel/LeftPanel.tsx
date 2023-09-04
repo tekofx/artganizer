@@ -7,7 +7,7 @@ import Snack from "../Snack";
 import AlertMessage from "../../interfaces/AlertMessage";
 import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
 import CreateMenu from "./CreateMenu";
-import SettingsMenu from "./SettingsMenu";
+import SettingsMenu from "./Menu";
 import CharacterForm from "../Forms/CharacterForm";
 import CharacterAccordion from "./CharacterAccordion";
 

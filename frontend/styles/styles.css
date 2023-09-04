@@ -11,15 +11,6 @@
     padding: 0 12px;
   }
   
-  .gallery .pics {
-    -webkit-transition: all 350ms ease;
-    transition: all 350ms ease;
-    cursor: zoom-in;
-    margin-bottom: 12px;
-    position: relative;
-    text-align: center;
-  }
-  
   .gallery .pic {
     width: 100%;
     height: "auto";

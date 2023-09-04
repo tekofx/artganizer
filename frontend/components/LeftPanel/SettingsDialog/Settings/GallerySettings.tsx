@@ -25,16 +25,7 @@ export default function GallerySettings({
     });
   }
   return (
-    <div>
-      <Typography variant="h6">General</Typography>
-      <FormGroup>
-        <FormControlLabel label="Show lateral menu" control={<Checkbox />} />
-        <FormControlLabel
-          label="Show number of submissions in tags"
-          control={<Checkbox />}
-        />
-      </FormGroup>
-      <Typography variant="h6">Content</Typography>
+    <>
       <Typography variant="body2">
         What info will be displayed in the submissions gallery for each
         submission
@@ -83,6 +74,6 @@ export default function GallerySettings({
           checked={settings.galleryInfo.colors}
         />
       </FormGroup>
-    </div>
+    </>
   );
 }
