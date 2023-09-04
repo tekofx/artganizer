@@ -19,6 +19,7 @@ import { emptyCharacter } from "../../src/utils";
 import Character from "../../interfaces/Character";
 import CharacterInfo from "../../components/Character/CharacterInfo";
 import CharacterEdit from "../../components/Character/CharacterEdit";
+import Head from "next/head";
 export default function Page() {
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const [editShow, setEditShow] = useState(false);
@@ -63,54 +64,59 @@ export default function Page() {
   }, [router.query.slug]);
 
   return (
-    <Paper>
-      <Grid container spacing={2} sx={{ paddingLeft: 2 }}>
-        <Grid item lg={12}>
-          {!editShow ? (
-            <CharacterInfo
-              character={character}
-              toggleEdit={toggleEdit}
-              handleClickOpenDialog={handleClickOpenDialog}
-            />
-          ) : (
-            <CharacterEdit
-              character={character}
-              toggleEdit={toggleEdit}
-              setCharacter={setCharacter}
-            />
-          )}
+    <>
+      <Head>
+        <title>ArtGanizer</title>
+      </Head>
+      <Paper>
+        <Grid container spacing={2} sx={{ paddingLeft: 2 }}>
+          <Grid item lg={12}>
+            {!editShow ? (
+              <CharacterInfo
+                character={character}
+                toggleEdit={toggleEdit}
+                handleClickOpenDialog={handleClickOpenDialog}
+              />
+            ) : (
+              <CharacterEdit
+                character={character}
+                toggleEdit={toggleEdit}
+                setCharacter={setCharacter}
+              />
+            )}
+          </Grid>
+          <Grid item lg={12}>
+            <Gallery character={character} />
+          </Grid>
         </Grid>
-        <Grid item lg={12}>
-          <Gallery character={character} />
-        </Grid>
-      </Grid>
-      <Dialog open={dialogOpen}>
-        <DialogTitle>
-          <Typography>
-            Are you sure you want to remove this submission?
-          </Typography>
-        </DialogTitle>
-        <DialogActions>
-          <Stack direction="row" width="100%" spacing={2}>
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<DoneIcon />}
-              onClick={removeCharacter}
-            >
-              Yes
-            </Button>
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<ClearIcon />}
-              onClick={handleCloseDialog}
-            >
-              No
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-    </Paper>
+        <Dialog open={dialogOpen}>
+          <DialogTitle>
+            <Typography>
+              Are you sure you want to remove this submission?
+            </Typography>
+          </DialogTitle>
+          <DialogActions>
+            <Stack direction="row" width="100%" spacing={2}>
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<DoneIcon />}
+                onClick={removeCharacter}
+              >
+                Yes
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<ClearIcon />}
+                onClick={handleCloseDialog}
+              >
+                No
+              </Button>
+            </Stack>
+          </DialogActions>
+        </Dialog>
+      </Paper>
+    </>
   );
 }

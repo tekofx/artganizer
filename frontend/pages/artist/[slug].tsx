@@ -19,6 +19,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
 import { emptyArtist } from "../../src/utils";
+import Head from "next/head";
 export default function Page() {
   const [artist, setArtist] = useState<Artist>(emptyArtist);
   const [editShow, setEditShow] = useState(false);
@@ -63,54 +64,59 @@ export default function Page() {
   }, [router.query.slug]);
 
   return (
-    <Paper>
-      <Grid container spacing={2}>
-        <Grid item lg={12}>
-          {!editShow ? (
-            <ArtistInfo
-              artist={artist}
-              toggleEdit={toggleEdit}
-              handleClickOpenDialog={handleClickOpenDialog}
-            />
-          ) : (
-            <ArtistEdit
-              artist={artist}
-              toggleEdit={toggleEdit}
-              setArtist={setArtist}
-            />
-          )}
+    <>
+      <Head>
+        <title>{artist.name} | ArtGanizer</title>
+      </Head>
+      <Paper>
+        <Grid container spacing={2}>
+          <Grid item lg={12}>
+            {!editShow ? (
+              <ArtistInfo
+                artist={artist}
+                toggleEdit={toggleEdit}
+                handleClickOpenDialog={handleClickOpenDialog}
+              />
+            ) : (
+              <ArtistEdit
+                artist={artist}
+                toggleEdit={toggleEdit}
+                setArtist={setArtist}
+              />
+            )}
+          </Grid>
+          <Grid item lg={12}>
+            <Gallery artist={artist} />
+          </Grid>
         </Grid>
-        <Grid item lg={12}>
-          <Gallery artist={artist} />
-        </Grid>
-      </Grid>
-      <Dialog open={dialogOpen}>
-        <DialogTitle>
-          <Typography>
-            Are you sure you want to remove this submission?
-          </Typography>
-        </DialogTitle>
-        <DialogActions>
-          <Stack direction="row" width="100%" spacing={2}>
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<DoneIcon />}
-              onClick={removeArtist}
-            >
-              Yes
-            </Button>
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<ClearIcon />}
-              onClick={handleCloseDialog}
-            >
-              No
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-    </Paper>
+        <Dialog open={dialogOpen}>
+          <DialogTitle>
+            <Typography>
+              Are you sure you want to remove this submission?
+            </Typography>
+          </DialogTitle>
+          <DialogActions>
+            <Stack direction="row" width="100%" spacing={2}>
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<DoneIcon />}
+                onClick={removeArtist}
+              >
+                Yes
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<ClearIcon />}
+                onClick={handleCloseDialog}
+              >
+                No
+              </Button>
+            </Stack>
+          </DialogActions>
+        </Dialog>
+      </Paper>
+    </>
   );
 }

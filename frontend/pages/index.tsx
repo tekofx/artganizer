@@ -2,6 +2,7 @@ import { useEffect, useContext } from "react";
 import Gallery from "../components/Gallery";
 import { DataContext } from "../pages/_app";
 import TopPanel from "../components/TopPanel/TopPanel";
+import Head from "next/head";
 
 export default function Home() {
   const { data, setData } = useContext(DataContext);
@@ -22,6 +23,10 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>ArtGanizer</title>
+      </Head>
+
       <TopPanel />
       <Gallery />
     </>

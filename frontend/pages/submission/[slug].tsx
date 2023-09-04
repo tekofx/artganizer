@@ -5,6 +5,7 @@ import RightPanel from "../../components/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
 import { DataContext } from "../_app";
 import { emptySubmission } from "../../src/utils";
+import Head from "next/head";
 export default function Page() {
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const { data } = useContext(DataContext);
@@ -25,29 +26,34 @@ export default function Page() {
   }, [router.query.slug]);
 
   return (
-    <Paper>
-      <Grid container>
-        <Grid item lg={9}>
-          <Paper
-            elevation={3}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <img
-              src={submission?.image}
-              width="auto"
-              style={{ maxHeight: "100vh", maxWidth: "100%" }}
-            />
-          </Paper>
+    <>
+      <Head>
+        <title>{submission?.title}</title>
+      </Head>
+      <Paper>
+        <Grid container>
+          <Grid item lg={9}>
+            <Paper
+              elevation={3}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+              }}
+            >
+              <img
+                src={submission?.image}
+                width="auto"
+                style={{ maxHeight: "100vh", maxWidth: "100%" }}
+              />
+            </Paper>
+          </Grid>
+          <Grid item lg={3}>
+            <RightPanel submission={submission} setSubmission={setSubmission} />
+          </Grid>
         </Grid>
-        <Grid item lg={3}>
-          <RightPanel submission={submission} setSubmission={setSubmission} />
-        </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
+    </>
   );
 }
