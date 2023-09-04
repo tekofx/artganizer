@@ -43,6 +43,12 @@ router.get("/", async (req: Request, res: Response) => {
   // Add image URL
   for (const artist of artists) {
     artist.image = process.env.URL + "/artists/uploads/" + artist.id;
+    artist.socials = [];
+    try {
+      artist.socials.push(JSON.parse(artist.socials.toString()));
+    } catch {
+      artist.socials = [];
+    }
   }
   res.send(artists);
 });
