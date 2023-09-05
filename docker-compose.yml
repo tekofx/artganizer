@@ -1,7 +1,8 @@
 version: "3"
 services:
   db:
-    image: mysql:5.7
+    container_name: db
+    image: mariadb:10.4
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
@@ -9,4 +10,18 @@ services:
     ports:
       - "3306:3306"
 
+  frontend:
+    build: frontend
+    container_name: web
+    env_file: .env
+    image: frontend
+    ports:
+      - 3000:3000
 
+  backend:
+    build: backend
+    container_name: backend
+    env_file: .env
+    image: backend
+    ports:
+      - 3001:3001
