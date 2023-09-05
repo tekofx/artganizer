@@ -1,12 +1,8 @@
 import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { DataSource, In } from "typeorm";
-import { Artist } from "../entities/Artist";
-import { Submission } from "../entities/Submission";
 import multer, { FileFilterCallback } from "multer";
 import * as fs from "fs";
 import * as path from "path";
-import sharp from "sharp";
 import Vibrant from "node-vibrant";
 import {
   ArtistRepo,

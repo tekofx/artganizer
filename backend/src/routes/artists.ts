@@ -1,22 +1,34 @@
 import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { DataSource } from "typeorm";
-import { Artist } from "../entities/Artist";
-import { Submission } from "../entities/Submission";
 import multer, { FileFilterCallback } from "multer";
 import * as fs from "fs";
 import * as path from "path";
 import sharp from "sharp";
-import { ArtistRepo, SubmissionRepo } from "../typeorm.config";
+import { ArtistRepo, SubmissionRepo, SocialRepo } from "../typeorm.config";
 
 const artistsPicsDir = path.join(__dirname, "../../data/uploads/artistPics");
 if (!fs.existsSync(artistsPicsDir)) {
   fs.mkdirSync(artistsPicsDir, { recursive: true });
 }
 
-const router = express.Router();
 // Multer config
-
+const artistsStorage = multer.diskStorage({
+  destination: function (
+    req: Express.Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null, destination: string) => void
+  ) {
+    cb(null, artistsPicsDir);
+  },
+  filename: function (
+    req: Express.Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null, filename: string) => void
+  ) {
+    // Guardar el archivo con un nombre temporal
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
 // Función de filtro de archivos
 const fileFilter = (
   req: Express.Request,
@@ -34,22 +46,21 @@ const fileFilter = (
 };
 
 const uploadArtistPics = multer({
-  dest: artistsPicsDir,
+  storage: artistsStorage,
   fileFilter: fileFilter,
 });
-router.get("/", async (req: Request, res: Response) => {
-  const artists = await ArtistRepo.find();
 
+const router = express.Router();
+
+router.get("/", async (req: Request, res: Response) => {
+  const queryBuilder = ArtistRepo.createQueryBuilder("artist")
+    .leftJoinAndSelect("artist.socials", "social")
+    .orderBy("artist.id", "ASC");
+
+  const artists = await queryBuilder.getMany();
   // Add image URL
   for (const artist of artists) {
     artist.image = process.env.URL + "/artists/uploads/" + artist.id;
-    var temp = JSON.parse(artist.socials.toString());
-    if (!Array.isArray(temp)) {
-      temp = [temp];
-    }
-    artist.socials = temp;
-
-    console.log(artist.socials);
   }
   res.send(artists);
 });
@@ -65,17 +76,19 @@ router.post(
       return;
     }
 
-    const artist = ArtistRepo.create({ name, description, socials });
+    const artist = ArtistRepo.create({ name, description });
     var id = await ArtistRepo.save(artist)
       .then((artist) => {
         return artist.id;
       })
       .catch((error) => {
         if (error.name == "ER_DATA_TOO_LONG") {
-          return res.status(400).send("Data too long");
+          res.status(400).send("Data too long");
         } else {
-          return res.status(400).send("An error ocurred");
+          res.status(400).send("An error ocurred");
+          console.log(error);
         }
+        return;
       });
 
     // Convertir a JPG y Renombrar el archivo con el ID generado
@@ -94,18 +107,27 @@ router.post(
         });
     }
 
+    if (socials) {
+      socials = JSON.parse(socials);
+      for (const social of socials) {
+        console.log(social);
+        const newSocial = SocialRepo.create({
+          name: social.name,
+          url: social.url,
+          artist: artist,
+        });
+        await SocialRepo.save(newSocial);
+      }
+
+      artist.socials = socials;
+      await ArtistRepo.save(artist);
+    }
+    console.log(artist);
+
     artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
     res.send(artist);
   }
 );
-
-router.get("/", async (req: Request, res: Response) => {
-  const artists = await ArtistRepo.find();
-  artists.forEach((artist) => {
-    artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
-  });
-  res.send(artists);
-});
 
 router.get("/:artistId", async (req: Request, res: Response) => {
   if (req.params.artistId == null) {

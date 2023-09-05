@@ -1,14 +1,6 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
-  PrimaryColumn,
-  ManyToMany,
-  OneToMany,
-} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Submission } from "./Submission";
+import { Social } from "./Social";
 
 @Entity()
 export class Artist {
@@ -21,12 +13,8 @@ export class Artist {
   @Column({ length: 200, default: "" })
   description: string;
 
-  @Column({ type: "json" })
-  socials: {
-    favicon: string;
-    url: string;
-    name: string;
-  }[];
+  @OneToMany(() => Social, (social) => social.artist)
+  socials: Social[];
 
   @OneToMany(() => Submission, (submission) => submission.artist)
   submissions: Submission[];

@@ -25,12 +25,6 @@ export default function ArtistInfo(props: ArtistInfoProps) {
         <Typography variant="h4">{props.artist?.name}</Typography>
         <Typography variant="h5">{props.artist?.description}</Typography>
         <Socials socials={props.artist?.socials} />
-        {props.artist?.socials.map((social, index) => (
-          <div key={index}>
-            {social.name}: {social.url}
-            <SocialIcon socialMediaName={social.name} />
-          </div>
-        ))}
       </Grid>
       <Grid item>
         <Stack direction="row" width="100%" spacing={2} justifyContent="center">

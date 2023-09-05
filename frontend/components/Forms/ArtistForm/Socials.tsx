@@ -5,7 +5,8 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-
+import { useState } from "react";
+import Social from "../../../interfaces/Social";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -16,13 +17,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LanguageIcon from "@mui/icons-material/Language";
 import ClearIcon from "@mui/icons-material/Clear";
 
-interface SocialWithIcon {
-  name: string;
-  url: string;
-  icon?: JSX.Element;
-}
 interface SocialProps {
-  socials: SocialWithIcon[];
+  socials: Social[];
   setSocials: any;
 }
 const socialMediaIcons = {
@@ -35,14 +31,15 @@ const socialMediaIcons = {
   bluesky: <CloudIcon />,
 };
 export default function Socials({ socials, setSocials }: SocialProps) {
+  const [icons, setIcons] = useState<JSX.Element[]>([<LanguageIcon />]);
   function handleSocialURLChange(event: any, index: number) {
     const newSocials = [...socials];
     var icon = getIcon(event.target.value);
 
     if (icon) {
-      newSocials[index].icon = icon;
+      icons[index] = icon;
     } else {
-      newSocials[index].icon = <LanguageIcon />;
+      icons[index] = <LanguageIcon />;
     }
     newSocials[index].url = event.target.value;
     setSocials(newSocials);
@@ -69,9 +66,12 @@ export default function Socials({ socials, setSocials }: SocialProps) {
     newSocials.push({
       name: "",
       url: "",
-      icon: <LanguageIcon />,
     });
     setSocials(newSocials);
+
+    const newIcons = [...icons];
+    newIcons.push(<LanguageIcon />);
+    setIcons(newIcons);
   }
 
   function removeSocial(index: number) {
@@ -85,7 +85,7 @@ export default function Socials({ socials, setSocials }: SocialProps) {
 
       {socials.map((value, i) => (
         <Stack direction="row" alignItems="center" spacing={2} key={i}>
-          {value.icon}
+          {icons[i]}
           <TextField
             label="Social Name"
             value={value.name}
