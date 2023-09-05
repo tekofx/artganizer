@@ -13,7 +13,7 @@ export class Artist {
   @Column({ length: 200, default: "" })
   description: string;
 
-  @OneToMany(() => Social, (social) => social.artist)
+  @OneToMany(() => Social, (social) => social.artist, { onDelete: "CASCADE" })
   socials: Social[];
 
   @OneToMany(() => Submission, (submission) => submission.artist)

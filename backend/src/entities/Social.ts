@@ -12,6 +12,6 @@ export class Social {
   @Column()
   name: string;
 
-  @ManyToOne(() => Artist, (artist) => artist.socials)
+  @ManyToOne(() => Artist, (artist) => artist.socials, { onDelete: "CASCADE" })
   artist: Artist;
 }
