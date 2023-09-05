@@ -7,6 +7,7 @@ import {
   Stack,
   Grid,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SelectableTagList from "./SelectableTagList";
@@ -74,9 +75,11 @@ export default function TagSelect({
         />
       </Grid>
       <Grid item xs={2}>
-        <IconButton onClick={() => setOpenTagForm(true)}>
-          <AddIcon />
-        </IconButton>
+        <Tooltip title="Create new tag">
+          <IconButton onClick={() => setOpenTagForm(true)}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
       </Grid>
       <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>

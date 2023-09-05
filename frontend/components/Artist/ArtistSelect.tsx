@@ -6,6 +6,7 @@ import {
   Popper,
   IconButton,
   Grid,
+  Tooltip,
 } from "@mui/material";
 import Artist from "../../interfaces/Artist";
 import ArtistLabel from "./ArtistLabel";
@@ -67,9 +68,11 @@ export default function ArtistSelect(props: ArtistSelectProps) {
                 />
               </Grid>
               <Grid item xs={2}>
-                <IconButton onClick={() => setOpenArtistForm(true)}>
-                  <AddIcon />
-                </IconButton>
+                <Tooltip title="Create new artist">
+                  <IconButton onClick={() => setOpenArtistForm(true)}>
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
               </Grid>
             </>
           )}

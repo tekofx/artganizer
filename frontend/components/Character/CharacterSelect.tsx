@@ -8,6 +8,7 @@ import {
   Grid,
   Avatar,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import CharacterForm from "../Forms/CharacterForm";
 import Character from "../../interfaces/Character";
@@ -84,9 +85,11 @@ export default function CharacterSelect({
         />
       </Grid>
       <Grid item xs={2}>
-        <IconButton onClick={() => setOpenCharacterForm(true)}>
-          <AddIcon />
-        </IconButton>
+        <Tooltip title="Create new character">
+          <IconButton onClick={() => setOpenCharacterForm(true)}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
       </Grid>
       <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>
