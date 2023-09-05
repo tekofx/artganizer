@@ -4,28 +4,32 @@ import { useState } from "react";
 import Character from "../../interfaces/Character";
 import ClearIcon from "@mui/icons-material/Clear";
 interface CharacterLabelProps {
-  character: Character;
+  character?: Character;
   clickable?: boolean;
   onDelete?: () => void;
 }
-export default function Page(props: CharacterLabelProps) {
+export default function Page({
+  character,
+  clickable,
+  onDelete,
+}: CharacterLabelProps) {
   const router = useRouter();
   const [highlight, setHighlight] = useState(false);
 
   function handleClick() {
-    if (props.clickable) {
-      router.push(`/character/${props.character.id}`);
+    if (clickable) {
+      router.push(`/character/${character?.id}`);
     }
   }
 
   function handleMouseEnter() {
-    if (props.clickable) {
+    if (clickable) {
       setHighlight(true);
     }
   }
 
   function handleMouseLeave() {
-    if (props.clickable) {
+    if (clickable) {
       setHighlight(false);
     }
   }
@@ -39,19 +43,30 @@ export default function Page(props: CharacterLabelProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       sx={{
-        cursor: props.clickable ? "pointer" : "default",
+        cursor: clickable ? "pointer" : "default",
         p: 1,
         backgroundColor: highlight ? "grey" : "transparent",
       }}
     >
-      <Avatar
-        src={`http://localhost:3001/characters/uploads/${props.character.id}`}
-      />
-      <Typography>{props.character.name}</Typography>
-      {props.onDelete && (
-        <IconButton onClick={props.onDelete}>
-          <ClearIcon />
-        </IconButton>
+      {character ? (
+        <>
+          <Avatar
+            src={`http://localhost:3001/characters/uploads/${character?.id}`}
+          />
+          <Typography>{character?.name}</Typography>
+          {onDelete && (
+            <IconButton onClick={onDelete}>
+              <ClearIcon />
+            </IconButton>
+          )}
+        </>
+      ) : (
+        <>
+          <Avatar>
+            <ClearIcon />
+          </Avatar>
+          <Typography>No characters selected</Typography>
+        </>
       )}
     </Stack>
   );

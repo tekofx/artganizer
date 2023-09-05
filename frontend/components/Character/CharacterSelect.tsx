@@ -1,18 +1,15 @@
 import { Dispatch, SetStateAction, useState, MouseEvent } from "react";
 import {
   Paper,
-  Typography,
   TextField,
   Popper,
   Stack,
   Grid,
-  Avatar,
   IconButton,
   Tooltip,
 } from "@mui/material";
 import CharacterForm from "../Forms/CharacterForm";
 import Character from "../../interfaces/Character";
-import ClearIcon from "@mui/icons-material/Clear";
 import SelectableCharacterList from "./SelectableCharacterList";
 import CharacterLabel from "./CharacterLabel";
 import AddIcon from "@mui/icons-material/Add";
@@ -45,9 +42,6 @@ export default function CharacterSelect({
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <Typography>Character select</Typography>
-      </Grid>
-      <Grid item xs={12}>
         <Grid container spacing={1}>
           {selectedCharacters.map((char) => (
             <Grid item key={char.id}>
@@ -64,18 +58,14 @@ export default function CharacterSelect({
 
       {selectedCharacters.length < 1 && (
         <Grid item>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar>
-              <ClearIcon />
-            </Avatar>
-            <Typography>No characters selected</Typography>
-          </Stack>
+          <CharacterLabel />
         </Grid>
       )}
       <Grid item xs={10}>
         <TextField
           label="Search characters"
           variant="standard"
+          fullWidth
           size="small"
           value={filter}
           onClick={handleClick}

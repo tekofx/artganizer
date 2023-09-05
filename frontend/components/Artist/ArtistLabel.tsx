@@ -5,7 +5,7 @@ import { useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 
 interface ArtistLabelProps {
-  artist: Artist;
+  artist?: Artist;
   clickable?: boolean;
   onDelete?: () => void;
 }
@@ -19,7 +19,7 @@ export default function Page({
 
   function handleClick() {
     if (clickable) {
-      router.push(`/artist/${artist.id}`);
+      router.push(`/artist/${artist?.id}`);
     }
   }
 
@@ -49,12 +49,23 @@ export default function Page({
         backgroundColor: highlight ? "grey" : "transparent",
       }}
     >
-      <Avatar src={`http://localhost:3001/artists/uploads/${artist.id}`} />
-      <Typography>{artist.name}</Typography>
-      {onDelete && (
-        <IconButton onClick={onDelete}>
-          <ClearIcon />
-        </IconButton>
+      {artist ? (
+        <>
+          <Avatar src={`http://localhost:3001/artists/uploads/${artist?.id}`} />
+          <Typography>{artist?.name}</Typography>
+          {onDelete && (
+            <IconButton onClick={onDelete}>
+              <ClearIcon />
+            </IconButton>
+          )}
+        </>
+      ) : (
+        <>
+          <Avatar>
+            <ClearIcon />
+          </Avatar>
+          <Typography>No artist selected</Typography>
+        </>
       )}
     </Stack>
   );

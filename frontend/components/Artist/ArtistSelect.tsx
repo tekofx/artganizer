@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useState, MouseEvent } from "react";
 import {
   Paper,
-  Typography,
   TextField,
   Popper,
   IconButton,
@@ -39,9 +38,6 @@ export default function ArtistSelect(props: ArtistSelectProps) {
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <Typography>Artist select</Typography>
-      </Grid>
-      <Grid item xs={12}>
         <Grid container spacing={1}>
           {props.selectedArtist != undefined && (
             <Grid item>
@@ -52,7 +48,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
           {props.selectedArtist == undefined && (
             <>
               <Grid item xs={12}>
-                <Typography>No artist selected</Typography>
+                <ArtistLabel />
               </Grid>
               <Grid item xs={10}>
                 <TextField

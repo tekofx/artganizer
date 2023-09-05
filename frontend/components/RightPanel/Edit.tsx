@@ -113,6 +113,7 @@ export default function Edit(props: InfoProps) {
               selectedCharacters={selectedCharacters}
               setSelectedCharacters={setSelectedCharacters}
             />
+            <Typography>Artist</Typography>
             <ArtistSelect
               selectedArtist={selectedArtist}
               setSelectedArtist={setSelectedArtist}
