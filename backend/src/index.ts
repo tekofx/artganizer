@@ -1,16 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { DataSource } from "typeorm";
-import { Artist } from "./entities/Artist";
-import { Submission } from "./entities/Submission";
-import { config } from "./config";
-import multer, { FileFilterCallback } from "multer";
-import * as fs from "fs";
-import * as path from "path";
-import sizeOf from "image-size";
-import submissionPostValidation from "./utils";
-import sharp from "sharp";
-import { AppDataSource, ArtistRepo, SubmissionRepo } from "./typeorm.config";
+import { AppDataSource } from "./typeorm.config";
 import artist from "./routes/artists";
 import submission from "./routes/submissions";
 import folders from "./routes/folders";
