@@ -6,6 +6,7 @@ import {
   IconButton,
   Grid,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import Artist from "../../interfaces/Artist";
 import ArtistLabel from "./ArtistLabel";
@@ -36,55 +37,63 @@ export default function ArtistSelect(props: ArtistSelectProps) {
   }
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12}>
-        <Grid container spacing={1}>
-          {props.selectedArtist != undefined && (
-            <Grid item>
-              <ArtistLabel artist={props.selectedArtist} onDelete={onRemove} />
-            </Grid>
-          )}
-
-          {props.selectedArtist == undefined && (
-            <>
-              <Grid item xs={12}>
-                <ArtistLabel />
-              </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  label="Search artist"
-                  variant="standard"
-                  size="small"
-                  value={filter}
-                  onClick={handleClick}
-                  onChange={(event) => {
-                    setFilter(event.target.value);
-                  }}
+    <Paper elevation={0} sx={{ p: 1 }}>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Typography>Artist</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={1}>
+            {props.selectedArtist != undefined && (
+              <Grid item>
+                <ArtistLabel
+                  artist={props.selectedArtist}
+                  onDelete={onRemove}
                 />
               </Grid>
-              <Grid item xs={2}>
-                <Tooltip title="Create new artist">
-                  <IconButton onClick={() => setOpenArtistForm(true)}>
-                    <AddIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-            </>
-          )}
+            )}
+
+            {props.selectedArtist == undefined && (
+              <>
+                <Grid item xs={12}>
+                  <ArtistLabel />
+                </Grid>
+                <Grid item xs={10}>
+                  <TextField
+                    fullWidth
+                    label="Search artist"
+                    variant="standard"
+                    size="small"
+                    value={filter}
+                    onClick={handleClick}
+                    onChange={(event) => {
+                      setFilter(event.target.value);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Tooltip title="Create new artist">
+                    <IconButton onClick={() => setOpenArtistForm(true)}>
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              </>
+            )}
+          </Grid>
         </Grid>
+        <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
+          <Paper sx={{ width: "200px" }}>
+            <SelectableArtistList
+              selectedArtist={props.selectedArtist}
+              setSelectedArtist={props.setSelectedArtist}
+              setOpen={setOpen}
+              filter={filter}
+            />
+          </Paper>
+        </Popper>
+        <ArtistForm open={openArtistForm} setOpen={setOpenArtistForm} />
       </Grid>
-      <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
-        <Paper sx={{ width: "200px" }}>
-          <SelectableArtistList
-            selectedArtist={props.selectedArtist}
-            setSelectedArtist={props.setSelectedArtist}
-            setOpen={setOpen}
-            filter={filter}
-          />
-        </Paper>
-      </Popper>
-      <ArtistForm open={openArtistForm} setOpen={setOpenArtistForm} />
-    </Grid>
+    </Paper>
   );
 }

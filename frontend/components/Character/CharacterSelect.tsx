@@ -7,6 +7,7 @@ import {
   Grid,
   IconButton,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import CharacterForm from "../Forms/CharacterForm";
 import Character from "../../interfaces/Character";
@@ -40,58 +41,66 @@ export default function CharacterSelect({
   }
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12}>
-        <Grid container spacing={1}>
-          {selectedCharacters.map((char) => (
-            <Grid item key={char.id}>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <CharacterLabel
-                  character={char}
-                  onDelete={() => removeCharacter(char)}
-                />
-              </Stack>
-            </Grid>
-          ))}
+    <Paper elevation={0} sx={{ p: 1 }}>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Typography>Characters</Typography>
         </Grid>
-      </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={1}>
+            {selectedCharacters.map((char) => (
+              <Grid item key={char.id}>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <CharacterLabel
+                    character={char}
+                    onDelete={() => removeCharacter(char)}
+                  />
+                </Stack>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
 
-      {selectedCharacters.length < 1 && (
-        <Grid item>
-          <CharacterLabel />
+        {selectedCharacters.length < 1 && (
+          <Grid item>
+            <CharacterLabel />
+          </Grid>
+        )}
+        <Grid item xs={10}>
+          <TextField
+            label="Search characters"
+            variant="standard"
+            fullWidth
+            size="small"
+            value={filter}
+            onClick={handleClick}
+            onChange={(event) => {
+              setFilter(event.target.value);
+            }}
+          />
         </Grid>
-      )}
-      <Grid item xs={10}>
-        <TextField
-          label="Search characters"
-          variant="standard"
-          fullWidth
-          size="small"
-          value={filter}
-          onClick={handleClick}
-          onChange={(event) => {
-            setFilter(event.target.value);
-          }}
+        <Grid item xs={2}>
+          <Tooltip title="Create new character">
+            <IconButton onClick={() => setOpenCharacterForm(true)}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
+          <Paper sx={{ width: "200px" }}>
+            <SelectableCharacterList
+              selectedCharacters={selectedCharacters}
+              setSelectedCharacters={setSelectedCharacters}
+              setOpen={setOpen}
+              filter={filter}
+            />
+          </Paper>
+        </Popper>
+        <CharacterForm
+          open={openCharacterForm}
+          setOpen={setOpenCharacterForm}
         />
       </Grid>
-      <Grid item xs={2}>
-        <Tooltip title="Create new character">
-          <IconButton onClick={() => setOpenCharacterForm(true)}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </Grid>
-      <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
-        <Paper sx={{ width: "200px" }}>
-          <SelectableCharacterList
-            selectedCharacters={selectedCharacters}
-            setSelectedCharacters={setSelectedCharacters}
-            setOpen={setOpen}
-            filter={filter}
-          />
-        </Paper>
-      </Popper>
-      <CharacterForm open={openCharacterForm} setOpen={setOpenCharacterForm} />
-    </Grid>
+    </Paper>
   );
 }

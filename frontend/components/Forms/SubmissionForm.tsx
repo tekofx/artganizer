@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
-  Paper,
 } from "@mui/material";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
@@ -191,29 +190,23 @@ export default function SubmissionForm(props: Props) {
               </Grid>
 
               <Grid item xs={6}>
-                <Paper sx={{ p: 2 }}>
-                  <TagSelect
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
-                  />
-                </Paper>
+                <TagSelect
+                  selectedTags={selectedTags}
+                  setSelectedTags={setSelectedTags}
+                />
               </Grid>
 
               <Grid item xs={6}>
-                <Paper sx={{ p: 2 }}>
-                  <ArtistSelect
-                    selectedArtist={selectedArtist}
-                    setSelectedArtist={setSelectedArtist}
-                  />
-                </Paper>
+                <ArtistSelect
+                  selectedArtist={selectedArtist}
+                  setSelectedArtist={setSelectedArtist}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Paper sx={{ p: 2 }}>
-                  <CharacterSelect
-                    selectedCharacters={selectedCharacters}
-                    setSelectedCharacters={setSelectedCharacters}
-                  />
-                </Paper>
+                <CharacterSelect
+                  selectedCharacters={selectedCharacters}
+                  setSelectedCharacters={setSelectedCharacters}
+                />
               </Grid>
             </Grid>
           </Grid>

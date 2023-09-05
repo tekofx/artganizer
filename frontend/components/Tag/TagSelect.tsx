@@ -40,58 +40,60 @@ export default function TagSelect({
   }
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12}>
-        <Typography>Tags select</Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container spacing={1}>
-          {selectedTags.map((tag) => (
-            <Grid item key={tag.id}>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <TagChip tag={tag} onDelete={() => removeTag(tag)} />
-              </Stack>
-            </Grid>
-          ))}
+    <Paper elevation={0} sx={{ p: 1 }}>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Typography>Tags</Typography>
         </Grid>
-      </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={1}>
+            {selectedTags.map((tag) => (
+              <Grid item key={tag.id}>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <TagChip tag={tag} onDelete={() => removeTag(tag)} />
+                </Stack>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
 
-      {selectedTags.length < 1 && (
-        <>
-          <Typography>No tags selected</Typography>
-        </>
-      )}
-      <Grid item xs={10}>
-        <TextField
-          label="Search tags"
-          variant="standard"
-          size="small"
-          fullWidth
-          value={filter}
-          onClick={handleClick}
-          onChange={(event) => {
-            setFilter(event.target.value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={2}>
-        <Tooltip title="Create new tag">
-          <IconButton onClick={() => setOpenTagForm(true)}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </Grid>
-      <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
-        <Paper sx={{ width: "200px" }}>
-          <SelectableTagList
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-            setOpen={setOpen}
-            filter={filter}
+        {selectedTags.length < 1 && (
+          <>
+            <Typography>No tags selected</Typography>
+          </>
+        )}
+        <Grid item xs={10}>
+          <TextField
+            label="Search tags"
+            variant="standard"
+            size="small"
+            fullWidth
+            value={filter}
+            onClick={handleClick}
+            onChange={(event) => {
+              setFilter(event.target.value);
+            }}
           />
-        </Paper>
-      </Popper>
-      <TagForm open={openTagForm} setOpen={setOpenTagForm} />
-    </Grid>
+        </Grid>
+        <Grid item xs={2}>
+          <Tooltip title="Create new tag">
+            <IconButton onClick={() => setOpenTagForm(true)}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
+          <Paper sx={{ width: "200px" }}>
+            <SelectableTagList
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              setOpen={setOpen}
+              filter={filter}
+            />
+          </Paper>
+        </Popper>
+        <TagForm open={openTagForm} setOpen={setOpenTagForm} />
+      </Grid>
+    </Paper>
   );
 }

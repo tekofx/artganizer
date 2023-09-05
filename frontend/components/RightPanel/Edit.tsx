@@ -103,17 +103,14 @@ export default function Edit(props: InfoProps) {
                 }));
               }}
             />
-
             <TagSelect
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />
-            <Typography>Characters</Typography>
             <CharacterSelect
               selectedCharacters={selectedCharacters}
               setSelectedCharacters={setSelectedCharacters}
             />
-            <Typography>Artist</Typography>
             <ArtistSelect
               selectedArtist={selectedArtist}
               setSelectedArtist={setSelectedArtist}
