@@ -5,55 +5,23 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import { useState } from "react";
 import Social from "../../../interfaces/Social";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import CloudIcon from "@mui/icons-material/Cloud";
-import RedditIcon from "@mui/icons-material/Reddit";
-import PinterestIcon from "@mui/icons-material/Pinterest";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import LanguageIcon from "@mui/icons-material/Language";
+
 import ClearIcon from "@mui/icons-material/Clear";
+import SocialIcon from "../../Social/SocialIcon";
 
 interface SocialProps {
   socials: Social[];
   setSocials: any;
 }
-const socialMediaIcons = {
-  instagram: <InstagramIcon />,
-  facebook: <FacebookIcon />,
-  twitter: <TwitterIcon />,
-  linkedin: <LinkedInIcon />,
-  reddit: <RedditIcon />,
-  pinterest: <PinterestIcon />,
-  bluesky: <CloudIcon />,
-};
+
 export default function Socials({ socials, setSocials }: SocialProps) {
-  const [icons, setIcons] = useState<JSX.Element[]>([<LanguageIcon />]);
   function handleSocialURLChange(event: any, index: number) {
     const newSocials = [...socials];
-    var icon = getIcon(event.target.value);
 
-    if (icon) {
-      icons[index] = icon;
-    } else {
-      icons[index] = <LanguageIcon />;
-    }
     newSocials[index].url = event.target.value;
     setSocials(newSocials);
   }
-
-  const getIcon = (socialMediaName: string) => {
-    socialMediaName = socialMediaName.toLowerCase();
-    for (const [name, icon] of Object.entries(socialMediaIcons)) {
-      if (socialMediaName.includes(name)) {
-        return icon;
-      }
-    }
-    return null;
-  };
 
   function handleSocialNameChange(event: any, index: number) {
     const newSocials = [...socials];
@@ -68,10 +36,6 @@ export default function Socials({ socials, setSocials }: SocialProps) {
       url: "",
     });
     setSocials(newSocials);
-
-    const newIcons = [...icons];
-    newIcons.push(<LanguageIcon />);
-    setIcons(newIcons);
   }
 
   function removeSocial(index: number) {
@@ -85,7 +49,7 @@ export default function Socials({ socials, setSocials }: SocialProps) {
 
       {socials.map((value, i) => (
         <Stack direction="row" alignItems="center" spacing={2} key={i}>
-          {icons[i]}
+          <SocialIcon social={value} clickable={false} />
           <TextField
             label="Social Name"
             value={value.name}

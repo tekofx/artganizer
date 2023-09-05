@@ -1,5 +1,5 @@
 import Social from "../../../interfaces/Social";
-import SocialIcon from "../../SocialIcon";
+import SocialIcon from "../../Social/SocialIcon";
 interface SocialsProps {
   socials: Social[];
 }
