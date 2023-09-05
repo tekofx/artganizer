@@ -1,6 +1,8 @@
 import { Grid, Avatar, Button, Stack, TextField } from "@mui/material";
 import Artist from "../../interfaces/Artist";
 import DoneIcon from "@mui/icons-material/Done";
+import ClearIcon from "@mui/icons-material/Clear";
+
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import axios from "axios";
 import { DataContext } from "../../pages/_app";
@@ -11,9 +13,12 @@ interface ArtistEditProps {
   setArtist: Dispatch<SetStateAction<Artist>>;
 }
 
-export default function ArtistEdit(props: ArtistEditProps) {
-  const [artist, setArtist] = useState<Artist>(props.artist);
-  const [image, setImage] = useState<string>(props.artist.image);
+export default function ArtistEdit({
+  artist,
+  toggleEdit,
+  setArtist,
+}: ArtistEditProps) {
+  const [image, setImage] = useState<string>(artist.image);
   const [imageData, setImageData] = useState<any>();
   const { data, setData } = useContext(DataContext);
   const router = useRouter();
@@ -34,7 +39,7 @@ export default function ArtistEdit(props: ArtistEditProps) {
     await axios
       .put(`http://localhost:3001/artists/${artist.id}`, formData)
       .then((response) => {
-        props.setArtist(response.data);
+        setArtist(response.data);
         var newData = { ...data };
         newData.artists = newData.artists.map((artist) => {
           if (artist.id === response.data.id) {
@@ -47,14 +52,14 @@ export default function ArtistEdit(props: ArtistEditProps) {
       .catch((error) => {
         console.log(error);
       });
-    props.toggleEdit();
+    toggleEdit();
 
     // Reload the page
     router.reload();
   }
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>
         <Stack spacing={2} direction="column">
           <Avatar sx={{ width: "10rem", height: "10rem" }} src={image} />
@@ -102,6 +107,13 @@ export default function ArtistEdit(props: ArtistEditProps) {
             onClick={() => editArtist()}
           >
             Ok
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<ClearIcon />}
+            onClick={() => toggleEdit()}
+          >
+            Cancel
           </Button>
         </Stack>
       </Grid>
