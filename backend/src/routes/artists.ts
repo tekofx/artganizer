@@ -60,9 +60,11 @@ router.get("/", async (req: Request, res: Response) => {
   const artists = await queryBuilder.getMany();
   // Add image URL
   for (const artist of artists) {
+    console.log(artist.socials);
     artist.image = process.env.URL + "/artists/uploads/" + artist.id;
   }
   res.send(artists);
+  console.log(artists);
 });
 
 router.post(
@@ -109,6 +111,7 @@ router.post(
 
     if (socials) {
       socials = JSON.parse(socials);
+      var socialsObjs = [];
       for (const social of socials) {
         console.log(social);
         const newSocial = SocialRepo.create({
@@ -117,9 +120,10 @@ router.post(
           artist: artist,
         });
         await SocialRepo.save(newSocial);
+        socialsObjs.push(newSocial);
       }
+      artist.socials = socialsObjs;
 
-      artist.socials = socials;
       await ArtistRepo.save(artist);
     }
     console.log(artist);
