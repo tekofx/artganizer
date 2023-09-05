@@ -22,7 +22,7 @@ export default function Snack(props: Props) {
   return (
     <Snackbar
       open={props.open}
-      autoHideDuration={6000}
+      autoHideDuration={3000}
       onClose={handleClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       sx={{ zIndex: 200000 }}
