@@ -8,7 +8,7 @@ import {
 import Social from "../../../interfaces/Social";
 
 import ClearIcon from "@mui/icons-material/Clear";
-import SocialIcon from "../../Social/SocialIcon";
+import SocialIcon from "../../SocialIcon";
 
 interface SocialProps {
   socials: Social[];
