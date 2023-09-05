@@ -4,13 +4,14 @@ import {
   Typography,
   TextField,
   Popper,
-  Stack,
   IconButton,
+  Grid,
 } from "@mui/material";
 import Artist from "../../interfaces/Artist";
-import ClearIcon from "@mui/icons-material/Clear";
 import ArtistLabel from "./ArtistLabel";
 import SelectableArtistList from "./SelectableArtistList";
+import AddIcon from "@mui/icons-material/Add";
+import { ArtistForm } from "../Forms";
 
 interface ArtistSelectProps {
   setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
@@ -18,6 +19,7 @@ interface ArtistSelectProps {
 }
 export default function ArtistSelect(props: ArtistSelectProps) {
   const [open, setOpen] = useState(false);
+  const [openArtistForm, setOpenArtistForm] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [filter, setFilter] = useState<string>("");
@@ -34,32 +36,45 @@ export default function ArtistSelect(props: ArtistSelectProps) {
   }
 
   return (
-    <>
-      <Typography>Artist select</Typography>
-      <Stack direction="row" spacing={2} alignItems="center">
-        {props.selectedArtist != undefined ? (
-          <Stack direction="row" spacing={2} alignItems="center">
-            <ArtistLabel artist={props.selectedArtist} />
-            <IconButton onClick={onRemove}>
-              <ClearIcon />
-            </IconButton>
-          </Stack>
-        ) : (
-          <>
-            <Typography>No artist selected</Typography>
-            <TextField
-              label="Search artist"
-              variant="standard"
-              size="small"
-              value={filter}
-              onClick={handleClick}
-              onChange={(event) => {
-                setFilter(event.target.value);
-              }}
-            />
-          </>
-        )}
-      </Stack>
+    <Grid container spacing={1}>
+      <Grid item xs={12}>
+        <Typography>Artist select</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container spacing={1}>
+          {props.selectedArtist != undefined && (
+            <Grid item>
+              <ArtistLabel artist={props.selectedArtist} onDelete={onRemove} />
+            </Grid>
+          )}
+
+          {props.selectedArtist == undefined && (
+            <>
+              <Grid item xs={12}>
+                <Typography>No artist selected</Typography>
+              </Grid>
+              <Grid item xs={10}>
+                <TextField
+                  fullWidth
+                  label="Search artist"
+                  variant="standard"
+                  size="small"
+                  value={filter}
+                  onClick={handleClick}
+                  onChange={(event) => {
+                    setFilter(event.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton onClick={() => setOpenArtistForm(true)}>
+                  <AddIcon />
+                </IconButton>
+              </Grid>
+            </>
+          )}
+        </Grid>
+      </Grid>
       <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>
           <SelectableArtistList
@@ -70,6 +85,7 @@ export default function ArtistSelect(props: ArtistSelectProps) {
           />
         </Paper>
       </Popper>
-    </>
+      <ArtistForm open={openArtistForm} setOpen={setOpenArtistForm} />
+    </Grid>
   );
 }

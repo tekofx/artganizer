@@ -14,7 +14,6 @@ import { useState, useContext } from "react";
 import { DataContext } from "../../../pages/_app";
 import axios from "axios";
 import Artist from "../../../interfaces/Artist";
-import LanguageIcon from "@mui/icons-material/Language";
 import LimitedTextField from "../../LimitedTextField";
 import Socials from "./Socials";
 import Social from "../../../interfaces/Social";
@@ -34,8 +33,8 @@ const defaultArtist: Artist = {
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenSnack: React.Dispatch<React.SetStateAction<boolean>>;
-  setAlertMessage: React.Dispatch<React.SetStateAction<AlertMessage>>;
+  setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
 }
 
 export default function ArtistForm({
@@ -72,20 +71,20 @@ export default function ArtistForm({
         var newData = { ...data };
         newData.artists.push(response.data);
         setData(newData);
-        setAlertMessage({
+        setAlertMessage?.({
           message: "Artist created",
           severity: "success",
         });
       })
       .catch((error) => {
         console.log(error);
-        setAlertMessage({
+        setAlertMessage?.({
           message: "Error creating artist",
           severity: "error",
         });
       })
       .finally(() => {
-        setOpenSnack(true);
+        setOpenSnack?.(true);
       });
   }
 

@@ -1,29 +1,36 @@
-import { Stack, Avatar, Typography } from "@mui/material";
+import { Stack, Avatar, Typography, IconButton } from "@mui/material";
 import Artist from "../../interfaces/Artist";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
+
 interface ArtistLabelProps {
   artist: Artist;
   clickable?: boolean;
+  onDelete?: () => void;
 }
-export default function Page(props: ArtistLabelProps) {
+export default function Page({
+  artist,
+  clickable,
+  onDelete,
+}: ArtistLabelProps) {
   const router = useRouter();
   const [highlight, setHighlight] = useState(false);
 
   function handleClick() {
-    if (props.clickable) {
-      router.push(`/artist/${props.artist.id}`);
+    if (clickable) {
+      router.push(`/artist/${artist.id}`);
     }
   }
 
   function handleMouseEnter() {
-    if (props.clickable) {
+    if (clickable) {
       setHighlight(true);
     }
   }
 
   function handleMouseLeave() {
-    if (props.clickable) {
+    if (clickable) {
       setHighlight(false);
     }
   }
@@ -37,15 +44,18 @@ export default function Page(props: ArtistLabelProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       sx={{
-        cursor: props.clickable ? "pointer" : "default",
+        cursor: clickable ? "pointer" : "default",
         p: 1,
         backgroundColor: highlight ? "grey" : "transparent",
       }}
     >
-      <Avatar
-        src={`http://localhost:3001/artists/uploads/${props.artist.id}`}
-      />
-      <Typography>{props.artist.name}</Typography>
+      <Avatar src={`http://localhost:3001/artists/uploads/${artist.id}`} />
+      <Typography>{artist.name}</Typography>
+      {onDelete && (
+        <IconButton onClick={onDelete}>
+          <ClearIcon />
+        </IconButton>
+      )}
     </Stack>
   );
 }
