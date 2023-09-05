@@ -42,7 +42,7 @@ export default function Page() {
 
   async function editLabel() {
     const response = await axios.put(
-      `http://localhost:3001/folders/${router.query.slug}`,
+      process.env.API_URL + `/folders/${router.query.slug}`,
       {
         name: newFolder,
       },

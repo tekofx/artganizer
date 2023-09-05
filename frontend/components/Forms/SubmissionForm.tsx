@@ -96,7 +96,7 @@ export default function SubmissionForm(props: Props) {
     // Create submission
     try {
       const response = await axios.post(
-        `http://localhost:3001/submissions`,
+        process.env.API_URL + `/submissions`,
         formData
       );
       var newData = { ...data };

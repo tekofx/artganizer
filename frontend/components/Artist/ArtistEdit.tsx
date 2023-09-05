@@ -37,7 +37,7 @@ export default function ArtistEdit({
     formData.append("id", artist?.id.toString());
 
     await axios
-      .put(`http://localhost:3001/artists/${artist.id}`, formData)
+      .put(process.env.API_URL + `/artists/${artist.id}`, formData)
       .then((response) => {
         setArtist(response.data);
         var newData = { ...data };

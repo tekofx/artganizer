@@ -27,7 +27,7 @@ export default function ManageTags(props: ManageTagsProps) {
 
   async function onClickRemoveTag(tag: Tag) {
     await axios
-      .delete(`http://localhost:3001/tags/${tag.id}`)
+      .delete(process.env.API_URL + `/tags/${tag.id}`)
       .then(() => {
         setTags(tags.filter((t) => t.id != tag.id));
         var submissionUpdated = data.submissions.map((s) => {

@@ -49,7 +49,7 @@ export default function CharacterForm(props: Props) {
     formData.append("image", character.image);
 
     await axios
-      .post("http://localhost:3001/characters", formData)
+      .post(process.env.API_URL + "/characters", formData)
       .then((response) => {
         var newData = { ...data };
         newData.characters.push(response.data);

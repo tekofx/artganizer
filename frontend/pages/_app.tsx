@@ -20,6 +20,12 @@ import Character from "../interfaces/Character";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
+
+if (process.env.API_URL==undefined){
+  process.env.API_URL="http://localhost:3001"
+}
+
+
 interface Filters {
   rating: number;
   tags: Tag[];
@@ -42,7 +48,7 @@ export interface MyAppProps extends AppProps {
 
 // Inital props
 MyApp.getInitialProps = async () => {
-  const tagsResponse = await axios.get<Tag[]>("http://localhost:3001/tags", {
+  const tagsResponse = await axios.get<Tag[]>(process.env.API_URL + "/tags", {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
@@ -51,7 +57,7 @@ MyApp.getInitialProps = async () => {
   const tags = tagsResponse.data;
 
   const foldersResponse = await axios.get<Folder[]>(
-    "http://localhost:3001/folders",
+    process.env.API_URL + "/folders",
     {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -62,7 +68,7 @@ MyApp.getInitialProps = async () => {
   const folders = foldersResponse.data;
 
   const submissionsResponse = await axios.get<Submission[]>(
-    "http://localhost:3001/submissions",
+    process.env.API_URL + "/submissions",
     {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -73,7 +79,7 @@ MyApp.getInitialProps = async () => {
   const submissions = submissionsResponse.data;
 
   const artistsResponse = await axios.get<Submission[]>(
-    "http://localhost:3001/artists",
+    process.env.API_URL + "/artists",
     {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -84,7 +90,7 @@ MyApp.getInitialProps = async () => {
   const artists = artistsResponse.data;
 
   const settingsResponse = await axios.get<Settings>(
-    "http://localhost:3001/settings",
+    process.env.API_URL + "/settings",
     {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -95,7 +101,7 @@ MyApp.getInitialProps = async () => {
   const settings = settingsResponse.data;
 
   const charactersResponse = await axios.get<Character[]>(
-    "http://localhost:3001/characters",
+    process.env.API_URL + "/characters",
     {
       headers: {
         "Access-Control-Allow-Origin": "*",

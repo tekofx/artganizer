@@ -37,7 +37,7 @@ export default function Page() {
   };
 
   async function removeCharacter() {
-    await axios.delete(`http://localhost:3001/characters/${character?.id}`);
+    await axios.delete(process.env.API_URL + `/characters/${character?.id}`);
     handleCloseDialog();
     // Remove character from data
     const newData = { ...data };

@@ -51,7 +51,7 @@ export default function Page({
       {character ? (
         <>
           <Avatar
-            src={`http://localhost:3001/characters/uploads/${character?.id}`}
+            src={process.env.API_URL + `/characters/uploads/${character?.id}`}
           />
           <Typography>{character?.name}</Typography>
           {onDelete && (

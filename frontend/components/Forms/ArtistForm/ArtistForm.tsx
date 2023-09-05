@@ -66,7 +66,7 @@ export default function ArtistForm({
     formData.append("socials", JSON.stringify(artist.socials));
 
     await axios
-      .post("http://localhost:3001/artists", formData)
+      .post(process.env.API_URL + "/artists", formData)
       .then((response) => {
         var newData = { ...data };
         newData.artists.push(response.data);

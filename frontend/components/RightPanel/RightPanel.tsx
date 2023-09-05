@@ -29,7 +29,7 @@ export default function RightPanel(props: RightPanelProps) {
 
   async function removeSubmission() {
     var submission = props.submission;
-    await axios.delete(`http://localhost:3001/submissions/${submission.id}`);
+    await axios.delete(process.env.API_URL + `/submissions/${submission.id}`);
 
     // Remove submission from data
     const newData = { ...data };

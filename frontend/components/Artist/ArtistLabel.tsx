@@ -51,7 +51,7 @@ export default function Page({
     >
       {artist ? (
         <>
-          <Avatar src={`http://localhost:3001/artists/uploads/${artist?.id}`} />
+          <Avatar src={process.env.API_URL + `/artists/uploads/${artist?.id}`} />
           <Typography>{artist?.name}</Typography>
           {onDelete && (
             <IconButton onClick={onDelete}>

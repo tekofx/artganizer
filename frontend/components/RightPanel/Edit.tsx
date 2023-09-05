@@ -45,7 +45,7 @@ export default function Edit(props: InfoProps) {
     submission.artist = selectedArtist;
     submission.characters = selectedCharacters;
     await axios
-      .put(`http://localhost:3001/submissions/${submission.id}`, {
+      .put(process.env.API_URL + `/submissions/${submission.id}`, {
         submission,
       })
       .then((response) => {

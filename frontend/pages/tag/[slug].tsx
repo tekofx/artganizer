@@ -47,7 +47,7 @@ export default function Page() {
 
   async function editLabel() {
     const response = await axios.put(
-      `http://localhost:3001/tags/${router.query.slug}`,
+      process.env.API_URL + `/tags/${router.query.slug}`,
       {
         name: newTag,
         color: color,

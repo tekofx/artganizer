@@ -37,7 +37,7 @@ export default function Page() {
   };
 
   async function removeArtist() {
-    await axios.delete(`http://localhost:3001/artists/${artist?.id}`);
+    await axios.delete(process.env.API_URL + `/artists/${artist?.id}`);
     handleCloseDialog();
     // Remove artist from data
     const newData = { ...data };

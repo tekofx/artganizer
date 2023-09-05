@@ -48,7 +48,7 @@ export default function TagForm(props: Props) {
   async function postTag(tag: Tag) {
     if (props.tag == undefined) {
       await axios
-        .post(`http://localhost:3001/tags`, tag)
+        .post(process.env.API_URL + `/tags`, tag)
         .then((response) => {
           const newData = { ...data };
           newData.tags.push(response.data);
@@ -72,7 +72,7 @@ export default function TagForm(props: Props) {
         });
     } else {
       await axios
-        .put(`http://localhost:3001/tags/${tag.id}`, tag)
+        .put(process.env.API_URL + `/tags/${tag.id}`, tag)
         .then((response) => {
           const newData = { ...data };
           const index = newData.tags.findIndex((t) => t.id == tag.id);

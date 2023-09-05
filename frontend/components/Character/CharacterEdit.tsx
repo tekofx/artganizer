@@ -32,7 +32,7 @@ export default function CharacterEdit(props: CharacterEditProps) {
     formData.append("id", character?.id.toString());
 
     await axios
-      .put(`http://localhost:3001/characters/${character.id}`, formData)
+      .put(process.env.API_URL + `/characters/${character.id}`, formData)
       .then((response) => {
         props.setCharacter(response.data);
         var newData = { ...data };

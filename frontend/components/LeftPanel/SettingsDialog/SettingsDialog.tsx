@@ -31,7 +31,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
 
   async function updateSettings() {
     await axios
-      .put("http://localhost:3001/settings", settings)
+      .put(process.env.API_URL + "/settings", settings)
       .then(() => {
         setData({
           ...data,
@@ -48,7 +48,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
 
   async function resetSettings() {
     await axios
-      .delete("http://localhost:3001/settings")
+      .delete(process.env.API_URL + "/settings")
       .then((res) => {
         setData({
           ...data,

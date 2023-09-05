@@ -59,7 +59,7 @@ export default function FolderAccordion() {
 
   async function createFolder() {
     await axios
-      .post("http://localhost:3001/folders", {
+      .post(process.env.API_URL + "/folders", {
         name: newFolder,
       })
       .then((response) => {
