@@ -25,7 +25,7 @@ export default function ArtistInfo({
         <Typography variant="h4">{artist?.name}</Typography>
         <Typography variant="h5">{artist?.description}</Typography>
         {artist?.socials.map((social, index) => (
-          <SocialIcon social={social} key={index} />
+          <SocialIcon social={social} key={index} clickable />
         ))}
       </Grid>
       <Grid item>
