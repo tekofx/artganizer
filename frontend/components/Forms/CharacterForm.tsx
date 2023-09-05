@@ -10,6 +10,7 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
+
 import { useState, useContext } from "react";
 import { DataContext } from "../../pages/_app";
 import axios from "axios";
@@ -24,8 +25,8 @@ interface AlertMessage {
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenSnack: React.Dispatch<React.SetStateAction<boolean>>;
-  setAlertMessage: React.Dispatch<React.SetStateAction<AlertMessage>>;
+  setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
 }
 
 export default function CharacterForm(props: Props) {
@@ -53,20 +54,20 @@ export default function CharacterForm(props: Props) {
         var newData = { ...data };
         newData.characters.push(response.data);
         setData(newData);
-        props.setAlertMessage({
+        props.setAlertMessage?.({
           message: "Character created",
           severity: "success",
         });
       })
       .catch((error) => {
         console.log(error);
-        props.setAlertMessage({
+        props.setAlertMessage?.({
           message: "Error creating character",
           severity: "error",
         });
       })
       .finally(() => {
-        props.setOpenSnack(true);
+        props.setOpenSnack?.(true);
       });
   }
 

@@ -7,17 +7,22 @@ import {
   Stack,
   Grid,
   Avatar,
+  IconButton,
 } from "@mui/material";
+import CharacterForm from "../Forms/CharacterForm";
 import Character from "../../interfaces/Character";
 import ClearIcon from "@mui/icons-material/Clear";
 import SelectableCharacterList from "./SelectableCharacterList";
 import CharacterLabel from "./CharacterLabel";
+import AddIcon from "@mui/icons-material/Add";
+
 interface CharacterSelectProps {
   setSelectedCharacters: Dispatch<SetStateAction<Character[]>>;
   selectedCharacters: Character[];
 }
 export default function CharacterSelect(props: CharacterSelectProps) {
   const [open, setOpen] = useState(false);
+  const [openCharacterForm, setOpenCharacterForm] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [filter, setFilter] = useState<string>("");
@@ -63,7 +68,7 @@ export default function CharacterSelect(props: CharacterSelectProps) {
           </Stack>
         </Grid>
       )}
-      <Grid item xs={12}>
+      <Grid item xs={10}>
         <TextField
           label="Search characters"
           variant="standard"
@@ -75,6 +80,11 @@ export default function CharacterSelect(props: CharacterSelectProps) {
           }}
         />
       </Grid>
+      <Grid item xs={2}>
+        <IconButton onClick={() => setOpenCharacterForm(true)}>
+          <AddIcon />
+        </IconButton>
+      </Grid>
       <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>
           <SelectableCharacterList
@@ -85,6 +95,7 @@ export default function CharacterSelect(props: CharacterSelectProps) {
           />
         </Paper>
       </Popper>
+      <CharacterForm open={openCharacterForm} setOpen={setOpenCharacterForm} />
     </Grid>
   );
 }
