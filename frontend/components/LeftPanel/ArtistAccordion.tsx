@@ -8,7 +8,7 @@ import {
   Grid,
 } from "@mui/material";
 import BrushIcon from "@mui/icons-material/Brush";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DataContext } from "../../pages/_app";
 import SearchBar from "./SearchBar";
@@ -37,6 +37,10 @@ export default function ArtistAccordion() {
       setArtists(data.artists);
     }
   }
+
+  useEffect(() => {
+    setArtists(data.artists);
+  }, [data.artists]);
 
   return (
     <Accordion expanded={expanded}>
