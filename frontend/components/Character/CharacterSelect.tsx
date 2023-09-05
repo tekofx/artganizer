@@ -20,7 +20,10 @@ interface CharacterSelectProps {
   setSelectedCharacters: Dispatch<SetStateAction<Character[]>>;
   selectedCharacters: Character[];
 }
-export default function CharacterSelect(props: CharacterSelectProps) {
+export default function CharacterSelect({
+  setSelectedCharacters,
+  selectedCharacters,
+}: CharacterSelectProps) {
   const [open, setOpen] = useState(false);
   const [openCharacterForm, setOpenCharacterForm] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -35,9 +38,7 @@ export default function CharacterSelect(props: CharacterSelectProps) {
   };
 
   function removeCharacter(char: Character) {
-    props.setSelectedCharacters(
-      props.selectedCharacters.filter((t) => t.id !== char.id)
-    );
+    setSelectedCharacters(selectedCharacters.filter((t) => t.id !== char.id));
   }
 
   return (
@@ -45,20 +46,22 @@ export default function CharacterSelect(props: CharacterSelectProps) {
       <Grid item xs={12}>
         <Typography>Character select</Typography>
       </Grid>
-      <Grid container spacing={1}>
-        {props.selectedCharacters.map((char) => (
-          <Grid item key={char.id}>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <CharacterLabel
-                character={char}
-                onDelete={() => removeCharacter(char)}
-              />
-            </Stack>
-          </Grid>
-        ))}
+      <Grid item xs={12}>
+        <Grid container spacing={1}>
+          {selectedCharacters.map((char) => (
+            <Grid item key={char.id}>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <CharacterLabel
+                  character={char}
+                  onDelete={() => removeCharacter(char)}
+                />
+              </Stack>
+            </Grid>
+          ))}
+        </Grid>
       </Grid>
 
-      {props.selectedCharacters.length < 1 && (
+      {selectedCharacters.length < 1 && (
         <Grid item>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar>
@@ -88,8 +91,8 @@ export default function CharacterSelect(props: CharacterSelectProps) {
       <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
         <Paper sx={{ width: "200px" }}>
           <SelectableCharacterList
-            selectedCharacters={props.selectedCharacters}
-            setSelectedCharacters={props.setSelectedCharacters}
+            selectedCharacters={selectedCharacters}
+            setSelectedCharacters={setSelectedCharacters}
             setOpen={setOpen}
             filter={filter}
           />
