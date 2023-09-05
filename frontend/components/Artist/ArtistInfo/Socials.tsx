@@ -10,8 +10,7 @@ export default function Socials({ socials }: SocialsProps) {
     <div>
       {socials.map((social, index) => (
         <div key={index}>
-          {social.name}: {social.url}
-          <SocialIcon socialMediaName={social.name} />
+          <SocialIcon social={social} />
         </div>
       ))}
     </div>
