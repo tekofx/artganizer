@@ -4,7 +4,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 
 import Socials from "./Socials";
-import SocialIcon from "../../SocialIcon";
 interface ArtistInfoProps {
   artist?: Artist;
   toggleEdit: () => void;
@@ -24,7 +23,7 @@ export default function ArtistInfo(props: ArtistInfoProps) {
       <Grid item>
         <Typography variant="h4">{props.artist?.name}</Typography>
         <Typography variant="h5">{props.artist?.description}</Typography>
-        <Socials socials={props.artist?.socials} />
+        <Socials socials={props.artist?.socials || []} />
       </Grid>
       <Grid item>
         <Stack direction="row" width="100%" spacing={2} justifyContent="center">
