@@ -15,7 +15,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { DataContext } from "../../../pages/_app";
+import { DataContext } from "../../../../pages/_app";
 
 function FolderList() {
   const { data } = useContext(DataContext);

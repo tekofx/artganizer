@@ -6,11 +6,11 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-import Submission from "../../interfaces/Submission";
+import Submission from "../../../interfaces/Submission";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { DataContext } from "../../pages/_app";
+import { DataContext } from "../../../pages/_app";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import Info from "./Info";

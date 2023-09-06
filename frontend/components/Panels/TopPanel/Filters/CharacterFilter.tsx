@@ -1,9 +1,9 @@
 import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext, useEffect } from "react";
-import { DataContext } from "../../../pages/_app";
-import Character from "../../../interfaces/Character";
-import CharacterSelect from "../../Character/CharacterSelect";
+import { DataContext } from "../../../../pages/_app";
+import Character from "../../../../interfaces/Character";
+import CharacterSelect from "../../../Character/CharacterSelect";
 import PersonIcon from "@mui/icons-material/Person";
 export default function CharacterFilter() {
   const { data, setData } = useContext(DataContext);

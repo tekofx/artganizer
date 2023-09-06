@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { DataContext } from "../../../pages/_app";
+import { DataContext } from "../../../../pages/_app";
 import { useContext } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 export default function ClearFilters() {

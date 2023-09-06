@@ -3,12 +3,12 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import FolderAccordion from "./Accordions/FolderAccordion";
 import ArtistAccordion from "./Accordions/ArtistAccordion";
-import Snack from "../Snack";
-import AlertMessage from "../../interfaces/AlertMessage";
-import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
+import Snack from "../../Snack";
+import AlertMessage from "../../../interfaces/AlertMessage";
+import { ArtistForm, SubmissionForm, TagForm } from "../../Forms";
 import CreateMenu from "./Menus/CreateMenu";
 import SettingsMenu from "./Menus/Menu";
-import CharacterForm from "../Forms/CharacterForm";
+import CharacterForm from "../../Forms/CharacterForm";
 import CharacterAccordion from "./Accordions/CharacterAccordion";
 
 export default function LeftPanel() {

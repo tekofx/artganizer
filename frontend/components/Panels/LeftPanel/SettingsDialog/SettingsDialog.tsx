@@ -16,8 +16,8 @@ import React, { Dispatch, SetStateAction } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { useState, useContext } from "react";
-import Settings from "../../../interfaces/Settings";
-import { DataContext } from "../../../pages/_app";
+import Settings from "../../../../interfaces/Settings";
+import { DataContext } from "../../../../pages/_app";
 import GallerySettings from "./Settings/GallerySettings";
 interface SettingsDialogProps {
   open: boolean;

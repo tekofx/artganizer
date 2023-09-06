@@ -1,19 +1,23 @@
 import { TextField } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
-  onChange: any;
+  onChange: (
+    // eslint-disable-next-line no-unused-vars
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+  value?: string;
+  focus?: boolean;
   show?: boolean;
 }
-export default function SearchBar({ onChange, show }: Props) {
-  const [search, setSearch] = useState("");
+export default function SearchBar({ onChange, show, value, focus }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (show) {
+    if (show && focus) {
       inputRef.current?.focus();
     }
-  }, [show]);
+  }, [show, focus]);
   return (
     <TextField
       inputRef={inputRef}
@@ -21,11 +25,8 @@ export default function SearchBar({ onChange, show }: Props) {
       label="Search"
       variant="outlined"
       size="small"
-      value={search}
-      onChange={(event) => {
-        setSearch(event.target.value);
-        onChange(event);
-      }}
+      value={value}
+      onChange={onChange}
       sx={{ display: show ? "block" : "none" }}
     />
   );
