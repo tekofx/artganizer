@@ -22,6 +22,7 @@ import CharacterSelect from "../Character/CharacterSelect";
 import Character from "../../interfaces/Character";
 import Artist from "../../interfaces/Artist";
 import AlertMessage from "../../interfaces/AlertMessage";
+import ProgressButton from "./ProgressButon";
 const emptySubmission: Submission = {
   id: 0,
   title: "",
@@ -50,6 +51,7 @@ export default function SubmissionForm(props: Props) {
   const { data, setData } = useContext(DataContext);
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const [image, setImage] = useState<string>("/placeholder.jpg");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
@@ -73,6 +75,7 @@ export default function SubmissionForm(props: Props) {
   }
 
   async function saveSubmission() {
+    setLoading(true);
     const formData = new FormData();
     formData.append("image", submission.image);
     formData.append("title", submission.title);
@@ -112,7 +115,10 @@ export default function SubmissionForm(props: Props) {
         severity: "error",
       });
     } finally {
-      // Update data
+      // Reset form
+      setLoading(false);
+      setSubmission(emptySubmission);
+      setImage("/placeholder.jpg");
 
       props.setOpen(false);
       props.setOpenSnack(true);
@@ -214,10 +220,15 @@ export default function SubmissionForm(props: Props) {
       </DialogContent>
       <DialogActions>
         <Stack direction="row" spacing={2}>
-          <Button variant="contained" onClick={() => saveSubmission()}>
-            Ok
+          <ProgressButton
+            loading={loading}
+            onClick={saveSubmission}
+            text="Ok"
+          />
+
+          <Button disabled={loading} onClick={() => onCancel()}>
+            Cancel
           </Button>
-          <Button onClick={() => onCancel()}>Cancel</Button>
         </Stack>
       </DialogActions>
     </Dialog>
