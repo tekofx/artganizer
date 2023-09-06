@@ -1,7 +1,10 @@
-import Artist from "../interfaces/Artist";
-import Character from "../interfaces/Character";
-import Settings from "../interfaces/Settings";
-import Submission from "../interfaces/Submission";
+import {
+  Artist,
+  Character,
+  Filters,
+  Settings,
+  Submission,
+} from "../interfaces";
 const emptyArtist: Artist = {
   id: 0,
   name: "",
@@ -47,4 +50,21 @@ const defaultSettings: Settings = {
     colors: false,
   },
 };
-export { emptyArtist, emptySubmission, defaultSettings, emptyCharacter };
+
+const emptyFilters: Filters = {
+  rating: -1,
+  tags: [],
+  folders: [],
+  artist: undefined,
+  title: "",
+  characters: [],
+  color: "",
+};
+
+export {
+  emptyArtist,
+  emptySubmission,
+  defaultSettings,
+  emptyCharacter,
+  emptyFilters,
+};
