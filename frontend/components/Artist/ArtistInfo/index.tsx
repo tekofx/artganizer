@@ -15,7 +15,6 @@ export default function ArtistInfo({
   toggleEdit,
   handleClickOpenDialog,
 }: ArtistInfoProps) {
-  console.log(artist?.socials);
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>

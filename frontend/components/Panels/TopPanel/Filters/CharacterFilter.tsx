@@ -26,7 +26,6 @@ export default function CharacterFilter() {
       var newData = { ...data };
       newData.filters.characters = characters;
       setData(newData);
-      console.log(data);
     } else {
       setInvisible(true);
       var newData = { ...data };

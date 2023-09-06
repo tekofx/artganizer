@@ -29,7 +29,6 @@ export default function TagFilter() {
     var temp = data.tags.filter((tag) =>
       tag.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
-    console.log(temp);
     setSearchedTags(temp);
   };
 
