@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 import Gallery from "../components/Gallery";
 import { DataContext } from "../pages/_app";
-import TopPanel from "../components/Panels/TopPanel/TopPanel";
+import TopPanel from "../components/Panels/TopPanel";
 import Head from "next/head";
 
 export default function Home() {
