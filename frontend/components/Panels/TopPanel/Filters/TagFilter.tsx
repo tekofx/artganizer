@@ -13,9 +13,9 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext, useEffect } from "react";
-import { DataContext } from "../../../pages/_app";
-import Tag from "../../../interfaces/Tag";
-import TagChip from "../../Tag/TagChip";
+import { DataContext } from "../../../../pages/_app";
+import Tag from "../../../../interfaces/Tag";
+import TagChip from "../../../Tag/TagChip";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 export default function TagFilter() {
   const { data, setData } = useContext(DataContext);

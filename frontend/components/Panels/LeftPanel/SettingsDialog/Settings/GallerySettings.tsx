@@ -4,7 +4,7 @@ import {
   Typography,
   Checkbox,
 } from "@mui/material";
-import Settings from "../../../../interfaces/Settings";
+import Settings from "../../../../../interfaces/Settings";
 
 interface GallerySettingsProps {
   settings: Settings;

@@ -1,7 +1,7 @@
 import { Rating, Button, Menu, MenuItem, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useContext, useEffect } from "react";
-import { DataContext } from "../../../pages/_app";
+import { DataContext } from "../../../../pages/_app";
 import GradeIcon from "@mui/icons-material/Grade";
 export default function RatingFilter() {
   const { data, setData } = useContext(DataContext);

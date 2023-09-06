@@ -1,7 +1,7 @@
 import { TextField, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
-import { DataContext } from "../../pages/_app";
+import { DataContext } from "../../../pages/_app";
 export default function Search() {
   const { data, setData } = useContext(DataContext);
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {

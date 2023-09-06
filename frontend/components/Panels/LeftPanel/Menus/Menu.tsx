@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import ManageTags from "../../Forms/ManageTags";
+import ManageTags from "../../../Forms/ManageTags";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import SettingsDialog from "../SettingsDialog/SettingsDialog";

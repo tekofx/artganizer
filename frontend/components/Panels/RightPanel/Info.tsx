@@ -7,14 +7,14 @@ import {
   Button,
   Rating,
 } from "@mui/material";
-import TagList from "../Tag/TagList";
-import Submission from "../../interfaces/Submission";
-import CharacterList from "../Character/CharacterList";
-import ColorPalette from "../Artist/ColorPalette";
-import { formatDate, convertBytes } from "../../src/formatters";
+import TagList from "../../Tag/TagList";
+import Submission from "../../../interfaces/Submission";
+import CharacterList from "../../Character/CharacterList";
+import ColorPalette from "../../Artist/ColorPalette";
+import { formatDate, convertBytes } from "../../../src/formatters";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
-import ArtistLabel from "../Artist/ArtistLabel";
+import ArtistLabel from "../../Artist/ArtistLabel";
 interface InfoProps {
   submission: Submission;
   toggleEdit: () => void;

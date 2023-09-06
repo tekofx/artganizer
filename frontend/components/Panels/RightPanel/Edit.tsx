@@ -7,19 +7,19 @@ import {
   Button,
   Container,
 } from "@mui/material";
-import Submission from "../../interfaces/Submission";
-import { formatDate, convertBytes } from "../../src/formatters";
+import Submission from "../../../interfaces/Submission";
+import { formatDate, convertBytes } from "../../../src/formatters";
 import { useState, Dispatch, SetStateAction } from "react";
-import ArtistSelect from "../Artist/ArtistSelect";
-import Artist from "../../interfaces/Artist";
+import ArtistSelect from "../../Artist/ArtistSelect";
+import Artist from "../../../interfaces/Artist";
 import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
-import TagSelect from "../Tag/TagSelect";
-import Tag from "../../interfaces/Tag";
+import TagSelect from "../../Tag/TagSelect";
+import Tag from "../../../interfaces/Tag";
 import { useContext } from "react";
-import { DataContext } from "../../pages/_app";
-import CharacterSelect from "../Character/CharacterSelect";
-import Character from "../../interfaces/Character";
+import { DataContext } from "../../../pages/_app";
+import CharacterSelect from "../../Character/CharacterSelect";
+import Character from "../../../interfaces/Character";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
