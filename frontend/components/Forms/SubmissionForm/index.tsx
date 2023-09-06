@@ -1,10 +1,7 @@
 import { useState, useContext, Dispatch, SetStateAction } from "react";
 import {
-  Typography,
   Button,
-  TextField,
   Stack,
-  Rating,
   Grid,
   Dialog,
   DialogTitle,
@@ -13,33 +10,17 @@ import {
   IconButton,
 } from "@mui/material";
 import axios from "axios";
-import { DataContext } from "../../pages/_app";
-import Tag from "../../interfaces/Tag";
-import Submission from "../../interfaces/Submission";
-import TagSelect from "../Tag/TagSelect";
-import ArtistSelect from "../Artist/ArtistSelect";
-import CharacterSelect from "../Character/CharacterSelect";
-import Character from "../../interfaces/Character";
-import Artist from "../../interfaces/Artist";
-import AlertMessage from "../../interfaces/AlertMessage";
-import ProgressButton from "./ProgressButon";
-const emptySubmission: Submission = {
-  id: 0,
-  title: "",
-  description: "",
-  date: new Date(),
-  rating: 0,
-  width: 0,
-  height: 0,
-  folders: [],
-  tags: [],
-  characters: [],
-  artist: undefined,
-  colors: [],
-  size: 0,
-  format: "",
-  image: "/placeholder.jpg",
-};
+import { DataContext } from "../../../pages/_app";
+import Tag from "../../../interfaces/Tag";
+import Submission from "../../../interfaces/Submission";
+
+import Character from "../../../interfaces/Character";
+import Artist from "../../../interfaces/Artist";
+import AlertMessage from "../../../interfaces/AlertMessage";
+import ProgressButton from "../ProgressButon";
+import BasicInfo from "./BasicInfo";
+import AdvancedInfo from "./AdvancedInfo";
+import { emptySubmission } from "../../../src/utils";
 
 interface Props {
   open: boolean;
@@ -151,75 +132,17 @@ export default function SubmissionForm({
             </label>
           </Grid>
           <Grid item xs={6}>
-            {/* Basic info */}
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h6">Basic Info</Typography>
-                <TextField
-                  label="Title"
-                  fullWidth
-                  value={submission.title}
-                  onChange={(event) => {
-                    setSubmission((prevSubmission) => ({
-                      ...prevSubmission,
-                      title: event.target.value,
-                    }));
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Description"
-                  fullWidth
-                  value={submission.description}
-                  onChange={(event) => {
-                    setSubmission((prevSubmission) => ({
-                      ...prevSubmission,
-                      description: event.target.value,
-                    }));
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6">Rating</Typography>
-                <Rating
-                  value={submission.rating}
-                  onChange={(event, newValue) => {
-                    setSubmission((prevSubmission) => ({
-                      ...prevSubmission,
-                      rating: newValue || 0,
-                    }));
-                  }}
-                />
-              </Grid>
-            </Grid>
+            <BasicInfo submission={submission} setSubmission={setSubmission} />
 
             {/* Advanced info */}
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography variant="h6">Advanced Info</Typography>
-              </Grid>
-
-              <Grid item xs={6}>
-                <TagSelect
-                  selectedTags={selectedTags}
-                  setSelectedTags={setSelectedTags}
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <ArtistSelect
-                  selectedArtist={selectedArtist}
-                  setSelectedArtist={setSelectedArtist}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <CharacterSelect
-                  selectedCharacters={selectedCharacters}
-                  setSelectedCharacters={setSelectedCharacters}
-                />
-              </Grid>
-            </Grid>
+            <AdvancedInfo
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              selectedArtist={selectedArtist}
+              setSelectedArtist={setSelectedArtist}
+              selectedCharacters={selectedCharacters}
+              setSelectedCharacters={setSelectedCharacters}
+            />
           </Grid>
         </Grid>
       </DialogContent>

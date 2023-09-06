@@ -7,7 +7,7 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json ./
 COPY yarn.lock ./
-RUN yarn install --timeout 30000
+RUN yarn install --network-timeout 500000
 
 
 # Rebuild the source code only when needed

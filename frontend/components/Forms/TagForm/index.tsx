@@ -9,15 +9,15 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import TagChip from "../Tag/TagChip";
-import TagLabel from "../Tag/TagLabel";
-import Tag from "../../interfaces/Tag";
+import TagChip from "../../Tag/TagChip";
+import TagLabel from "../../Tag/TagLabel";
+import Tag from "../../../interfaces/Tag";
 import { useState, useContext } from "react";
 import axios from "axios";
 import { TwitterPicker, ColorResult } from "react-color";
-import { DataContext } from "../../pages/_app";
-import AlertMessage from "../../interfaces/AlertMessage";
-import ProgressButton from "./ProgressButon";
+import { DataContext } from "../../../pages/_app";
+import AlertMessage from "../../../interfaces/AlertMessage";
+import ProgressButton from "../ProgressButon";
 const defaultTag: Tag = {
   name: "",
   color: "#FFFFFF",

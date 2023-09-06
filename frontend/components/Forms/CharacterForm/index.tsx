@@ -10,13 +10,13 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
-import ProgressButton from "./ProgressButon";
+import ProgressButton from "../ProgressButon";
 import { useState, useContext } from "react";
-import { DataContext } from "../../pages/_app";
+import { DataContext } from "../../../pages/_app";
 import axios from "axios";
-import LimitedTextField from "../LimitedTextField";
-import Character from "../../interfaces/Character";
-import { emptyCharacter } from "../../src/utils";
+import LimitedTextField from "../../LimitedTextField";
+import Character from "../../../interfaces/Character";
+import { emptyCharacter } from "../../../src/utils";
 interface AlertMessage {
   message: string;
   severity: "success" | "error" | "info" | "warning";
