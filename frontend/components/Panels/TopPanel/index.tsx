@@ -1,4 +1,3 @@
-import Search from "./Search";
 import { Stack, Paper } from "@mui/material";
 import { DataContext } from "../../../pages/_app";
 import { useContext } from "react";
