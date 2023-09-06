@@ -1,10 +1,8 @@
-name: ci
+name: Build Backend
 
 on:
   release:
     types: [published]
-  push:
-    branches: [main]
 
 jobs:
   docker:
@@ -12,6 +10,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          # Optionally strip `v` prefix
+          strip_v: true
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -29,8 +34,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: frontend/
+          context: backend/
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/tekofx/artganizer-frontend:latest
+            ghcr.io/tekofx/artganizer-backend:latest
+            ghcr.io/tekofx/artganizer-backend:${{steps.tag.outputs.tag}}
