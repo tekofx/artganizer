@@ -10,7 +10,7 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
-
+import ProgressButton from "./ProgressButon";
 import { useState, useContext } from "react";
 import { DataContext } from "../../pages/_app";
 import axios from "axios";
@@ -29,9 +29,15 @@ interface Props {
   setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
 }
 
-export default function CharacterForm(props: Props) {
+export default function CharacterForm({
+  open,
+  setOpen,
+  setOpenSnack,
+  setAlertMessage,
+}: Props) {
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const [image, setImage] = useState<string>("/placeholder.jpg");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { data, setData } = useContext(DataContext);
 
@@ -42,7 +48,8 @@ export default function CharacterForm(props: Props) {
     setImage(URL.createObjectURL(event.target.files[0]));
   }
 
-  async function postCharacter(character: Character) {
+  async function postCharacter() {
+    setLoading(true);
     const formData = new FormData();
     formData.append("name", character.name);
     formData.append("description", character.description);
@@ -54,25 +61,27 @@ export default function CharacterForm(props: Props) {
         var newData = { ...data };
         newData.characters.push(response.data);
         setData(newData);
-        props.setAlertMessage?.({
+        setAlertMessage?.({
           message: "Character created",
           severity: "success",
         });
       })
       .catch((error) => {
         console.log(error);
-        props.setAlertMessage?.({
+        setAlertMessage?.({
           message: "Error creating character",
           severity: "error",
         });
       })
       .finally(() => {
-        props.setOpenSnack?.(true);
+        setLoading(false);
+        setOpen(false);
+        setOpenSnack?.(true);
       });
   }
 
   return (
-    <Dialog open={props.open} onClose={() => props.setOpen(false)}>
+    <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create Character</DialogTitle>
       <DialogContent sx={{ p: 2 }}>
         <Grid container spacing={2}>
@@ -120,16 +129,14 @@ export default function CharacterForm(props: Props) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button
-          variant="contained"
-          onClick={() => {
-            postCharacter(character);
-            props.setOpen(false);
-          }}
-        >
-          Create
+        <ProgressButton
+          loading={loading}
+          onClick={postCharacter}
+          text="Create"
+        />
+        <Button disabled={loading} onClick={() => setOpen(false)}>
+          Cancel
         </Button>
-        <Button onClick={() => props.setOpen(false)}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );

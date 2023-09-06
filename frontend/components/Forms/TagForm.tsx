@@ -17,7 +17,7 @@ import axios from "axios";
 import { TwitterPicker, ColorResult } from "react-color";
 import { DataContext } from "../../pages/_app";
 import AlertMessage from "../../interfaces/AlertMessage";
-
+import ProgressButton from "./ProgressButon";
 const defaultTag: Tag = {
   name: "",
   color: "#FFFFFF",
@@ -30,11 +30,18 @@ interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
   setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
-  tag?: Tag;
+  tagToUpdate?: Tag;
 }
 
-export default function TagForm(props: Props) {
-  const [tag, setTag] = useState<Tag>(props.tag ?? defaultTag);
+export default function TagForm({
+  open,
+  setOpen,
+  setAlertMessage,
+  setOpenSnack,
+  tagToUpdate,
+}: Props) {
+  const [tag, setTag] = useState<Tag>(tagToUpdate ?? defaultTag);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { data, setData } = useContext(DataContext);
 
@@ -45,21 +52,22 @@ export default function TagForm(props: Props) {
     }));
   };
 
-  async function postTag(tag: Tag) {
-    if (props.tag == undefined) {
+  async function postTag() {
+    setLoading(true);
+    if (tagToUpdate == undefined) {
       await axios
         .post(process.env.API_URL + `/tags`, tag)
         .then((response) => {
           const newData = { ...data };
           newData.tags.push(response.data);
           setData(newData);
-          props.setAlertMessage?.({
+          setAlertMessage?.({
             message: "Tag created",
             severity: "success",
           });
         })
         .catch((error) => {
-          props.setAlertMessage?.({
+          setAlertMessage?.({
             message: "Error creating tag",
             severity: "error",
           });
@@ -67,8 +75,8 @@ export default function TagForm(props: Props) {
           console.log(error);
         })
         .finally(() => {
-          props.setOpenSnack?.(true);
-          props.setOpen(false);
+          setOpenSnack?.(true);
+          setOpen(false);
         });
     } else {
       await axios
@@ -78,13 +86,13 @@ export default function TagForm(props: Props) {
           const index = newData.tags.findIndex((t) => t.id == tag.id);
           newData.tags[index] = response.data;
           setData(newData);
-          props.setAlertMessage?.({
+          setAlertMessage?.({
             message: "Tag updated",
             severity: "success",
           });
         })
         .catch((error) => {
-          props.setAlertMessage?.({
+          setAlertMessage?.({
             message: "Error updating tag",
             severity: "error",
           });
@@ -92,15 +100,16 @@ export default function TagForm(props: Props) {
           console.log(error);
         })
         .finally(() => {
-          props.setOpenSnack?.(true);
-          props.setOpen(false);
+          setOpenSnack?.(true);
+          setOpen(false);
         });
     }
+    setLoading(false);
   }
 
   return (
     <>
-      <Dialog open={props.open} onClose={() => props.setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Create Tag</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} paddingTop={2}>
@@ -145,11 +154,15 @@ export default function TagForm(props: Props) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={() => postTag(tag)}>
-            {props.tag == undefined ? "Create" : "Update"}
-          </Button>
+          <ProgressButton
+            loading={loading}
+            onClick={postTag}
+            text={tagToUpdate == undefined ? "Create" : "Update"}
+          />
 
-          <Button onClick={() => props.setOpen(false)}>Close</Button>
+          <Button disabled={loading} onClick={() => setOpen(false)}>
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
     </>

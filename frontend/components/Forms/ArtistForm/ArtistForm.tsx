@@ -17,6 +17,7 @@ import Artist from "../../../interfaces/Artist";
 import LimitedTextField from "../../LimitedTextField";
 import Socials from "./Socials";
 import Social from "../../../interfaces/Social";
+import ProgressButton from "../ProgressButon";
 interface AlertMessage {
   message: string;
   severity: "success" | "error" | "info" | "warning";
@@ -46,6 +47,7 @@ export default function ArtistForm({
   const [artist, setArtist] = useState<Artist>(defaultArtist);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [socials, setSocials] = useState<Social[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { data, setData } = useContext(DataContext);
 
@@ -56,7 +58,8 @@ export default function ArtistForm({
     setImage(URL.createObjectURL(event.target.files[0]));
   }
 
-  async function postArtist(artist: Artist) {
+  async function postArtist() {
+    setLoading(true);
     artist.socials = socials;
     console.log(JSON.stringify(artist.socials));
     const formData = new FormData();
@@ -84,6 +87,8 @@ export default function ArtistForm({
         });
       })
       .finally(() => {
+        setLoading(false);
+        setOpen(false);
         setOpenSnack?.(true);
       });
   }
@@ -141,16 +146,10 @@ export default function ArtistForm({
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button
-          variant="contained"
-          onClick={() => {
-            postArtist(artist);
-            setOpen(false);
-          }}
-        >
-          Create
+        <ProgressButton loading={loading} onClick={postArtist} text="Create" />
+        <Button disabled={loading} onClick={() => setOpen(false)}>
+          Cancel
         </Button>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );
