@@ -23,16 +23,32 @@ export default function CharacterFilter() {
   useEffect(() => {
     if (characters?.length != 0) {
       setInvisible(false);
-      var newData = { ...data };
-      newData.filters.characters = characters;
-      setData(newData);
+      setData((prevData) => ({
+        ...prevData,
+        filters: {
+          ...prevData.filters,
+          characters: characters,
+        },
+      }));
     } else {
       setInvisible(true);
-      var newData = { ...data };
-      newData.filters.characters = [];
-      setData(newData);
+      setData((prevData) => ({
+        ...prevData,
+        filters: {
+          ...prevData.filters,
+          characters: [],
+        },
+      }));
     }
   }, [characters]);
+
+  useEffect(() => {
+    if (data.filters.characters != undefined) {
+      setCharacters(data.filters.characters);
+    } else {
+      setCharacters([]);
+    }
+  }, [data.filters.characters]);
 
   return (
     <div>

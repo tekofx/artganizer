@@ -1,6 +1,6 @@
-import { Button, Menu } from "@mui/material";
+import { Button, Menu, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext } from "react";
+import { useState, MouseEvent, useContext, useEffect } from "react";
 import { ChromePicker } from "react-color";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { DataContext } from "../../../../pages/_app";
@@ -9,6 +9,8 @@ export default function RatingFilter() {
   const { data, setData } = useContext(DataContext);
   const [color, setColor] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [invisible, setInvisible] = useState<boolean>(true);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -19,10 +21,24 @@ export default function RatingFilter() {
 
   const handleColorChange = (color: any) => {
     setColor(color.hex);
-    const newData = { ...data };
-    newData.filters.color = color.hex;
-    setData(newData);
   };
+
+  useEffect(() => {
+    if (color != "") {
+      setInvisible(false);
+      setData((prevData) => ({
+        ...prevData,
+        filters: { ...prevData.filters, color: color },
+      }));
+    }
+  }, [color]);
+
+  useEffect(() => {
+    if (data.filters.color == "") {
+      setInvisible(true);
+      setColor("");
+    }
+  }, [data.filters.color]);
 
   return (
     <div>
@@ -33,9 +49,13 @@ export default function RatingFilter() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
-        startIcon={<ColorLensIcon />}
+        startIcon={
+          <Badge variant="dot" color="error" invisible={invisible}>
+            <ColorLensIcon />
+          </Badge>
+        }
       >
-        Colors
+        Color
       </Button>
       <Menu
         id="basic-menu"
@@ -47,7 +67,7 @@ export default function RatingFilter() {
         }}
       >
         <ChromePicker color={color} onChange={handleColorChange} />
-        <Button onClick={handleClose}>Apply</Button>
+        <Button onClick={handleClose}>Close</Button>
       </Menu>
     </div>
   );

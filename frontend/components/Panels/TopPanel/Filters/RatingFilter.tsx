@@ -53,9 +53,13 @@ export default function RatingFilter() {
             name="simple-controlled"
             value={data.filters.rating}
             onChange={(event, newValue) => {
-              const newData = { ...data };
-              newData.filters.rating = newValue || -1;
-              setData(newData);
+              setData((prevData) => ({
+                ...prevData,
+                filters: {
+                  ...prevData.filters,
+                  rating: newValue || -1,
+                },
+              }));
             }}
           />
         </MenuItem>

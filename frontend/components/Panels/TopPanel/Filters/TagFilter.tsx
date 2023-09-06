@@ -41,13 +41,21 @@ export default function TagFilter() {
 
   function onClick(tag: Tag) {
     if (data.filters.tags.includes(tag)) {
-      const newData = { ...data };
-      newData.filters.tags = newData.filters.tags.filter((t) => t.id != tag.id);
-      setData(newData);
+      setData((prevData) => ({
+        ...prevData,
+        filters: {
+          ...prevData.filters,
+          tags: prevData.filters.tags.filter((t) => t.id !== tag.id),
+        },
+      }));
     } else {
-      const newData = { ...data };
-      newData.filters.tags = [...data.filters.tags, tag];
-      setData(newData);
+      setData((prevData) => ({
+        ...prevData,
+        filters: {
+          ...prevData.filters,
+          tags: [...prevData.filters.tags, tag],
+        },
+      }));
     }
   }
 

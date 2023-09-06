@@ -22,7 +22,6 @@ export default function Gallery({ artist, character }: GalleryProps) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(data.filters.color);
     let temp = data.submissions;
     if (artist != undefined) {
       temp = temp.filter((submission) => submission.artist?.id == artist?.id);
