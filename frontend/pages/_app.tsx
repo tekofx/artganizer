@@ -7,7 +7,7 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import { Grid } from "@mui/material";
-import LateralPanel from "../components/LeftPanel/LeftPanel";
+import LateralPanel from "../components/LeftPanel";
 import Tag from "../interfaces/Tag";
 import "../styles/styles.css";
 import axios from "axios";
@@ -20,11 +20,9 @@ import Character from "../interfaces/Character";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
-
-if (process.env.API_URL==undefined){
-  process.env.API_URL="http://localhost:3001"
+if (process.env.API_URL == undefined) {
+  process.env.API_URL = "http://localhost:3001";
 }
-
 
 interface Filters {
   rating: number;

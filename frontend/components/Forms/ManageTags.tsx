@@ -97,7 +97,11 @@ export default function ManageTags(props: ManageTagsProps) {
                   </IconButton>
                 </div>
               </Stack>
-              <TagForm open={openTagForm} setOpen={setOpenTagForm} tagToUpdate={tag} />
+              <TagForm
+                open={openTagForm}
+                setOpen={setOpenTagForm}
+                tagToUpdate={tag}
+              />
             </>
           ))}
         </DialogContent>

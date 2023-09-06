@@ -4,29 +4,29 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Grid,
   IconButton,
+  Grid,
 } from "@mui/material";
-import { useState, useContext } from "react";
+import BrushIcon from "@mui/icons-material/Brush";
+import { useState, useContext, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { DataContext } from "../../pages/_app";
-import SearchBar from "./SearchBar";
+import { DataContext } from "../../../pages/_app";
+import SearchBar from "../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
-import CharacterList from "../Character/CharacterList";
-import PersonIcon from "@mui/icons-material/Person";
+
+import ArtistList from "../../Artist/ArtistList";
 export default function ArtistAccordion() {
   const { data } = useContext(DataContext);
-  const [characters, setCharacters] = useState(data.characters);
-  const [expanded, setExpanded] = useState<boolean>(true);
+  const [artists, setArtists] = useState(data.artists);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(true);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    var temp = data.characters.filter((character) =>
-      character.name.toLowerCase().includes(event.target.value.toLowerCase())
+    var temp = data.artists.filter((artist) =>
+      artist.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
-    setCharacters(temp);
+    setArtists(temp);
   }
-
   function onSearchIconClick() {
     if (!expanded) setExpanded(!expanded);
 
@@ -34,17 +34,19 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setCharacters(data.characters);
+      setArtists(data.artists);
     }
   }
+
+  useEffect(() => {
+    setArtists(data.artists);
+  }, [data.artists]);
 
   return (
     <Accordion expanded={expanded}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon onClick={() => setExpanded(!expanded)} />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-        sx={{ flexDirection: "row-reverse", justifyContent: "space-between" }}
+        sx={{ height: "auto", maxHeight: "auto" }}
       >
         <Grid container alignItems="center">
           <Grid item lg={10}>
@@ -54,9 +56,9 @@ export default function ArtistAccordion() {
               alignItems="center"
               justifyContent="center"
             >
-              <PersonIcon />
+              <BrushIcon />
               <Typography onClick={() => setExpanded(!expanded)}>
-                Characters
+                Artists
               </Typography>
             </Stack>
           </Grid>
@@ -70,7 +72,7 @@ export default function ArtistAccordion() {
       <AccordionDetails>
         <Stack direction="column">
           <SearchBar onChange={onChange} show={showSearchBar} />
-          <CharacterList characters={characters} clickable />
+          <ArtistList artists={artists} clickable />
         </Stack>
       </AccordionDetails>
     </Accordion>

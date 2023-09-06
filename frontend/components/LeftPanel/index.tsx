@@ -1,15 +1,15 @@
 import { Grid, Typography, Paper, MenuList } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import FolderAccordion from "./FolderAccordion";
-import ArtistAccordion from "./ArtistAccordion";
+import FolderAccordion from "./Accordions/FolderAccordion";
+import ArtistAccordion from "./Accordions/ArtistAccordion";
 import Snack from "../Snack";
 import AlertMessage from "../../interfaces/AlertMessage";
 import { ArtistForm, SubmissionForm, TagForm } from "../Forms";
-import CreateMenu from "./CreateMenu";
-import SettingsMenu from "./Menu";
+import CreateMenu from "./Menus/CreateMenu";
+import SettingsMenu from "./Menus/Menu";
 import CharacterForm from "../Forms/CharacterForm";
-import CharacterAccordion from "./CharacterAccordion";
+import CharacterAccordion from "./Accordions/CharacterAccordion";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
