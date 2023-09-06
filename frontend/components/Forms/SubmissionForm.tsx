@@ -47,7 +47,12 @@ interface Props {
   setOpenSnack: Dispatch<SetStateAction<boolean>>;
   setAlertMessage: Dispatch<SetStateAction<AlertMessage>>;
 }
-export default function SubmissionForm(props: Props) {
+export default function SubmissionForm({
+  open,
+  setOpen,
+  setOpenSnack,
+  setAlertMessage,
+}: Props) {
   const { data, setData } = useContext(DataContext);
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const [image, setImage] = useState<string>("/placeholder.jpg");
@@ -62,8 +67,8 @@ export default function SubmissionForm(props: Props) {
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
 
   function onCancel() {
-    if (props.setOpen != undefined) {
-      props.setOpen(false);
+    if (setOpen != undefined) {
+      setOpen(false);
     }
   }
 
@@ -105,12 +110,12 @@ export default function SubmissionForm(props: Props) {
       var newData = { ...data };
       newData.submissions.push(response.data);
       setData(newData);
-      props.setAlertMessage({
+      setAlertMessage({
         message: "Submission created",
         severity: "success",
       });
     } catch (error) {
-      props.setAlertMessage({
+      setAlertMessage({
         message: "Error creating submission",
         severity: "error",
       });
@@ -120,13 +125,13 @@ export default function SubmissionForm(props: Props) {
       setSubmission(emptySubmission);
       setImage("/placeholder.jpg");
 
-      props.setOpen(false);
-      props.setOpenSnack(true);
+      setOpen(false);
+      setOpenSnack(true);
     }
   }
 
   return (
-    <Dialog open={props.open} onClose={() => props.setOpen(false)} fullScreen>
+    <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
       <DialogTitle>Create Submission</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
