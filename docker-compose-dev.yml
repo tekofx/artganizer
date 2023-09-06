@@ -6,14 +6,14 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
-    env_file: .env
+    env_file: .dev.env
     ports:
       - "3306:3306"
 
   frontend:
     build: frontend
     container_name: frontend
-    env_file: .env
+    env_file: .dev.env
     image: frontend
     depends_on:
       - backend
@@ -23,9 +23,11 @@ services:
   backend:
     build: backend
     container_name: backend
-    env_file: .env
+    env_file: .dev.env
     image: backend
     depends_on:
       - db
+    volumes:
+      - ./backend/data:/express-docker/data
     ports:
       - 3001:3001

@@ -27,5 +27,7 @@ services:
     env_file: .env
     depends_on:
       - db
+    volumes:
+      - ./backend/data:/express-docker/data
     ports:
       - 3001:3001
