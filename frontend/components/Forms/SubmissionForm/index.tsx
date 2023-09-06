@@ -20,7 +20,7 @@ import AlertMessage from "../../../interfaces/AlertMessage";
 import ProgressButton from "../ProgressButon";
 import BasicInfo from "./BasicInfo";
 import AdvancedInfo from "./AdvancedInfo";
-import { emptySubmission } from "../../../src/utils";
+import { emptySubmission } from "../../../src/emptyEntities";
 
 interface Props {
   open: boolean;

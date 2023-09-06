@@ -15,7 +15,7 @@ import Gallery from "../../components/Gallery";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import { emptyCharacter } from "../../src/utils";
+import { emptyCharacter } from "../../src/emptyEntities";
 import Character from "../../interfaces/Character";
 import CharacterInfo from "../../components/Character/CharacterInfo";
 import CharacterEdit from "../../components/Character/CharacterEdit";

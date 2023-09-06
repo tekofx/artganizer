@@ -15,7 +15,7 @@ import Submission from "../interfaces/Submission";
 import Folder from "../interfaces/Folder";
 import Artist from "../interfaces/Artist";
 import Settings from "../interfaces/Settings";
-import { defaultSettings } from "../src/utils";
+import { defaultSettings } from "../src/emptyEntities";
 import Character from "../interfaces/Character";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
