@@ -11,7 +11,7 @@ import BrushIcon from "@mui/icons-material/Brush";
 import { useState, useContext, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DataContext } from "../../../../pages/_app";
-import SearchBar from "../SearchBar";
+import SearchBar from "../../../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
 
 import ArtistList from "../../../Artist/ArtistList";
@@ -71,7 +71,11 @@ export default function ArtistAccordion() {
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction="column">
-          <SearchBar onChange={onChange} show={showSearchBar} />
+          <SearchBar
+            onChange={onChange}
+            show={showSearchBar}
+            focus={showSearchBar}
+          />
           <ArtistList artists={artists} clickable />
         </Stack>
       </AccordionDetails>

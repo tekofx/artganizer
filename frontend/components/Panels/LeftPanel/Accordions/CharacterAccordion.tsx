@@ -10,7 +10,7 @@ import {
 import { useState, useContext } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DataContext } from "../../../../pages/_app";
-import SearchBar from "../SearchBar";
+import SearchBar from "../../../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
 import CharacterList from "../../../Character/CharacterList";
 import PersonIcon from "@mui/icons-material/Person";
@@ -69,7 +69,11 @@ export default function ArtistAccordion() {
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction="column">
-          <SearchBar onChange={onChange} show={showSearchBar} />
+          <SearchBar
+            onChange={onChange}
+            show={showSearchBar}
+            focus={showSearchBar}
+          />
           <CharacterList characters={characters} clickable />
         </Stack>
       </AccordionDetails>
