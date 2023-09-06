@@ -11,20 +11,20 @@ services:
       - "3306:3306"
 
   frontend:
-    image: ghcr.io/tekofx/artganizer-frontend:latest
-    container_name: frontend
     build: frontend
+    container_name: frontend
     env_file: .env
+    image: frontend
     depends_on:
       - backend
     ports:
       - 3000:3000
 
   backend:
-    image: ghcr.io/tekofx/artganizer-backend:latest
-    container_name: backend
     build: backend
+    container_name: backend
     env_file: .env
+    image: backend
     depends_on:
       - db
     ports:
