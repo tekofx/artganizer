@@ -16,7 +16,7 @@ function colorDistance(color1: string, color2: string) {
 function filterSubmissionsByColor(
   submissions: Submission[],
   color: string,
-  threshold: number
+  threshold: number // 0-255
 ): Submission[] {
   return submissions.filter((submission) =>
     submission.colors.some((c: string) => colorDistance(c, color) <= threshold)

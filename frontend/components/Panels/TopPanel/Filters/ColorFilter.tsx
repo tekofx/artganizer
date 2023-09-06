@@ -1,10 +1,12 @@
 import { Button, Menu } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useContext } from "react";
 import { ChromePicker } from "react-color";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
+import { DataContext } from "../../../../pages/_app";
 
 export default function RatingFilter() {
+  const { data, setData } = useContext(DataContext);
   const [color, setColor] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -17,6 +19,9 @@ export default function RatingFilter() {
 
   const handleColorChange = (color: any) => {
     setColor(color.hex);
+    const newData = { ...data };
+    newData.filters.color = color.hex;
+    setData(newData);
   };
 
   return (

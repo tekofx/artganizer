@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import Artist from "../../interfaces/Artist";
 import Character from "../../interfaces/Character";
 import Image from "./Image";
+import { filterSubmissionsByColor } from "../../src/colorManagement";
+
 interface GalleryProps {
   artist?: Artist;
   character?: Character;
@@ -20,7 +22,7 @@ export default function Gallery({ artist, character }: GalleryProps) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(character);
+    console.log(data.filters.color);
     let temp = data.submissions;
     if (artist != undefined) {
       temp = temp.filter((submission) => submission.artist?.id == artist?.id);
@@ -64,6 +66,10 @@ export default function Gallery({ artist, character }: GalleryProps) {
       );
     }
 
+    if (data.filters.color != "") {
+      temp = filterSubmissionsByColor(temp, data.filters.color, 80);
+    }
+
     if (data.filters.artist != undefined) {
       temp = temp.filter(
         (submission) => submission.artist?.id == data.filters.artist?.id
@@ -91,6 +97,7 @@ export default function Gallery({ artist, character }: GalleryProps) {
     data.filters.title,
     data.filters.artist,
     data.filters.characters,
+    data.filters.color,
     artist,
     character,
   ]);
