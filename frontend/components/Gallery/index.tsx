@@ -12,7 +12,7 @@ interface GalleryProps {
   character?: Character;
 }
 
-export default function Gallery(props: GalleryProps) {
+export default function Gallery({ artist, character }: GalleryProps) {
   const { data } = useContext(DataContext);
   const [submissions, setSubmissions] = useState<Submission[]>(
     data.submissions
@@ -20,19 +20,15 @@ export default function Gallery(props: GalleryProps) {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(character);
     let temp = data.submissions;
-    if (props.artist != undefined) {
-      temp = temp.filter(
-        (submission) => submission.artist?.id == props.artist?.id
-      );
+    if (artist != undefined) {
+      temp = temp.filter((submission) => submission.artist?.id == artist?.id);
     }
 
-    if (props.character != undefined) {
-      temp = temp.filter(
-        (submission) =>
-          submission.characters?.some(
-            (character) => character.id == props.character?.id
-          ) == true
+    if (character != undefined) {
+      temp = temp.filter((submission) =>
+        submission.characters.some((c) => c.id === character.id)
       );
     }
 
@@ -95,7 +91,8 @@ export default function Gallery(props: GalleryProps) {
     data.filters.title,
     data.filters.artist,
     data.filters.characters,
-    props.artist,
+    artist,
+    character,
   ]);
 
   function ImageList() {
