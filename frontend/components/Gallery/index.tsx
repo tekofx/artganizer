@@ -105,7 +105,9 @@ export default function Gallery({ artist, character }: GalleryProps) {
         overflowY: "auto",
         maxHeight: "100vh",
         p: 2,
+
         columns: 3,
+        columnCount: 3,
       }}
     >
       {submissions.length == 0 && (

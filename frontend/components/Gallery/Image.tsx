@@ -32,7 +32,12 @@ export default function Image({ image, width }: ImageProps) {
   return (
     <Paper
       elevation={0}
-      sx={{ display: "inline-block", width: width, cursor: "pointer" }}
+      sx={{
+        display: "inline-block",
+        width: width,
+        cursor: "pointer",
+        marginBottom: 2,
+      }}
       component={motion.div}
       whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
