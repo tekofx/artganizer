@@ -101,7 +101,6 @@ export const DataContext = createContext<DataContextType>({
     filters: {
       rating: -1,
       tags: [],
-      folders: [],
       artist: undefined,
       title: "",
       characters: [],

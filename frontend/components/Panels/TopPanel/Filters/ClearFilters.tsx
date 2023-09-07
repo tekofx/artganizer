@@ -6,7 +6,6 @@ import { Filters } from "../../../../interfaces";
 const emptyFilters: Filters = {
   rating: -1,
   tags: [],
-  folders: [],
   artist: undefined,
   title: "",
   characters: [],
@@ -26,7 +25,6 @@ export default function ClearFilters() {
     const filtersAreEmpty =
       data.filters.rating === emptyFilters.rating &&
       data.filters.tags.length === emptyFilters.tags.length &&
-      data.filters.folders.length === emptyFilters.folders.length &&
       data.filters.artist === emptyFilters.artist &&
       data.filters.title === emptyFilters.title &&
       data.filters.color === emptyFilters.color &&

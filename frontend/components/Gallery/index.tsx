@@ -45,15 +45,6 @@ export default function Gallery({ artist, character }: GalleryProps) {
       );
     }
 
-    if (data.filters.folders.length > 0) {
-      temp = temp.filter((submission) =>
-        submission.folders?.some((folder) =>
-          data.filters.folders.some(
-            (filterFolder) => filterFolder.id === folder.id
-          )
-        )
-      );
-    }
     if (data.filters.title.length > 0) {
       temp = temp.filter((submission) =>
         submission.title
@@ -89,7 +80,6 @@ export default function Gallery({ artist, character }: GalleryProps) {
   }, [
     data.filters.rating,
     data.filters.tags,
-    data.filters.folders,
     data.filters.title,
     data.filters.artist,
     data.filters.characters,

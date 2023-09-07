@@ -67,7 +67,6 @@ export default function SubmissionForm({
     formData.append("title", submission.title);
     formData.append("description", submission.description);
     formData.append("rating", submission.rating.toString());
-    formData.append("folders", JSON.stringify(submission.folders));
     if (selectedTags != undefined) {
       selectedTags.forEach((tag) => {
         formData.append("tags", tag.id.toString());
