@@ -31,7 +31,6 @@ const emptySubmission: Submission = {
   tags: [],
   characters: [],
   colors: [],
-  folders: [],
   format: "",
   height: 0,
   width: 0,
@@ -54,7 +53,6 @@ const defaultSettings: Settings = {
 const emptyFilters: Filters = {
   rating: -1,
   tags: [],
-  folders: [],
   artist: undefined,
   title: "",
   characters: [],
