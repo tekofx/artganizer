@@ -1,7 +1,16 @@
-import { Grid, Avatar, Button, Stack, TextField } from "@mui/material";
+import {
+  Grid,
+  Avatar,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import Artist from "../../../interfaces/Artist";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import axios from "axios";
@@ -22,6 +31,7 @@ export default function ArtistEdit({
   const [image, setImage] = useState<string>(artist.image);
   const [imageData, setImageData] = useState<any>();
   const [socialsDialogOpen, setSocialsDialogOpen] = useState(false);
+  const [auxArtist, setAuxArtist] = useState<Artist>(artist);
   const { data, setData } = useContext(DataContext);
 
   function onImageUpload(event: any) {
@@ -31,6 +41,7 @@ export default function ArtistEdit({
     setImage(URL.createObjectURL(event.target.files[0]));
   }
   async function editArtist() {
+    setArtist(auxArtist);
     const formData = new FormData();
     if (imageData) {
       formData.append("image", imageData);
@@ -61,21 +72,29 @@ export default function ArtistEdit({
     <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>
         <Stack spacing={2} direction="column">
-          <Avatar sx={{ width: "10rem", height: "10rem" }} src={image} />
-          <Button variant="contained" component="label">
-            Change image
-            <input type="file" hidden onChange={onImageUpload} />
-          </Button>
+          <input
+            accept="image/*"
+            id="contained-button-file"
+            multiple
+            type="file"
+            hidden
+            onChange={onImageUpload}
+          />
+          <label htmlFor="contained-button-file">
+            <IconButton component="span">
+              <Avatar src={image} sx={{ width: "10rem", height: "10rem" }} />
+            </IconButton>
+          </label>
         </Stack>
       </Grid>
       <Grid item>
         <Stack spacing={2}>
           <TextField
             label="Name"
-            value={artist?.name}
+            value={auxArtist?.name}
             onChange={(event) => {
-              if (artist) {
-                setArtist((prevSubmission) => ({
+              if (auxArtist) {
+                setAuxArtist((prevSubmission) => ({
                   ...prevSubmission,
                   name: event.target.value,
                 }));
@@ -86,10 +105,10 @@ export default function ArtistEdit({
           <TextField
             label="Description"
             multiline
-            value={artist?.description}
+            value={auxArtist?.description}
             onChange={(event) => {
-              if (artist) {
-                setArtist((prevSubmission) => ({
+              if (auxArtist) {
+                setAuxArtist((prevSubmission) => ({
                   ...prevSubmission,
                   description: event.target.value,
                 }));
@@ -98,15 +117,16 @@ export default function ArtistEdit({
           />
         </Stack>
       </Grid>
-      <Grid item>
-        <Stack spacing={2}>
+      <Grid item spacing={2}>
+        <Typography>Socials</Typography>
+        <Stack spacing={2} direction="row">
           {artist?.socials.map((social, index) => (
             <SocialIcon social={social} key={index} clickable />
           ))}
         </Stack>
         <Button
           variant="contained"
-          startIcon={<DoneIcon />}
+          startIcon={<EditIcon />}
           onClick={() => setSocialsDialogOpen(true)}
         >
           Edit socials
