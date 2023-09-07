@@ -11,7 +11,6 @@ import {
   JoinTable,
 } from "typeorm";
 import { Artist } from "./Artist";
-import { Folder } from "./Folder";
 import { Tag } from "./Tag";
 import { Character } from "./Character";
 
@@ -42,9 +41,7 @@ export class Submission {
   @ManyToOne(() => Artist, (artist) => artist.submissions)
   artist: Artist;
 
-  @ManyToMany(() => Folder)
-  @JoinTable()
-  folders: Folder[];
+
 
   @ManyToMany(() => Tag)
   @JoinTable()

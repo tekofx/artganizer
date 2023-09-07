@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import "reflect-metadata";
 import { Submission } from "../entities/Submission";
 import { TagRepo, SubmissionRepo } from "../typeorm.config";
-import { Folder } from "../entities/Folder";
 
 const router = express.Router();
 

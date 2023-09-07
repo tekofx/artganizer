@@ -8,7 +8,6 @@ import {
   ArtistRepo,
   SubmissionRepo,
   TagRepo,
-  FolderRepo,
   CharacterRepo,
 } from "../typeorm.config";
 import sizeOf from "image-size";
@@ -61,15 +60,12 @@ const uploadSubmissions = multer({
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  var { tags, folders, characters, artist } = req.query;
+  var { tags, characters, artist } = req.query;
 
   const queryBuilder = SubmissionRepo.createQueryBuilder("submission");
 
   // Use leftJoinAndSelect to join the submission and tags tables and select the related tags
   queryBuilder.leftJoinAndSelect("submission.tags", "tag");
-
-  // Use leftJoinAndSelect to join the submission and folders tables and select the related folders
-  queryBuilder.leftJoinAndSelect("submission.folders", "folder");
 
   // Use leftJoinAndSelect to join the submission and artist tables and select the related artist
   queryBuilder.leftJoinAndSelect("submission.artist", "artist");
@@ -83,15 +79,6 @@ router.get("/", async (req: Request, res: Response) => {
       "tag",
       "tag.id IN (:...tags)",
       { tags }
-    );
-  }
-
-  if (folders) {
-    queryBuilder.innerJoinAndSelect(
-      "submission.folders",
-      "folder",
-      "folder.id IN (:...folders)",
-      { folders }
     );
   }
 
@@ -152,8 +139,7 @@ router.post(
   "/",
   uploadSubmissions.single("image"),
   async (req: Request, res: Response) => {
-    var { title, description, rating, artist, folders, tags, characters } =
-      req.body;
+    var { title, description, rating, artist, tags, characters } = req.body;
 
     var image = req.file;
     if (!image) {
@@ -197,22 +183,6 @@ router.post(
       if (artistObj) {
         submission.artist = artistObj;
       }
-    }
-
-    if (folders) {
-      if (!Array.isArray(folders)) {
-        folders = [folders];
-      }
-      var folderOjs = [];
-      for (var i = 0; i < folders.length; i++) {
-        var folderObj = await FolderRepo.findOne({
-          where: { id: folders[i] },
-        });
-        if (folderObj) {
-          folderOjs.push(folderObj);
-        }
-      }
-      submission.folders = folderOjs;
     }
 
     if (tags) {
@@ -310,7 +280,7 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
   var submissionId: number = parseInt(req.params.submissionId);
   const submission = await SubmissionRepo.findOne({
     where: { id: submissionId },
-    relations: ["tags", "folders"],
+    relations: ["tags"],
   });
 
   if (submission == null) {
@@ -318,11 +288,10 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
     return;
   }
 
-  var { title, description, rating, artist, tags, folders, characters } =
+  var { title, description, rating, artist, tags, characters } =
     req.body.submission;
 
   submission.tags = tags;
-  submission.folders = folders;
   submission.characters = characters;
 
   // Actualizar los campos del submission

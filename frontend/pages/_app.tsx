@@ -11,7 +11,6 @@ import LateralPanel from "../components/Panels/LeftPanel";
 import "../styles/styles.css";
 import axios from "axios";
 import {
-  Folder,
   Submission,
   Artist,
   Filters,
@@ -31,7 +30,6 @@ if (process.env.API_URL == undefined) {
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
   tags: Tag[];
-  folders: Folder[];
   submissions: Submission[];
   artists: Artist[];
   characters: Character[];
@@ -48,17 +46,6 @@ MyApp.getInitialProps = async () => {
     },
   });
   const tags = tagsResponse.data;
-
-  const foldersResponse = await axios.get<Folder[]>(
-    process.env.API_URL + "/folders",
-    {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const folders = foldersResponse.data;
 
   const submissionsResponse = await axios.get<Submission[]>(
     process.env.API_URL + "/submissions",
@@ -104,13 +91,12 @@ MyApp.getInitialProps = async () => {
   );
   const characters = charactersResponse.data;
 
-  return { tags, folders, submissions, artists, settings, characters };
+  return { tags, submissions, artists, settings, characters };
 };
 
 export const DataContext = createContext<DataContextType>({
   data: {
     tags: [],
-    folders: [],
     submissions: [],
     filters: {
       rating: -1,
@@ -132,7 +118,6 @@ export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const [data, setData] = useState<{
     tags: Tag[];
-    folders: Folder[];
     submissions: Submission[];
     filters: Filters;
     artists: Artist[];
@@ -140,7 +125,6 @@ export default function MyApp(props: MyAppProps) {
     settings: Settings;
   }>({
     tags: props.tags,
-    folders: props.folders,
     submissions: props.submissions,
     artists: props.artists,
     characters: props.characters,
