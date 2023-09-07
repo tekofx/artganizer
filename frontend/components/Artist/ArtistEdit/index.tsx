@@ -41,23 +41,22 @@ export default function ArtistEdit({
     setImage(URL.createObjectURL(event.target.files[0]));
   }
   async function editArtist() {
-    setArtist(auxArtist);
     const formData = new FormData();
     if (imageData) {
       formData.append("image", imageData);
     }
-    formData.append("name", artist.name);
-    formData.append("description", artist.description);
-    formData.append("id", artist?.id.toString());
-    formData.append("socials", JSON.stringify(artist.socials));
+    formData.append("name", auxArtist.name);
+    formData.append("description", auxArtist.description);
+    formData.append("id", auxArtist?.id.toString());
+    formData.append("socials", JSON.stringify(auxArtist.socials));
     console.log("a");
 
     await axios
-      .put(process.env.API_URL + `/artists/${artist.id}`, formData)
+      .put(process.env.API_URL + `/artists/${auxArtist.id}`, formData)
       .then((response) => {
         console.log(response.data);
         setArtist(response.data);
-        setData({ ...data, artists: [...data.artists, response.data] });
+        setData({ ...data, artists: data.artists });
       })
       .catch((error) => {
         console.log(error);
@@ -71,21 +70,19 @@ export default function ArtistEdit({
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>
-        <Stack spacing={2} direction="column">
-          <input
-            accept="image/*"
-            id="contained-button-file"
-            multiple
-            type="file"
-            hidden
-            onChange={onImageUpload}
-          />
-          <label htmlFor="contained-button-file">
-            <IconButton component="span">
-              <Avatar src={image} sx={{ width: "10rem", height: "10rem" }} />
-            </IconButton>
-          </label>
-        </Stack>
+        <input
+          accept="image/*"
+          id="contained-button-file"
+          multiple
+          type="file"
+          hidden
+          onChange={onImageUpload}
+        />
+        <label htmlFor="contained-button-file">
+          <IconButton component="span">
+            <Avatar src={image} sx={{ width: "10rem", height: "10rem" }} />
+          </IconButton>
+        </label>
       </Grid>
       <Grid item>
         <Stack spacing={2}>
