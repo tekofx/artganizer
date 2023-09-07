@@ -1,9 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import { motion } from "framer-motion";
 import { Typography, Paper } from "@mui/material";
 import Submission from "../../interfaces/Submission";
 import { DataContext } from "../../pages/_app";
-import { useRouter } from "next/router";
 import Artist from "../../interfaces/Artist";
 import Character from "../../interfaces/Character";
 import Image from "./Image";
@@ -19,7 +17,6 @@ export default function Gallery({ artist, character }: GalleryProps) {
   const [submissions, setSubmissions] = useState<Submission[]>(
     data.submissions
   );
-  const router = useRouter();
 
   useEffect(() => {
     let temp = data.submissions;
@@ -101,33 +98,22 @@ export default function Gallery({ artist, character }: GalleryProps) {
     character,
   ]);
 
-  function ImageList() {
-    return (
-      <div>
-        {submissions.map((image) => (
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            onClick={() => router.push(`/submission/${image.id}`)}
-            key={image.id}
-          >
-            <Image image={image} />
-          </motion.div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <Paper
-      sx={{ minHeight: "100vh", overflowY: "auto", maxHeight: "100vh", p: 2 }}
+      sx={{
+        minHeight: "100vh",
+        overflowY: "auto",
+        maxHeight: "100vh",
+        p: 2,
+        columns: 3,
+      }}
     >
-      <div className="gallery">
-        {submissions.length == 0 && (
-          <Typography variant="h1">No submissions yet</Typography>
-        )}
-        <ImageList />
-      </div>
+      {submissions.length == 0 && (
+        <Typography variant="h1">No submissions yet</Typography>
+      )}
+      {submissions.map((image) => (
+        <Image image={image} key={image.id} />
+      ))}
     </Paper>
   );
 }
