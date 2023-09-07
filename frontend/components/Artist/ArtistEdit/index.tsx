@@ -129,8 +129,9 @@ export default function ArtistEdit({
           Edit socials
         </Button>
       </Grid>
+      <Grid item xs></Grid>
       <Grid item>
-        <Stack direction="row" width="100%" spacing={2} justifyContent="center">
+        <Stack spacing={2}>
           <Button
             variant="contained"
             startIcon={<DoneIcon />}

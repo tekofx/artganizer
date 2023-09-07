@@ -17,18 +17,19 @@ export default function ArtistInfo({
 }: ArtistInfoProps) {
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
-      <Grid item>
+      <Grid item xs={2}>
         <Avatar sx={{ width: "10rem", height: "10rem" }} src={artist?.image} />
       </Grid>
-      <Grid item>
+      <Grid item xs={8}>
         <Typography variant="h4">{artist?.name}</Typography>
         <Typography variant="h5">{artist?.description}</Typography>
         {artist?.socials?.map((social, index) => (
           <SocialIcon social={social} key={index} clickable />
         ))}
       </Grid>
+      <Grid item xs></Grid>
       <Grid item>
-        <Stack direction="row" width="100%" spacing={2} justifyContent="center">
+        <Stack spacing={2}>
           <Button
             variant="contained"
             startIcon={<EditIcon />}
