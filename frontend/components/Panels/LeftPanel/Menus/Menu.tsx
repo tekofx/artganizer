@@ -8,10 +8,12 @@ import {
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import InfoIcon from "@mui/icons-material/Info";
 import ManageTags from "../../../Forms/ManageTags";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import SettingsDialog from "../SettingsDialog/SettingsDialog";
+import SettingsDialog from "../SettingsDialog";
+import About from "../About";
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -19,6 +21,7 @@ export default function SettingMenu() {
   };
   const [openTagManager, setOpenTagManager] = useState<boolean>(false);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
+  const [openAbout, setOpenAbout] = useState<boolean>(false);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -38,6 +41,14 @@ export default function SettingMenu() {
       onclick: () => {
         handleCloseUserMenu();
         setOpenSettings(true);
+      },
+    },
+    {
+      name: "About",
+      icon: <InfoIcon />,
+      onclick: () => {
+        handleCloseUserMenu();
+        setOpenAbout(true);
       },
     },
   ];
@@ -77,6 +88,7 @@ export default function SettingMenu() {
       </Menu>
       <ManageTags open={openTagManager} setOpen={setOpenTagManager} />
       <SettingsDialog open={openSettings} setOpen={setOpenSettings} />
+      <About open={openAbout} setOpen={setOpenAbout} />
     </>
   );
 }
