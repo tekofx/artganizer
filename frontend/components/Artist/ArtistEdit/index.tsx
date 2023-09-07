@@ -1,12 +1,13 @@
 import { Grid, Avatar, Button, Stack, TextField } from "@mui/material";
-import Artist from "../../interfaces/Artist";
+import Artist from "../../../interfaces/Artist";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import axios from "axios";
-import { DataContext } from "../../pages/_app";
-import { useRouter } from "next/router";
+import { DataContext } from "../../../pages/_app";
+import SocialIcon from "../../SocialIcon";
+import SocialsDialog from "./SocialsDialog";
 interface ArtistEditProps {
   artist: Artist;
   toggleEdit: () => void;
@@ -20,8 +21,8 @@ export default function ArtistEdit({
 }: ArtistEditProps) {
   const [image, setImage] = useState<string>(artist.image);
   const [imageData, setImageData] = useState<any>();
+  const [socialsDialogOpen, setSocialsDialogOpen] = useState(false);
   const { data, setData } = useContext(DataContext);
-  const router = useRouter();
 
   function onImageUpload(event: any) {
     setImageData(event.target.files[0]);
@@ -31,23 +32,21 @@ export default function ArtistEdit({
   }
   async function editArtist() {
     const formData = new FormData();
-    formData.append("image", imageData);
+    if (imageData) {
+      formData.append("image", imageData);
+    }
     formData.append("name", artist.name);
     formData.append("description", artist.description);
     formData.append("id", artist?.id.toString());
+    formData.append("socials", JSON.stringify(artist.socials));
+    console.log("a");
 
     await axios
       .put(process.env.API_URL + `/artists/${artist.id}`, formData)
       .then((response) => {
+        console.log(response.data);
         setArtist(response.data);
-        var newData = { ...data };
-        newData.artists = newData.artists.map((artist) => {
-          if (artist.id === response.data.id) {
-            return response.data;
-          }
-          return artist;
-        });
-        setData(newData);
+        setData({ ...data, artists: [...data.artists, response.data] });
       })
       .catch((error) => {
         console.log(error);
@@ -55,7 +54,7 @@ export default function ArtistEdit({
     toggleEdit();
 
     // Reload the page
-    router.reload();
+    //router.reload();
   }
 
   return (
@@ -100,6 +99,20 @@ export default function ArtistEdit({
         </Stack>
       </Grid>
       <Grid item>
+        <Stack spacing={2}>
+          {artist?.socials.map((social, index) => (
+            <SocialIcon social={social} key={index} clickable />
+          ))}
+        </Stack>
+        <Button
+          variant="contained"
+          startIcon={<DoneIcon />}
+          onClick={() => setSocialsDialogOpen(true)}
+        >
+          Edit socials
+        </Button>
+      </Grid>
+      <Grid item>
         <Stack direction="row" width="100%" spacing={2} justifyContent="center">
           <Button
             variant="contained"
@@ -117,6 +130,12 @@ export default function ArtistEdit({
           </Button>
         </Stack>
       </Grid>
+      <SocialsDialog
+        artist={artist}
+        setArtist={setArtist}
+        setOpen={setSocialsDialogOpen}
+        open={socialsDialogOpen}
+      />
     </Grid>
   );
 }
