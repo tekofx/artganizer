@@ -1,5 +1,4 @@
 import Tag from "./Tag";
-import Folder from "./Folder";
 import Character from "./Character";
 import Artist from "./Artist";
 export default interface Submission {
@@ -11,7 +10,6 @@ export default interface Submission {
   width: number;
   height: number;
   artist: Artist | undefined;
-  folders: Folder[];
   tags: Tag[];
   characters: Character[];
   format: string;

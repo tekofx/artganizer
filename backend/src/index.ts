@@ -3,7 +3,6 @@ import "reflect-metadata";
 import { AppDataSource } from "./typeorm.config";
 import artist from "./routes/artists";
 import submission from "./routes/submissions";
-import folders from "./routes/folders";
 import tags from "./routes/tags";
 import characters from "./routes/characters";
 import settings from "./routes/settings";
@@ -27,7 +26,6 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/artists", artist);
 app.use("/submissions", submission);
-app.use("/folders", folders);
 app.use("/tags", tags);
 app.use("/characters", characters);
 app.use("/settings", settings);

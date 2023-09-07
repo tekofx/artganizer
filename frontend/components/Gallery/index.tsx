@@ -1,38 +1,32 @@
 import { useState, useEffect, useContext } from "react";
-import { motion } from "framer-motion";
 import { Typography, Paper } from "@mui/material";
 import Submission from "../../interfaces/Submission";
 import { DataContext } from "../../pages/_app";
-import { useRouter } from "next/router";
 import Artist from "../../interfaces/Artist";
 import Character from "../../interfaces/Character";
 import Image from "./Image";
+import { filterSubmissionsByColor } from "../../src/colorManagement";
+
 interface GalleryProps {
   artist?: Artist;
   character?: Character;
 }
 
-export default function Gallery(props: GalleryProps) {
+export default function Gallery({ artist, character }: GalleryProps) {
   const { data } = useContext(DataContext);
   const [submissions, setSubmissions] = useState<Submission[]>(
     data.submissions
   );
-  const router = useRouter();
 
   useEffect(() => {
     let temp = data.submissions;
-    if (props.artist != undefined) {
-      temp = temp.filter(
-        (submission) => submission.artist?.id == props.artist?.id
-      );
+    if (artist != undefined) {
+      temp = temp.filter((submission) => submission.artist?.id == artist?.id);
     }
 
-    if (props.character != undefined) {
-      temp = temp.filter(
-        (submission) =>
-          submission.characters?.some(
-            (character) => character.id == props.character?.id
-          ) == true
+    if (character != undefined) {
+      temp = temp.filter((submission) =>
+        submission.characters.some((c) => c.id === character.id)
       );
     }
 
@@ -51,21 +45,16 @@ export default function Gallery(props: GalleryProps) {
       );
     }
 
-    if (data.filters.folders.length > 0) {
-      temp = temp.filter((submission) =>
-        submission.folders?.some((folder) =>
-          data.filters.folders.some(
-            (filterFolder) => filterFolder.id === folder.id
-          )
-        )
-      );
-    }
     if (data.filters.title.length > 0) {
       temp = temp.filter((submission) =>
         submission.title
           .toLowerCase()
           .includes(data.filters.title.toLowerCase())
       );
+    }
+
+    if (data.filters.color != "") {
+      temp = filterSubmissionsByColor(temp, data.filters.color, 80);
     }
 
     if (data.filters.artist != undefined) {
@@ -91,40 +80,32 @@ export default function Gallery(props: GalleryProps) {
   }, [
     data.filters.rating,
     data.filters.tags,
-    data.filters.folders,
     data.filters.title,
     data.filters.artist,
     data.filters.characters,
-    props.artist,
+    data.filters.color,
+    artist,
+    character,
   ]);
-
-  function ImageList() {
-    return (
-      <div>
-        {submissions.map((image) => (
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            onClick={() => router.push(`/submission/${image.id}`)}
-            key={image.id}
-          >
-            <Image image={image} />
-          </motion.div>
-        ))}
-      </div>
-    );
-  }
 
   return (
     <Paper
-      sx={{ minHeight: "100vh", overflowY: "auto", maxHeight: "100vh", p: 2 }}
+      sx={{
+        minHeight: "100vh",
+        overflowY: "auto",
+        maxHeight: "100vh",
+        p: 2,
+
+        columns: 3,
+        columnCount: 3,
+      }}
     >
-      <div className="gallery">
-        {submissions.length == 0 && (
-          <Typography variant="h1">No submissions yet</Typography>
-        )}
-        <ImageList />
-      </div>
+      {submissions.length == 0 && (
+        <Typography variant="h1">No submissions yet</Typography>
+      )}
+      {submissions.map((image) => (
+        <Image image={image} key={image.id} />
+      ))}
     </Paper>
   );
 }

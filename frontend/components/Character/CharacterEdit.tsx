@@ -54,7 +54,7 @@ export default function CharacterEdit(props: CharacterEditProps) {
   }
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>
         <Stack spacing={2} direction="column">
           <Avatar sx={{ width: "10rem", height: "10rem" }} src={image} />

@@ -6,25 +6,25 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
-    env_file: .env
+    env_file: .dev.env
     ports:
       - "3306:3306"
 
   frontend:
-    image: ghcr.io/tekofx/artganizer-frontend:latest
-    container_name: frontend
     build: frontend
-    env_file: .env
+    container_name: frontend
+    env_file: .dev.env
+    image: frontend
     depends_on:
       - backend
     ports:
       - 3000:3000
 
   backend:
-    image: ghcr.io/tekofx/artganizer-backend:latest
-    container_name: backend
     build: backend
-    env_file: .env
+    container_name: backend
+    env_file: .dev.env
+    image: backend
     depends_on:
       - db
     volumes:

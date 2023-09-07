@@ -8,7 +8,6 @@ import {
   Container,
 } from "@mui/material";
 import Submission from "../../../interfaces/Submission";
-import { formatDate, convertBytes } from "../../../src/formatters";
 import { useState, Dispatch, SetStateAction } from "react";
 import ArtistSelect from "../../Artist/ArtistSelect";
 import Artist from "../../../interfaces/Artist";
@@ -117,46 +116,7 @@ export default function Edit(props: InfoProps) {
             />
           </Stack>
         </Grid>
-        <Grid item lg={12}>
-          <Typography variant="h5">Information</Typography>
-          <Grid container spacing={1}>
-            <Grid item lg={4}>
-              <Typography>Rating</Typography>
-            </Grid>
-            <Grid item lg={8}>
-              <Rating value={props.submission?.rating} readOnly />
-            </Grid>
-            <Grid item lg={4}>
-              Date
-            </Grid>
 
-            <Grid item lg={8}>
-              <Typography>{formatDate(props.submission?.date)}</Typography>
-            </Grid>
-
-            <Grid item lg={4}>
-              Dimensions
-            </Grid>
-            <Grid item lg={8}>
-              <Typography>
-                {props.submission?.width}x{props.submission?.height}
-              </Typography>
-            </Grid>
-            <Grid item lg={4}>
-              Size
-            </Grid>
-            <Grid item lg={8}>
-              {convertBytes(props.submission?.size)}
-            </Grid>
-
-            <Grid item lg={4}>
-              Format
-            </Grid>
-            <Grid item lg={8}>
-              <Typography>{props.submission?.format.toUpperCase()}</Typography>
-            </Grid>
-          </Grid>
-        </Grid>
         <Grid item lg={12}>
           <Button
             variant="contained"

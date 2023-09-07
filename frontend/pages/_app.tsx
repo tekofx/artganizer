@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useState } from "react";
+import { createContext, useState } from "react";
 import Head from "next/head";
 import { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
@@ -8,14 +8,17 @@ import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import { Grid } from "@mui/material";
 import LateralPanel from "../components/Panels/LeftPanel";
-import Tag from "../interfaces/Tag";
 import "../styles/styles.css";
 import axios from "axios";
-import Submission from "../interfaces/Submission";
-import Folder from "../interfaces/Folder";
-import Artist from "../interfaces/Artist";
-import Settings from "../interfaces/Settings";
-import { defaultSettings } from "../src/utils";
+import {
+  Submission,
+  Artist,
+  Filters,
+  Settings,
+  Tag,
+  DataContextType,
+} from "../interfaces";
+import { defaultSettings } from "../src/emptyEntities";
 import Character from "../interfaces/Character";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -24,19 +27,9 @@ if (process.env.API_URL == undefined) {
   process.env.API_URL = "http://localhost:3001";
 }
 
-interface Filters {
-  rating: number;
-  tags: Tag[];
-  folders: Folder[];
-  artist: Artist | undefined;
-  title: string;
-  characters: Character[];
-}
-
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
   tags: Tag[];
-  folders: Folder[];
   submissions: Submission[];
   artists: Artist[];
   characters: Character[];
@@ -53,17 +46,6 @@ MyApp.getInitialProps = async () => {
     },
   });
   const tags = tagsResponse.data;
-
-  const foldersResponse = await axios.get<Folder[]>(
-    process.env.API_URL + "/folders",
-    {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const folders = foldersResponse.data;
 
   const submissionsResponse = await axios.get<Submission[]>(
     process.env.API_URL + "/submissions",
@@ -109,46 +91,20 @@ MyApp.getInitialProps = async () => {
   );
   const characters = charactersResponse.data;
 
-  return { tags, folders, submissions, artists, settings, characters };
+  return { tags, submissions, artists, settings, characters };
 };
-
-export interface DataType {
-  tags: Tag[];
-  folders: Folder[];
-  submissions: Submission[];
-  filters: Filters;
-  artists: Artist[];
-  characters: Character[];
-  settings: Settings;
-}
-
-interface DataContextType {
-  data: DataType;
-  setData: Dispatch<
-    SetStateAction<{
-      tags: Tag[];
-      folders: Folder[];
-      submissions: Submission[];
-      filters: Filters;
-      characters: Character[];
-      artists: Artist[];
-      settings: Settings;
-    }>
-  >;
-}
 
 export const DataContext = createContext<DataContextType>({
   data: {
     tags: [],
-    folders: [],
     submissions: [],
     filters: {
       rating: -1,
       tags: [],
-      folders: [],
       artist: undefined,
       title: "",
       characters: [],
+      color: "",
     },
     artists: [],
     characters: [],
@@ -161,7 +117,6 @@ export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const [data, setData] = useState<{
     tags: Tag[];
-    folders: Folder[];
     submissions: Submission[];
     filters: Filters;
     artists: Artist[];
@@ -169,7 +124,6 @@ export default function MyApp(props: MyAppProps) {
     settings: Settings;
   }>({
     tags: props.tags,
-    folders: props.folders,
     submissions: props.submissions,
     artists: props.artists,
     characters: props.characters,
@@ -180,6 +134,7 @@ export default function MyApp(props: MyAppProps) {
       artists: [],
       characters: [],
       title: "",
+      color: "",
     },
     settings: props.settings,
   });

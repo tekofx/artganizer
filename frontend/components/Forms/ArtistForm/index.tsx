@@ -16,7 +16,6 @@ import axios from "axios";
 import Artist from "../../../interfaces/Artist";
 import LimitedTextField from "../../LimitedTextField";
 import Socials from "./Socials";
-import Social from "../../../interfaces/Social";
 import ProgressButton from "../ProgressButon";
 interface AlertMessage {
   message: string;
@@ -46,7 +45,6 @@ export default function ArtistForm({
 }: Props) {
   const [artist, setArtist] = useState<Artist>(defaultArtist);
   const [image, setImage] = useState<string>("/placeholder.jpg");
-  const [socials, setSocials] = useState<Social[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { data, setData } = useContext(DataContext);
@@ -60,7 +58,6 @@ export default function ArtistForm({
 
   async function postArtist() {
     setLoading(true);
-    artist.socials = socials;
     console.log(JSON.stringify(artist.socials));
     const formData = new FormData();
     formData.append("name", artist.name);
@@ -141,7 +138,7 @@ export default function ArtistForm({
           </Grid>
 
           <Grid item lg={12}>
-            <Socials socials={socials} setSocials={setSocials} />
+            <Socials artist={artist} setArtist={setArtist} />
           </Grid>
         </Grid>
       </DialogContent>

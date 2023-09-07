@@ -3,6 +3,7 @@ import Gallery from "../components/Gallery";
 import { DataContext } from "../pages/_app";
 import TopPanel from "../components/Panels/TopPanel";
 import Head from "next/head";
+import { emptyFilters } from "../src/emptyEntities";
 
 export default function Home() {
   const { data, setData } = useContext(DataContext);
@@ -10,14 +11,7 @@ export default function Home() {
   useEffect(() => {
     // Reset filters
     const newData = { ...data };
-    newData.filters = {
-      rating: -1,
-      tags: [],
-      folders: [],
-      artist: undefined,
-      title: "",
-      characters: [],
-    };
+    newData.filters = emptyFilters;
     setData(newData);
   }, []);
 

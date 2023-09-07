@@ -16,7 +16,7 @@ import { DataContext } from "../../../pages/_app";
 import axios from "axios";
 import LimitedTextField from "../../LimitedTextField";
 import Character from "../../../interfaces/Character";
-import { emptyCharacter } from "../../../src/utils";
+import { emptyCharacter } from "../../../src/emptyEntities";
 interface AlertMessage {
   message: string;
   severity: "success" | "error" | "info" | "warning";

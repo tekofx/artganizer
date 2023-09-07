@@ -1,7 +1,13 @@
-import { Grid, Typography, Paper, MenuList } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Paper,
+  MenuList,
+  Avatar,
+  Stack,
+} from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import FolderAccordion from "./Accordions/FolderAccordion";
 import ArtistAccordion from "./Accordions/ArtistAccordion";
 import Snack from "../../Snack";
 import AlertMessage from "../../../interfaces/AlertMessage";
@@ -35,13 +41,16 @@ export default function LeftPanel() {
             </Grid>
 
             <Grid item>
-              <Typography
-                variant="h5"
-                onClick={() => router.push("/")}
-                sx={{ cursor: "pointer" }}
-              >
-                Artganizer
-              </Typography>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Avatar src="/logo.jpg" sx={{ width: 25, height: 25 }} />
+                <Typography
+                  variant="h5"
+                  onClick={() => router.push("/")}
+                  sx={{ cursor: "pointer" }}
+                >
+                  Artganizer
+                </Typography>
+              </Stack>
             </Grid>
             <Grid item>
               <CreateMenu
@@ -55,7 +64,6 @@ export default function LeftPanel() {
         </Grid>
         <Grid item lg={12}>
           <MenuList>
-            <FolderAccordion />
             <ArtistAccordion />
             <CharacterAccordion />
           </MenuList>

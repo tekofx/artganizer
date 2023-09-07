@@ -4,7 +4,7 @@ import { Grid, Paper } from "@mui/material";
 import RightPanel from "../../components/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
 import { DataContext } from "../_app";
-import { emptySubmission } from "../../src/utils";
+import { emptySubmission } from "../../src/emptyEntities";
 import Head from "next/head";
 export default function Page() {
   const [submission, setSubmission] = useState<Submission>(emptySubmission);

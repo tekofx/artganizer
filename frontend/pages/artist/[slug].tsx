@@ -18,7 +18,7 @@ import ArtistEdit from "../../components/Artist/ArtistEdit";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import { emptyArtist } from "../../src/utils";
+import { emptyArtist } from "../../src/emptyEntities";
 import Head from "next/head";
 export default function Page() {
   const [artist, setArtist] = useState<Artist>(emptyArtist);

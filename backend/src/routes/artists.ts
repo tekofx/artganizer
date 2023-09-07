@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import sharp from "sharp";
 import { ArtistRepo, SubmissionRepo, SocialRepo } from "../typeorm.config";
+import { Social } from "../entities";
 
 const artistsPicsDir = path.join(__dirname, "../../data/uploads/artistPics");
 if (!fs.existsSync(artistsPicsDir)) {
@@ -230,7 +231,10 @@ router.put(
       return;
     }
     var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({ where: { id: artistId } });
+    const artist = await ArtistRepo.findOne({
+      where: { id: artistId },
+      relations: ["socials"],
+    });
 
     if (artist == null) {
       res.status(404).send("artist not found");
@@ -238,14 +242,13 @@ router.put(
     }
     var file = req.file;
 
-    // Remove old image
-    const filePath = path.join(artistsPicsDir, artistId + ".jpg");
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-
     // Convertir a JPG y Renombrar el archivo con el ID generado
     if (file) {
+      // Remove old image
+      const filePath = path.join(artistsPicsDir, artistId + ".jpg");
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
       sharp(file.path)
         .jpeg()
         .toFile(path.join(artistsPicsDir, artistId + ".jpg"))
@@ -260,10 +263,28 @@ router.put(
         });
     }
 
-    var { id, name, description } = req.body;
+    var { id, name, description, socials } = req.body;
     artist.name = name;
     artist.description = description;
+
+    socials = JSON.parse(socials);
+
+    // Add new socials
+    for (const social of socials) {
+      await SocialRepo.save(social);
+    }
+
+    // Remove old socials
+    for (const social of artist.socials) {
+      if (!socials.find((s: Social) => s.id === social.id)) {
+        await SocialRepo.remove(social);
+      }
+    }
+
+    artist.socials = socials;
+
     var result = await ArtistRepo.save(artist);
+
     result.image = process.env.URL + "/artists/uploads/" + result.id;
     res.send(result);
   }

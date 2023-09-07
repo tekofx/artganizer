@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import "reflect-metadata";
 import { Submission } from "../entities/Submission";
 import { CharacterRepo } from "../typeorm.config";
-import { Folder } from "../entities/Folder";
 import * as fs from "fs";
 import * as path from "path";
 import sharp from "sharp";

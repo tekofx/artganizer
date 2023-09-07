@@ -24,16 +24,32 @@ export default function ArtistFilter() {
   useEffect(() => {
     if (artist != undefined) {
       setInvisible(false);
-      var newData = { ...data };
-      newData.filters.artist = artist;
-      setData(newData);
+      setData((prevData) => ({
+        ...prevData,
+        filters: {
+          ...prevData.filters,
+          artist: artist,
+        },
+      }));
     } else {
       setInvisible(true);
-      var newData = { ...data };
-      newData.filters.artist = undefined;
-      setData(newData);
+      setData((prevData) => ({
+        ...prevData,
+        filters: {
+          ...prevData.filters,
+          artist: undefined,
+        },
+      }));
     }
   }, [artist]);
+
+  useEffect(() => {
+    if (data.filters.artist != undefined) {
+      setArtist(data.filters.artist);
+    } else {
+      setArtist(undefined);
+    }
+  }, [data.filters.artist]);
 
   return (
     <div>
