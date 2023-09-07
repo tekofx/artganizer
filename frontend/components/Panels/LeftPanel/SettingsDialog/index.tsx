@@ -105,7 +105,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
           </IconButton>
         </Stack>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ height: "50vh" }}>
         <Grid container>
           <Grid item xs={2}>
             <Tabs
