@@ -16,7 +16,9 @@ export class Artist {
   @OneToMany(() => Social, (social) => social.artist, { onDelete: "CASCADE" })
   socials: Social[];
 
-  @OneToMany(() => Submission, (submission) => submission.artist)
+  @OneToMany(() => Submission, (submission) => submission.artist, {
+    onDelete: "CASCADE",
+  })
   submissions: Submission[];
 
   image: string;

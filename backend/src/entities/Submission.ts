@@ -38,10 +38,10 @@ export class Submission {
   @Column()
   height: number;
 
-  @ManyToOne(() => Artist, (artist) => artist.submissions)
+  @ManyToOne(() => Artist, (artist) => artist.submissions, {
+    onDelete: "CASCADE",
+  })
   artist: Artist;
-
-
 
   @ManyToMany(() => Tag)
   @JoinTable()
