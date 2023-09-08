@@ -1,5 +1,8 @@
 # Artganizer
 
+<p align="center">
+<img src="frontend/public/logo.jpg" style="width: 50%;align: center; border-radius:20%">
+</p>
 A web application to store your art and commissions
 
 The purpose of this was to create a program to organize the art I comission because my art folder it's a mess.
