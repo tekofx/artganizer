@@ -176,5 +176,30 @@ router.put(
     res.send(result);
   }
 );
+router.delete("/:id", async (req: Request, res: Response) => {
+  if (req.params.id == null) {
+    res.status(400).send("artist ID not provided");
+    return;
+  }
+
+  var characterId: number = parseInt(req.params.id);
+  const character = await CharacterRepo.findOne({ where: { id: characterId } });
+
+  if (character == null) {
+    res.status(404).send("character not found");
+    return;
+  }
+
+  // Remove from data/uploads folder
+  const filePath = path.join(charactersDir, characterId + ".jpg");
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+
+  // Remove from database
+  await CharacterRepo.remove(character);
+
+  res.send(character);
+});
 
 export default router;

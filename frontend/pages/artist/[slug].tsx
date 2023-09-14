@@ -37,16 +37,23 @@ export default function Page() {
   };
 
   async function removeArtist() {
-    await axios.delete(process.env.API_URL + `/artists/${artist?.id}`);
-    handleCloseDialog();
-    // Remove artist from data
-    const newData = { ...data };
-    newData.artists = newData.artists.filter(
-      (art: Artist) => art.id != artist?.id
-    );
-    setData(newData);
-
-    router.push("/");
+    await axios
+      .delete(process.env.API_URL + `/artists/${artist?.id}`)
+      .then(() => {
+        // Remove artist from data
+        const newData = { ...data };
+        newData.artists = newData.artists.filter(
+          (art: Artist) => art.id != artist?.id
+        );
+        setData(newData);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        handleCloseDialog();
+        router.push("/");
+      });
   }
 
   useEffect(() => {
