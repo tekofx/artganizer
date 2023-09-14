@@ -73,7 +73,7 @@ export default function Page() {
   return (
     <>
       <Head>
-        <title>{artist.name} | ArtGanizer</title>
+        <title>{artist.name} | Artganizer</title>
       </Head>
       <Paper>
         <Grid container spacing={2}>

@@ -73,7 +73,7 @@ export default function Page() {
   return (
     <>
       <Head>
-        <title>ArtGanizer</title>
+        <title>Artganizer</title>
       </Head>
       <Paper>
         <Grid container spacing={2} sx={{ paddingLeft: 2 }}>
