@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Bottom submission navigation in the submission page
+
 ### Fixed
 
 - Error that changed the submission image when you try to create a character or artist in the submission form.

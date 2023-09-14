@@ -6,6 +6,7 @@ import Submission from "../../interfaces/Submission";
 import { DataContext } from "../_app";
 import { emptySubmission } from "../../src/emptyEntities";
 import Head from "next/head";
+import BottomPanel from "../../components/Panels/BottomPanel";
 export default function Page() {
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const { data } = useContext(DataContext);
@@ -39,7 +40,7 @@ export default function Page() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "100vh",
+                height: "84vh",
               }}
             >
               <img
@@ -48,6 +49,7 @@ export default function Page() {
                 style={{ maxHeight: "100vh", maxWidth: "100%" }}
               />
             </Paper>
+            <BottomPanel current={submission} />
           </Grid>
           <Grid item lg={3}>
             <RightPanel submission={submission} setSubmission={setSubmission} />
