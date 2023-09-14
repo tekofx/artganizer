@@ -38,6 +38,7 @@ export default function SubmissionForm({
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
@@ -58,6 +59,7 @@ export default function SubmissionForm({
     newSubmission.image = event.target.files[0];
     setSubmission(newSubmission);
     setImage(URL.createObjectURL(event.target.files[0]));
+    setDisabled(false);
   }
 
   async function saveSubmission() {
@@ -148,6 +150,7 @@ export default function SubmissionForm({
         <Stack direction="row" spacing={2}>
           <ProgressButton
             loading={loading}
+            disabled={disabled}
             onClick={saveSubmission}
             text="Ok"
           />
