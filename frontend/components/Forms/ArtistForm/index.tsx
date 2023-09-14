@@ -143,7 +143,12 @@ export default function ArtistForm({
         </Grid>
       </DialogContent>
       <DialogActions>
-        <ProgressButton loading={loading} onClick={postArtist} text="Create" />
+        <ProgressButton
+          loading={loading}
+          disabled={artist.name == ""}
+          onClick={postArtist}
+          text="Create"
+        />
         <Button disabled={loading} onClick={() => setOpen(false)}>
           Cancel
         </Button>

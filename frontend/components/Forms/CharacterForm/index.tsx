@@ -131,6 +131,7 @@ export default function CharacterForm({
       <DialogActions>
         <ProgressButton
           loading={loading}
+          disabled={character.name == ""}
           onClick={postCharacter}
           text="Create"
         />

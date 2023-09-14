@@ -156,6 +156,7 @@ export default function TagForm({
         <DialogActions>
           <ProgressButton
             loading={loading}
+            disabled={tag.name == ""}
             onClick={postTag}
             text={tagToUpdate == undefined ? "Create" : "Update"}
           />
