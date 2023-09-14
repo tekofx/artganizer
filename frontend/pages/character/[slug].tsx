@@ -37,16 +37,23 @@ export default function Page() {
   };
 
   async function removeCharacter() {
-    await axios.delete(process.env.API_URL + `/characters/${character?.id}`);
-    handleCloseDialog();
-    // Remove character from data
-    const newData = { ...data };
-    newData.characters = newData.characters.filter(
-      (char: Character) => char.id != character?.id
-    );
-    setData(newData);
-
-    router.push("/");
+    await axios
+      .delete(process.env.API_URL + `/characters/${character?.id}`)
+      .then(() => {
+        // Remove character from data
+        const newData = { ...data };
+        newData.characters = newData.characters.filter(
+          (char: Character) => char.id != character?.id
+        );
+        setData(newData);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        handleCloseDialog();
+        router.push("/");
+      });
   }
 
   useEffect(() => {
