@@ -113,11 +113,11 @@ export default function SubmissionForm({
   }
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
+    <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create Submission</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <input
               accept="image/*"
               id="submission-form-image"
@@ -132,7 +132,7 @@ export default function SubmissionForm({
               </IconButton>
             </label>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <BasicInfo submission={submission} setSubmission={setSubmission} />
 
             <AdvancedInfo
