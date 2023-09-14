@@ -72,13 +72,13 @@ export default function ArtistEdit({
       <Grid item>
         <input
           accept="image/*"
-          id="contained-button-file"
+          id="artist-edit"
           multiple
           type="file"
           hidden
           onChange={onImageUpload}
         />
-        <label htmlFor="contained-button-file">
+        <label htmlFor="artist-edit">
           <IconButton component="span">
             <Avatar src={image} sx={{ width: "10rem", height: "10rem" }} />
           </IconButton>

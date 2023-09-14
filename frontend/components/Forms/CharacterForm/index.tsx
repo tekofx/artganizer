@@ -88,13 +88,13 @@ export default function CharacterForm({
           <Grid item lg={4}>
             <input
               accept="image/*"
-              id="contained-button-file"
+              id="character-form"
               multiple
               type="file"
               hidden
               onChange={onImageUpload}
             />
-            <label htmlFor="contained-button-file">
+            <label htmlFor="character-form">
               <IconButton component="span">
                 <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
               </IconButton>

@@ -118,13 +118,13 @@ export default function SubmissionForm({
           <Grid item xs={6}>
             <input
               accept="image/*"
-              id="contained-button-file"
+              id="submission-form-image"
               multiple
               type="file"
               hidden
               onChange={onImageUpload}
             />
-            <label htmlFor="contained-button-file">
+            <label htmlFor="submission-form-image">
               <IconButton component="span">
                 <img src={image} width="100%" />
               </IconButton>
@@ -133,7 +133,6 @@ export default function SubmissionForm({
           <Grid item xs={6}>
             <BasicInfo submission={submission} setSubmission={setSubmission} />
 
-            {/* Advanced info */}
             <AdvancedInfo
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}

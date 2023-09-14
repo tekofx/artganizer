@@ -98,13 +98,13 @@ export default function ArtistForm({
           <Grid item lg={4}>
             <input
               accept="image/*"
-              id="contained-button-file"
+              id="artist-form-image"
               multiple
               type="file"
               hidden
               onChange={onImageUpload}
             />
-            <label htmlFor="contained-button-file">
+            <label htmlFor="artist-form-image">
               <IconButton component="span">
                 <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
               </IconButton>
