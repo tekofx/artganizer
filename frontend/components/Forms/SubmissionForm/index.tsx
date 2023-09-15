@@ -84,32 +84,34 @@ export default function SubmissionForm({
     }
 
     // Create submission
-    try {
-      const response = await axios.post(
-        process.env.API_URL + `/submissions`,
-        formData
-      );
-      var newData = { ...data };
-      newData.submissions.push(response.data);
-      setData(newData);
-      setAlertMessage({
-        message: "Submission created",
-        severity: "success",
+    await axios
+      .post(process.env.API_URL + `/submissions`, formData)
+      .then((response) => {
+        var newData = { ...data };
+        newData.submissions.push(response.data);
+        setData(newData);
+        setAlertMessage({
+          message: "Submission created",
+          severity: "success",
+        });
+      })
+      .catch(() => {
+        setAlertMessage({
+          message: "Error creating submission",
+          severity: "error",
+        });
+      })
+      .finally(() => {
+        // Reset form
+        setLoading(false);
+        setSubmission(emptySubmission);
+        setImage("/placeholder.jpg");
+        setSelectedArtist(undefined);
+        setSelectedCharacters([]);
+        setSelectedTags([]);
+        setOpen(false);
+        setOpenSnack(true);
       });
-    } catch (error) {
-      setAlertMessage({
-        message: "Error creating submission",
-        severity: "error",
-      });
-    } finally {
-      // Reset form
-      setLoading(false);
-      setSubmission(emptySubmission);
-      setImage("/placeholder.jpg");
-
-      setOpen(false);
-      setOpenSnack(true);
-    }
   }
 
   return (
