@@ -86,7 +86,9 @@ export default function ArtistForm({
       .finally(() => {
         setLoading(false);
         setOpen(false);
+        setImage("/placeholder.jpg");
         setOpenSnack?.(true);
+        setArtist(defaultArtist);
       });
   }
 
