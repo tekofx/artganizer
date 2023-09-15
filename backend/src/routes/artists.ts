@@ -61,7 +61,7 @@ router.get("/", async (req: Request, res: Response) => {
   const artists = await queryBuilder.getMany();
   // Add image URL
   for (const artist of artists) {
-    artist.image = process.env.URL + "/artists/uploads/" + artist.id;
+    artist.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
   }
   res.send(artists);
 });
@@ -196,7 +196,7 @@ router.get("/:artistId/submissions", async (req: Request, res: Response) => {
 
   res.send(submissions);
 });
-router.get("/uploads/:artistId", async (req: Request, res: Response) => {
+/* router.get("/uploads/:artistId", async (req: Request, res: Response) => {
   if (req.params.artistId == null) {
     res.status(400).send("Artist ID not provided");
     return;
@@ -220,7 +220,9 @@ router.get("/uploads/:artistId", async (req: Request, res: Response) => {
   }
 
   return res.sendFile(filePath);
-});
+}); */
+
+router.use("/uploads", express.static(artistsPicsDir));
 
 router.put(
   "/:artistId",

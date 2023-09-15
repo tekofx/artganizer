@@ -106,7 +106,7 @@ router.get("/", async (req: Request, res: Response) => {
   res.send(submissions);
 });
 
-router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
+/* router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
     return;
@@ -133,7 +133,7 @@ router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
   }
 
   return res.sendFile(filePath);
-});
+}); */
 
 router.post(
   "/",

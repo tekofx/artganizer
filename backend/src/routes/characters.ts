@@ -54,10 +54,12 @@ const router = express.Router();
 router.get("/", async (req: Request, res: Response) => {
   const characters = await CharacterRepo.find();
   for (const character of characters) {
-    character.image = process.env.URL + "/characters/uploads/" + character.id;
+    character.image =
+      process.env.URL + "/characters/uploads/" + character.id + ".jpg";
   }
   res.send(characters);
 });
+router.use("/uploads", express.static(charactersDir));
 
 router.post(
   "/",
@@ -94,7 +96,7 @@ router.post(
   }
 );
 
-router.get("/uploads/:characterId", async (req: Request, res: Response) => {
+/* router.get("/uploads/:characterId", async (req: Request, res: Response) => {
   if (req.params.characterId == null) {
     res.status(400).send("Character ID not provided");
     return;
@@ -118,7 +120,7 @@ router.get("/uploads/:characterId", async (req: Request, res: Response) => {
   }
 
   return res.sendFile(filePath);
-});
+}); */
 
 router.put(
   "/:id",
