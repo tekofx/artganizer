@@ -18,6 +18,7 @@ import { TwitterPicker, ColorResult } from "react-color";
 import { DataContext } from "../../../pages/_app";
 import AlertMessage from "../../../interfaces/AlertMessage";
 import ProgressButton from "../ProgressButon";
+import Snack from "../../Snack";
 const defaultTag: Tag = {
   name: "",
   color: "#FFFFFF",
@@ -28,20 +29,17 @@ const defaultTag: Tag = {
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
-  setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
   tagToUpdate?: Tag;
 }
 
-export default function TagForm({
-  open,
-  setOpen,
-  setAlertMessage,
-  setOpenSnack,
-  tagToUpdate,
-}: Props) {
+export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
   const [tag, setTag] = useState<Tag>(tagToUpdate ?? defaultTag);
   const [loading, setLoading] = useState<boolean>(false);
+  const [openSnack, setOpenSnack] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    message: "Submission created",
+    severity: "success",
+  });
 
   const { data, setData } = useContext(DataContext);
 
@@ -174,6 +172,11 @@ export default function TagForm({
           </Button>
         </DialogActions>
       </Dialog>
+      <Snack
+        open={openSnack}
+        setOpen={setOpenSnack}
+        alertMessage={alertMessage}
+      />
     </>
   );
 }

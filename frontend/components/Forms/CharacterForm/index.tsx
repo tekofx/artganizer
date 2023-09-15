@@ -17,27 +17,23 @@ import axios from "axios";
 import LimitedTextField from "../../LimitedTextField";
 import Character from "../../../interfaces/Character";
 import { emptyCharacter } from "../../../src/emptyEntities";
-interface AlertMessage {
-  message: string;
-  severity: "success" | "error" | "info" | "warning";
-}
+import Snack from "../../Snack";
+import { AlertMessage } from "../../../interfaces";
 
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
-  setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
 }
 
-export default function CharacterForm({
-  open,
-  setOpen,
-  setOpenSnack,
-  setAlertMessage,
-}: Props) {
+export default function CharacterForm({ open, setOpen }: Props) {
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
+  const [openSnack, setOpenSnack] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    message: "Submission created",
+    severity: "success",
+  });
 
   const { data, setData } = useContext(DataContext);
 
@@ -73,7 +69,7 @@ export default function CharacterForm({
       })
       .catch((error) => {
         console.log(error);
-        setAlertMessage?.({
+        setAlertMessage({
           message: "Error creating character",
           severity: "error",
         });
@@ -81,7 +77,7 @@ export default function CharacterForm({
       .finally(() => {
         setLoading(false);
         setOpen(false);
-        setOpenSnack?.(true);
+        setOpenSnack(true);
         resetForm();
       });
   }
@@ -92,64 +88,71 @@ export default function CharacterForm({
   }
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Create Character</DialogTitle>
-      <DialogContent sx={{ p: 2 }}>
-        <Grid container spacing={2}>
-          <Grid item lg={4}>
-            <input
-              accept="image/*"
-              id="character-form"
-              multiple
-              type="file"
-              hidden
-              onChange={onImageUpload}
-            />
-            <label htmlFor="character-form">
-              <IconButton component="span">
-                <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
-              </IconButton>
-            </label>
-          </Grid>
-          <Grid item lg={8}>
-            <Stack spacing={2}>
-              <TextField
-                label="Name"
-                value={character.name}
-                onChange={(event) => {
-                  setCharacter((prevCharacter) => ({
-                    ...prevCharacter,
-                    name: event.target.value,
-                  }));
-                }}
+    <>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Create Character</DialogTitle>
+        <DialogContent sx={{ p: 2 }}>
+          <Grid container spacing={2}>
+            <Grid item lg={4}>
+              <input
+                accept="image/*"
+                id="character-form"
+                multiple
+                type="file"
+                hidden
+                onChange={onImageUpload}
               />
-              <LimitedTextField
-                label="Description"
-                maxLength={200}
-                multiline
-                value={character.description}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setCharacter((prevCharacter) => ({
-                    ...prevCharacter,
-                    description: event.target.value,
-                  }));
-                }}
-              />
-            </Stack>
+              <label htmlFor="character-form">
+                <IconButton component="span">
+                  <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
+                </IconButton>
+              </label>
+            </Grid>
+            <Grid item lg={8}>
+              <Stack spacing={2}>
+                <TextField
+                  label="Name"
+                  value={character.name}
+                  onChange={(event) => {
+                    setCharacter((prevCharacter) => ({
+                      ...prevCharacter,
+                      name: event.target.value,
+                    }));
+                  }}
+                />
+                <LimitedTextField
+                  label="Description"
+                  maxLength={200}
+                  multiline
+                  value={character.description}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setCharacter((prevCharacter) => ({
+                      ...prevCharacter,
+                      description: event.target.value,
+                    }));
+                  }}
+                />
+              </Stack>
+            </Grid>
           </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <ProgressButton
-          loading={loading}
-          disabled={character.name == ""}
-          onClick={postCharacter}
-          text="Create"
-        />
-        <Button disabled={loading} onClick={onCancel}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <ProgressButton
+            loading={loading}
+            disabled={character.name == ""}
+            onClick={postCharacter}
+            text="Create"
+          />
+          <Button disabled={loading} onClick={onCancel}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snack
+        open={openSnack}
+        setOpen={setOpenSnack}
+        alertMessage={alertMessage}
+      />
+    </>
   );
 }

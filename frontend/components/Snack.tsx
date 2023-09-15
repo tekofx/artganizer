@@ -8,7 +8,7 @@ interface Props {
   alertMessage: AlertMessage;
 }
 
-export default function Snack(props: Props) {
+export default function Snack({ open, setOpen, alertMessage }: Props) {
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -17,11 +17,11 @@ export default function Snack(props: Props) {
       return;
     }
 
-    props.setOpen(false);
+    setOpen(false);
   };
   return (
     <Snackbar
-      open={props.open}
+      open={open}
       autoHideDuration={3000}
       onClose={handleClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
@@ -29,10 +29,10 @@ export default function Snack(props: Props) {
     >
       <Alert
         onClose={handleClose}
-        severity={props.alertMessage.severity}
+        severity={alertMessage.severity}
         sx={{ width: "100%" }}
       >
-        {props.alertMessage.message}
+        {alertMessage.message}
       </Alert>
     </Snackbar>
   );

@@ -17,10 +17,9 @@ import Artist from "../../../interfaces/Artist";
 import LimitedTextField from "../../LimitedTextField";
 import Socials from "./Socials";
 import ProgressButton from "../ProgressButon";
-interface AlertMessage {
-  message: string;
-  severity: "success" | "error" | "info" | "warning";
-}
+import Snack from "../../Snack";
+import { AlertMessage } from "../../../interfaces";
+
 const defaultArtist: Artist = {
   id: -1,
   name: "",
@@ -33,19 +32,17 @@ const defaultArtist: Artist = {
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
-  setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
 }
 
-export default function ArtistForm({
-  open,
-  setOpen,
-  setOpenSnack,
-  setAlertMessage,
-}: Props) {
+export default function ArtistForm({ open, setOpen }: Props) {
   const [artist, setArtist] = useState<Artist>(defaultArtist);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
+  const [openSnack, setOpenSnack] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    message: "Submission created",
+    severity: "success",
+  });
 
   const { data, setData } = useContext(DataContext);
 
@@ -71,14 +68,14 @@ export default function ArtistForm({
         var newData = { ...data };
         newData.artists.push(response.data);
         setData(newData);
-        setAlertMessage?.({
+        setAlertMessage({
           message: "Artist created",
           severity: "success",
         });
       })
       .catch((error) => {
         console.log(error);
-        setAlertMessage?.({
+        setAlertMessage({
           message: "Error creating artist",
           severity: "error",
         });
@@ -87,7 +84,7 @@ export default function ArtistForm({
         setLoading(false);
         setOpen(false);
         setImage("/placeholder.jpg");
-        setOpenSnack?.(true);
+        setOpenSnack(true);
         setArtist(defaultArtist);
       });
   }
@@ -99,68 +96,75 @@ export default function ArtistForm({
   }
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Create Artist</DialogTitle>
-      <DialogContent sx={{ p: 2 }}>
-        <Grid container spacing={2}>
-          <Grid item lg={4}>
-            <input
-              accept="image/*"
-              id="artist-form-image"
-              multiple
-              type="file"
-              hidden
-              onChange={onImageUpload}
-            />
-            <label htmlFor="artist-form-image">
-              <IconButton component="span">
-                <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
-              </IconButton>
-            </label>
-          </Grid>
-          <Grid item lg={8}>
-            <Stack spacing={2}>
-              <TextField
-                label="Name"
-                value={artist.name}
-                onChange={(event) => {
-                  setArtist((prevSubmission) => ({
-                    ...prevSubmission,
-                    name: event.target.value,
-                  }));
-                }}
+    <>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Create Artist</DialogTitle>
+        <DialogContent sx={{ p: 2 }}>
+          <Grid container spacing={2}>
+            <Grid item lg={4}>
+              <input
+                accept="image/*"
+                id="artist-form-image"
+                multiple
+                type="file"
+                hidden
+                onChange={onImageUpload}
               />
-              <LimitedTextField
-                label="Description"
-                maxLength={200}
-                multiline
-                value={artist.description}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setArtist((prevSubmission) => ({
-                    ...prevSubmission,
-                    description: event.target.value,
-                  }));
-                }}
-              />
-            </Stack>
-          </Grid>
+              <label htmlFor="artist-form-image">
+                <IconButton component="span">
+                  <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
+                </IconButton>
+              </label>
+            </Grid>
+            <Grid item lg={8}>
+              <Stack spacing={2}>
+                <TextField
+                  label="Name"
+                  value={artist.name}
+                  onChange={(event) => {
+                    setArtist((prevSubmission) => ({
+                      ...prevSubmission,
+                      name: event.target.value,
+                    }));
+                  }}
+                />
+                <LimitedTextField
+                  label="Description"
+                  maxLength={200}
+                  multiline
+                  value={artist.description}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setArtist((prevSubmission) => ({
+                      ...prevSubmission,
+                      description: event.target.value,
+                    }));
+                  }}
+                />
+              </Stack>
+            </Grid>
 
-          <Grid item lg={12}>
-            <Socials artist={artist} setArtist={setArtist} />
+            <Grid item lg={12}>
+              <Socials artist={artist} setArtist={setArtist} />
+            </Grid>
           </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <ProgressButton
-          loading={loading}
-          disabled={artist.name == ""}
-          onClick={postArtist}
-          text="Create"
-        />
-        <Button disabled={loading} onClick={onCancel}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <ProgressButton
+            loading={loading}
+            disabled={artist.name == ""}
+            onClick={postArtist}
+            text="Create"
+          />
+          <Button disabled={loading} onClick={onCancel}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snack
+        open={openSnack}
+        setOpen={setOpenSnack}
+        alertMessage={alertMessage}
+      />
+    </>
   );
 }

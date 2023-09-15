@@ -21,24 +21,23 @@ import ProgressButton from "../ProgressButon";
 import BasicInfo from "./BasicInfo";
 import AdvancedInfo from "./AdvancedInfo";
 import { emptySubmission } from "../../../src/emptyEntities";
+import Snack from "../../Snack";
 
 interface Props {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  setOpenSnack: Dispatch<SetStateAction<boolean>>;
-  setAlertMessage: Dispatch<SetStateAction<AlertMessage>>;
 }
-export default function SubmissionForm({
-  open,
-  setOpen,
-  setOpenSnack,
-  setAlertMessage,
-}: Props) {
+export default function SubmissionForm({ open, setOpen }: Props) {
   const { data, setData } = useContext(DataContext);
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(true);
+  const [openSnack, setOpenSnack] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    message: "Submission created",
+    severity: "success",
+  });
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
@@ -118,53 +117,63 @@ export default function SubmissionForm({
   }
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Create Submission</DialogTitle>
-      <DialogContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <input
-              accept="image/*"
-              id="submission-form-image"
-              multiple
-              type="file"
-              hidden
-              onChange={onImageUpload}
-            />
-            <label htmlFor="submission-form-image">
-              <IconButton component="span">
-                <img src={image} width="100%" />
-              </IconButton>
-            </label>
-          </Grid>
-          <Grid item xs={12}>
-            <BasicInfo submission={submission} setSubmission={setSubmission} />
+    <>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Create Submission</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <input
+                accept="image/*"
+                id="submission-form-image"
+                multiple
+                type="file"
+                hidden
+                onChange={onImageUpload}
+              />
+              <label htmlFor="submission-form-image">
+                <IconButton component="span">
+                  <img src={image} width="100%" />
+                </IconButton>
+              </label>
+            </Grid>
+            <Grid item xs={12}>
+              <BasicInfo
+                submission={submission}
+                setSubmission={setSubmission}
+              />
 
-            <AdvancedInfo
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              selectedArtist={selectedArtist}
-              setSelectedArtist={setSelectedArtist}
-              selectedCharacters={selectedCharacters}
-              setSelectedCharacters={setSelectedCharacters}
-            />
+              <AdvancedInfo
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
+                selectedArtist={selectedArtist}
+                setSelectedArtist={setSelectedArtist}
+                selectedCharacters={selectedCharacters}
+                setSelectedCharacters={setSelectedCharacters}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Stack direction="row" spacing={2}>
-          <ProgressButton
-            loading={loading}
-            disabled={disabled}
-            onClick={saveSubmission}
-            text="Ok"
-          />
+        </DialogContent>
+        <DialogActions>
+          <Stack direction="row" spacing={2}>
+            <ProgressButton
+              loading={loading}
+              disabled={disabled}
+              onClick={saveSubmission}
+              text="Ok"
+            />
 
-          <Button disabled={loading} onClick={onCancel}>
-            Cancel
-          </Button>
-        </Stack>
-      </DialogActions>
-    </Dialog>
+            <Button disabled={loading} onClick={onCancel}>
+              Cancel
+            </Button>
+          </Stack>
+        </DialogActions>
+      </Dialog>
+      <Snack
+        open={openSnack}
+        setOpen={setOpenSnack}
+        alertMessage={alertMessage}
+      />
+    </>
   );
 }
