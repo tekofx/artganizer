@@ -92,6 +92,12 @@ export default function ArtistForm({
       });
   }
 
+  function onCancel() {
+    setOpen(false);
+    setImage("/placeholder.jpg");
+    setArtist(defaultArtist);
+  }
+
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create Artist</DialogTitle>
@@ -151,7 +157,7 @@ export default function ArtistForm({
           onClick={postArtist}
           text="Create"
         />
-        <Button disabled={loading} onClick={() => setOpen(false)}>
+        <Button disabled={loading} onClick={onCancel}>
           Cancel
         </Button>
       </DialogActions>
