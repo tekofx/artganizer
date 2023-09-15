@@ -52,8 +52,14 @@ export default function TagForm({
     }));
   };
 
+  function onCancel() {
+    setOpen(false);
+    setTag(defaultTag);
+  }
+
   async function postTag() {
     setLoading(true);
+    // Create tag
     if (tagToUpdate == undefined) {
       await axios
         .post(process.env.API_URL + `/tags`, tag)
@@ -79,6 +85,7 @@ export default function TagForm({
           setOpen(false);
         });
     } else {
+      // Edit tag
       await axios
         .put(process.env.API_URL + `/tags/${tag.id}`, tag)
         .then((response) => {
@@ -105,6 +112,7 @@ export default function TagForm({
         });
     }
     setLoading(false);
+    setTag(defaultTag);
   }
 
   return (
@@ -161,7 +169,7 @@ export default function TagForm({
             text={tagToUpdate == undefined ? "Create" : "Update"}
           />
 
-          <Button disabled={loading} onClick={() => setOpen(false)}>
+          <Button disabled={loading} onClick={onCancel}>
             Close
           </Button>
         </DialogActions>

@@ -48,10 +48,17 @@ export default function SubmissionForm({
 
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
 
+  function resetForm() {
+    setSubmission(emptySubmission);
+    setImage("/placeholder.jpg");
+    setSelectedArtist(undefined);
+    setSelectedCharacters([]);
+    setSelectedTags([]);
+  }
+
   function onCancel() {
-    if (setOpen != undefined) {
-      setOpen(false);
-    }
+    setOpen(false);
+    resetForm();
   }
 
   function onImageUpload(event: any) {
@@ -104,13 +111,9 @@ export default function SubmissionForm({
       .finally(() => {
         // Reset form
         setLoading(false);
-        setSubmission(emptySubmission);
-        setImage("/placeholder.jpg");
-        setSelectedArtist(undefined);
-        setSelectedCharacters([]);
-        setSelectedTags([]);
         setOpen(false);
         setOpenSnack(true);
+        resetForm();
       });
   }
 
@@ -157,7 +160,7 @@ export default function SubmissionForm({
             text="Ok"
           />
 
-          <Button disabled={loading} onClick={() => onCancel()}>
+          <Button disabled={loading} onClick={onCancel}>
             Cancel
           </Button>
         </Stack>
