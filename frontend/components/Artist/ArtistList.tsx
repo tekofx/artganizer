@@ -8,11 +8,16 @@ interface ArtistListProps {
 
 export default function ArtistList({ artists, clickable }: ArtistListProps) {
   return (
-    <>
+    <div
+      style={{
+        maxHeight: "35vh",
+        overflowY: "auto",
+      }}
+    >
       {artists.length == 0 && <Typography>No artists</Typography>}
       {artists.map((artist) => (
         <ArtistLabel key={artist.id} artist={artist} clickable={clickable} />
       ))}
-    </>
+    </div>
   );
 }
