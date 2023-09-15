@@ -45,8 +45,6 @@ export default function Info({
       });
   }
 
-  console.log(typeof submission.date);
-
   return (
     <Container sx={{ paddingLeft: "0" }}>
       <Grid container spacing={2}>

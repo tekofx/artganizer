@@ -55,7 +55,6 @@ export default function ArtistForm({ open, setOpen }: Props) {
 
   async function postArtist() {
     setLoading(true);
-    console.log(JSON.stringify(artist.socials));
     const formData = new FormData();
     formData.append("name", artist.name);
     formData.append("description", artist.description);

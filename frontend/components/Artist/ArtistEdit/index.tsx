@@ -49,12 +49,10 @@ export default function ArtistEdit({
     formData.append("description", auxArtist.description);
     formData.append("id", auxArtist?.id.toString());
     formData.append("socials", JSON.stringify(auxArtist.socials));
-    console.log("a");
 
     await axios
       .put(process.env.API_URL + `/artists/${auxArtist.id}`, formData)
       .then((response) => {
-        console.log(response.data);
         setArtist(response.data);
         setData({ ...data, artists: data.artists });
       })

@@ -36,7 +36,6 @@ export default function Socials({ artist, setArtist }: SocialProps) {
       url: "",
     });
     setArtist({ ...artist, socials: newSocials });
-    console.log(artist.socials);
   }
 
   function removeSocial(index: number) {
