@@ -41,6 +41,11 @@ export default function CharacterForm({
 
   const { data, setData } = useContext(DataContext);
 
+  function resetForm() {
+    setImage("/placeholder.jpg");
+    setCharacter(emptyCharacter);
+  }
+
   function onImageUpload(event: any) {
     const newCharacter = { ...character };
     newCharacter.image = event.target.files[0];
@@ -77,7 +82,13 @@ export default function CharacterForm({
         setLoading(false);
         setOpen(false);
         setOpenSnack?.(true);
+        resetForm();
       });
+  }
+
+  function onCancel() {
+    setOpen(false);
+    resetForm();
   }
 
   return (
@@ -135,7 +146,7 @@ export default function CharacterForm({
           onClick={postCharacter}
           text="Create"
         />
-        <Button disabled={loading} onClick={() => setOpen(false)}>
+        <Button disabled={loading} onClick={onCancel}>
           Cancel
         </Button>
       </DialogActions>
