@@ -11,7 +11,7 @@ import TagList from "../../Tag/TagList";
 import Submission from "../../../interfaces/Submission";
 import CharacterList from "../../Character/CharacterList";
 import ColorPalette from "../../Artist/ColorPalette";
-import { formatDate, convertBytes } from "../../../src/formatters";
+import { convertBytes } from "../../../src/formatters";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -46,7 +46,7 @@ export default function Info({
   }
 
   return (
-    <Container sx={{ paddingLeft: "0" }}>
+    <Container sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}>
       <Grid container spacing={2}>
         <Grid item lg={12}>
           <Stack spacing={1}>
@@ -72,7 +72,7 @@ export default function Info({
               <Paper elevation={0} sx={{ padding: 2 }}>
                 <Stack spacing={1}>
                   <Typography>Characters</Typography>
-                  <CharacterList characters={submission.characters} />
+                  <CharacterList characters={submission.characters} clickable />
                 </Stack>
               </Paper>
             )}
@@ -98,13 +98,13 @@ export default function Info({
           <Paper elevation={0} sx={{ padding: 2 }}>
             <Typography variant="h5">Image Information</Typography>
             <Grid container spacing={1}>
-              <Grid item lg={4}>
+              {/* <Grid item lg={4}>
                 Date
               </Grid>
 
               <Grid item lg={8}>
-                <Typography>{formatDate(submission.date)}</Typography>
-              </Grid>
+                <Typography>{submission.date.getUTCDate()}</Typography>
+              </Grid> */}
 
               <Grid item lg={4}>
                 Dimensions

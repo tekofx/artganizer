@@ -29,14 +29,14 @@ export default function AdvancedInfo({
         <Typography variant="h6">Advanced Info</Typography>
       </Grid>
 
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <TagSelect
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
         />
       </Grid>
 
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <ArtistSelect
           selectedArtist={selectedArtist}
           setSelectedArtist={setSelectedArtist}

@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>ArtGanizer</title>
+        <title>Artganizer</title>
       </Head>
 
       <TopPanel />

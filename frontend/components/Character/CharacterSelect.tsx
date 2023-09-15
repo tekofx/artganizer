@@ -3,7 +3,6 @@ import {
   Paper,
   TextField,
   Popper,
-  Stack,
   Grid,
   IconButton,
   Tooltip,
@@ -50,12 +49,10 @@ export default function CharacterSelect({
           <Grid container spacing={1}>
             {selectedCharacters.map((char) => (
               <Grid item key={char.id}>
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <CharacterLabel
-                    character={char}
-                    onDelete={() => removeCharacter(char)}
-                  />
-                </Stack>
+                <CharacterLabel
+                  character={char}
+                  onDelete={() => removeCharacter(char)}
+                />
               </Grid>
             ))}
           </Grid>

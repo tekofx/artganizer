@@ -8,12 +8,14 @@ import {
   Grid,
   IconButton,
   Tooltip,
+  Avatar,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SelectableTagList from "./SelectableTagList";
 import Tag from "../../interfaces/Tag";
 import TagChip from "./TagChip";
 import { TagForm } from "../Forms";
+import ClearIcon from "@mui/icons-material/Clear";
 interface TagSelectProps {
   setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
   selectedTags: Tag[];
@@ -49,18 +51,26 @@ export default function TagSelect({
           <Grid container spacing={1}>
             {selectedTags.map((tag) => (
               <Grid item key={tag.id}>
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <TagChip tag={tag} onDelete={() => removeTag(tag)} />
-                </Stack>
+                <TagChip tag={tag} onDelete={() => removeTag(tag)} />
               </Grid>
             ))}
           </Grid>
         </Grid>
 
         {selectedTags.length < 1 && (
-          <>
-            <Typography>No tags selected</Typography>
-          </>
+          <Grid item>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={2}
+              sx={{ p: 1 }}
+            >
+              <Avatar>
+                <ClearIcon />
+              </Avatar>
+              <Typography>No tags selected</Typography>
+            </Stack>
+          </Grid>
         )}
         <Grid item xs={10}>
           <TextField

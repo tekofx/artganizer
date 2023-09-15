@@ -18,6 +18,7 @@ import { TwitterPicker, ColorResult } from "react-color";
 import { DataContext } from "../../../pages/_app";
 import AlertMessage from "../../../interfaces/AlertMessage";
 import ProgressButton from "../ProgressButon";
+import Snack from "../../Snack";
 const defaultTag: Tag = {
   name: "",
   color: "#FFFFFF",
@@ -28,20 +29,17 @@ const defaultTag: Tag = {
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAlertMessage?: React.Dispatch<React.SetStateAction<AlertMessage>>;
-  setOpenSnack?: React.Dispatch<React.SetStateAction<boolean>>;
   tagToUpdate?: Tag;
 }
 
-export default function TagForm({
-  open,
-  setOpen,
-  setAlertMessage,
-  setOpenSnack,
-  tagToUpdate,
-}: Props) {
+export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
   const [tag, setTag] = useState<Tag>(tagToUpdate ?? defaultTag);
   const [loading, setLoading] = useState<boolean>(false);
+  const [openSnack, setOpenSnack] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<AlertMessage>({
+    message: "Submission created",
+    severity: "success",
+  });
 
   const { data, setData } = useContext(DataContext);
 
@@ -52,8 +50,14 @@ export default function TagForm({
     }));
   };
 
+  function onCancel() {
+    setOpen(false);
+    setTag(defaultTag);
+  }
+
   async function postTag() {
     setLoading(true);
+    // Create tag
     if (tagToUpdate == undefined) {
       await axios
         .post(process.env.API_URL + `/tags`, tag)
@@ -79,6 +83,7 @@ export default function TagForm({
           setOpen(false);
         });
     } else {
+      // Edit tag
       await axios
         .put(process.env.API_URL + `/tags/${tag.id}`, tag)
         .then((response) => {
@@ -105,6 +110,7 @@ export default function TagForm({
         });
     }
     setLoading(false);
+    setTag(defaultTag);
   }
 
   return (
@@ -156,15 +162,21 @@ export default function TagForm({
         <DialogActions>
           <ProgressButton
             loading={loading}
+            disabled={tag.name == ""}
             onClick={postTag}
             text={tagToUpdate == undefined ? "Create" : "Update"}
           />
 
-          <Button disabled={loading} onClick={() => setOpen(false)}>
+          <Button disabled={loading} onClick={onCancel}>
             Close
           </Button>
         </DialogActions>
       </Dialog>
+      <Snack
+        open={openSnack}
+        setOpen={setOpenSnack}
+        alertMessage={alertMessage}
+      />
     </>
   );
 }

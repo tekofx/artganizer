@@ -5,9 +5,15 @@ interface Props {
   loading: boolean;
   onClick: () => void;
   text: string;
+  disabled?: boolean;
 }
 
-export default function ProgressButton({ loading, onClick, text }: Props) {
+export default function ProgressButton({
+  loading,
+  onClick,
+  text,
+  disabled,
+}: Props) {
   const buttonSx = {
     ...(loading && {
       bgcolor: green[500],
@@ -21,7 +27,7 @@ export default function ProgressButton({ loading, onClick, text }: Props) {
     <Box sx={{ m: 1, position: "relative" }}>
       <Button
         variant="contained"
-        disabled={loading}
+        disabled={loading || disabled}
         sx={buttonSx}
         onClick={() => onClick()}
       >

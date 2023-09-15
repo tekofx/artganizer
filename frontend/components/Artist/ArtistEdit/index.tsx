@@ -49,12 +49,10 @@ export default function ArtistEdit({
     formData.append("description", auxArtist.description);
     formData.append("id", auxArtist?.id.toString());
     formData.append("socials", JSON.stringify(auxArtist.socials));
-    console.log("a");
 
     await axios
       .put(process.env.API_URL + `/artists/${auxArtist.id}`, formData)
       .then((response) => {
-        console.log(response.data);
         setArtist(response.data);
         setData({ ...data, artists: data.artists });
       })
@@ -72,13 +70,13 @@ export default function ArtistEdit({
       <Grid item>
         <input
           accept="image/*"
-          id="contained-button-file"
+          id="artist-edit"
           multiple
           type="file"
           hidden
           onChange={onImageUpload}
         />
-        <label htmlFor="contained-button-file">
+        <label htmlFor="artist-edit">
           <IconButton component="span">
             <Avatar src={image} sx={{ width: "10rem", height: "10rem" }} />
           </IconButton>

@@ -8,17 +8,21 @@ import {
   IconButton,
 } from "@mui/material";
 import { useState, useContext } from "react";
+import AddIcon from "@mui/icons-material/Add";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DataContext } from "../../../../pages/_app";
 import SearchBar from "../../../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
 import CharacterList from "../../../Character/CharacterList";
 import PersonIcon from "@mui/icons-material/Person";
+import CharacterForm from "../../../Forms/CharacterForm";
 export default function ArtistAccordion() {
   const { data } = useContext(DataContext);
   const [characters, setCharacters] = useState(data.characters);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     var temp = data.characters.filter((character) =>
@@ -47,7 +51,7 @@ export default function ArtistAccordion() {
         sx={{ flexDirection: "row-reverse", justifyContent: "space-between" }}
       >
         <Grid container alignItems="center">
-          <Grid item lg={10}>
+          <Grid item lg={8}>
             <Stack
               direction="row"
               spacing={1}
@@ -60,16 +64,22 @@ export default function ArtistAccordion() {
               </Typography>
             </Stack>
           </Grid>
-          <Grid item lg={2}>
-            <IconButton onClick={onSearchIconClick}>
-              <SearchIcon />
-            </IconButton>
+          <Grid item lg={4}>
+            <Stack direction="row">
+              <IconButton onClick={() => setOpen(true)}>
+                <AddIcon />
+              </IconButton>
+              <IconButton onClick={onSearchIconClick}>
+                <SearchIcon />
+              </IconButton>
+            </Stack>
           </Grid>
         </Grid>
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction="column">
           <SearchBar
+            fullWidth
             onChange={onChange}
             show={showSearchBar}
             focus={showSearchBar}
@@ -77,6 +87,7 @@ export default function ArtistAccordion() {
           <CharacterList characters={characters} clickable />
         </Stack>
       </AccordionDetails>
+      <CharacterForm open={open} setOpen={setOpen} />
     </Accordion>
   );
 }
