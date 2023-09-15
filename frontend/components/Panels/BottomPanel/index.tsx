@@ -1,5 +1,5 @@
 import { Paper, Stack } from "@mui/material";
-import { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { DataContext } from "../../../pages/_app";
 import { Submission } from "../../../interfaces";
 import { useRouter } from "next/router";
@@ -9,10 +9,16 @@ interface BottomPanelProps {
 export default function BottomPanel({ current }: BottomPanelProps) {
   const { data } = useContext(DataContext);
   const router = useRouter();
+  const ref = useRef<HTMLDivElement>(null);
 
+  const handleWheel = (e: React.WheelEvent) => {
+    if (ref.current) {
+      ref.current.scrollLeft += e.deltaY;
+    }
+  };
   return (
-    <Paper>
-      <Stack direction="row">
+    <Paper sx={{ overflowX: "auto" }} onWheel={handleWheel} ref={ref}>
+      <Stack direction="row" sx={{ width: "max-content" }}>
         {data.submissions.map((submission) => (
           <img
             src={submission.image}
