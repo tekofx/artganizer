@@ -72,7 +72,7 @@ export default function Info({
               <Paper elevation={0} sx={{ padding: 2 }}>
                 <Stack spacing={1}>
                   <Typography>Characters</Typography>
-                  <CharacterList characters={submission.characters} />
+                  <CharacterList characters={submission.characters} clickable />
                 </Stack>
               </Paper>
             )}
