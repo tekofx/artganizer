@@ -75,11 +75,10 @@ export default function ManageTags(props: ManageTagsProps) {
         </DialogTitle>
         <DialogContent sx={{ p: 5 }}>
           {tags?.map((tag) => (
-            <>
+            <div key={tag.id}>
               <Stack
                 direction="row"
                 spacing={3}
-                key={tag.id}
                 justifyContent="space-between"
                 alignItems="center"
               >
@@ -102,7 +101,7 @@ export default function ManageTags(props: ManageTagsProps) {
                 setOpen={setOpenTagForm}
                 tagToUpdate={tag}
               />
-            </>
+            </div>
           ))}
         </DialogContent>
       </Dialog>
