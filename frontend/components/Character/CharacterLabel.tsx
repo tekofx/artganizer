@@ -50,9 +50,7 @@ export default function Page({
     >
       {character ? (
         <>
-          <Avatar
-            src={process.env.API_URL + `/characters/uploads/${character?.id}`}
-          />
+          <Avatar src={character.image} />
           <Typography>{character?.name}</Typography>
           {onDelete && (
             <IconButton onClick={onDelete}>
