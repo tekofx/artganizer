@@ -31,7 +31,11 @@ export default function Page() {
       <Head>
         <title>{submission?.title}</title>
       </Head>
-      <Paper>
+      <Paper
+        sx={{
+          maxHeight: "100vh",
+        }}
+      >
         <Grid container>
           <Grid item lg={9}>
             <Grid container>

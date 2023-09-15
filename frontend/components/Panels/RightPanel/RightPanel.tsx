@@ -51,7 +51,11 @@ export default function RightPanel(props: RightPanelProps) {
   };
 
   return (
-    <>
+    <div
+      style={{
+        height: "100vh",
+      }}
+    >
       {!editShow ? (
         <>
           <Info
@@ -97,6 +101,6 @@ export default function RightPanel(props: RightPanelProps) {
           </Stack>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 }

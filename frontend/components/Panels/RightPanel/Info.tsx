@@ -46,7 +46,7 @@ export default function Info({
   }
 
   return (
-    <Container sx={{ paddingLeft: "0" }}>
+    <Container sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}>
       <Grid container spacing={2}>
         <Grid item lg={12}>
           <Stack spacing={1}>

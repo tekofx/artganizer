@@ -17,7 +17,11 @@ export default function BottomPanel({ current }: BottomPanelProps) {
     }
   };
   return (
-    <Paper sx={{ overflowX: "auto" }} onWheel={handleWheel} ref={ref}>
+    <Paper
+      sx={{ overflowX: "auto", maxHeight: "20vh" }}
+      onWheel={handleWheel}
+      ref={ref}
+    >
       <Stack direction="row" sx={{ width: "max-content" }}>
         {data.submissions.map((submission) => (
           <img
