@@ -43,7 +43,13 @@ export default function Image({ image, width }: ImageProps) {
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
       onClick={() => router.push(`/submission/${image.id}`)}
     >
-      <img src={image.image} className="pic" width="100%" />
+      <img
+        src={image.image}
+        style={{
+          width: "100%",
+          height: "auto",
+        }}
+      />
       <Grid
         container
         spacing={1}

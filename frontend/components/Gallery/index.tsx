@@ -6,7 +6,6 @@ import Artist from "../../interfaces/Artist";
 import Character from "../../interfaces/Character";
 import Image from "./Image";
 import { filterSubmissionsByColor } from "../../src/colorManagement";
-
 interface GalleryProps {
   artist?: Artist;
   character?: Character;
@@ -101,7 +100,7 @@ export default function Gallery({ artist, character }: GalleryProps) {
       {submissions.length == 0 && (
         <Typography variant="h1">No submissions yet</Typography>
       )}
-      <div className="gallery">
+      <div style={{ columnCount: 3 }}>
         {submissions.map((image) => (
           <Image image={image} key={image.id} />
         ))}
