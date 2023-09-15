@@ -25,11 +25,11 @@ export default function BottomPanel({ current }: BottomPanelProps) {
       <Stack direction="row" sx={{ width: "max-content" }}>
         {data.submissions.map((submission) => (
           <img
-            src={submission.image}
             key={submission.id}
+            src={submission.image}
             height="150px"
             style={{
-              border: submission.id == current.id ? "5px solid #555" : "none",
+              border: submission.id == current.id ? "10px solid #555" : "none",
               cursor: "pointer",
             }}
             onClick={() => router.push(`/submission/${submission.id}`)}
