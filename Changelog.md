@@ -14,9 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Error that changed the submission image when you try to create a character or artist in the submission form.
+- When a form is cancelled or accepted, it will reset the form.
 
 ### Changed
 
+- Artists and characters left lists are now sorted alphabetically
 - Reorganized the submission form
 - In all the forms the ok buttom is disabled unless it is introduced the needed information.
 
