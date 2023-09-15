@@ -9,8 +9,15 @@ interface Props {
   value?: string;
   focus?: boolean;
   show?: boolean;
+  fullWidth?: boolean;
 }
-export default function SearchBar({ onChange, show, value, focus }: Props) {
+export default function SearchBar({
+  onChange,
+  show,
+  value,
+  focus,
+  fullWidth,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -27,6 +34,7 @@ export default function SearchBar({ onChange, show, value, focus }: Props) {
       size="small"
       value={value}
       onChange={onChange}
+      fullWidth={fullWidth}
       sx={{ display: show ? "block" : "none" }}
     />
   );

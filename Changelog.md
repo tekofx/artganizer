@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Bottom submission navigation in the submission page
+- Button to create an artist or a character in left panel accordions
 
 ### Fixed
 
