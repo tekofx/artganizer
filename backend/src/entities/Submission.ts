@@ -63,5 +63,9 @@ export class Submission {
   @Column()
   size: number;
 
+  // Name of the original submission file
+  @Column()
+  filename: string;
+
   image: string;
 }
