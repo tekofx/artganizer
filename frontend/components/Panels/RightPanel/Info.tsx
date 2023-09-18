@@ -67,19 +67,19 @@ export default function Info({
                 </Stack>
               </Paper>
             )}
-            {submission.characters && (
-              <Paper elevation={0} sx={{ padding: 2 }}>
-                <Stack spacing={1}>
-                  <Typography>Characters</Typography>
-                  <CharacterList characters={submission.characters} clickable />
-                </Stack>
-              </Paper>
-            )}
             {submission.artist && (
               <Paper elevation={0} sx={{ padding: 2 }}>
                 <Stack spacing={1}>
                   <Typography>Artist</Typography>
                   <ArtistLabel artist={submission.artist} clickable />
+                </Stack>
+              </Paper>
+            )}
+            {submission.characters && (
+              <Paper elevation={0} sx={{ padding: 2 }}>
+                <Stack spacing={1}>
+                  <Typography>Characters</Typography>
+                  <CharacterList characters={submission.characters} clickable />
                 </Stack>
               </Paper>
             )}

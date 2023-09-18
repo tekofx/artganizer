@@ -1,18 +1,8 @@
-import { Dispatch, SetStateAction, useState, MouseEvent } from "react";
-import {
-  Paper,
-  TextField,
-  Popper,
-  Grid,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import CharacterForm from "../Forms/CharacterForm";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Paper, TextField, Grid, Typography } from "@mui/material";
 import Character from "../../interfaces/Character";
 import SelectableCharacterList from "./SelectableCharacterList";
 import CharacterLabel from "./CharacterLabel";
-import AddIcon from "@mui/icons-material/Add";
 
 interface CharacterSelectProps {
   setSelectedCharacters: Dispatch<SetStateAction<Character[]>>;
@@ -23,13 +13,10 @@ export default function CharacterSelect({
   selectedCharacters,
 }: CharacterSelectProps) {
   const [open, setOpen] = useState(false);
-  const [openCharacterForm, setOpenCharacterForm] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [filter, setFilter] = useState<string>("");
 
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = () => {
     if (!open) {
       setOpen((previousOpen) => !previousOpen);
     }
@@ -63,7 +50,7 @@ export default function CharacterSelect({
             <CharacterLabel />
           </Grid>
         )}
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <TextField
             label="Search characters"
             variant="standard"
@@ -76,15 +63,8 @@ export default function CharacterSelect({
             }}
           />
         </Grid>
-        <Grid item xs={2}>
-          <Tooltip title="Create new character">
-            <IconButton onClick={() => setOpenCharacterForm(true)}>
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-        </Grid>
-        <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
-          <Paper sx={{ width: "200px" }}>
+        <Grid item xs={12} sx={{ display: open ? "block" : "none" }}>
+          <Paper sx={{ width: "100%", overflowY: "auto", maxHeight: "200px" }}>
             <SelectableCharacterList
               selectedCharacters={selectedCharacters}
               setSelectedCharacters={setSelectedCharacters}
@@ -92,11 +72,7 @@ export default function CharacterSelect({
               filter={filter}
             />
           </Paper>
-        </Popper>
-        <CharacterForm
-          open={openCharacterForm}
-          setOpen={setOpenCharacterForm}
-        />
+        </Grid>
       </Grid>
     </Paper>
   );
