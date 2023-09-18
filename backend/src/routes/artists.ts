@@ -95,6 +95,7 @@ router.post(
     // Convertir a JPG y Renombrar el archivo con el ID generado
     if (file) {
       sharp(file.path)
+        .resize(500)
         .jpeg()
         .toFile(path.join(artistsPicsDir, id + ".jpg"))
         .then(() => {

@@ -78,6 +78,7 @@ router.post(
 
     if (file) {
       sharp(file.path)
+        .resize(500)
         .jpeg()
         .toFile(path.join(charactersDir, id + ".jpg"))
         .then(() => {
