@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction, useState, MouseEvent } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Paper,
   TextField,
-  Popper,
   IconButton,
   Grid,
   Tooltip,
@@ -21,12 +20,10 @@ interface ArtistSelectProps {
 export default function ArtistSelect(props: ArtistSelectProps) {
   const [open, setOpen] = useState(false);
   const [openArtistForm, setOpenArtistForm] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [filter, setFilter] = useState<string>("");
 
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = () => {
     if (!open) {
       setOpen((previousOpen) => !previousOpen);
     }
@@ -81,17 +78,20 @@ export default function ArtistSelect(props: ArtistSelectProps) {
               </>
             )}
           </Grid>
+          <Grid item xs={12} sx={{ display: open ? "block" : "none" }}>
+            <Paper
+              sx={{ width: "100%", overflowY: "auto", maxHeight: "200px" }}
+            >
+              <SelectableArtistList
+                selectedArtist={props.selectedArtist}
+                setSelectedArtist={props.setSelectedArtist}
+                setOpen={setOpen}
+                filter={filter}
+              />
+            </Paper>
+          </Grid>
         </Grid>
-        <Popper open={open} anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
-          <Paper sx={{ width: "200px" }}>
-            <SelectableArtistList
-              selectedArtist={props.selectedArtist}
-              setSelectedArtist={props.setSelectedArtist}
-              setOpen={setOpen}
-              filter={filter}
-            />
-          </Paper>
-        </Popper>
+
         <ArtistForm open={openArtistForm} setOpen={setOpenArtistForm} />
       </Grid>
     </Paper>

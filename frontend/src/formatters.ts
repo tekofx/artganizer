@@ -27,10 +27,10 @@ export function convertBytes(bytes: number | undefined) {
     return "unknown";
   }
   if (bytes > 1000000) {
-    var mb = bytes / 1000000;
+    var mb = (bytes / 1000000).toFixed(2);
     return `${mb} MB`;
   } else {
-    var kb = bytes / 1000;
+    var kb = (bytes / 1000).toFixed(2);
     return `${kb} KB`;
   }
 }

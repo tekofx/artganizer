@@ -11,7 +11,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import ProgressButton from "../ProgressButon";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { DataContext } from "../../../pages/_app";
 import axios from "axios";
 import LimitedTextField from "../../LimitedTextField";
@@ -23,10 +23,13 @@ import { AlertMessage } from "../../../interfaces";
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  name?: string;
 }
 
-export default function CharacterForm({ open, setOpen }: Props) {
-  const [character, setCharacter] = useState<Character>(emptyCharacter);
+export default function CharacterForm({ open, setOpen, name }: Props) {
+  const [character, setCharacter] = useState<Character>(
+    name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
+  );
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
   const [openSnack, setOpenSnack] = useState<boolean>(false);
@@ -36,6 +39,11 @@ export default function CharacterForm({ open, setOpen }: Props) {
   });
 
   const { data, setData } = useContext(DataContext);
+  useEffect(() => {
+    setCharacter(
+      name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
+    );
+  }, [name]);
 
   function resetForm() {
     setImage("/placeholder.jpg");

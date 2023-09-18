@@ -29,13 +29,12 @@ export default function Info({
 }: InfoProps) {
   async function downloadImage() {
     await axios
-      .get(submission.image + "?download")
+      .get(submission.image + "?download", { responseType: "blob" })
       .then((response) => {
-        var format = submission.format;
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", submission.title + "." + format);
+        link.setAttribute("download", submission.filename);
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -68,19 +67,19 @@ export default function Info({
                 </Stack>
               </Paper>
             )}
-            {submission.characters && (
-              <Paper elevation={0} sx={{ padding: 2 }}>
-                <Stack spacing={1}>
-                  <Typography>Characters</Typography>
-                  <CharacterList characters={submission.characters} clickable />
-                </Stack>
-              </Paper>
-            )}
             {submission.artist && (
               <Paper elevation={0} sx={{ padding: 2 }}>
                 <Stack spacing={1}>
                   <Typography>Artist</Typography>
                   <ArtistLabel artist={submission.artist} clickable />
+                </Stack>
+              </Paper>
+            )}
+            {submission.characters && (
+              <Paper elevation={0} sx={{ padding: 2 }}>
+                <Stack spacing={1}>
+                  <Typography>Characters</Typography>
+                  <CharacterList characters={submission.characters} clickable />
                 </Stack>
               </Paper>
             )}

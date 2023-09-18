@@ -8,14 +8,13 @@ import {
   Container,
 } from "@mui/material";
 import Submission from "../../../interfaces/Submission";
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useContext } from "react";
 import ArtistSelect from "../../Artist/ArtistSelect";
 import Artist from "../../../interfaces/Artist";
 import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
 import TagSelect from "../../Tag/TagSelect";
 import Tag from "../../../interfaces/Tag";
-import { useContext } from "react";
 import { DataContext } from "../../../pages/_app";
 import CharacterSelect from "../../Character/CharacterSelect";
 import Character from "../../../interfaces/Character";
@@ -67,7 +66,7 @@ export default function Edit(props: InfoProps) {
   }
 
   return (
-    <Container sx={{ paddingLeft: 1 }}>
+    <Container sx={{ paddingLeft: 1, overflowY: "auto", maxHeight: "95vh" }}>
       <Grid container spacing={2} alignContent="center" sx={{ paddingTop: 3 }}>
         <Grid item lg={12}>
           <Stack spacing={1}>
@@ -106,13 +105,13 @@ export default function Edit(props: InfoProps) {
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />
-            <CharacterSelect
-              selectedCharacters={selectedCharacters}
-              setSelectedCharacters={setSelectedCharacters}
-            />
             <ArtistSelect
               selectedArtist={selectedArtist}
               setSelectedArtist={setSelectedArtist}
+            />
+            <CharacterSelect
+              selectedCharacters={selectedCharacters}
+              setSelectedCharacters={setSelectedCharacters}
             />
           </Stack>
         </Grid>

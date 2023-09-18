@@ -14,6 +14,7 @@ export default interface Submission {
   characters: Character[];
   format: string;
   image: string;
+  filename: string;
   colors: string[];
   size: number;
 }

@@ -11,6 +11,8 @@ import {
   CharacterRepo,
 } from "../typeorm.config";
 import sizeOf from "image-size";
+import sharp from "sharp";
+import { Submission } from "../entities";
 
 const submissionsDir = path.join(__dirname, "../../data/uploads/submissions");
 if (!fs.existsSync(submissionsDir)) {
@@ -99,14 +101,13 @@ router.get("/", async (req: Request, res: Response) => {
 
   // Add image URL
   submissions.forEach((submission) => {
-    submission.image =
-      process.env.URL + "/submissions/uploads/" + submission.id;
+    submission.image = `${process.env.URL}/submissions/uploads/${submission.id}.${submission.format}`;
   });
 
   res.send(submissions);
 });
 
-router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
+/* router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
     return;
@@ -133,7 +134,7 @@ router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
   }
 
   return res.sendFile(filePath);
-});
+}); */
 
 router.post(
   "/",
@@ -159,7 +160,7 @@ router.post(
       }
     });
 
-    var submission;
+    var submission: Submission;
     try {
       // Obtener las dimensiones de la imagen
       const dimensions = sizeOf(image.path);
@@ -173,11 +174,13 @@ router.post(
         format: dimensions.type,
         colors: colorsArray,
         size: image.size,
+        filename: image.originalname,
       });
     } catch (error) {
       console.log(error);
       return res.status(400).send("Error creating submission");
     }
+
     if (artist) {
       var artistObj = await ArtistRepo.findOne({ where: { id: artist } });
       if (artistObj) {
@@ -226,6 +229,7 @@ router.post(
       .catch((error) => {
         console.log(error);
       });
+
     // Renombrar el archivo con el ID generado
     const tempPath = image.path;
     const newPath = path.join(
@@ -234,11 +238,12 @@ router.post(
     );
     await fs.promises.rename(tempPath, newPath);
 
-    submission.image = process.env.URL + "/submissions/uploads/" + id;
+    submission.image = `${process.env.URL}/submissions/uploads/${id}.${submission.format}`;
 
     res.send(submission);
   }
 );
+router.use("/uploads", express.static(submissionsDir));
 
 router.delete("/:submissionId", async (req: Request, res: Response) => {
   if (req.params.submissionId == null) {
@@ -299,7 +304,7 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
   submission.description = description;
   submission.rating = rating;
   submission.artist = artist;
-  submission.image = process.env.URL + "/submissions/uploads/" + submissionId;
+  submission.image = `${process.env.URL}/submissions/uploads/${submission.id}.${submission.format}`;
 
   // Guardar el submission actualizado en la base de datos
   const result = await SubmissionRepo.save(submission);
