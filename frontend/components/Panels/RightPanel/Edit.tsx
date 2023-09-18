@@ -67,7 +67,7 @@ export default function Edit(props: InfoProps) {
   }
 
   return (
-    <Container sx={{ paddingLeft: 1 }}>
+    <Container sx={{ paddingLeft: 1, overflowY: "auto", maxHeight: "95vh" }}>
       <Grid container spacing={2} alignContent="center" sx={{ paddingTop: 3 }}>
         <Grid item lg={12}>
           <Stack spacing={1}>
