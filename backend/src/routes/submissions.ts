@@ -304,7 +304,7 @@ router.put("/:submissionId", async (req: Request, res: Response) => {
   submission.description = description;
   submission.rating = rating;
   submission.artist = artist;
-  submission.image = process.env.URL + "/submissions/uploads/" + submissionId;
+  submission.image = `${process.env.URL}/submissions/uploads/${submission.id}.${submission.format}`;
 
   // Guardar el submission actualizado en la base de datos
   const result = await SubmissionRepo.save(submission);
