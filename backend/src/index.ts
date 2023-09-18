@@ -6,7 +6,7 @@ import submission from "./routes/submissions";
 import tags from "./routes/tags";
 import characters from "./routes/characters";
 import settings from "./routes/settings";
-
+import cors from "cors";
 
 const port = 3001;
 
@@ -18,6 +18,11 @@ if (process.env.NODE_ENV !== "production") {
 // Create express app
 const app = express();
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
