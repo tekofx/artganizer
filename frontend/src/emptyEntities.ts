@@ -35,6 +35,7 @@ const emptySubmission: Submission = {
   height: 0,
   width: 0,
   size: 0,
+  filename: "",
 };
 
 const defaultSettings: Settings = {
