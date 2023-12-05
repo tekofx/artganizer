@@ -18,7 +18,7 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@types/react-color": "^3.0.6",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "framer-motion": "^10.12.22",
     "next": "^13.4.19",
     "react": "latest",
