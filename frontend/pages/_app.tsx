@@ -110,7 +110,7 @@ export const DataContext = createContext<DataContextType>({
     characters: [],
     settings: defaultSettings,
   },
-  setData: () => {},
+  setData: () => { },
 });
 
 export default function MyApp(props: MyAppProps) {
@@ -147,16 +147,14 @@ export default function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <DataContext.Provider value={{ data, setData }}>
-          <Grid container>
-            <Grid item lg={2} position="fixed">
-              <LateralPanel />
-            </Grid>
-            <Grid item lg={10} style={{ marginLeft: "16.66%" }}>
-              <Component {...pageProps} />
-            </Grid>
+        <Grid container>
+          <Grid item lg={2} position="fixed">
+            <LateralPanel />
           </Grid>
-        </DataContext.Provider>
+          <Grid item lg={10} style={{ marginLeft: "16.66%" }}>
+            <Component {...pageProps} />
+          </Grid>
+        </Grid>
       </ThemeProvider>
     </CacheProvider>
   );

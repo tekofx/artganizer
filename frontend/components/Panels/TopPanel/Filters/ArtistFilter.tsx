@@ -1,13 +1,13 @@
 import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext, useEffect } from "react";
+import { useState, MouseEvent, useContext, useEffect, Dispatch, SetStateAction } from "react";
 import { DataContext } from "../../../../pages/_app";
 import ArtistSelect from "../../../Artist/ArtistSelect";
 import Artist from "../../../../interfaces/Artist";
 import BrushIcon from "@mui/icons-material/Brush";
+import { Filters } from "../../../../interfaces";
 
-export default function ArtistFilter() {
-  const { data, setData } = useContext(DataContext);
+export default function ArtistFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [artist, setArtist] = useState<Artist>();
   const [invisible, setInvisible] = useState<boolean>(true);
@@ -24,32 +24,20 @@ export default function ArtistFilter() {
   useEffect(() => {
     if (artist != undefined) {
       setInvisible(false);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          artist: artist,
-        },
-      }));
+      setFilters({ ...filters, artist: artist });
     } else {
       setInvisible(true);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          artist: undefined,
-        },
-      }));
+      setFilters({ ...filters, artist: undefined });
     }
   }, [artist]);
 
   useEffect(() => {
-    if (data.filters.artist != undefined) {
-      setArtist(data.filters.artist);
+    if (filters.artist != undefined) {
+      setArtist(filters.artist);
     } else {
       setArtist(undefined);
     }
-  }, [data.filters.artist]);
+  }, [filters.artist]);
 
   return (
     <div>

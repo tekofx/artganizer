@@ -1,8 +1,9 @@
-import { useContext, Dispatch, SetStateAction } from "react";
+import { useContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Typography, MenuItem } from "@mui/material";
 import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
 import ArtistLabel from "./ArtistLabel";
+import axios from "axios";
 interface ArtistListProps {
   selectedArtist: Artist | undefined;
   setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
@@ -11,7 +12,15 @@ interface ArtistListProps {
 }
 
 export default function SelectableArtistList(props: ArtistListProps) {
-  const { data } = useContext(DataContext);
+  const [artists, setArtists] = useState<Artist[]>([]);
+  useEffect(() => {
+    const getArtists = async () => {
+      var res = await axios.get(process.env.API_URL + "/artists");
+      setArtists(res.data);
+    }
+    getArtists();
+  }
+    , []);
 
   function handleClick(artist: Artist) {
     props.setSelectedArtist(artist);
@@ -20,10 +29,10 @@ export default function SelectableArtistList(props: ArtistListProps) {
 
   return (
     <>
-      {data.artists.filter((artist) =>
+      {artists.filter((artist) =>
         artist.name.toLowerCase().includes(props.filter.toLowerCase())
       ).length == 0 && <Typography>No artists</Typography>}
-      {data.artists
+      {artists
 
         .filter((artist) =>
           artist.name.toLowerCase().includes(props.filter.toLowerCase())
