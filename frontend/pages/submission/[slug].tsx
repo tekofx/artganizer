@@ -7,22 +7,24 @@ import { DataContext } from "../_app";
 import { emptySubmission } from "../../src/emptyEntities";
 import Head from "next/head";
 import BottomPanel from "../../components/Panels/BottomPanel";
+import axios from "axios";
 export default function Page() {
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
-  const { data } = useContext(DataContext);
 
   const router = useRouter();
 
   useEffect(() => {
+    const getSubmission = async (id: number) => {
+      var res = await axios.get(process.env.API_URL + `/submissions/${id}`);
+      setSubmission(res.data);
+    }
+
     const slug = router.query.slug;
     if (slug) {
       var id = parseInt(slug.toString());
       // Get submission
-      data.submissions.filter((sub: Submission) => {
-        if (sub.id == id) {
-          setSubmission(sub);
-        }
-      });
+      getSubmission(id);
+
     }
   }, [router.query.slug]);
 

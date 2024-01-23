@@ -107,6 +107,61 @@ router.get("/", async (req: Request, res: Response) => {
   res.send(submissions);
 });
 
+router.get("/:submissionId", async (req: Request, res: Response) => {
+  var { tags, characters, artist } = req.query;
+  if (req.params.submissionId == null) {
+    res.status(400).send("submission ID not provided");
+    return;
+  }
+
+  var submissionId: number = parseInt(req.params.submissionId);
+
+  const queryBuilder = SubmissionRepo.createQueryBuilder("submission");
+
+  queryBuilder.where("submission.id = :id", { id: submissionId });
+
+  // Use leftJoinAndSelect to join the submission and tags tables and select the related tags
+  queryBuilder.leftJoinAndSelect("submission.tags", "tag");
+
+  // Use leftJoinAndSelect to join the submission and artist tables and select the related artist
+  queryBuilder.leftJoinAndSelect("submission.artist", "artist");
+
+  // Use leftJoinAndSelect to join the submission and characters tables and select the related characters
+  queryBuilder.leftJoinAndSelect("submission.characters", "character");
+
+  if (tags) {
+    queryBuilder.innerJoinAndSelect(
+      "submission.tags",
+      "tag",
+      "tag.id IN (:...tags)",
+      { tags }
+    );
+  }
+
+  if (characters) {
+    queryBuilder.innerJoinAndSelect(
+      "submission.characters",
+      "character",
+      "character.id IN (:...characters)",
+      { characters }
+    );
+  }
+
+  if (artist) {
+    queryBuilder.andWhere("submission.artistId = :artist", { artist });
+  }
+
+  var submission = await queryBuilder.getOne();
+  if (submission == null) {
+    res.status(404).send("submission not found");
+    return;
+  }
+  // Add image URL
+  submission.image = `${process.env.URL}/submissions/uploads/${submission.id}.${submission.format}`;
+
+  res.send(submission);
+});
+
 /* router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
