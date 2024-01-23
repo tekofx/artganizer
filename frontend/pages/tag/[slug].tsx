@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import {
   IconButton,
   Paper,
@@ -20,7 +20,7 @@ import axios from "axios";
 import Gallery from "../../components/Gallery";
 import { TwitterPicker } from "react-color";
 import Tag from "../../interfaces/Tag";
-import { DataContext } from "../_app";
+import { emptyFilters } from "../../src/emptyEntities";
 
 export default function Page() {
   const [tag, setTag] = useState<Tag>();
@@ -28,7 +28,6 @@ export default function Page() {
   const [color, setColor] = useState("#fff");
   const [textFieldError, setTextFieldError] = useState<boolean>(false);
   const [newTag, setNewTag] = useState<string>("New Name");
-  const { data, setData } = useContext(DataContext);
 
   const router = useRouter();
 
@@ -60,34 +59,20 @@ export default function Page() {
       }
     );
     setTag(response.data);
-    data.tags.filter((tag: Tag) => {
-      if (tag.id == response.data.id) {
-        const newData = { ...data };
-        newData.tags[data.tags.indexOf(tag)] = response.data;
-        setData(newData);
-      }
-    });
+
     setOpen(false);
   }
 
   useEffect(() => {
+    const getTag = async (id: number) => {
+      var res = await axios.get(process.env.API_URL + "/tag/" + id);
+      setTag(res.data);
+    }
     const slug = router.query.slug;
     if (slug) {
       var id = parseInt(slug.toString());
+      getTag(id);
 
-      // Get tag
-      data.tags.filter((tag: Tag) => {
-        if (tag.id == id) {
-          setTag(tag);
-          setNewTag(tag.name);
-          // If tag not in filters add it
-          if (!data.filters.tags.some((filterTag) => filterTag.id === tag.id)) {
-            const newData = { ...data };
-            newData.filters.tags.push(tag);
-            setData(newData);
-          }
-        }
-      });
     }
   }, [router.query.slug]);
 
@@ -144,7 +129,7 @@ export default function Page() {
         </DialogContent>
       </Dialog>
 
-      <Gallery />
+      <Gallery filters={emptyFilters} />
     </Paper>
   );
 }

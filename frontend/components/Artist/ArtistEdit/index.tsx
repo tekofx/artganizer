@@ -12,9 +12,8 @@ import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
 
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
-import { DataContext } from "../../../pages/_app";
 import SocialIcon from "../../SocialIcon";
 import SocialsDialog from "./SocialsDialog";
 interface ArtistEditProps {
@@ -32,7 +31,6 @@ export default function ArtistEdit({
   const [imageData, setImageData] = useState<any>();
   const [socialsDialogOpen, setSocialsDialogOpen] = useState(false);
   const [auxArtist, setAuxArtist] = useState<Artist>(artist);
-  const { data, setData } = useContext(DataContext);
 
   function onImageUpload(event: any) {
     setImageData(event.target.files[0]);
@@ -54,7 +52,6 @@ export default function ArtistEdit({
       .put(process.env.API_URL + `/artists/${auxArtist.id}`, formData)
       .then((response) => {
         setArtist(response.data);
-        setData({ ...data, artists: data.artists });
       })
       .catch((error) => {
         console.log(error);

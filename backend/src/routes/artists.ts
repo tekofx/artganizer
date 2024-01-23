@@ -197,7 +197,7 @@ router.get("/:artistId/submissions", async (req: Request, res: Response) => {
 
   res.send(submissions);
 });
-/* router.get("/uploads/:artistId", async (req: Request, res: Response) => {
+router.get("/uploads/:artistId", async (req: Request, res: Response) => {
   if (req.params.artistId == null) {
     res.status(400).send("Artist ID not provided");
     return;
@@ -221,7 +221,7 @@ router.get("/:artistId/submissions", async (req: Request, res: Response) => {
   }
 
   return res.sendFile(filePath);
-}); */
+});
 
 router.use("/uploads", express.static(artistsPicsDir));
 

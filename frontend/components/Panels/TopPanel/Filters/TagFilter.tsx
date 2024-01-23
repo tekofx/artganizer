@@ -12,8 +12,7 @@ import {
   Badge,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext, useEffect, Dispatch, SetStateAction } from "react";
-import { DataContext } from "../../../../pages/_app";
+import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
 import Tag from "../../../../interfaces/Tag";
 import TagChip from "../../../Tag/TagChip";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -23,7 +22,6 @@ export default function TagFilter({ filters, setFilters }: { filters: Filters, s
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [searchedTags, setSearchedTags] = useState<Tag[]>([]);
   const [invisible, setInvisible] = useState<boolean>(true);
-  const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     const getTags = async () => {

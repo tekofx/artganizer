@@ -1,6 +1,5 @@
 import { Stack, Paper } from "@mui/material";
-import { DataContext } from "../../../pages/_app";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import {
   RatingFilter,

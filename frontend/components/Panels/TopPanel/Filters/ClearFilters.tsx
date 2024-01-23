@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
-import { DataContext } from "../../../../pages/_app";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Filters } from "../../../../interfaces";
 const emptyFilters: Filters = {

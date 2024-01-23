@@ -9,8 +9,7 @@ import {
 import Submission from "../../../interfaces/Submission";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { DataContext } from "../../../pages/_app";
+import { Dispatch, SetStateAction, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import Info from "./Info";
@@ -23,21 +22,12 @@ interface RightPanelProps {
 
 export default function RightPanel(props: RightPanelProps) {
   const router = useRouter();
-  const { data, setData } = useContext(DataContext);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editShow, setEditShow] = useState(false);
 
   async function removeSubmission() {
     var submission = props.submission;
     await axios.delete(process.env.API_URL + `/submissions/${submission.id}`);
-
-    // Remove submission from data
-    const newData = { ...data };
-    newData.submissions = newData.submissions.filter(
-      (sub: Submission) => sub.id != submission.id
-    );
-    setData(newData);
-
     router.push("/");
   }
   const handleClickOpenDialog = () => {

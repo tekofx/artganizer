@@ -59,6 +59,26 @@ router.get("/", async (req: Request, res: Response) => {
   }
   res.send(characters);
 });
+
+router.get("/:characterId", async (req: Request, res: Response) => {
+  if (req.params.characterId == null) {
+    res.status(400).send("Character ID not provided");
+    return;
+  }
+
+  var characterId: number = parseInt(req.params.characterId);
+  const queryBuilder = CharacterRepo.createQueryBuilder("character");
+  queryBuilder.where("character.id = :id", { id: characterId });
+
+  var character = await queryBuilder.getOne();
+  if (character == null) {
+    res.status(404).send("Character not found");
+    return;
+  }
+  character.image =
+    process.env.URL + "/characters/uploads/" + character.id + ".jpg";
+  res.send(character);
+});
 router.use("/uploads", express.static(charactersDir));
 
 router.post(

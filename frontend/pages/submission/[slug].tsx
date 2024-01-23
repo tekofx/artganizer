@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Grid, Paper } from "@mui/material";
 import RightPanel from "../../components/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
-import { DataContext } from "../_app";
 import { emptySubmission } from "../../src/emptyEntities";
 import Head from "next/head";
 import BottomPanel from "../../components/Panels/BottomPanel";

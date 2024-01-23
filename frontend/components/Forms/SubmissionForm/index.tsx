@@ -1,4 +1,4 @@
-import { useState, useContext, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import {
   Button,
   Stack,
@@ -10,7 +10,6 @@ import {
   IconButton,
 } from "@mui/material";
 import axios from "axios";
-import { DataContext } from "../../../pages/_app";
 import Tag from "../../../interfaces/Tag";
 import Submission from "../../../interfaces/Submission";
 
@@ -28,7 +27,6 @@ interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function SubmissionForm({ open, setOpen }: Props) {
-  const { data, setData } = useContext(DataContext);
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
@@ -92,10 +90,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
     // Create submission
     await axios
       .post(process.env.API_URL + `/submissions`, formData)
-      .then((response) => {
-        var newData = { ...data };
-        newData.submissions.push(response.data);
-        setData(newData);
+      .then(() => {
         setAlertMessage({
           message: "Submission created",
           severity: "success",

@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState, useContext, Dispatch, SetStateAction, useEffect } from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import Tag from "../../interfaces/Tag";
 import TagLabel from "../../components/Tag/TagLabel";
 import axios from "axios";
@@ -14,7 +14,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ClearIcon from "@mui/icons-material/Clear";
 import TagForm from "./TagForm";
 import EditIcon from "@mui/icons-material/Edit";
-import { DataContext } from "../../pages/_app";
 
 interface ManageTagsProps {
   open: boolean;

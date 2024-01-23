@@ -1,6 +1,5 @@
-import { useContext, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Typography, MenuItem } from "@mui/material";
-import { DataContext } from "../../pages/_app";
 import Artist from "../../interfaces/Artist";
 import ArtistLabel from "./ArtistLabel";
 import axios from "axios";

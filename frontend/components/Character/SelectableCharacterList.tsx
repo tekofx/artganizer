@@ -1,6 +1,5 @@
-import { useContext, Dispatch, SetStateAction, useState, useEffect } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { Typography, MenuItem, Button } from "@mui/material";
-import { DataContext } from "../../pages/_app";
 import CharacterLabel from "./CharacterLabel";
 import CharacterForm from "../Forms/CharacterForm";
 import AddIcon from "@mui/icons-material/Add";

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Paper } from "@mui/material";
 import Submission from "../../interfaces/Submission";
 import Image from "./Image";

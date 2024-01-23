@@ -12,10 +12,9 @@ import {
 import TagChip from "../../Tag/TagChip";
 import TagLabel from "../../Tag/TagLabel";
 import Tag from "../../../interfaces/Tag";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { TwitterPicker, ColorResult } from "react-color";
-import { DataContext } from "../../../pages/_app";
 import AlertMessage from "../../../interfaces/AlertMessage";
 import ProgressButton from "../ProgressButon";
 import Snack from "../../Snack";
@@ -41,7 +40,6 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     severity: "success",
   });
 
-  const { data, setData } = useContext(DataContext);
 
   const handleChangeComplete = (color: ColorResult) => {
     setTag((prevTag) => ({
@@ -61,10 +59,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     if (tagToUpdate == undefined) {
       await axios
         .post(process.env.API_URL + `/tags`, tag)
-        .then((response) => {
-          const newData = { ...data };
-          newData.tags.push(response.data);
-          setData(newData);
+        .then(() => {
           setAlertMessage?.({
             message: "Tag created",
             severity: "success",
@@ -86,11 +81,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
       // Edit tag
       await axios
         .put(process.env.API_URL + `/tags/${tag.id}`, tag)
-        .then((response) => {
-          const newData = { ...data };
-          const index = newData.tags.findIndex((t) => t.id == tag.id);
-          newData.tags[index] = response.data;
-          setData(newData);
+        .then(() => {
           setAlertMessage?.({
             message: "Tag updated",
             severity: "success",

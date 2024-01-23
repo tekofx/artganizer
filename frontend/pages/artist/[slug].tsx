@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import {
   Grid,
   Paper,
@@ -10,7 +10,6 @@ import {
   DialogTitle,
   Stack,
 } from "@mui/material";
-import { DataContext } from "../_app";
 import Artist from "../../interfaces/Artist";
 import Gallery from "../../components/Gallery";
 import ArtistInfo from "../../components/Artist/ArtistInfo";
@@ -18,14 +17,28 @@ import ArtistEdit from "../../components/Artist/ArtistEdit";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import { emptyArtist } from "../../src/emptyEntities";
+import { emptyArtist, emptyFilters } from "../../src/emptyEntities";
 import Head from "next/head";
 export default function Page() {
   const [artist, setArtist] = useState<Artist>(emptyArtist);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { data, setData } = useContext(DataContext);
   const router = useRouter();
+
+  useEffect(() => {
+    const getArtist = async (id: number) => {
+      var res = await axios.get(process.env.API_URL + `/artists/${id}`);
+      setArtist(res.data);
+    };
+
+    const slug = router.query.slug;
+    if (slug) {
+      var id = parseInt(slug.toString());
+      // Get artist
+      getArtist(id);
+    }
+  }
+    , [router.query.slug]);
   const toggleEdit = () => {
     setEditShow(!editShow);
   };
@@ -40,12 +53,6 @@ export default function Page() {
     await axios
       .delete(process.env.API_URL + `/artists/${artist?.id}`)
       .then(() => {
-        // Remove artist from data
-        const newData = { ...data };
-        newData.artists = newData.artists.filter(
-          (art: Artist) => art.id != artist?.id
-        );
-        setData(newData);
       })
       .catch((error) => {
         console.log(error);
@@ -56,19 +63,6 @@ export default function Page() {
       });
   }
 
-  useEffect(() => {
-    const slug = router.query.slug;
-    if (slug) {
-      var id = parseInt(slug.toString());
-
-      // Get artist from data
-      data.artists.filter((artist: Artist) => {
-        if (artist.id == id) {
-          setArtist(artist);
-        }
-      });
-    }
-  }, [router.query.slug]);
 
   return (
     <>
@@ -93,7 +87,7 @@ export default function Page() {
             )}
           </Grid>
           <Grid item lg={12}>
-            <Gallery artist={artist} />
+            <Gallery filters={emptyFilters} />
           </Grid>
         </Grid>
         <Dialog open={dialogOpen}>

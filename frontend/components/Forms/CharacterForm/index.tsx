@@ -11,8 +11,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import ProgressButton from "../ProgressButon";
-import { useState, useContext, useEffect } from "react";
-import { DataContext } from "../../../pages/_app";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import LimitedTextField from "../../LimitedTextField";
 import Character from "../../../interfaces/Character";
@@ -38,7 +37,6 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
     severity: "success",
   });
 
-  const { data, setData } = useContext(DataContext);
   useEffect(() => {
     setCharacter(
       name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
@@ -66,10 +64,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
 
     await axios
       .post(process.env.API_URL + "/characters", formData)
-      .then((response) => {
-        var newData = { ...data };
-        newData.characters.push(response.data);
-        setData(newData);
+      .then(() => {
         setAlertMessage?.({
           message: "Character created",
           severity: "success",

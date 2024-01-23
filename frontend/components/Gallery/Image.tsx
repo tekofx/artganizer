@@ -3,11 +3,12 @@ import Submission from "../../interfaces/Submission";
 import { formatDate } from "../../src/formatters";
 import TagList from "../Tag/TagList";
 import ArtistLabel from "../Artist/ArtistLabel";
-import { useContext } from "react";
-import { DataContext } from "../../pages/_app";
 import Settings from "../../interfaces/Settings";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
+import { defaultSettings } from "../../src/emptyEntities";
+import { useEffect, useState } from "react";
+import axios from "axios";
 interface ImageProps {
   image: Submission;
   width?: string;
@@ -15,17 +16,25 @@ interface ImageProps {
 }
 
 export default function Image({ image, width }: ImageProps) {
-  const { data } = useContext(DataContext);
   const router = useRouter();
+  const [settings, setSettings] = useState<Settings>(defaultSettings);
+  useEffect(() => {
+    const getSettings = async () => {
+      var res = await axios.get(process.env.API_URL + "/settings");
+      setSettings(res.data);
+    };
+    getSettings();
+  }
+    , []);
 
   function gallerySettingsAllFalse() {
     return (
-      !data.settings.galleryInfo.artist &&
-      !data.settings.galleryInfo.date &&
-      !data.settings.galleryInfo.dimensions &&
-      !data.settings.galleryInfo.rating &&
-      !data.settings.galleryInfo.tags &&
-      !data.settings.galleryInfo.title
+      !settings.galleryInfo.artist &&
+      !settings.galleryInfo.date &&
+      !settings.galleryInfo.dimensions &&
+      !settings.galleryInfo.rating &&
+      !settings.galleryInfo.tags &&
+      !settings.galleryInfo.title
     );
   }
 
@@ -61,23 +70,23 @@ export default function Image({ image, width }: ImageProps) {
           display: gallerySettingsAllFalse() == true ? "none" : "block",
         }}
       >
-        {data.settings.galleryInfo.title && (
+        {settings.galleryInfo.title && (
           <Grid item xs={12}>
             <Typography>{image.title}</Typography>
           </Grid>
         )}
 
-        {data.settings.galleryInfo.date && (
+        {settings.galleryInfo.date && (
           <Grid item>
             <Typography>{formatDate(image.date)}</Typography>
           </Grid>
         )}
-        {data.settings.galleryInfo.rating && (
+        {settings.galleryInfo.rating && (
           <Grid item>
             <Rating value={image.rating} readOnly />
           </Grid>
         )}
-        {data.settings.galleryInfo.dimensions && (
+        {settings.galleryInfo.dimensions && (
           <Grid item>
             <Typography>
               {image.width}x{image.height}
@@ -85,7 +94,7 @@ export default function Image({ image, width }: ImageProps) {
           </Grid>
         )}
 
-        {data.settings.galleryInfo.artist && image.artist != undefined && (
+        {settings.galleryInfo.artist && image.artist != undefined && (
           <>
             <Grid item xs={12}></Grid>
             <Grid item>
@@ -94,7 +103,7 @@ export default function Image({ image, width }: ImageProps) {
           </>
         )}
 
-        {data.settings.galleryInfo.tags && image.tags.length > 0 && (
+        {settings.galleryInfo.tags && image.tags.length > 0 && (
           <Grid item>
             <TagList tags={image.tags} />
           </Grid>

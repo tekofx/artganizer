@@ -8,14 +8,13 @@ import {
   Container,
 } from "@mui/material";
 import Submission from "../../../interfaces/Submission";
-import { useState, Dispatch, SetStateAction, useContext } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import ArtistSelect from "../../Artist/ArtistSelect";
 import Artist from "../../../interfaces/Artist";
 import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
 import TagSelect from "../../Tag/TagSelect";
 import Tag from "../../../interfaces/Tag";
-import { DataContext } from "../../../pages/_app";
 import CharacterSelect from "../../Character/CharacterSelect";
 import Character from "../../../interfaces/Character";
 interface InfoProps {
@@ -32,7 +31,6 @@ export default function Edit(props: InfoProps) {
     props.submission.characters
   );
 
-  const { setData } = useContext(DataContext);
 
   const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
     props.submission?.artist
@@ -48,16 +46,6 @@ export default function Edit(props: InfoProps) {
       })
       .then((response) => {
         props.setSubmission(response.data);
-        setData((prevData) => ({
-          ...prevData,
-          submissions: prevData.submissions.map((submission) => {
-            if (submission.id === response.data.id) {
-              return response.data;
-            } else {
-              return submission;
-            }
-          }),
-        }));
       })
       .catch((error) => {
         console.log(error);

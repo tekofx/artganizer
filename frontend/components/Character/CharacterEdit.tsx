@@ -1,8 +1,7 @@
 import { Grid, Avatar, Button, Stack, TextField } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
-import { DataContext } from "../../pages/_app";
 import { useRouter } from "next/router";
 import Character from "../../interfaces/Character";
 interface CharacterEditProps {
@@ -15,7 +14,6 @@ export default function CharacterEdit(props: CharacterEditProps) {
   const [character, setCharacter] = useState<Character>(props.character);
   const [image, setImage] = useState<string>(props.character.image);
   const [imageData, setImageData] = useState<any>();
-  const { data, setData } = useContext(DataContext);
   const router = useRouter();
 
   function onImageUpload(event: any) {
@@ -35,14 +33,6 @@ export default function CharacterEdit(props: CharacterEditProps) {
       .put(process.env.API_URL + `/characters/${character.id}`, formData)
       .then((response) => {
         props.setCharacter(response.data);
-        var newData = { ...data };
-        newData.characters = newData.characters.map((character) => {
-          if (character.id === response.data.id) {
-            return response.data;
-          }
-          return character;
-        });
-        setData(newData);
       })
       .catch((error) => {
         console.log(error);

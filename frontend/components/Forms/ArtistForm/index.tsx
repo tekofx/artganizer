@@ -10,8 +10,7 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
-import { useState, useContext } from "react";
-import { DataContext } from "../../../pages/_app";
+import { useState } from "react";
 import axios from "axios";
 import Artist from "../../../interfaces/Artist";
 import LimitedTextField from "../../LimitedTextField";
@@ -44,7 +43,6 @@ export default function ArtistForm({ open, setOpen }: Props) {
     severity: "success",
   });
 
-  const { data, setData } = useContext(DataContext);
 
   function onImageUpload(event: any) {
     const newArtist = { ...artist };
@@ -63,10 +61,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
 
     await axios
       .post(process.env.API_URL + "/artists", formData)
-      .then((response) => {
-        var newData = { ...data };
-        newData.artists.push(response.data);
-        setData(newData);
+      .then(() => {
         setAlertMessage({
           message: "Artist created",
           severity: "success",

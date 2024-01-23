@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import {
   Grid,
   Paper,
@@ -10,12 +10,11 @@ import {
   DialogTitle,
   Stack,
 } from "@mui/material";
-import { DataContext } from "../_app";
 import Gallery from "../../components/Gallery";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import { emptyCharacter } from "../../src/emptyEntities";
+import { emptyCharacter, emptyFilters } from "../../src/emptyEntities";
 import Character from "../../interfaces/Character";
 import CharacterInfo from "../../components/Character/CharacterInfo";
 import CharacterEdit from "../../components/Character/CharacterEdit";
@@ -24,7 +23,6 @@ export default function Page() {
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { data, setData } = useContext(DataContext);
   const router = useRouter();
   const toggleEdit = () => {
     setEditShow(!editShow);
@@ -41,11 +39,6 @@ export default function Page() {
       .delete(process.env.API_URL + `/characters/${character?.id}`)
       .then(() => {
         // Remove character from data
-        const newData = { ...data };
-        newData.characters = newData.characters.filter(
-          (char: Character) => char.id != character?.id
-        );
-        setData(newData);
       })
       .catch((error) => {
         console.log(error);
@@ -57,16 +50,15 @@ export default function Page() {
   }
 
   useEffect(() => {
+    const getCharacter = async (id: number) => {
+      var res = await axios.get(process.env.API_URL + `/characters/${id}`);
+      setCharacter(res.data);
+      console.log(res.data);
+    }
     const slug = router.query.slug;
     if (slug) {
       var id = parseInt(slug.toString());
-
-      // Get character from data
-      data.characters.filter((character: Character) => {
-        if (character.id == id) {
-          setCharacter(character);
-        }
-      });
+      getCharacter(id);
     }
   }, [router.query.slug]);
 
@@ -93,7 +85,7 @@ export default function Page() {
             )}
           </Grid>
           <Grid item lg={12}>
-            <Gallery character={character} />
+            <Gallery filters={emptyFilters} />
           </Grid>
         </Grid>
         <Dialog open={dialogOpen}>
