@@ -20,21 +20,14 @@ export default function ArtistFilter({ filters, setFilters }: { filters: Filters
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    if (artist != undefined) {
-      setInvisible(false);
-      setFilters({ ...filters, artist: artist });
-    } else {
-      setInvisible(true);
-      setFilters({ ...filters, artist: undefined });
-    }
-  }, [artist]);
 
   useEffect(() => {
     if (filters.artist != undefined) {
       setArtist(filters.artist);
+      setInvisible(false);
     } else {
       setArtist(undefined);
+      setInvisible(true);
     }
   }, [filters.artist]);
 

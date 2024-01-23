@@ -1,6 +1,6 @@
 import { Button, Menu, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, MouseEvent, Dispatch, SetStateAction } from "react";
 import { ChromePicker } from "react-color";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { Filters } from "../../../../interfaces";
@@ -20,21 +20,11 @@ export default function RatingFilter({ filters, setFilters }: { filters: Filters
 
   const handleColorChange = (color: any) => {
     setColor(color.hex);
+    setInvisible(false);
+    setFilters({ ...filters, color: color.hex });
   };
 
-  useEffect(() => {
-    if (color != "") {
-      setInvisible(false);
-      setFilters({ ...filters, color: color });
-    }
-  }, [color]);
 
-  useEffect(() => {
-    if (filters.color == "") {
-      setInvisible(true);
-      setColor("");
-    }
-  }, [filters.color]);
 
   return (
     <div>

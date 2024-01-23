@@ -1,6 +1,6 @@
 import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent,useEffect, Dispatch, SetStateAction } from "react";
+import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
 import Character from "../../../../interfaces/Character";
 import CharacterSelect from "../../../Character/CharacterSelect";
 import PersonIcon from "@mui/icons-material/Person";
@@ -19,21 +19,15 @@ export default function CharacterFilter({ filters, setFilters }: { filters: Filt
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    if (characters?.length != 0) {
-      setInvisible(false);
-      setFilters({ ...filters, characters: characters });
-    } else {
-      setInvisible(true);
-      setFilters({ ...filters, characters: [] });
-    }
-  }, [characters]);
 
   useEffect(() => {
-    if (filters.characters != undefined) {
+    console.log(filters.characters)
+    if (filters.characters.length != 0) {
       setCharacters(filters.characters);
+      setInvisible(false);
     } else {
       setCharacters([]);
+      setInvisible(true);
     }
   }, [filters.characters]);
 

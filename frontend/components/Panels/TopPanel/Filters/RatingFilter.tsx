@@ -20,7 +20,7 @@ export default function RatingFilter({ filters, setFilters }: { filters: Filters
     } else {
       setInvisible(false);
     }
-  }, [filters.rating]);
+  }, [filters]);
   return (
     <div>
       <Button

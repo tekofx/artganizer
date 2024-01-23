@@ -63,7 +63,7 @@ export default function TagFilter({ filters, setFilters }: { filters: Filters, s
     } else {
       setInvisible(false);
     }
-  }, [filters.tags]);
+  }, [filters]);
 
   return (
     <div>

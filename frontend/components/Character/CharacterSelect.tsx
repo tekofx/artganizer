@@ -3,14 +3,18 @@ import { Paper, TextField, Grid, Typography } from "@mui/material";
 import Character from "../../interfaces/Character";
 import SelectableCharacterList from "./SelectableCharacterList";
 import CharacterLabel from "./CharacterLabel";
+import { Filters } from "../../interfaces";
 
 interface CharacterSelectProps {
   setSelectedCharacters: Dispatch<SetStateAction<Character[]>>;
   selectedCharacters: Character[];
+  filters?: Filters;
+  setFilters?: Dispatch<SetStateAction<Filters>>;
 }
 export default function CharacterSelect({
   setSelectedCharacters,
   selectedCharacters,
+
 }: CharacterSelectProps) {
   const [open, setOpen] = useState(false);
 
@@ -21,6 +25,10 @@ export default function CharacterSelect({
       setOpen((previousOpen) => !previousOpen);
     }
   };
+
+  function addCharacter(char: Character) {
+    setSelectedCharacters([...selectedCharacters, char]);
+  }
 
   function removeCharacter(char: Character) {
     setSelectedCharacters(selectedCharacters.filter((t) => t.id !== char.id));

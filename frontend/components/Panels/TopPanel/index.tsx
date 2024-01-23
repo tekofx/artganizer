@@ -17,6 +17,7 @@ export default function TopPanel({ filters, setFilters }: { filters: Filters, se
     /* var newData = { ...data };
     newData.filters.title = event.target.value;
     setData(newData); */
+    event.preventDefault();
     setFilters({ ...filters, title: event.target.value });
     console.log(filters);
   }
