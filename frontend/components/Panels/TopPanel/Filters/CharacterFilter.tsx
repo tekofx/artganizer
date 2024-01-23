@@ -1,12 +1,12 @@
 import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext, useEffect } from "react";
+import { useState, MouseEvent, useContext, useEffect, Dispatch, SetStateAction } from "react";
 import { DataContext } from "../../../../pages/_app";
 import Character from "../../../../interfaces/Character";
 import CharacterSelect from "../../../Character/CharacterSelect";
 import PersonIcon from "@mui/icons-material/Person";
-export default function CharacterFilter() {
-  const { data, setData } = useContext(DataContext);
+import { Filters } from "../../../../interfaces";
+export default function CharacterFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [characters, setCharacters] = useState<Character[]>([]);
   const [invisible, setInvisible] = useState<boolean>(true);
@@ -23,32 +23,20 @@ export default function CharacterFilter() {
   useEffect(() => {
     if (characters?.length != 0) {
       setInvisible(false);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          characters: characters,
-        },
-      }));
+      setFilters({ ...filters, characters: characters });
     } else {
       setInvisible(true);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          characters: [],
-        },
-      }));
+      setFilters({ ...filters, characters: [] });
     }
   }, [characters]);
 
   useEffect(() => {
-    if (data.filters.characters != undefined) {
-      setCharacters(data.filters.characters);
+    if (filters.characters != undefined) {
+      setCharacters(filters.characters);
     } else {
       setCharacters([]);
     }
-  }, [data.filters.characters]);
+  }, [filters.characters]);
 
   return (
     <div>

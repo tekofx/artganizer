@@ -40,6 +40,16 @@ export default function Gallery({ filters }: { filters: Filters }) {
           )
         );
       }
+      if (filters.characters.length > 0) {
+        // Get all submissions that have at least one of the characters
+        res.data = res.data.filter((submission: Submission) =>
+          submission.characters?.some((character) =>
+            filters.characters.some(
+              (filterCharacter) => filterCharacter.id === character.id
+            )
+          )
+        );
+      }
       if (filters.color != "") {
         res.data = filterSubmissionsByColor(res.data, filters.color, 80);
       }

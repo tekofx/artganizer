@@ -29,8 +29,8 @@ export default function TopPanel({ filters, setFilters }: { filters: Filters, se
         <TagFilter filters={filters} setFilters={setFilters} />
         <ColorFilter filters={filters} setFilters={setFilters} />
         <ArtistFilter filters={filters} setFilters={setFilters} />
-        <CharacterFilter />
-        <ClearFilters />
+        <CharacterFilter filters={filters} setFilters={setFilters} />
+        <ClearFilters filters={filters} setFilters={setFilters} />
       </Stack>
     </Paper>
   );

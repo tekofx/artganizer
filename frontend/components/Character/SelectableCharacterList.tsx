@@ -1,10 +1,11 @@
-import { useContext, Dispatch, SetStateAction, useState } from "react";
+import { useContext, Dispatch, SetStateAction, useState, useEffect } from "react";
 import { Typography, MenuItem, Button } from "@mui/material";
 import { DataContext } from "../../pages/_app";
 import CharacterLabel from "./CharacterLabel";
 import CharacterForm from "../Forms/CharacterForm";
 import AddIcon from "@mui/icons-material/Add";
 import Character from "../../interfaces/Character";
+import axios from "axios";
 interface CharacterListProps {
   selectedCharacters: Character[];
   setSelectedCharacters: Dispatch<SetStateAction<Character[]>>;
@@ -13,8 +14,17 @@ interface CharacterListProps {
 }
 
 export default function SelectableCharacterList(props: CharacterListProps) {
-  const { data } = useContext(DataContext);
   const [openCharacterForm, setOpenCharacterForm] = useState(false);
+  const [characters, setCharacters] = useState<Character[]>([]);
+
+  useEffect(() => {
+    const getCharacters = async () => {
+      var res = await axios.get(process.env.API_URL + "/characters");
+      setCharacters(res.data);
+    }
+    getCharacters();
+  }
+    , []);
 
   function handleClick(char: Character) {
     if (props.selectedCharacters.includes(char)) {
@@ -34,10 +44,10 @@ export default function SelectableCharacterList(props: CharacterListProps) {
 
   return (
     <>
-      {data.characters.filter((artist) =>
+      {characters.filter((artist) =>
         artist.name.toLowerCase().includes(props.filter.toLowerCase())
       ).length == 0 && <Typography>No characters</Typography>}
-      {data.characters
+      {characters
 
         .filter((removeCharacter) =>
           removeCharacter.name
@@ -57,7 +67,7 @@ export default function SelectableCharacterList(props: CharacterListProps) {
 
       {
         // If no character with name filter exists, show a button to create a new character
-        data.characters.filter((artist) =>
+        characters.filter((artist) =>
           artist.name.toLowerCase().includes(props.filter.toLowerCase())
         ).length == 0 && (
           <Button onClick={() => setOpenCharacterForm(true)}>
