@@ -10,23 +10,23 @@ import {
 import BrushIcon from "@mui/icons-material/Brush";
 import AddIcon from "@mui/icons-material/Add";
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { DataContext } from "../../../../pages/_app";
 import SearchBar from "../../../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
 import { ArtistForm } from "../../../Forms";
 
 import ArtistList from "../../../Artist/ArtistList";
+import { Artist } from "../../../../interfaces";
+import axios from "axios";
 export default function ArtistAccordion() {
-  const { data } = useContext(DataContext);
-  const [artists, setArtists] = useState(data.artists);
+  const [artists, setArtists] = useState<Artist[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    var temp = data.artists.filter((artist) =>
+    var temp = artists.filter((artist) =>
       artist.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
     setArtists(temp);
@@ -38,13 +38,18 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setArtists(data.artists);
+      setArtists(artists);
     }
   }
 
   useEffect(() => {
-    setArtists(data.artists);
-  }, [data.artists]);
+    const getArtists = async () => {
+      var res = await axios.get(process.env.API_URL + "/artists");
+      setArtists(res.data);
+    }
+    getArtists();
+
+  }, []);
 
   return (
     <Accordion expanded={expanded}>

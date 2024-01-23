@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState, useContext, Dispatch, SetStateAction } from "react";
+import { useState, useContext, Dispatch, SetStateAction, useEffect } from "react";
 import Tag from "../../interfaces/Tag";
 import TagLabel from "../../components/Tag/TagLabel";
 import axios from "axios";
@@ -21,28 +21,22 @@ interface ManageTagsProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function ManageTags(props: ManageTagsProps) {
-  const { data, setData } = useContext(DataContext);
-  const [tags, setTags] = useState<Tag[]>(data.tags);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [openTagForm, setOpenTagForm] = useState<boolean>(false);
+  useEffect(() => {
+    const getTags = async () => {
+      var res = await axios.get(process.env.API_URL + "/tags");
+      setTags(res.data);
+    }
+    getTags();
+  }
+    , []);
 
   async function onClickRemoveTag(tag: Tag) {
     await axios
       .delete(process.env.API_URL + `/tags/${tag.id}`)
       .then(() => {
         setTags(tags.filter((t) => t.id != tag.id));
-        var submissionUpdated = data.submissions.map((s) => {
-          var index = s.tags.findIndex((t) => t.id == tag.id);
-          if (index != -1) {
-            s.tags.splice(index, 1);
-          }
-          return s;
-        });
-
-        setData({
-          ...data,
-          tags: data.tags.filter((t) => t.id != tag.id),
-          submissions: submissionUpdated,
-        });
       })
       .catch((err) => {
         console.log(err);

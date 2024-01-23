@@ -7,25 +7,34 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
-
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { DataContext } from "../../../../pages/_app";
 import SearchBar from "../../../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
 import CharacterList from "../../../Character/CharacterList";
 import PersonIcon from "@mui/icons-material/Person";
 import CharacterForm from "../../../Forms/CharacterForm";
+import { Character } from "../../../../interfaces";
+import axios from "axios";
 export default function ArtistAccordion() {
-  const { data } = useContext(DataContext);
-  const [characters, setCharacters] = useState(data.characters);
+  const [characters, setCharacters] = useState<Character[]>([]);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    const getCharacters = async () => {
+      var res = await axios.get(process.env.API_URL + "/characters");
+      setCharacters(res.data);
+    }
+    getCharacters();
+
+  }
+    , []);
+
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    var temp = data.characters.filter((character) =>
+    var temp = characters.filter((character) =>
       character.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
     setCharacters(temp);
@@ -38,7 +47,7 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setCharacters(data.characters);
+      setCharacters(characters);
     }
   }
 

@@ -12,31 +12,36 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { useState, useContext } from "react";
 import Settings from "../../../../interfaces/Settings";
 import { DataContext } from "../../../../pages/_app";
 import GallerySettings from "./Settings/GallerySettings";
+import { defaultSettings } from "../../../../src/emptyEntities";
 interface SettingsDialogProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function SettingsDialog(props: SettingsDialogProps) {
   const [value, setValue] = React.useState(0);
+  const [settings, setSettings] = useState<Settings>(defaultSettings);
 
-  const { data, setData } = useContext(DataContext);
-  const [settings, setSettings] = useState<Settings>(data.settings);
+  useEffect(() => {
+    const getSettings = async () => {
+      var res = await axios.get(process.env.API_URL + "/settings");
+      setSettings(res.data);
+    }
+    getSettings();
+  }
+    , []);
 
   async function updateSettings() {
     await axios
       .put(process.env.API_URL + "/settings", settings)
       .then(() => {
-        setData({
-          ...data,
-          settings: settings,
-        });
+        setSettings(settings);
       })
       .catch((err) => {
         console.log(err);
@@ -50,10 +55,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     await axios
       .delete(process.env.API_URL + "/settings")
       .then((res) => {
-        setData({
-          ...data,
-          settings: res.data,
-        });
+        setSettings(res.data);
       })
       .catch((err) => {
         console.log(err);

@@ -1,9 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Typography, Paper } from "@mui/material";
 import Submission from "../../interfaces/Submission";
-import { DataContext } from "../../pages/_app";
-import Artist from "../../interfaces/Artist";
-import Character from "../../interfaces/Character";
 import Image from "./Image";
 import { filterSubmissionsByColor } from "../../src/colorManagement";
 import { Filters } from "../../interfaces";
@@ -16,52 +13,58 @@ export default function Gallery({ filters }: { filters: Filters }) {
 
   useEffect(() => {
     const getSubmissions = async () => {
-      // FIXME: Make only 1 petition to the API using filters
       const res = await axios.get(process.env.API_URL + "/submissions");
-      if (filters.title) {
-        res.data = res.data.filter((submission: Submission) =>
-          submission.title
-            .toLowerCase()
-            .includes(filters.title.toLowerCase())
-        );
-      }
-
-      if (filters.rating != -1) {
-        res.data = res.data.filter(
-          (submission: Submission) =>
-            submission.rating >= filters.rating
-        );
-      }
-      if (filters.tags.length > 0) {
-        // Get all submissions that have at least one of the tags
-        res.data = res.data.filter((submission: Submission) =>
-          submission.tags?.some((tag) =>
-            filters.tags.some((filterTag) => filterTag.id === tag.id)
-          )
-        );
-      }
-      if (filters.characters.length > 0) {
-        // Get all submissions that have at least one of the characters
-        res.data = res.data.filter((submission: Submission) =>
-          submission.characters?.some((character) =>
-            filters.characters.some(
-              (filterCharacter) => filterCharacter.id === character.id
-            )
-          )
-        );
-      }
-      if (filters.color != "") {
-        res.data = filterSubmissionsByColor(res.data, filters.color, 80);
-      }
-      if (filters.artist != undefined) {
-        res.data = res.data.filter(
-          (submission: Submission) => submission.artist?.id == filters.artist?.id
-        );
-      }
       setSubmissions(res.data);
     }
     getSubmissions();
-  }, [filters]);
+  }
+    , []);
+
+  useEffect(() => {
+    var temp = submissions;
+
+    if (filters.title) {
+      temp = temp.filter((submission: Submission) =>
+        submission.title
+          .toLowerCase()
+          .includes(filters.title.toLowerCase())
+      );
+    }
+
+    if (filters.rating != -1) {
+      temp = temp.filter(
+        (submission: Submission) =>
+          submission.rating >= filters.rating
+      );
+    }
+    if (filters.tags.length > 0) {
+      // Get all submissions that have at least one of the tags
+      temp = temp.filter((submission: Submission) =>
+        submission.tags?.some((tag) =>
+          filters.tags.some((filterTag) => filterTag.id === tag.id)
+        )
+      );
+    }
+    if (filters.characters.length > 0) {
+      // Get all submissions that have at least one of the characters
+      temp = temp.filter((submission: Submission) =>
+        submission.characters?.some((character) =>
+          filters.characters.some(
+            (filterCharacter) => filterCharacter.id === character.id
+          )
+        )
+      );
+    }
+    if (filters.color != "") {
+      temp = filterSubmissionsByColor(temp, filters.color, 80);
+    }
+    if (filters.artist != undefined) {
+      temp = temp.filter(
+        (submission: Submission) => submission.artist?.id == filters.artist?.id
+      );
+    }
+    setSubmissions(temp);
+  }, [filters, submissions]);
 
   return (
     <Paper
