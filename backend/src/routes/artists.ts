@@ -138,16 +138,18 @@ router.get("/:artistId", async (req: Request, res: Response) => {
   }
 
   var artistId: number = parseInt(req.params.artistId);
-  const artist = await ArtistRepo.findOne({
-    where: { id: artistId },
-    relations: ["submissions"],
-  });
+  const queryBuilder = ArtistRepo.createQueryBuilder("artist")
+    .leftJoinAndSelect("artist.socials", "social")
+    .orderBy("artist.id", "ASC")
+    .where("artist.id = :id", { id: artistId });
+
+  const artist = await queryBuilder.getOne();
 
   if (artist == null) {
     res.status(404).send("artist not found");
     return;
   }
-  artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
+  artist.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
 
   res.send(artist);
 });

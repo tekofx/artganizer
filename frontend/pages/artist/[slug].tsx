@@ -29,6 +29,7 @@ export default function Page() {
     const getArtist = async (id: number) => {
       var res = await axios.get(process.env.API_URL + `/artists/${id}`);
       setArtist(res.data);
+      console.log(res.data);
     };
 
     const slug = router.query.slug;

@@ -109,10 +109,10 @@ export default function ArtistEdit({
           />
         </Stack>
       </Grid>
-      <Grid item spacing={2}>
+      <Grid item >
         <Typography>Socials</Typography>
         <Stack spacing={2} direction="row">
-          {artist?.socials.map((social, index) => (
+          {artist?.socials?.map((social, index) => (
             <SocialIcon social={social} key={index} clickable />
           ))}
         </Stack>
