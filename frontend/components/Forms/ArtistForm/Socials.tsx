@@ -9,6 +9,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import SocialIcon from "../../SocialIcon";
 import { Artist } from "../../../interfaces";
+import { useEffect } from "react";
 
 interface SocialProps {
   artist: Artist;
@@ -16,6 +17,14 @@ interface SocialProps {
 }
 
 export default function Socials({ artist, setArtist }: SocialProps) {
+
+  useEffect(() => {
+    if (artist.socials.length == 0) {
+      addEmptySocial();
+    }
+  }
+    , []);
+
   function handleSocialURLChange(event: any, index: number) {
     const newSocials = [...artist.socials];
 
