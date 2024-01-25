@@ -38,42 +38,40 @@ export default function CharacterAutocomplete({
     }
 
     return (
-        <>
-            <Autocomplete
-                multiple
-                options={characters}
-                getOptionLabel={(character) => character.name}
-                value={selectedCharacters}
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue);
-                }}
-                onChange={(event, newValue) => {
-                    setSelectedCharacters(newValue);
-                }}
-                renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Characters" />
-                )}
-                renderOption={(props, character) => {
-                    const isSelected = selectedCharacters.some((selectedCharacter) => selectedCharacter.id === character.id);
-                    if (isSelected) {
-                        props["aria-selected"] = true;
-                    }
-                    return (
-                        <li {...props}>
-                            <CharacterLabel character={character} />
-                        </li>
-                    );
-                }}
-                renderTags={(value) =>
-                    value.map((character) => (
-                        <Paper key={character.id} sx={{ borderRadius: "20" }}>
-                            <CharacterLabel character={character} onDelete={() => handleDeleteCharacter(character)} />
-                        </Paper>
-                    ))
+        <Autocomplete
+            multiple
+            options={characters}
+            getOptionLabel={(character) => character.name}
+            value={selectedCharacters}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+                setInputValue(newInputValue);
+            }}
+            onChange={(event, newValue) => {
+                setSelectedCharacters(newValue);
+            }}
+            renderInput={(params) => (
+                <TextField {...params} variant="outlined" label="Characters" />
+            )}
+            renderOption={(props, character) => {
+                const isSelected = selectedCharacters.some((selectedCharacter) => selectedCharacter.id === character.id);
+                if (isSelected) {
+                    props["aria-selected"] = true;
                 }
-                noOptionsText={<Button onClick={onAddCharacter}>Create character {inputValue}</Button>}
-            />
-        </>
+                return (
+                    <li {...props}>
+                        <CharacterLabel character={character} />
+                    </li>
+                );
+            }}
+            renderTags={(value) =>
+                value.map((character) => (
+                    <Paper key={character.id} sx={{ borderRadius: "20" }}>
+                        <CharacterLabel character={character} onDelete={() => handleDeleteCharacter(character)} />
+                    </Paper>
+                ))
+            }
+            noOptionsText={<Button onClick={onAddCharacter}>Create character {inputValue}</Button>}
+        />
     );
 }

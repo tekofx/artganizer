@@ -2,9 +2,9 @@ import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
 import Character from "../../../../interfaces/Character";
-import CharacterSelect from "../../../Character/CharacterSelect";
 import PersonIcon from "@mui/icons-material/Person";
 import { Filters } from "../../../../interfaces";
+import CharacterAutocomplete from "../../../Character/CharacterAutocomplete";
 export default function CharacterFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -60,7 +60,7 @@ export default function CharacterFilter({ filters, setFilters }: { filters: Filt
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <CharacterSelect
+              <CharacterAutocomplete
                 selectedCharacters={characters}
                 setSelectedCharacters={setCharacters}
               />

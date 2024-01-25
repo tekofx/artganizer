@@ -14,9 +14,9 @@ import Artist from "../../../interfaces/Artist";
 import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
 import Tag from "../../../interfaces/Tag";
-import CharacterSelect from "../../Character/CharacterSelect";
 import Character from "../../../interfaces/Character";
 import TagAutocomplete from "../../Tag/TagAutocomplete";
+import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
@@ -97,7 +97,7 @@ export default function Edit(props: InfoProps) {
               selectedArtist={selectedArtist}
               setSelectedArtist={setSelectedArtist}
             />
-            <CharacterSelect
+            <CharacterAutocomplete
               selectedCharacters={selectedCharacters}
               setSelectedCharacters={setSelectedCharacters}
             />
