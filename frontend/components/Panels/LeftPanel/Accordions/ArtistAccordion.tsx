@@ -46,6 +46,7 @@ export default function ArtistAccordion() {
     const getArtists = async () => {
       var res = await axios.get(process.env.API_URL + "/artists");
       setArtists(res.data);
+      console.log(res.data);
     }
     getArtists();
 

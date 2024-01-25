@@ -5,7 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import sharp from "sharp";
 import { ArtistRepo, SubmissionRepo, SocialRepo } from "../typeorm.config";
-import { Social } from "../entities";
+import { Artist, Social } from "../entities";
 
 const artistsPicsDir = path.join(__dirname, "../../data/uploads/artistPics");
 if (!fs.existsSync(artistsPicsDir)) {
@@ -236,10 +236,14 @@ router.put(
       return;
     }
     var artistId: number = parseInt(req.params.artistId);
-    const artist = await ArtistRepo.findOne({
-      where: { id: artistId },
-      relations: ["socials"],
-    });
+
+    const queryBuilder = ArtistRepo.createQueryBuilder("artist")
+      .leftJoinAndSelect("artist.socials", "social")
+      .orderBy("artist.id", "ASC")
+      .where("artist.id = :id", { id: artistId });
+
+    const artist = await queryBuilder.getOne();
+    console.log(artist);
 
     if (artist == null) {
       res.status(404).send("artist not found");
@@ -267,31 +271,69 @@ router.put(
           console.log(error);
         });
     }
-
     var { id, name, description, socials } = req.body;
     artist.name = name;
     artist.description = description;
-
     socials = JSON.parse(socials);
 
-    // Add new socials
+    // Update socials of artist
     for (const social of socials) {
-      await SocialRepo.save(social);
-    }
-
-    // Remove old socials
-    for (const social of artist.socials) {
-      if (!socials.find((s: Social) => s.id === social.id)) {
-        await SocialRepo.remove(social);
+      if (social.id) {
+        console.log("Updating social");
+        // Update existing social
+        const socialObj = await SocialRepo.findOne({
+          where: { id: social.id },
+        });
+        if (socialObj) {
+          socialObj.name = social.name;
+          socialObj.url = social.url;
+          await SocialRepo.save(socialObj);
+        }
+      } else {
+        console.log("Creating social");
+        // Create new social
+        const newSocial = SocialRepo.create({
+          name: social.name,
+          url: social.url,
+          artist: artist,
+        });
+        var result2 = await SocialRepo.save(newSocial);
+        artist.socials.push(result2);
       }
     }
 
-    artist.socials = socials;
-
     var result = await ArtistRepo.save(artist);
+    result.socials = socials;
+    result.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
 
-    result.image = process.env.URL + "/artists/uploads/" + result.id;
     res.send(result);
   }
 );
+
+router.post("/:artistId/socials", async (req: Request, res: Response) => {
+  if (req.params.artistId == null) {
+    res.status(400).send("artist ID not provided");
+    return;
+  }
+  var artistId: number = parseInt(req.params.artistId);
+
+  const queryBuilder = ArtistRepo.createQueryBuilder("artist")
+    .leftJoinAndSelect("artist.socials", "social")
+    .orderBy("artist.id", "ASC")
+    .where("artist.id = :id", { id: artistId });
+
+  const artist = await queryBuilder.getOne();
+
+  if (artist == null) {
+    res.status(404).send("artist not found");
+    return;
+  }
+
+  var { name, url } = req.body;
+  const newSocial = SocialRepo.create({ name, url, artist });
+  var result = await SocialRepo.save(newSocial);
+  artist.socials.push(result);
+  await ArtistRepo.save(artist);
+  res.send(result);
+});
 export default router;
