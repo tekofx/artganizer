@@ -144,22 +144,22 @@ router.post(
 }); */
 
 router.put(
-  "/:id",
+  "/:characterId",
   uploadCharacterPic.single("image"),
   async (req: Request, res: Response) => {
-    if (req.params.id == null) {
+    if (req.params.characterId == null) {
       res.status(400).send("submission ID not provided");
       if (file?.path) {
         fs.unlinkSync(file.path);
       }
       return;
     }
-    var characterId: number = parseInt(req.params.id);
+    var characterId: number = parseInt(req.params.characterId);
+
     var file = req.file;
 
-    var character = await CharacterRepo.findOne({
-      where: { id: characterId },
-    });
+    var character = await CharacterRepo.findOne({ where: { id: characterId } });
+    console.log(character);
 
     if (character == null) {
       res.status(404).send("character not found");
@@ -190,11 +190,22 @@ router.put(
         });
     }
 
-    var { id, name, description } = req.body;
+    var { name, description } = req.body;
     character.name = name;
     character.description = description;
-    var result = await CharacterRepo.save(character);
-    result.image = process.env.URL + "/characters/uploads" + characterId;
+    console.log("1");
+
+    var result;
+    try {
+      console.log("2");
+
+      result = await CharacterRepo.save(character);
+      result.image = process.env.URL + "/characters/uploads" + characterId;
+      console.log(result);
+    } catch (error) {
+      console.log("OCurrion un error al guardar el personaje");
+      console.log(error);
+    }
 
     res.send(result);
   }

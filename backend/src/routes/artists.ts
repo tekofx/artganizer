@@ -271,39 +271,11 @@ router.put(
           console.log(error);
         });
     }
-    var { id, name, description, socials } = req.body;
+    var { name, description } = req.body;
     artist.name = name;
     artist.description = description;
-    socials = JSON.parse(socials);
-
-    // Update socials of artist
-    for (const social of socials) {
-      if (social.id) {
-        console.log("Updating social");
-        // Update existing social
-        const socialObj = await SocialRepo.findOne({
-          where: { id: social.id },
-        });
-        if (socialObj) {
-          socialObj.name = social.name;
-          socialObj.url = social.url;
-          await SocialRepo.save(socialObj);
-        }
-      } else {
-        console.log("Creating social");
-        // Create new social
-        const newSocial = SocialRepo.create({
-          name: social.name,
-          url: social.url,
-          artist: artist,
-        });
-        var result2 = await SocialRepo.save(newSocial);
-        artist.socials.push(result2);
-      }
-    }
 
     var result = await ArtistRepo.save(artist);
-    result.socials = socials;
     result.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
 
     res.send(result);

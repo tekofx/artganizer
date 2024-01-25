@@ -10,11 +10,9 @@ interface CharacterEditProps {
   setCharacter: Dispatch<SetStateAction<Character>>;
 }
 
-export default function CharacterEdit(props: CharacterEditProps) {
-  const [character, setCharacter] = useState<Character>(props.character);
-  const [image, setImage] = useState<string>(props.character.image);
+export default function CharacterEdit({ character, toggleEdit, setCharacter }: CharacterEditProps) {
+  const [image, setImage] = useState<string>(character.image);
   const [imageData, setImageData] = useState<any>();
-  const router = useRouter();
 
   function onImageUpload(event: any) {
     setImageData(event.target.files[0]);
@@ -27,20 +25,18 @@ export default function CharacterEdit(props: CharacterEditProps) {
     formData.append("image", imageData);
     formData.append("name", character.name);
     formData.append("description", character.description);
-    formData.append("id", character?.id.toString());
+    console.log(character.id);
 
     await axios
       .put(process.env.API_URL + `/characters/${character.id}`, formData)
       .then((response) => {
-        props.setCharacter(response.data);
+        setCharacter(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-    props.toggleEdit();
+    toggleEdit();
 
-    // Reload the page
-    router.reload();
   }
 
   return (
@@ -90,7 +86,7 @@ export default function CharacterEdit(props: CharacterEditProps) {
           <Button
             variant="contained"
             startIcon={<DoneIcon />}
-            onClick={() => editCharacter()}
+            onClick={editCharacter}
           >
             Ok
           </Button>
