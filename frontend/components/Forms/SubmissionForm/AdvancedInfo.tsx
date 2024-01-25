@@ -6,6 +6,7 @@ import ArtistSelect from "../../Artist/ArtistSelect";
 import CharacterSelect from "../../Character/CharacterSelect";
 import Character from "../../../interfaces/Character";
 import Artist from "../../../interfaces/Artist";
+import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
 
 interface Props {
   selectedTags: Tag[];
@@ -43,7 +44,8 @@ export default function AdvancedInfo({
         />
       </Grid>
       <Grid item xs={12}>
-        <CharacterSelect
+
+        <CharacterAutocomplete
           selectedCharacters={selectedCharacters}
           setSelectedCharacters={setSelectedCharacters}
         />
