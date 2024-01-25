@@ -40,44 +40,42 @@ export default function TagAutocomplete({
   }
 
   return (
-    <>
-      <Autocomplete
-        multiple
-        options={tags}
-        getOptionLabel={(tag) => tag.name}
-        value={selectedTags}
-        inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
-        }}
-        onChange={(event, newValue) => {
-          setSelectedTags(newValue);
-        }}
-        renderInput={(params) => (
-          <TextField {...params} variant="outlined" label="Tags" />
-        )}
-        renderOption={(props, tag) => {
-          const isSelected = selectedTags.some((selectedTag) => selectedTag.id === tag.id);
-          if (isSelected) {
-            props["aria-selected"] = true;
-          }
-          return (
-            <li {...props}>
-              <TagLabel tag={tag} />
-            </li>
-          );
-        }}
-        renderTags={(value) =>
-          value.map((tag) => (
-            <TagChip
-              key={tag.id}
-              tag={tag}
-              onDelete={() => handleDeleteTag(tag)}
-            />
-          ))
+    <Autocomplete
+      multiple
+      options={tags}
+      getOptionLabel={(tag) => tag.name}
+      value={selectedTags}
+      inputValue={inputValue}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+      }}
+      onChange={(event, newValue) => {
+        setSelectedTags(newValue);
+      }}
+      renderInput={(params) => (
+        <TextField {...params} variant="outlined" label="Tags" />
+      )}
+      renderOption={(props, tag) => {
+        const isSelected = selectedTags.some((selectedTag) => selectedTag.id === tag.id);
+        if (isSelected) {
+          props["aria-selected"] = true;
         }
-        noOptionsText={<Button onClick={onAddTag}>Create tag {inputValue}</Button>}
-      />
-    </>
+        return (
+          <li {...props}>
+            <TagLabel tag={tag} />
+          </li>
+        );
+      }}
+      renderTags={(value) =>
+        value.map((tag) => (
+          <TagChip
+            key={tag.id}
+            tag={tag}
+            onDelete={() => handleDeleteTag(tag)}
+          />
+        ))
+      }
+      noOptionsText={<Button onClick={onAddTag}>Create tag {inputValue}</Button>}
+    />
   );
 }
