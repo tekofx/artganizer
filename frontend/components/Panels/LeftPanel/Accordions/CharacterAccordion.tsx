@@ -22,16 +22,21 @@ export default function ArtistAccordion() {
   const [expanded, setExpanded] = useState<boolean>(true);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
+  const getCharacters = async () => {
+    var res = await axios.get(process.env.API_URL + "/characters");
+    setCharacters(res.data);
+  }
   useEffect(() => {
-    const getCharacters = async () => {
-      var res = await axios.get(process.env.API_URL + "/characters");
-      setCharacters(res.data);
-    }
+
     getCharacters();
 
-  }
-    , []);
+  }, []);
+
+  useEffect(() => {
+
+    getCharacters();
+
+  }, [open]);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     var temp = characters.filter((character) =>

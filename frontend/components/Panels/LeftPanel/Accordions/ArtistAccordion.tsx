@@ -19,6 +19,9 @@ import { ArtistForm } from "../../../Forms";
 import ArtistList from "../../../Artist/ArtistList";
 import { Artist } from "../../../../interfaces";
 import axios from "axios";
+
+
+
 export default function ArtistAccordion() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
@@ -41,16 +44,20 @@ export default function ArtistAccordion() {
       setArtists(artists);
     }
   }
-
+  const getArtists = async () => {
+    var res = await axios.get(process.env.API_URL + "/artists");
+    setArtists(res.data);
+    console.log(res.data);
+  }
   useEffect(() => {
-    const getArtists = async () => {
-      var res = await axios.get(process.env.API_URL + "/artists");
-      setArtists(res.data);
-      console.log(res.data);
-    }
     getArtists();
 
   }, []);
+
+  useEffect(() => {
+    getArtists();
+
+  }, [open]);
 
   return (
     <Accordion expanded={expanded}>
