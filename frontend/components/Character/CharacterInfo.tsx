@@ -21,8 +21,9 @@ export default function CharacterInfo(props: CharacterInfoProps) {
         <Typography variant="h4">{props.character?.name}</Typography>
         <Typography variant="h5">{props.character?.description}</Typography>
       </Grid>
+      <Grid item xs></Grid>
       <Grid item>
-        <Stack direction="row" width="100%" spacing={2} justifyContent="center">
+        <Stack direction="column" width="100%" spacing={2} justifyContent="center">
           <Button
             variant="contained"
             startIcon={<EditIcon />}

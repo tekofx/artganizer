@@ -84,6 +84,7 @@ export default function CharacterEdit(props: CharacterEditProps) {
           />
         </Stack>
       </Grid>
+      <Grid item xs></Grid>
       <Grid item>
         <Stack direction="row" width="100%" spacing={2} justifyContent="center">
           <Button
