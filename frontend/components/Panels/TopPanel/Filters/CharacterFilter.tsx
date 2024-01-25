@@ -23,13 +23,17 @@ export default function CharacterFilter({ filters, setFilters }: { filters: Filt
   useEffect(() => {
     console.log(filters.characters)
     if (filters.characters.length != 0) {
-      setCharacters(filters.characters);
       setInvisible(false);
     } else {
-      setCharacters([]);
       setInvisible(true);
     }
-  }, [filters.characters]);
+  }, [filters]);
+
+  useEffect(() => {
+    setFilters({ ...filters, characters: characters });
+  }
+    , [characters]);
+
 
   return (
     <div>
