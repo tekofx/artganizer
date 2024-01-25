@@ -40,6 +40,7 @@ export default function CharacterAutocomplete({
     return (
         <Autocomplete
             multiple
+            sx={{ minWidth: "20rem" }}
             options={characters}
             getOptionLabel={(character) => character.name}
             value={selectedCharacters}
