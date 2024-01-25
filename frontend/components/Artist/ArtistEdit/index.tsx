@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
 import SocialIcon from "../../SocialIcon";
-import SocialsDialog from "./SocialsDialog";
+import AddSocialDialog from "./AddSocialDialog";
 interface ArtistEditProps {
   artist: Artist;
   toggleEdit: () => void;
@@ -46,7 +46,7 @@ export default function ArtistEdit({
     formData.append("name", auxArtist.name);
     formData.append("description", auxArtist.description);
     formData.append("id", auxArtist?.id.toString());
-    formData.append("socials", JSON.stringify(auxArtist.socials));
+    formData.append("socials", JSON.stringify(artist.socials));
 
     await axios
       .put(process.env.API_URL + `/artists/${auxArtist.id}`, formData)
@@ -143,7 +143,8 @@ export default function ArtistEdit({
           </Button>
         </Stack>
       </Grid>
-      <SocialsDialog
+
+      <AddSocialDialog
         artist={artist}
         setArtist={setArtist}
         setOpen={setSocialsDialogOpen}
