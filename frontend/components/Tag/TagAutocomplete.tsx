@@ -11,7 +11,7 @@ interface TagListProps {
 
 const colors = ["#7BDCB5", "#FCB900", "#FF6900", "#0693E3", "#8ED1FC", "#F78DA7", "#EB144C", "#ABB8C3", "#9900EF"]
 
-export default function SelectableTagList({
+export default function TagAutocomplete({
   setSelectedTags,
   selectedTags,
 }: TagListProps) {
