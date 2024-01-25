@@ -336,4 +336,84 @@ router.post("/:artistId/socials", async (req: Request, res: Response) => {
   await ArtistRepo.save(artist);
   res.send(result);
 });
+
+router.put(
+  "/:artistId/socials/:socialId",
+  async (req: Request, res: Response) => {
+    if (req.params.artistId == null) {
+      res.status(400).send("artist ID not provided");
+      return;
+    }
+    if (req.params.socialId == null) {
+      res.status(400).send("social ID not provided");
+      return;
+    }
+    var artistId: number = parseInt(req.params.artistId);
+    var socialId: number = parseInt(req.params.socialId);
+
+    const queryBuilder = ArtistRepo.createQueryBuilder("artist")
+      .leftJoinAndSelect("artist.socials", "social")
+      .orderBy("artist.id", "ASC")
+      .where("artist.id = :id", { id: artistId });
+
+    const artist = await queryBuilder.getOne();
+
+    if (artist == null) {
+      res.status(404).send("artist not found");
+      return;
+    }
+
+    const social = await SocialRepo.findOne({ where: { id: socialId } });
+
+    if (social == null) {
+      res.status(404).send("social not found");
+      return;
+    }
+
+    var { name, url } = req.body;
+    social.name = name;
+    social.url = url;
+
+    await SocialRepo.save(social);
+    res.send(social);
+  }
+);
+
+router.delete(
+  "/:artistId/socials/:socialId",
+  async (req: Request, res: Response) => {
+    if (req.params.artistId == null) {
+      res.status(400).send("artist ID not provided");
+      return;
+    }
+    if (req.params.socialId == null) {
+      res.status(400).send("social ID not provided");
+      return;
+    }
+    var artistId: number = parseInt(req.params.artistId);
+    var socialId: number = parseInt(req.params.socialId);
+
+    const queryBuilder = ArtistRepo.createQueryBuilder("artist")
+      .leftJoinAndSelect("artist.socials", "social")
+      .orderBy("artist.id", "ASC")
+      .where("artist.id = :id", { id: artistId });
+
+    const artist = await queryBuilder.getOne();
+
+    if (artist == null) {
+      res.status(404).send("artist not found");
+      return;
+    }
+
+    const social = await SocialRepo.findOne({ where: { id: socialId } });
+
+    if (social == null) {
+      res.status(404).send("social not found");
+      return;
+    }
+
+    await SocialRepo.remove(social);
+    res.send(social);
+  }
+);
 export default router;

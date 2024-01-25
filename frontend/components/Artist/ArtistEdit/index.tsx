@@ -10,12 +10,11 @@ import {
 import Artist from "../../../interfaces/Artist";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
-import EditIcon from "@mui/icons-material/Edit";
-
+import AddIcon from '@mui/icons-material/Add';
 import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
-import SocialIcon from "../../SocialIcon";
-import AddSocialDialog from "./AddSocialDialog";
+import SocialDialog from "./SocialDialog";
+import SocialLabel from "../SocialLabel";
 interface ArtistEditProps {
   artist: Artist;
   toggleEdit: () => void;
@@ -110,19 +109,25 @@ export default function ArtistEdit({
         </Stack>
       </Grid>
       <Grid item >
-        <Typography>Socials</Typography>
-        <Stack spacing={2} direction="row">
+        <Grid container spacing={2} direction="row">
+          <Typography>Socials</Typography>
+          {/*  <Stack spacing={2} direction="row"> */}
           {artist?.socials?.map((social, index) => (
-            <SocialIcon social={social} key={index} clickable />
+            <Grid item key={index}>
+              <SocialLabel social={social} artist={artist} setArtist={setArtist} />
+            </Grid>
           ))}
-        </Stack>
-        <Button
-          variant="contained"
-          startIcon={<EditIcon />}
-          onClick={() => setSocialsDialogOpen(true)}
-        >
-          Edit socials
-        </Button>
+          <Grid item>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => setSocialsDialogOpen(true)}
+            >
+              Add Social
+            </Button>
+          </Grid>
+          {/* </Stack> */}
+        </Grid>
       </Grid>
       <Grid item xs></Grid>
       <Grid item>
@@ -144,7 +149,7 @@ export default function ArtistEdit({
         </Stack>
       </Grid>
 
-      <AddSocialDialog
+      <SocialDialog
         artist={artist}
         setArtist={setArtist}
         setOpen={setSocialsDialogOpen}
