@@ -9,12 +9,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import Artist from "../../../interfaces/Artist";
 import Character from "../../../interfaces/Character";
 import Submission from "../../../interfaces/Submission";
 import Tag from "../../../interfaces/Tag";
+import { useAppContext } from "../../../pages/_app";
 import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
 import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
 import TagAutocomplete from "../../Tag/TagAutocomplete";
@@ -24,6 +24,7 @@ interface InfoProps {
   setSubmission: Dispatch<SetStateAction<Submission>>;
 }
 export default function Edit(props: InfoProps) {
+  const { editSubmission } = useAppContext();
   const [submission, setSubmission] = useState<Submission>(props.submission);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     props.submission.tags
@@ -37,21 +38,17 @@ export default function Edit(props: InfoProps) {
     props.submission?.artist
   );
 
-  async function editSubmission() {
+  async function onOkButton() {
     submission.tags = selectedTags;
     submission.artist = selectedArtist;
     submission.characters = selectedCharacters;
-    await axios
-      .put(process.env.API_URL + `/submissions/${submission.id}`, {
-        submission,
-      })
-      .then((response) => {
-        props.setSubmission(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    props.setEditShow(false);
+
+    var result = await editSubmission(submission);
+    if (result) {
+      setSubmission(result);
+      props.setEditShow(false);
+      props.setSubmission(result);
+    }
   }
 
   return (
@@ -122,7 +119,7 @@ export default function Edit(props: InfoProps) {
           <Button
             variant="contained"
             startIcon={<DoneIcon />}
-            onClick={editSubmission}
+            onClick={onOkButton}
           >
             Ok
           </Button>

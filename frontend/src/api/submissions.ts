@@ -38,3 +38,19 @@ export async function handleCreateSubmission(
 
   return status;
 }
+
+export async function handleEditSubmission(
+  submission: Submission
+): Promise<Submission | undefined> {
+  // Edit submission
+  var status = await axios
+    .put(process.env.API_URL + `/submissions/${submission.id}`, { submission })
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return undefined;
+    });
+
+  return status;
+}
