@@ -1,7 +1,7 @@
-import { Rating, Button, Menu, MenuItem, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
 import GradeIcon from "@mui/icons-material/Grade";
+import { Badge, Button, Menu, MenuItem, Rating } from "@mui/material";
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { Filters } from "../../../../interfaces";
 export default function RatingFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

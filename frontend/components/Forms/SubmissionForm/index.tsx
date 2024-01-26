@@ -1,26 +1,26 @@
-import { useState, Dispatch, SetStateAction } from "react";
 import {
   Button,
-  Stack,
-  Grid,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
   IconButton,
+  Stack,
 } from "@mui/material";
 import axios from "axios";
-import Tag from "../../../interfaces/Tag";
+import { Dispatch, SetStateAction, useState } from "react";
 import Submission from "../../../interfaces/Submission";
+import Tag from "../../../interfaces/Tag";
 
-import Character from "../../../interfaces/Character";
-import Artist from "../../../interfaces/Artist";
 import AlertMessage from "../../../interfaces/AlertMessage";
-import ProgressButton from "../ProgressButon";
-import BasicInfo from "./BasicInfo";
-import AdvancedInfo from "./AdvancedInfo";
+import Artist from "../../../interfaces/Artist";
+import Character from "../../../interfaces/Character";
 import { emptySubmission } from "../../../src/emptyEntities";
 import Snack from "../../Snack";
+import ProgressButton from "../ProgressButon";
+import AdvancedInfo from "./AdvancedInfo";
+import BasicInfo from "./BasicInfo";
 
 interface Props {
   open: boolean;

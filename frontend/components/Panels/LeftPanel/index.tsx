@@ -1,19 +1,19 @@
 import {
-  Grid,
-  Typography,
-  Paper,
-  MenuList,
   Avatar,
+  Grid,
+  MenuList,
+  Paper,
   Stack,
+  Typography,
 } from "@mui/material";
-import { useState } from "react";
 import { useRouter } from "next/router";
-import ArtistAccordion from "./Accordions/ArtistAccordion";
+import { useState } from "react";
 import { ArtistForm, SubmissionForm, TagForm } from "../../Forms";
+import CharacterForm from "../../Forms/CharacterForm";
+import ArtistAccordion from "./Accordions/ArtistAccordion";
+import CharacterAccordion from "./Accordions/CharacterAccordion";
 import CreateMenu from "./Menus/CreateMenu";
 import SettingsMenu from "./Menus/Menu";
-import CharacterForm from "../../Forms/CharacterForm";
-import CharacterAccordion from "./Accordions/CharacterAccordion";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);

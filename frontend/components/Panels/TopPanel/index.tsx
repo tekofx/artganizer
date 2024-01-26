@@ -1,16 +1,16 @@
-import { Stack, Paper } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
+import { Filters } from "../../../interfaces";
+import SearchBar from "../../SearchBar";
 import {
-  RatingFilter,
-  ColorFilter,
-  ClearFilters,
-  TagFilter,
   ArtistFilter,
   CharacterFilter,
+  ClearFilters,
+  ColorFilter,
+  RatingFilter,
+  TagFilter,
 } from "./Filters";
-import SearchBar from "../../SearchBar";
-import { Filters } from "../../../interfaces";
 export default function TopPanel({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {

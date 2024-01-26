@@ -1,4 +1,4 @@
-import { Typography, Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import Tag from "../../interfaces/Tag";
 import TagChip from "./TagChip";
 interface TagListProps {

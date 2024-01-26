@@ -1,9 +1,9 @@
-import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
-import Character from "../../../../interfaces/Character";
 import PersonIcon from "@mui/icons-material/Person";
+import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { Filters } from "../../../../interfaces";
+import Character from "../../../../interfaces/Character";
 import CharacterAutocomplete from "../../../Character/CharacterAutocomplete";
 export default function CharacterFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

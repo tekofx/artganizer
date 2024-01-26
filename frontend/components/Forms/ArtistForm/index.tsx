@@ -1,23 +1,23 @@
 import {
-  Stack,
-  TextField,
-  Grid,
-  Button,
-  IconButton,
   Avatar,
+  Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
 } from "@mui/material";
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
+import { AlertMessage } from "../../../interfaces";
 import Artist from "../../../interfaces/Artist";
 import LimitedTextField from "../../LimitedTextField";
-import Socials from "./Socials";
-import ProgressButton from "../ProgressButon";
 import Snack from "../../Snack";
-import { AlertMessage } from "../../../interfaces";
+import ProgressButton from "../ProgressButon";
+import Socials from "./Socials";
 
 const defaultArtist: Artist = {
   id: -1,

@@ -8,10 +8,10 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
+import axios from "axios";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { Artist, Social } from "../../../interfaces";
 import SocialIcon from "../../SocialIcon";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
-import axios from "axios";
 interface SocialsDialogProps {
     open: boolean;
     setOpen: any;

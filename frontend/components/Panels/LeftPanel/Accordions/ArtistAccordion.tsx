@@ -1,24 +1,24 @@
+import AddIcon from "@mui/icons-material/Add";
+import BrushIcon from "@mui/icons-material/Brush";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Grid,
+  IconButton,
   Stack,
   Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  IconButton,
-  Grid,
 } from "@mui/material";
-import BrushIcon from "@mui/icons-material/Brush";
-import AddIcon from "@mui/icons-material/Add";
 
-import { useState, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import SearchBar from "../../../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
+import { useEffect, useState } from "react";
 import { ArtistForm } from "../../../Forms";
+import SearchBar from "../../../SearchBar";
 
-import ArtistList from "../../../Artist/ArtistList";
-import { Artist } from "../../../../interfaces";
 import axios from "axios";
+import { Artist } from "../../../../interfaces";
+import ArtistList from "../../../Artist/ArtistList";
 
 
 

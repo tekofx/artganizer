@@ -1,8 +1,8 @@
 import {
+  Checkbox,
   FormControlLabel,
   FormGroup,
   Typography,
-  Checkbox,
 } from "@mui/material";
 import Settings from "../../../../../interfaces/Settings";
 

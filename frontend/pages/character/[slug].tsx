@@ -1,24 +1,24 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
 import {
-  Grid,
-  Paper,
-  Typography,
   Button,
   Dialog,
   DialogActions,
   DialogTitle,
+  Grid,
+  Paper,
   Stack,
+  Typography,
 } from "@mui/material";
-import Gallery from "../../components/Gallery";
-import ClearIcon from "@mui/icons-material/Clear";
-import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import { emptyCharacter, emptyFilters } from "../../src/emptyEntities";
-import Character from "../../interfaces/Character";
-import CharacterInfo from "../../components/Character/CharacterInfo";
-import CharacterEdit from "../../components/Character/CharacterEdit";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import CharacterEdit from "../../components/Character/CharacterEdit";
+import CharacterInfo from "../../components/Character/CharacterInfo";
+import Gallery from "../../components/Gallery";
+import Character from "../../interfaces/Character";
+import { emptyCharacter, emptyFilters } from "../../src/emptyEntities";
 export default function Page() {
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const [editShow, setEditShow] = useState(false);

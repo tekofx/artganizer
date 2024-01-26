@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { Typography, Paper } from "@mui/material";
-import Submission from "../../interfaces/Submission";
-import Image from "./Image";
-import { filterSubmissionsByColor } from "../../src/colorManagement";
-import { Filters } from "../../interfaces";
+import { Paper, Typography } from "@mui/material";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Filters } from "../../interfaces";
+import Submission from "../../interfaces/Submission";
+import { filterSubmissionsByColor } from "../../src/colorManagement";
+import Image from "./Image";
 
 export default function Gallery({ filters }: { filters: Filters }) {
   const [submissions, setSubmissions] = useState<Submission[]>(

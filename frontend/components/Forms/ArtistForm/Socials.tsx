@@ -1,15 +1,15 @@
 import {
+  Button,
+  IconButton,
   Stack,
   TextField,
   Typography,
-  Button,
-  IconButton,
 } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
-import SocialIcon from "../../SocialIcon";
-import { Artist } from "../../../interfaces";
 import { useEffect } from "react";
+import { Artist } from "../../../interfaces";
+import SocialIcon from "../../SocialIcon";
 
 interface SocialProps {
   artist: Artist;

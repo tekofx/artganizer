@@ -1,5 +1,5 @@
+import { Grid, Rating, TextField, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { Typography, TextField, Rating, Grid } from "@mui/material";
 
 import Submission from "../../../interfaces/Submission";
 

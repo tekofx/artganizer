@@ -1,22 +1,22 @@
-import {
-  Stack,
-  Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Grid,
-  IconButton,
-} from "@mui/material";
-import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import SearchBar from "../../../SearchBar";
-import SearchIcon from "@mui/icons-material/Search";
-import CharacterList from "../../../Character/CharacterList";
 import PersonIcon from "@mui/icons-material/Person";
-import CharacterForm from "../../../Forms/CharacterForm";
-import { Character } from "../../../../interfaces";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Character } from "../../../../interfaces";
+import CharacterList from "../../../Character/CharacterList";
+import CharacterForm from "../../../Forms/CharacterForm";
+import SearchBar from "../../../SearchBar";
 export default function ArtistAccordion() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [expanded, setExpanded] = useState<boolean>(true);

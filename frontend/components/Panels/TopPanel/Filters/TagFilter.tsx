@@ -1,23 +1,23 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import {
-  Checkbox,
+  Badge,
   Button,
+  Checkbox,
+  Chip,
+  Grid,
   MenuItem,
-  Stack,
   Paper,
   Popover,
-  Grid,
-  Typography,
-  Chip,
+  Stack,
   TextField,
-  Badge,
+  Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
+import axios from "axios";
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
+import { Filters } from "../../../../interfaces";
 import Tag from "../../../../interfaces/Tag";
 import TagChip from "../../../Tag/TagChip";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import { Filters } from "../../../../interfaces";
-import axios from "axios";
 export default function TagFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [searchedTags, setSearchedTags] = useState<Tag[]>([]);

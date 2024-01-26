@@ -1,3 +1,7 @@
+import InfoIcon from "@mui/icons-material/Info";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import MenuIcon from "@mui/icons-material/Menu";
+import SettingsIcon from "@mui/icons-material/Settings";
 import {
   IconButton,
   Menu,
@@ -6,14 +10,10 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useState, MouseEvent } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import InfoIcon from "@mui/icons-material/Info";
+import { MouseEvent, useState } from "react";
 import ManageTags from "../../../Forms/ManageTags";
-import SettingsIcon from "@mui/icons-material/Settings";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import SettingsDialog from "../SettingsDialog";
 import About from "../About";
+import SettingsDialog from "../SettingsDialog";
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {

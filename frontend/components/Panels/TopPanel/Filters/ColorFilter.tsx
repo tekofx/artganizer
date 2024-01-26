@@ -1,8 +1,8 @@
-import { Button, Menu, Badge } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, Dispatch, SetStateAction } from "react";
-import { ChromePicker } from "react-color";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Badge, Button, Menu } from "@mui/material";
+import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
+import { ChromePicker } from "react-color";
 import { Filters } from "../../../../interfaces";
 
 export default function RatingFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {

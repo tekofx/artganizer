@@ -1,3 +1,4 @@
+import ClearIcon from "@mui/icons-material/Clear";
 import {
   Box,
   Button,
@@ -12,13 +13,11 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
-import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
-import { useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Settings from "../../../../interfaces/Settings";
-import GallerySettings from "./Settings/GallerySettings";
 import { defaultSettings } from "../../../../src/emptyEntities";
+import GallerySettings from "./Settings/GallerySettings";
 interface SettingsDialogProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;

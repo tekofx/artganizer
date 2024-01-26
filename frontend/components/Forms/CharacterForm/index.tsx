@@ -1,23 +1,23 @@
 import {
-  Stack,
-  TextField,
-  Grid,
-  Button,
-  IconButton,
   Avatar,
+  Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
 } from "@mui/material";
-import ProgressButton from "../ProgressButon";
-import { useState, useEffect } from "react";
 import axios from "axios";
-import LimitedTextField from "../../LimitedTextField";
+import { useEffect, useState } from "react";
+import { AlertMessage } from "../../../interfaces";
 import Character from "../../../interfaces/Character";
 import { emptyCharacter } from "../../../src/emptyEntities";
+import LimitedTextField from "../../LimitedTextField";
 import Snack from "../../Snack";
-import { AlertMessage } from "../../../interfaces";
+import ProgressButton from "../ProgressButon";
 
 interface Props {
   open: boolean;

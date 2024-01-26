@@ -1,3 +1,6 @@
+import ClearIcon from "@mui/icons-material/Clear";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Dialog,
   DialogContent,
@@ -6,14 +9,11 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState, Dispatch, SetStateAction, useEffect } from "react";
-import Tag from "../../interfaces/Tag";
-import TagLabel from "../../components/Tag/TagLabel";
 import axios from "axios";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ClearIcon from "@mui/icons-material/Clear";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import TagLabel from "../../components/Tag/TagLabel";
+import Tag from "../../interfaces/Tag";
 import TagForm from "./TagForm";
-import EditIcon from "@mui/icons-material/Edit";
 
 interface ManageTagsProps {
   open: boolean;

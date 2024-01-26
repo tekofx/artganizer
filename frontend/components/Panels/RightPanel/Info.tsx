@@ -1,22 +1,22 @@
-import {
-  Grid,
-  Typography,
-  Stack,
-  Container,
-  Paper,
-  Button,
-  Rating,
-} from "@mui/material";
-import TagList from "../../Tag/TagList";
-import Submission from "../../../interfaces/Submission";
-import CharacterList from "../../Character/CharacterList";
-import ColorPalette from "../../Artist/ColorPalette";
-import { convertBytes } from "../../../src/formatters";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
 import DownloadIcon from "@mui/icons-material/Download";
-import ArtistLabel from "../../Artist/ArtistLabel";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Button,
+  Container,
+  Grid,
+  Paper,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
+import Submission from "../../../interfaces/Submission";
+import { convertBytes } from "../../../src/formatters";
+import ArtistLabel from "../../Artist/ArtistLabel";
+import ColorPalette from "../../Artist/ColorPalette";
+import CharacterList from "../../Character/CharacterList";
+import TagList from "../../Tag/TagList";
 interface InfoProps {
   submission: Submission;
   toggleEdit: () => void;

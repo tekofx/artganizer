@@ -1,6 +1,6 @@
-import { Grid, Avatar, Typography, Button, Stack } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import { Avatar, Button, Grid, Stack, Typography } from "@mui/material";
 import Character from "../../interfaces/Character";
 interface CharacterInfoProps {
   character?: Character;

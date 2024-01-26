@@ -1,20 +1,20 @@
+import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
 import {
-  Grid,
   Avatar,
   Button,
+  Grid,
+  IconButton,
   Stack,
   TextField,
   Typography,
-  IconButton,
 } from "@mui/material";
-import Artist from "../../../interfaces/Artist";
-import DoneIcon from "@mui/icons-material/Done";
-import ClearIcon from "@mui/icons-material/Clear";
-import AddIcon from '@mui/icons-material/Add';
-import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
-import SocialDialog from "./SocialDialog";
+import { Dispatch, SetStateAction, useState } from "react";
+import Artist from "../../../interfaces/Artist";
 import SocialLabel from "../SocialLabel";
+import SocialDialog from "./SocialDialog";
 interface ArtistEditProps {
   artist: Artist;
   toggleEdit: () => void;

@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Box } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { green } from "@mui/material/colors";
 
 interface Props {

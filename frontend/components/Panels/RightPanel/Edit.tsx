@@ -1,23 +1,23 @@
+import DoneIcon from "@mui/icons-material/Done";
 import {
+  Button,
+  Container,
   Grid,
-  Typography,
+  Paper,
   Rating,
   Stack,
   TextField,
-  Button,
-  Container,
-  Paper,
+  Typography,
 } from "@mui/material";
-import Submission from "../../../interfaces/Submission";
-import { useState, Dispatch, SetStateAction } from "react";
-import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
-import Artist from "../../../interfaces/Artist";
 import axios from "axios";
-import DoneIcon from "@mui/icons-material/Done";
-import Tag from "../../../interfaces/Tag";
+import { Dispatch, SetStateAction, useState } from "react";
+import Artist from "../../../interfaces/Artist";
 import Character from "../../../interfaces/Character";
-import TagAutocomplete from "../../Tag/TagAutocomplete";
+import Submission from "../../../interfaces/Submission";
+import Tag from "../../../interfaces/Tag";
+import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
 import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
+import TagAutocomplete from "../../Tag/TagAutocomplete";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;

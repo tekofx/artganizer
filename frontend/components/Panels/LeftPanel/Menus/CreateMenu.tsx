@@ -1,15 +1,15 @@
-import {
-  MenuItem,
-  Typography,
-  Menu,
-  Stack,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import PhotoIcon from "@mui/icons-material/Photo";
-import { useState, MouseEvent } from "react";
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { MouseEvent, useState } from "react";
 
 interface Props {
   setOpenSubmissionForm: React.Dispatch<React.SetStateAction<boolean>>;

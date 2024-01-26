@@ -1,14 +1,14 @@
-import { Typography, Paper, Rating, Grid } from "@mui/material";
-import Submission from "../../interfaces/Submission";
-import { formatDate } from "../../src/formatters";
-import TagList from "../Tag/TagList";
-import ArtistLabel from "../Artist/ArtistLabel";
-import Settings from "../../interfaces/Settings";
-import { useRouter } from "next/router";
-import { motion } from "framer-motion";
-import { defaultSettings } from "../../src/emptyEntities";
-import { useEffect, useState } from "react";
+import { Grid, Paper, Rating, Typography } from "@mui/material";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Settings from "../../interfaces/Settings";
+import Submission from "../../interfaces/Submission";
+import { defaultSettings } from "../../src/emptyEntities";
+import { formatDate } from "../../src/formatters";
+import ArtistLabel from "../Artist/ArtistLabel";
+import TagList from "../Tag/TagList";
 interface ImageProps {
   image: Submission;
   width?: string;

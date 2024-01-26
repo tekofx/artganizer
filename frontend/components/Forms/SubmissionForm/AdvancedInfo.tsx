@@ -1,11 +1,11 @@
+import { Grid, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { Typography, Grid } from "@mui/material";
-import Tag from "../../../interfaces/Tag";
-import Character from "../../../interfaces/Character";
 import Artist from "../../../interfaces/Artist";
+import Character from "../../../interfaces/Character";
+import Tag from "../../../interfaces/Tag";
+import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
 import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
 import TagAutocomplete from "../../Tag/TagAutocomplete";
-import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
 
 interface Props {
   selectedTags: Tag[];

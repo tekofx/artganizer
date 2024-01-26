@@ -1,15 +1,13 @@
-import TagFilter from "./TagFilter";
-import RatingFilter from "./RatingFilter";
-import ClearFilters from "./ClearFilters";
-import ColorFilter from "./ColorFilter";
 import ArtistFilter from "./ArtistFilter";
 import CharacterFilter from "./CharacterFilter";
+import ClearFilters from "./ClearFilters";
+import ColorFilter from "./ColorFilter";
+import RatingFilter from "./RatingFilter";
+import TagFilter from "./TagFilter";
 
 export {
-  TagFilter,
-  RatingFilter,
-  ClearFilters,
-  ColorFilter,
   ArtistFilter,
-  CharacterFilter,
+  CharacterFilter, ClearFilters,
+  ColorFilter, RatingFilter, TagFilter
 };
+

@@ -1,12 +1,12 @@
+import { Grid, Paper } from "@mui/material";
+import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Grid, Paper } from "@mui/material";
+import BottomPanel from "../../components/Panels/BottomPanel";
 import RightPanel from "../../components/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
 import { emptySubmission } from "../../src/emptyEntities";
-import Head from "next/head";
-import BottomPanel from "../../components/Panels/BottomPanel";
-import axios from "axios";
 export default function Page() {
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
 

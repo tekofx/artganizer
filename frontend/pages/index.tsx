@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import Head from "next/head";
+import { useState } from "react";
 import Gallery from "../components/Gallery";
 import TopPanel from "../components/Panels/TopPanel";
-import Head from "next/head";
-import { emptyFilters } from "../src/emptyEntities";
 import { Filters } from "../interfaces";
+import { emptyFilters } from "../src/emptyEntities";
 
 export default function Home() {
   const [filters, setFilters] = useState<Filters>(emptyFilters);

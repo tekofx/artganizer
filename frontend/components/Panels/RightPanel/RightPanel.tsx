@@ -1,19 +1,19 @@
+import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
 import {
-  Typography,
-  Stack,
   Button,
   Dialog,
-  DialogTitle,
   DialogActions,
+  DialogTitle,
+  Stack,
+  Typography,
 } from "@mui/material";
-import Submission from "../../../interfaces/Submission";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
-import ClearIcon from "@mui/icons-material/Clear";
-import DoneIcon from "@mui/icons-material/Done";
-import Info from "./Info";
+import Submission from "../../../interfaces/Submission";
 import Edit from "./Edit";
+import Info from "./Info";
 
 interface RightPanelProps {
   submission: Submission;

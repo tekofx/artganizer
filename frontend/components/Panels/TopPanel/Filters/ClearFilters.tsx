@@ -1,6 +1,6 @@
+import ClearIcon from "@mui/icons-material/Clear";
 import { Button } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import ClearIcon from "@mui/icons-material/Clear";
 import { Filters } from "../../../../interfaces";
 const emptyFilters: Filters = {
   rating: -1,

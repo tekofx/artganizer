@@ -1,8 +1,8 @@
-import { Stack, Avatar, Typography, IconButton } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import { Avatar, IconButton, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Character from "../../interfaces/Character";
-import ClearIcon from "@mui/icons-material/Clear";
 interface CharacterLabelProps {
   character?: Character;
   clickable?: boolean;

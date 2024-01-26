@@ -1,24 +1,24 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
+import EditIcon from "@mui/icons-material/Edit";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
   IconButton,
   Paper,
   Stack,
-  Typography,
-  Grid,
-  Dialog,
-  DialogTitle,
   TextField,
-  DialogContent,
-  Button,
+  Typography,
 } from "@mui/material";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import EditIcon from "@mui/icons-material/Edit";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
-import Gallery from "../../components/Gallery";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { TwitterPicker } from "react-color";
+import Gallery from "../../components/Gallery";
 import Tag from "../../interfaces/Tag";
 import { emptyFilters } from "../../src/emptyEntities";
 

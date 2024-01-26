@@ -1,8 +1,7 @@
-import { Grid, Avatar, Button, Stack, TextField } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Avatar, Button, Grid, Stack, TextField } from "@mui/material";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useState } from "react";
 import Character from "../../interfaces/Character";
 interface CharacterEditProps {
   character: Character;

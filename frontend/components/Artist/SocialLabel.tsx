@@ -1,10 +1,10 @@
-import { Stack, Typography, IconButton, Paper } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import SocialIcon from "../SocialIcon";
-import { Artist, Social } from "../../interfaces";
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
+import { Artist, Social } from "../../interfaces";
+import SocialIcon from "../SocialIcon";
 import SocialDialog from "./ArtistEdit/SocialDialog";
 interface SocialLabelProps {
     social: Social;

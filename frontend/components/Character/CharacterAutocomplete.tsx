@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { TextField, Autocomplete, Button, Paper } from "@mui/material";
+import { Autocomplete, Button, Paper, TextField } from "@mui/material";
 import axios from "axios";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Character } from "../../interfaces";
 import CharacterLabel from "./CharacterLabel";
 interface TagListProps {

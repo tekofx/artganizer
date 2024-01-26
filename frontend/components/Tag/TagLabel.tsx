@@ -1,6 +1,6 @@
-import { Stack, Typography, Icon, Chip, Tooltip } from "@mui/material";
-import Tag from "../../interfaces/Tag";
 import LocalOffer from "@mui/icons-material/LocalOffer";
+import { Chip, Icon, Stack, Tooltip, Typography } from "@mui/material";
+import Tag from "../../interfaces/Tag";
 
 interface TagLabelProps {
   tag: Tag;
