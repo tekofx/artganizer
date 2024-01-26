@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Submission from "../../../interfaces/Submission";
 import { useState, Dispatch, SetStateAction } from "react";
-import ArtistSelect from "../../Artist/ArtistSelect";
+import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
 import Artist from "../../../interfaces/Artist";
 import axios from "axios";
 import DoneIcon from "@mui/icons-material/Done";
@@ -93,7 +93,7 @@ export default function Edit(props: InfoProps) {
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
             />
-            <ArtistSelect
+            <ArtistAutocomplete
               selectedArtist={selectedArtist}
               setSelectedArtist={setSelectedArtist}
             />

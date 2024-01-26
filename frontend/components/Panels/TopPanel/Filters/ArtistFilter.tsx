@@ -1,8 +1,8 @@
 import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, MouseEvent, useEffect, Dispatch, SetStateAction } from "react";
-import ArtistSelect from "../../../Artist/ArtistSelect";
 import Artist from "../../../../interfaces/Artist";
+import ArtistAutocomplete from "../../../Artist/ArtistAutocomplete";
 import BrushIcon from "@mui/icons-material/Brush";
 import { Filters } from "../../../../interfaces";
 
@@ -60,7 +60,7 @@ export default function ArtistFilter({ filters, setFilters }: { filters: Filters
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <ArtistSelect
+              <ArtistAutocomplete
                 selectedArtist={artist}
                 setSelectedArtist={setArtist}
               />

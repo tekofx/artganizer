@@ -1,13 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 import { Typography, Grid } from "@mui/material";
 import Tag from "../../../interfaces/Tag";
-import TagSelect from "../../Tag/TagSelect";
-import ArtistSelect from "../../Artist/ArtistSelect";
-import CharacterSelect from "../../Character/CharacterSelect";
 import Character from "../../../interfaces/Character";
 import Artist from "../../../interfaces/Artist";
 import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
 import TagAutocomplete from "../../Tag/TagAutocomplete";
+import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
 
 interface Props {
   selectedTags: Tag[];
@@ -39,7 +37,8 @@ export default function AdvancedInfo({
       </Grid>
 
       <Grid item xs={12}>
-        <ArtistSelect
+
+        <ArtistAutocomplete
           selectedArtist={selectedArtist}
           setSelectedArtist={setSelectedArtist}
         />
