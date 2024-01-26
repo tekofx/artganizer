@@ -5,10 +5,9 @@ import {
   Avatar,
   Button,
   Grid,
-  IconButton,
   Stack,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Artist from "../../../interfaces/Artist";
@@ -51,19 +50,13 @@ export default function ArtistEdit({
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
       <Grid item>
-        <input
-          accept="image/*"
-          id="artist-edit"
-          multiple
-          type="file"
-          hidden
-          onChange={onImageUpload}
-        />
-        <label htmlFor="artist-edit">
-          <IconButton component="span">
-            <Avatar src={image} sx={{ width: "10rem", height: "10rem" }} />
-          </IconButton>
-        </label>
+        <Stack spacing={2} direction="column">
+          <Avatar sx={{ width: "10rem", height: "10rem" }} src={image} />
+          <Button variant="contained" component="label">
+            Change image
+            <input type="file" hidden onChange={onImageUpload} />
+          </Button>
+        </Stack>
       </Grid>
       <Grid item>
         <Stack spacing={2}>
