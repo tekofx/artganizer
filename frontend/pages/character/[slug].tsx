@@ -60,7 +60,7 @@ export default function Page() {
         <title>Artganizer</title>
       </Head>
       <Paper>
-        <Grid container spacing={2} sx={{ paddingLeft: 2 }}>
+        <Grid container spacing={2} >
           <Grid item lg={12}>
             {!editShow ? (
               <CharacterInfo
