@@ -10,7 +10,6 @@ interface TagListProps {
 
 
 export default function ArtistAutocomplete({
-    selectedArtist,
     setSelectedArtist,
 }: TagListProps) {
     const [inputValue, setInputValue] = useState("");
@@ -31,8 +30,9 @@ export default function ArtistAutocomplete({
     }
 
     async function onAddArtist() {
-        await axios.post(process.env.API_URL + `/characters`, { name: inputValue, description: "" }).then((res) => {
-            setSelectedArtist(selectedArtist);
+        await axios.post(process.env.API_URL + `/artists`, { name: inputValue, description: "" }).then((res) => {
+            setSelectedArtist(res.data);
+            setSelectedArtists([res.data]);
             setInputValue("");
             getArtists();
         }
@@ -66,6 +66,10 @@ export default function ArtistAutocomplete({
             }}
             // Render elements in list
             renderOption={(props, artist) => {
+                const isSelected = selectedArtists.some((selectedArtist) => selectedArtist.id === artist.id);
+                if (isSelected) {
+                    props["aria-selected"] = true;
+                }
                 return (
                     <li {...props}>
                         <ArtistLabel artist={artist} />
@@ -81,7 +85,7 @@ export default function ArtistAutocomplete({
                     </Paper>
                 ))
             }
-            noOptionsText={<Button onClick={onAddArtist}>Create character {inputValue}</Button>}
+            noOptionsText={<Button onClick={onAddArtist}>Create artist {inputValue}</Button>}
         />
     );
 }

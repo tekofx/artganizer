@@ -1,12 +1,12 @@
 import BrushIcon from "@mui/icons-material/Brush";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { Filters } from "../../../../interfaces";
 import Artist from "../../../../interfaces/Artist";
 import ArtistAutocomplete from "../../../Artist/ArtistAutocomplete";
 
-export default function ArtistFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
+export default function ArtistFilter({ filters }: { filters: Filters }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [artist, setArtist] = useState<Artist>();
   const [invisible, setInvisible] = useState<boolean>(true);
