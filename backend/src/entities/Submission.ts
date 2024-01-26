@@ -39,7 +39,7 @@ export class Submission {
   height: number;
 
   @ManyToOne(() => Artist, (artist) => artist.submissions, {
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
   })
   artist: Artist;
 

@@ -17,7 +17,7 @@ export class Artist {
   socials: Social[];
 
   @OneToMany(() => Submission, (submission) => submission.artist, {
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
   })
   submissions: Submission[];
 
