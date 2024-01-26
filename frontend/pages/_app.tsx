@@ -81,6 +81,7 @@ export default function MyApp(props: MyAppProps) {
     if (artistEdited) {
       setArtists([...artists.filter(a => a.id != artist.id), artistEdited]);
     }
+    getArtists();
     return artistEdited;
   }
 
@@ -97,6 +98,7 @@ export default function MyApp(props: MyAppProps) {
     if (characterEdited) {
       setCharacters([...characters.filter(c => c.id != character.id), characterEdited]);
     }
+    getCharacters();
     return characterEdited;
   }
 
