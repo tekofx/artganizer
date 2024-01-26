@@ -11,7 +11,7 @@ import { Artist, Character, Submission, Tag } from "../interfaces";
 import { handleCreateArtist, handleEditArtist, handleRemoveArtist } from "../src/api/artists";
 import { handleCreateCharacter, handleEditCharacter, handleRemoveCharacter } from "../src/api/characters";
 import { handleCreateSubmission, handleEditSubmission, handleRemoveSubmission } from "../src/api/submissions";
-import { handleCreateTag } from "../src/api/tags";
+import { handleCreateTag, handleEditTag, handleRemoveTag } from "../src/api/tags";
 import createEmotionCache from "../src/createEmotionCache";
 import theme from "../src/theme";
 import "../styles/styles.css";
@@ -55,6 +55,10 @@ interface AppContextType {
   editSubmission(submission: Submission): Promise<Submission | undefined>;
   // eslint-disable-next-line no-unused-vars
   removeSubmission(submission: Submission): Promise<boolean | undefined>;
+  // eslint-disable-next-line no-unused-vars
+  editTag(tag: Tag): Promise<Tag | undefined>;
+  // eslint-disable-next-line no-unused-vars
+  removeTag(tag: Tag): Promise<boolean | undefined>;
 
 }
 
@@ -145,6 +149,20 @@ export default function MyApp(props: MyAppProps) {
     return tagCreated;
   }
 
+  async function editTag(tag: Tag) {
+    const tagEdited = await handleEditTag(tag);
+    if (tagEdited) {
+      setTags([...tags.filter(t => t.id != tag.id), tagEdited]);
+    }
+    return tagEdited;
+  }
+  async function removeTag(tag: Tag) {
+    const status = await handleRemoveTag(tag);
+    if (status) {
+      setTags([...tags.filter(t => t.id != tag.id)]);
+    }
+    return status;
+  }
 
 
 
@@ -190,8 +208,8 @@ export default function MyApp(props: MyAppProps) {
           tags, setTags,
           submissions, setSubmissions,
           createSubmission, createArtist, createCharacter, createTag,
-          editArtist, editCharacter, editSubmission,
-          removeArtist, removeCharacter, removeSubmission
+          editArtist, editCharacter, editSubmission, editTag,
+          removeArtist, removeCharacter, removeSubmission, removeTag
         }}>
           <Grid container>
             <Grid item lg={2} position="fixed">

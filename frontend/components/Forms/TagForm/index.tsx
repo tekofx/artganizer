@@ -9,7 +9,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { ColorResult, TwitterPicker } from "react-color";
 import AlertMessage from "../../../interfaces/AlertMessage";
@@ -41,7 +40,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     severity: "success",
   });
 
-  const { createTag } = useAppContext()
+  const { createTag, editTag } = useAppContext()
 
   const handleChangeComplete = (color: ColorResult) => {
     setTag((prevTag) => ({
@@ -74,22 +73,18 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
 
     } else {
       // Edit tag
-      await axios
-        .put(process.env.API_URL + `/tags/${tag.id}`, tag)
-        .then(() => {
-          setAlertMessage?.({
-            message: "Tag updated",
-            severity: "success",
-          });
-        })
-        .catch((error) => {
-          setAlertMessage?.({
-            message: "Error updating tag",
-            severity: "error",
-          });
-
-          console.log(error);
-        })
+      var result = await editTag(tag)
+      if (result) {
+        setAlertMessage?.({
+          message: "Tag updated",
+          severity: "success",
+        });
+      } else {
+        setAlertMessage?.({
+          message: "Error updating tag",
+          severity: "error",
+        });
+      }
     }
     setOpenSnack?.(true);
     setOpen(false);

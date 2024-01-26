@@ -28,7 +28,7 @@ export default function TopPanel({ filters, setFilters }: { filters: Filters, se
         <RatingFilter filters={filters} setFilters={setFilters} />
         <TagFilter filters={filters} setFilters={setFilters} />
         <ColorFilter filters={filters} setFilters={setFilters} />
-        <ArtistFilter filters={filters} setFilters={setFilters} />
+        <ArtistFilter filters={filters} />
         <CharacterFilter filters={filters} setFilters={setFilters} />
         <ClearFilters filters={filters} setFilters={setFilters} />
       </Stack>
