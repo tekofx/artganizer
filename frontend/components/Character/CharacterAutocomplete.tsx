@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { TextField, Autocomplete, Button, Chip, Paper, IconButton, Stack } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import { TextField, Autocomplete, Button, Paper } from "@mui/material";
 import axios from "axios";
 import { Character } from "../../interfaces";
 import CharacterLabel from "./CharacterLabel";
