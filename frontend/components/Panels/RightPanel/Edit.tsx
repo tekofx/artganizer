@@ -6,6 +6,7 @@ import {
   TextField,
   Button,
   Container,
+  Paper,
 } from "@mui/material";
 import Submission from "../../../interfaces/Submission";
 import { useState, Dispatch, SetStateAction } from "react";
@@ -54,53 +55,66 @@ export default function Edit(props: InfoProps) {
   }
 
   return (
-    <Container sx={{ paddingLeft: 1, overflowY: "auto", maxHeight: "95vh" }}>
+    <Container sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}>
       <Grid container spacing={2} alignContent="center" sx={{ paddingTop: 3 }}>
         <Grid item lg={12}>
           <Stack spacing={1}>
-            <TextField
-              label="Title"
-              value={submission?.title}
-              onChange={(event) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  title: event.target.value,
-                }));
-              }}
-            />
-            <TextField
-              label="Description"
-              multiline
-              value={submission?.description}
-              onChange={(event) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  description: event.target.value,
-                }));
-              }}
-            />
-            <Typography>Rating</Typography>
-            <Rating
-              value={submission.rating}
-              onChange={(event, newValue) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  rating: newValue || 0,
-                }));
-              }}
-            />
-            <TagAutocomplete
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-            />
-            <ArtistAutocomplete
-              selectedArtist={selectedArtist}
-              setSelectedArtist={setSelectedArtist}
-            />
-            <CharacterAutocomplete
-              selectedCharacters={selectedCharacters}
-              setSelectedCharacters={setSelectedCharacters}
-            />
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <Stack spacing={1}>
+
+
+                <TextField
+                  label="Title"
+                  value={submission?.title}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      title: event.target.value,
+                    }));
+                  }}
+                />
+                <TextField
+                  label="Description"
+                  multiline
+                  value={submission?.description}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      description: event.target.value,
+                    }));
+                  }}
+                />
+                <Typography>Rating</Typography>
+                <Rating
+                  value={submission.rating}
+                  onChange={(event, newValue) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      rating: newValue || 0,
+                    }));
+                  }}
+                />
+              </Stack>
+
+            </Paper>
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <TagAutocomplete
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
+              />
+            </Paper>
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <ArtistAutocomplete
+                selectedArtist={selectedArtist}
+                setSelectedArtist={setSelectedArtist}
+              />
+            </Paper>
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <CharacterAutocomplete
+                selectedCharacters={selectedCharacters}
+                setSelectedCharacters={setSelectedCharacters}
+              />
+            </Paper>
           </Stack>
         </Grid>
 
