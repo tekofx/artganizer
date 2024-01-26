@@ -47,10 +47,8 @@ export default function LeftPanel() {
             </Grid>
             <Grid item>
               <CreateMenu
-                setOpenArtistForm={setOpenArtistForm}
                 setOpenSubmissionForm={setOpenSubmissionForm}
                 setOpenTagForm={setOpenTagForm}
-                setOpenCharacterForm={setOpenCharacterForm}
               />
             </Grid>
           </Grid>
