@@ -1,16 +1,32 @@
 import { Paper, Typography } from "@mui/material";
-import { useEffect } from "react";
-import { Filters } from "../../interfaces";
+import { useEffect, useState } from "react";
+import { Artist, Character, Filters } from "../../interfaces";
 import Submission from "../../interfaces/Submission";
 import { useAppContext } from "../../pages/_app";
 import { filterSubmissionsByColor } from "../../src/colorManagement";
 import Image from "./Image";
 
-export default function Gallery({ filters }: { filters: Filters }) {
+export default function Gallery({ filters, character, artist }: { filters: Filters, character?: Character, artist?: Artist }) {
   const { submissions, setSubmissions } = useAppContext();
+
+  const [gallerySubmissions, setGallerySubmissions] = useState<Submission[]>([]);
 
   useEffect(() => {
     var temp = submissions;
+
+    if (character) {
+      temp = temp.filter((submission: Submission) =>
+        submission.characters?.some((char) => char.id === character.id)
+      );
+      console.log(temp);
+    }
+
+    if (artist) {
+      temp = temp.filter(
+        (submission: Submission) =>
+          submission.artist?.id === artist.id
+      );
+    }
 
     if (filters.title) {
       temp = temp.filter((submission: Submission) =>
@@ -52,8 +68,8 @@ export default function Gallery({ filters }: { filters: Filters }) {
         (submission: Submission) => submission.artist?.id == filters.artist?.id
       );
     }
-    setSubmissions(temp);
-  }, [filters, submissions]);
+    setGallerySubmissions(temp);
+  }, [filters, submissions, character, artist]);
 
   return (
     <Paper
@@ -65,11 +81,11 @@ export default function Gallery({ filters }: { filters: Filters }) {
         flexDirection: "column",
       }}
     >
-      {submissions.length == 0 && (
+      {gallerySubmissions.length == 0 && (
         <Typography variant="h1">No submissions yet</Typography>
       )}
       <div style={{ columnCount: 3 }}>
-        {submissions.map((image) => (
+        {gallerySubmissions.map((image) => (
           <Image image={image} key={image.id} />
         ))}
       </div>

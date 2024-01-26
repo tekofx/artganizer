@@ -77,7 +77,7 @@ export default function Page() {
             )}
           </Grid>
           <Grid item lg={12}>
-            <Gallery filters={emptyFilters} />
+            <Gallery filters={emptyFilters} artist={artist} />
           </Grid>
         </Grid>
         <Dialog open={dialogOpen}>
