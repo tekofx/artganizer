@@ -74,9 +74,7 @@ export default function MyApp(props: MyAppProps) {
 
   async function createArtist(artist: Artist) {
     const artistCreated = await handleCreateArtist(artist);
-    if (artistCreated) {
-      setArtists([...artists, artistCreated]);
-    }
+    getArtists();
     return artistCreated;
   }
 
@@ -85,7 +83,6 @@ export default function MyApp(props: MyAppProps) {
     if (artistEdited) {
       setArtists([...artists.filter(a => a.id != artist.id), artistEdited]);
     }
-    getArtists();
     return artistEdited;
   }
 
@@ -99,9 +96,7 @@ export default function MyApp(props: MyAppProps) {
 
   async function createCharacter(character: Character) {
     const characterCreated = await handleCreateCharacter(character);
-    if (characterCreated) {
-      setCharacters([...characters, characterCreated]);
-    }
+    getCharacters();
     return characterCreated;
   }
 

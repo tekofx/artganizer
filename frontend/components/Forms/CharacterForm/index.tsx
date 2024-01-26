@@ -10,10 +10,10 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AlertMessage } from "../../../interfaces";
 import Character from "../../../interfaces/Character";
+import { useAppContext } from "../../../pages/_app";
 import { emptyCharacter } from "../../../src/emptyEntities";
 import LimitedTextField from "../../LimitedTextField";
 import Snack from "../../Snack";
@@ -29,6 +29,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
   const [character, setCharacter] = useState<Character>(
     name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
   );
+  const { createCharacter } = useAppContext();
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
   const [openSnack, setOpenSnack] = useState<boolean>(false);
@@ -37,11 +38,6 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
     severity: "success",
   });
 
-  useEffect(() => {
-    setCharacter(
-      name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
-    );
-  }, [name]);
 
   function resetForm() {
     setImage("/placeholder.jpg");
@@ -57,32 +53,25 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
 
   async function postCharacter() {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("name", character.name);
-    formData.append("description", character.description);
-    formData.append("image", character.image);
+    var result = await createCharacter(character);
+    if (result) {
+      setAlertMessage({
 
-    await axios
-      .post(process.env.API_URL + "/characters", formData)
-      .then(() => {
-        setAlertMessage?.({
-          message: "Character created",
-          severity: "success",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setAlertMessage({
-          message: "Error creating character",
-          severity: "error",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-        setOpen(false);
-        setOpenSnack(true);
-        resetForm();
+        message: "Character created",
+        severity: "success",
       });
+    }
+    else {
+      setAlertMessage({
+        message: "Error: Character not created",
+        severity: "error",
+      });
+    }
+
+    setLoading(false);
+    setOpen(false);
+    setOpenSnack(true);
+    resetForm();
   }
 
   function onCancel() {
