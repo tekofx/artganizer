@@ -1,8 +1,8 @@
 import DoneIcon from "@mui/icons-material/Done";
 import { Avatar, Button, Grid, Stack, TextField } from "@mui/material";
-import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import Character from "../../interfaces/Character";
+import { useAppContext } from "../../pages/_app";
 interface CharacterEditProps {
   character: Character;
   toggleEdit: () => void;
@@ -11,29 +11,21 @@ interface CharacterEditProps {
 
 export default function CharacterEdit({ character, toggleEdit, setCharacter }: CharacterEditProps) {
   const [image, setImage] = useState<string>(character.image);
-  const [imageData, setImageData] = useState<any>();
+  const { editCharacter } = useAppContext();
 
   function onImageUpload(event: any) {
-    setImageData(event.target.files[0]);
+    const newCharacter = { ...character };
+    newCharacter.image = event.target.files[0];
+    setCharacter(newCharacter);
 
     // Change the image in the preview
     setImage(URL.createObjectURL(event.target.files[0]));
   }
-  async function editCharacter() {
-    const formData = new FormData();
-    formData.append("image", imageData);
-    formData.append("name", character.name);
-    formData.append("description", character.description);
-    console.log(character.id);
-
-    await axios
-      .put(process.env.API_URL + `/characters/${character.id}`, formData)
-      .then((response) => {
-        setCharacter(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  async function onOkClick() {
+    var result = await editCharacter(character);
+    if (result) {
+      setCharacter(result);
+    }
     toggleEdit();
 
   }
@@ -85,7 +77,7 @@ export default function CharacterEdit({ character, toggleEdit, setCharacter }: C
           <Button
             variant="contained"
             startIcon={<DoneIcon />}
-            onClick={editCharacter}
+            onClick={onOkClick}
           >
             Ok
           </Button>

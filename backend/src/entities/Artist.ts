@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Submission } from "./Submission";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Social } from "./Social";
+import { Submission } from "./Submission";
 
 @Entity()
 export class Artist {

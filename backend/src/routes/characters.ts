@@ -1,11 +1,10 @@
 import express, { Request, Response } from "express";
-import "reflect-metadata";
-import { Submission } from "../entities/Submission";
-import { CharacterRepo } from "../typeorm.config";
 import * as fs from "fs";
-import * as path from "path";
-import sharp from "sharp";
 import multer, { FileFilterCallback } from "multer";
+import * as path from "path";
+import "reflect-metadata";
+import sharp from "sharp";
+import { CharacterRepo } from "../typeorm.config";
 const charactersDir = path.join(__dirname, "../../data/uploads/characters");
 if (!fs.existsSync(charactersDir)) {
   fs.mkdirSync(charactersDir, { recursive: true });
@@ -193,21 +192,17 @@ router.put(
     var { name, description } = req.body;
     character.name = name;
     character.description = description;
-    console.log("1");
 
     var result;
     try {
-      console.log("2");
-
       result = await CharacterRepo.save(character);
-      result.image = process.env.URL + "/characters/uploads" + characterId;
-      console.log(result);
+      result.image =
+        process.env.URL + "/characters/uploads/" + characterId + ".jpg";
+      res.send(result);
     } catch (error) {
-      console.log("OCurrion un error al guardar el personaje");
       console.log(error);
+      res.status(500).send("error");
     }
-
-    res.send(result);
   }
 );
 router.delete("/:id", async (req: Request, res: Response) => {

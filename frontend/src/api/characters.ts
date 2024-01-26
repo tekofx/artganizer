@@ -19,3 +19,25 @@ export async function handleCreateCharacter(
     });
   return result;
 }
+
+export async function handleEditCharacter(
+  character: Character
+): Promise<Character | undefined> {
+  const formData = new FormData();
+  if (character.image) {
+    formData.append("image", character.image);
+    console.log("image");
+  }
+  formData.append("name", character.name);
+  formData.append("description", character.description);
+
+  var result = await axios
+    .put(process.env.API_URL + "/characters/" + character.id, formData)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return undefined;
+    });
+  return result;
+}

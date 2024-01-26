@@ -9,7 +9,7 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
 import LateralPanel from "../components/Panels/LeftPanel";
 import { Artist, Character, Submission, Tag } from "../interfaces";
 import { handleCreateArtist, handleEditArtist } from "../src/api/artists";
-import { handleCreateCharacter } from "../src/api/characters";
+import { handleCreateCharacter, handleEditCharacter } from "../src/api/characters";
 import { handleCreateSubmission } from "../src/api/submissions";
 import { handleCreateTag } from "../src/api/tags";
 import createEmotionCache from "../src/createEmotionCache";
@@ -45,6 +45,9 @@ interface AppContextType {
   createTag(tag: Tag): Promise<Tag | undefined>;
   // eslint-disable-next-line no-unused-vars
   editArtist(artist: Artist): Promise<Artist | undefined>;
+  // eslint-disable-next-line no-unused-vars
+  editCharacter(character: Character): Promise<Character | undefined>;
+
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -87,6 +90,14 @@ export default function MyApp(props: MyAppProps) {
       setCharacters([...characters, characterCreated]);
     }
     return characterCreated;
+  }
+
+  async function editCharacter(character: Character) {
+    const characterEdited = await handleEditCharacter(character);
+    if (characterEdited) {
+      setCharacters([...characters.filter(c => c.id != character.id), characterEdited]);
+    }
+    return characterEdited;
   }
 
   async function createTag(tag: Tag) {
@@ -142,7 +153,7 @@ export default function MyApp(props: MyAppProps) {
           tags, setTags,
           submissions, setSubmissions,
           createSubmission, createArtist, createCharacter, createTag,
-          editArtist
+          editArtist, editCharacter
         }}>
           <Grid container>
             <Grid item lg={2} position="fixed">
