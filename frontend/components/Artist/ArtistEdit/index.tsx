@@ -10,9 +10,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import Artist from "../../../interfaces/Artist";
+import { useAppContext } from '../../../pages/_app';
 import SocialLabel from "../SocialLabel";
 import SocialDialog from "./SocialDialog";
 interface ArtistEditProps {
@@ -26,39 +26,26 @@ export default function ArtistEdit({
   toggleEdit,
   setArtist,
 }: ArtistEditProps) {
+  const { editArtist } = useAppContext();
   const [image, setImage] = useState<string>(artist.image);
-  const [imageData, setImageData] = useState<any>();
   const [socialsDialogOpen, setSocialsDialogOpen] = useState(false);
-  const [auxArtist, setAuxArtist] = useState<Artist>(artist);
 
   function onImageUpload(event: any) {
-    setImageData(event.target.files[0]);
+
+    const newArtist = { ...artist };
+    newArtist.image = event.target.files[0];
+    setArtist(newArtist);
 
     // Change the image in the preview
     setImage(URL.createObjectURL(event.target.files[0]));
   }
-  async function editArtist() {
-    const formData = new FormData();
-    if (imageData) {
-      formData.append("image", imageData);
+  async function onOkClick() {
+    var result = await editArtist(artist);
+    if (result) {
+      setArtist(result);
     }
-    formData.append("name", auxArtist.name);
-    formData.append("description", auxArtist.description);
-    formData.append("id", auxArtist?.id.toString());
-    formData.append("socials", JSON.stringify(artist.socials));
-
-    await axios
-      .put(process.env.API_URL + `/artists/${auxArtist.id}`, formData)
-      .then((response) => {
-        setArtist(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
     toggleEdit();
 
-    // Reload the page
-    //router.reload();
   }
 
   return (
@@ -82,10 +69,10 @@ export default function ArtistEdit({
         <Stack spacing={2}>
           <TextField
             label="Name"
-            value={auxArtist?.name}
+            value={artist?.name}
             onChange={(event) => {
-              if (auxArtist) {
-                setAuxArtist((prevSubmission) => ({
+              if (artist) {
+                setArtist((prevSubmission) => ({
                   ...prevSubmission,
                   name: event.target.value,
                 }));
@@ -96,10 +83,10 @@ export default function ArtistEdit({
           <TextField
             label="Description"
             multiline
-            value={auxArtist?.description}
+            value={artist?.description}
             onChange={(event) => {
-              if (auxArtist) {
-                setAuxArtist((prevSubmission) => ({
+              if (artist) {
+                setArtist((prevSubmission) => ({
                   ...prevSubmission,
                   description: event.target.value,
                 }));
@@ -135,7 +122,7 @@ export default function ArtistEdit({
           <Button
             variant="contained"
             startIcon={<DoneIcon />}
-            onClick={() => editArtist()}
+            onClick={() => onOkClick()}
           >
             Ok
           </Button>

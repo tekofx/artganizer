@@ -19,24 +19,23 @@ import ArtistInfo from "../../components/Artist/ArtistInfo";
 import Gallery from "../../components/Gallery";
 import Artist from "../../interfaces/Artist";
 import { emptyArtist, emptyFilters } from "../../src/emptyEntities";
+import { useAppContext } from "../_app";
 export default function Page() {
+  const { artists } = useAppContext();
   const [artist, setArtist] = useState<Artist>(emptyArtist);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const getArtist = async (id: number) => {
-      var res = await axios.get(process.env.API_URL + `/artists/${id}`);
-      setArtist(res.data);
-      console.log(res.data);
-    };
-
     const slug = router.query.slug;
     if (slug) {
       var id = parseInt(slug.toString());
       // Get artist
-      getArtist(id);
+      const artist = artists.find((artist) => artist.id === id);
+      if (artist) {
+        setArtist(artist);
+      }
     }
   }
     , [router.query.slug]);
