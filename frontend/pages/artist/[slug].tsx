@@ -10,7 +10,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -21,7 +20,7 @@ import Artist from "../../interfaces/Artist";
 import { emptyArtist, emptyFilters } from "../../src/emptyEntities";
 import { useAppContext } from "../_app";
 export default function Page() {
-  const { artists } = useAppContext();
+  const { artists, removeArtist } = useAppContext();
   const [artist, setArtist] = useState<Artist>(emptyArtist);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -49,20 +48,11 @@ export default function Page() {
     setDialogOpen(false);
   };
 
-  async function removeArtist() {
-    await axios
-      .delete(process.env.API_URL + `/artists/${artist?.id}`)
-      .then(() => {
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        handleCloseDialog();
-        router.push("/");
-      });
+  async function onYesClick() {
+    await removeArtist(artist);
+    handleCloseDialog();
+    router.push("/");
   }
-
 
   return (
     <>
@@ -102,7 +92,7 @@ export default function Page() {
                 variant="contained"
                 size="small"
                 startIcon={<DoneIcon />}
-                onClick={removeArtist}
+                onClick={onYesClick}
               >
                 Yes
               </Button>

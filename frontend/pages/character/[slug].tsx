@@ -10,7 +10,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -19,7 +18,9 @@ import CharacterInfo from "../../components/Character/CharacterInfo";
 import Gallery from "../../components/Gallery";
 import Character from "../../interfaces/Character";
 import { emptyCharacter, emptyFilters } from "../../src/emptyEntities";
+import { useAppContext } from "../_app";
 export default function Page() {
+  const { characters, removeCharacter } = useAppContext();
   const [character, setCharacter] = useState<Character>(emptyCharacter);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -34,31 +35,22 @@ export default function Page() {
     setDialogOpen(false);
   };
 
-  async function removeCharacter() {
-    await axios
-      .delete(process.env.API_URL + `/characters/${character?.id}`)
-      .then(() => {
-        // Remove character from data
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        handleCloseDialog();
-        router.push("/");
-      });
+  async function onYesClick() {
+    await removeCharacter(character);
+    handleCloseDialog();
+    router.push("/");
   }
 
   useEffect(() => {
-    const getCharacter = async (id: number) => {
-      var res = await axios.get(process.env.API_URL + `/characters/${id}`);
-      setCharacter(res.data);
-      console.log(res.data);
-    }
+
     const slug = router.query.slug;
     if (slug) {
       var id = parseInt(slug.toString());
-      getCharacter(id);
+      // Get character
+      const character = characters.find((character) => character.id === id);
+      if (character) {
+        setCharacter(character);
+      }
     }
   }, [router.query.slug]);
 
@@ -100,7 +92,7 @@ export default function Page() {
                 variant="contained"
                 size="small"
                 startIcon={<DoneIcon />}
-                onClick={removeCharacter}
+                onClick={onYesClick}
               >
                 Yes
               </Button>

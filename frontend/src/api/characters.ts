@@ -41,3 +41,17 @@ export async function handleEditCharacter(
     });
   return result;
 }
+
+export async function handleRemoveCharacter(
+  character: Character
+): Promise<boolean | undefined> {
+  var result = await axios
+    .delete(process.env.API_URL + "/characters/" + character.id)
+    .then(() => {
+      return true;
+    })
+    .catch(() => {
+      return undefined;
+    });
+  return result;
+}

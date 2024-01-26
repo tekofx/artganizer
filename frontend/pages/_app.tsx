@@ -8,8 +8,8 @@ import Head from "next/head";
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 import LateralPanel from "../components/Panels/LeftPanel";
 import { Artist, Character, Submission, Tag } from "../interfaces";
-import { handleCreateArtist, handleEditArtist } from "../src/api/artists";
-import { handleCreateCharacter, handleEditCharacter } from "../src/api/characters";
+import { handleCreateArtist, handleEditArtist, handleRemoveArtist } from "../src/api/artists";
+import { handleCreateCharacter, handleEditCharacter, handleRemoveCharacter } from "../src/api/characters";
 import { handleCreateSubmission } from "../src/api/submissions";
 import { handleCreateTag } from "../src/api/tags";
 import createEmotionCache from "../src/createEmotionCache";
@@ -47,6 +47,10 @@ interface AppContextType {
   editArtist(artist: Artist): Promise<Artist | undefined>;
   // eslint-disable-next-line no-unused-vars
   editCharacter(character: Character): Promise<Character | undefined>;
+  // eslint-disable-next-line no-unused-vars
+  removeArtist(artist: Artist): Promise<boolean | undefined>;
+  // eslint-disable-next-line no-unused-vars
+  removeCharacter(character: Character): Promise<boolean | undefined>;
 
 }
 
@@ -85,6 +89,14 @@ export default function MyApp(props: MyAppProps) {
     return artistEdited;
   }
 
+  async function removeArtist(artist: Artist) {
+    const status = await handleRemoveArtist(artist);
+    if (status) {
+      setArtists([...artists.filter(a => a.id != artist.id)]);
+    }
+    return status;
+  }
+
   async function createCharacter(character: Character) {
     const characterCreated = await handleCreateCharacter(character);
     if (characterCreated) {
@@ -100,6 +112,14 @@ export default function MyApp(props: MyAppProps) {
     }
     getCharacters();
     return characterEdited;
+  }
+
+  async function removeCharacter(character: Character) {
+    const status = await handleRemoveCharacter(character);
+    if (status) {
+      setCharacters([...characters.filter(c => c.id != character.id)]);
+    }
+    return status;
   }
 
   async function createTag(tag: Tag) {
@@ -155,7 +175,8 @@ export default function MyApp(props: MyAppProps) {
           tags, setTags,
           submissions, setSubmissions,
           createSubmission, createArtist, createCharacter, createTag,
-          editArtist, editCharacter
+          editArtist, editCharacter,
+          removeArtist, removeCharacter
         }}>
           <Grid container>
             <Grid item lg={2} position="fixed">

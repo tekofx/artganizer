@@ -42,3 +42,17 @@ export async function handleEditArtist(
     });
   return result;
 }
+
+export async function handleRemoveArtist(
+  artist: Artist
+): Promise<boolean | undefined> {
+  var result = await axios
+    .delete(process.env.API_URL + "/artists/" + artist.id)
+    .then(() => {
+      return true;
+    })
+    .catch(() => {
+      return undefined;
+    });
+  return result;
+}
