@@ -2,6 +2,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -21,6 +22,7 @@ interface ManageTagsProps {
 }
 export default function ManageTags(props: ManageTagsProps) {
   const { tags } = useAppContext();
+  const [openTagForm, setOpenTagForm] = useState<boolean>(false);
 
   return (
     <>
@@ -43,11 +45,30 @@ export default function ManageTags(props: ManageTagsProps) {
           </Stack>
         </DialogTitle>
         <DialogContent sx={{ p: 5 }}>
+
+          {tags.length == 0 && (
+            <Stack direction="column" spacing={2}>
+
+              <Typography variant="body1" >
+                No tags found
+              </Typography>
+              <Button variant="contained" onClick={() => setOpenTagForm(true)}>
+                Create tag
+              </Button>
+            </Stack>
+          )
+
+          }
           {tags?.map((tag) => (
             <TagElement tag={tag} key={tag.id} />
           ))}
+
         </DialogContent>
       </Dialog>
+      <TagForm
+        open={openTagForm}
+        setOpen={setOpenTagForm}
+      />
     </>
   );
 }
