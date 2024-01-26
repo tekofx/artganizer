@@ -77,6 +77,7 @@ export default function MyApp(props: MyAppProps) {
     if (submissionCreated) {
       setSubmissions([...submissions, submissionCreated]);
     }
+    getTags();
     return submissionCreated;
   }
 
