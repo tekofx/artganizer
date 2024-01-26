@@ -61,9 +61,7 @@ const emptyFilters: Filters = {
 };
 
 export {
-  emptyArtist,
-  emptySubmission,
-  defaultSettings,
-  emptyCharacter,
-  emptyFilters,
+  defaultSettings, emptyArtist, emptyCharacter,
+  emptyFilters, emptySubmission
 };
+

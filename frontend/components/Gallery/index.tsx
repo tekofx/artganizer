@@ -1,24 +1,13 @@
 import { Paper, Typography } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Filters } from "../../interfaces";
 import Submission from "../../interfaces/Submission";
+import { useAppContext } from "../../pages/_app";
 import { filterSubmissionsByColor } from "../../src/colorManagement";
 import Image from "./Image";
 
 export default function Gallery({ filters }: { filters: Filters }) {
-  const [submissions, setSubmissions] = useState<Submission[]>(
-    []
-  );
-
-  useEffect(() => {
-    const getSubmissions = async () => {
-      const res = await axios.get(process.env.API_URL + "/submissions");
-      setSubmissions(res.data);
-    }
-    getSubmissions();
-  }
-    , []);
+  const { submissions, setSubmissions } = useAppContext();
 
   useEffect(() => {
     var temp = submissions;
