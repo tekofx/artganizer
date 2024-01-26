@@ -1,7 +1,7 @@
 import { Autocomplete, Button, Paper, TextField } from "@mui/material";
-import axios from "axios";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Artist } from "../../interfaces";
+import { useAppContext } from "../../pages/_app";
 import ArtistLabel from "./ArtistLabel";
 interface TagListProps {
     selectedArtist: Artist | undefined;
@@ -12,16 +12,12 @@ interface TagListProps {
 export default function ArtistAutocomplete({
     setSelectedArtist,
 }: TagListProps) {
+    const { artists, createArtist } = useAppContext();
+
     const [inputValue, setInputValue] = useState("");
-    const [artists, setArtists] = useState<Artist[]>([]);
     const [selectedArtists, setSelectedArtists] = useState<Artist[]>([]); // Needed to make autocomplete with multiple work
-    const getArtists = async () => {
-        var res = await axios.get(process.env.API_URL + "/artists");
-        setArtists(res.data);
-    };
-    useEffect(() => {
-        getArtists();
-    }, []);
+
+
 
     function handleDeleteArtist(artist: Artist) {
         setSelectedArtists([]);
@@ -30,13 +26,13 @@ export default function ArtistAutocomplete({
     }
 
     async function onAddArtist() {
-        await axios.post(process.env.API_URL + `/artists`, { name: inputValue, description: "" }).then((res) => {
-            setSelectedArtist(res.data);
-            setSelectedArtists([res.data]);
+        var newArtist: Artist = { name: inputValue, description: "", id: -1, socials: [], submissions: [], image: "" };
+        var result = await createArtist(newArtist);
+        if (result) {
+            setSelectedArtists([result]);
+            setSelectedArtist(result);
             setInputValue("");
-            getArtists();
         }
-        );
     }
 
     return (

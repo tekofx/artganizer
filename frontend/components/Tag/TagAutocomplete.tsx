@@ -1,7 +1,7 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
-import axios from "axios";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Tag from "../../interfaces/Tag";
+import { useAppContext } from "../../pages/_app";
 import TagChip from "./TagChip";
 import TagLabel from "./TagLabel";
 interface TagListProps {
@@ -15,15 +15,8 @@ export default function TagAutocomplete({
   setSelectedTags,
   selectedTags,
 }: TagListProps) {
+  const { createTag, tags } = useAppContext();
   const [inputValue, setInputValue] = useState("");
-  const [tags, setTags] = useState<Tag[]>([]);
-  const getTags = async () => {
-    var res = await axios.get(process.env.API_URL + "/tags");
-    setTags(res.data);
-  };
-  useEffect(() => {
-    getTags();
-  }, []);
 
   function handleDeleteTag(tag: Tag) {
     setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
@@ -31,12 +24,12 @@ export default function TagAutocomplete({
 
   async function onAddTag() {
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
-    await axios.post(process.env.API_URL + `/tags`, { name: inputValue, color: randomColor }).then((res) => {
-      setSelectedTags([...selectedTags, res.data]);
+    var newTag: Tag = { name: inputValue, color: randomColor, id: -1, submissionCount: 0 };
+    var result = await createTag(newTag);
+    if (result) {
+      setSelectedTags([...selectedTags, result]);
       setInputValue("");
-      getTags();
     }
-    );
   }
 
   return (

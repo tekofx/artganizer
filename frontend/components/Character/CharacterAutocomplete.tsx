@@ -1,7 +1,7 @@
 import { Autocomplete, Button, Paper, TextField } from "@mui/material";
-import axios from "axios";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Character } from "../../interfaces";
+import { useAppContext } from "../../pages/_app";
 import CharacterLabel from "./CharacterLabel";
 interface TagListProps {
     selectedCharacters: Character[];
@@ -13,27 +13,21 @@ export default function CharacterAutocomplete({
     selectedCharacters,
     setSelectedCharacters,
 }: TagListProps) {
+    const { characters, createCharacter } = useAppContext();
     const [inputValue, setInputValue] = useState("");
-    const [characters, setCharacters] = useState<Character[]>([]);
-    const getCharacters = async () => {
-        var res = await axios.get(process.env.API_URL + "/characters");
-        setCharacters(res.data);
-    };
-    useEffect(() => {
-        getCharacters();
-    }, []);
+
 
     function handleDeleteCharacter(character: Character) {
         setSelectedCharacters(selectedCharacters.filter((t) => t.id !== character.id));
     }
 
     async function onAddCharacter() {
-        await axios.post(process.env.API_URL + `/characters`, { name: inputValue, description: "" }).then((res) => {
-            setSelectedCharacters([...selectedCharacters, res.data]);
+        var newCharacter: Character = { name: inputValue, description: "", id: -1, image: "" }
+        var result = await createCharacter(newCharacter);
+        if (result) {
+            setSelectedCharacters([...selectedCharacters, result]);
             setInputValue("");
-            getCharacters();
         }
-        );
     }
 
     return (
