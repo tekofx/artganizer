@@ -8,7 +8,6 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import Submission from "../../../interfaces/Submission";
 import Tag from "../../../interfaces/Tag";
@@ -16,6 +15,7 @@ import Tag from "../../../interfaces/Tag";
 import AlertMessage from "../../../interfaces/AlertMessage";
 import Artist from "../../../interfaces/Artist";
 import Character from "../../../interfaces/Character";
+import { useAppContext } from "../../../pages/_app";
 import { emptySubmission } from "../../../src/emptyEntities";
 import Snack from "../../Snack";
 import ProgressButton from "../ProgressButon";
@@ -45,6 +45,8 @@ export default function SubmissionForm({ open, setOpen }: Props) {
 
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
 
+  const { createSubmission } = useAppContext();
+
   function resetForm() {
     setSubmission(emptySubmission);
     setImage("/placeholder.jpg");
@@ -66,7 +68,30 @@ export default function SubmissionForm({ open, setOpen }: Props) {
     setDisabled(false);
   }
 
-  async function saveSubmission() {
+  async function onOkClick() {
+    setLoading(true);
+    var status = await createSubmission(submission, selectedTags, selectedArtist, selectedCharacters);
+    if (status != undefined) {
+      setAlertMessage({
+        message: "Submission created",
+        severity: "success",
+      });
+    } else {
+      setAlertMessage({
+        message: "Error creating submission",
+        severity: "error",
+      });
+    }
+    setLoading(false);
+    setOpen(false);
+    setOpenSnack(true);
+    resetForm();
+
+  }
+
+
+
+  /* async function saveSubmission() {
     setLoading(true);
     const formData = new FormData();
     formData.append("image", submission.image);
@@ -109,7 +134,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
         setOpenSnack(true);
         resetForm();
       });
-  }
+  } */
 
   return (
     <>
@@ -154,7 +179,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
             <ProgressButton
               loading={loading}
               disabled={disabled}
-              onClick={saveSubmission}
+              onClick={onOkClick}
               text="Ok"
             />
 

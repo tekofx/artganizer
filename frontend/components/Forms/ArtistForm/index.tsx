@@ -10,10 +10,10 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
 import { AlertMessage } from "../../../interfaces";
 import Artist from "../../../interfaces/Artist";
+import { useAppContext } from "../../../pages/_app";
 import LimitedTextField from "../../LimitedTextField";
 import Snack from "../../Snack";
 import ProgressButton from "../ProgressButon";
@@ -43,6 +43,8 @@ export default function ArtistForm({ open, setOpen }: Props) {
     severity: "success",
   });
 
+  const { createArtist } = useAppContext();
+
 
   function onImageUpload(event: any) {
     const newArtist = { ...artist };
@@ -53,34 +55,25 @@ export default function ArtistForm({ open, setOpen }: Props) {
 
   async function postArtist() {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("name", artist.name);
-    formData.append("description", artist.description);
-    formData.append("image", artist.image);
-    formData.append("socials", JSON.stringify(artist.socials));
-
-    await axios
-      .post(process.env.API_URL + "/artists", formData)
-      .then(() => {
-        setAlertMessage({
-          message: "Artist created",
-          severity: "success",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setAlertMessage({
-          message: "Error creating artist",
-          severity: "error",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-        setOpen(false);
-        setImage("/placeholder.jpg");
-        setOpenSnack(true);
-        setArtist(defaultArtist);
+    const result = await createArtist(artist);
+    if (result != undefined) {
+      setAlertMessage({
+        message: "Artist created",
+        severity: "success",
       });
+
+    } else {
+      setAlertMessage({
+        message: "Error creating artist",
+        severity: "error",
+      });
+    }
+
+    setLoading(false);
+    setOpen(false);
+    setImage("/placeholder.jpg");
+    setOpenSnack(true);
+    setArtist(defaultArtist);
   }
 
   function onCancel() {

@@ -14,6 +14,7 @@ import { useState } from "react";
 import { ColorResult, TwitterPicker } from "react-color";
 import AlertMessage from "../../../interfaces/AlertMessage";
 import Tag from "../../../interfaces/Tag";
+import { useAppContext } from "../../../pages/_app";
 import Snack from "../../Snack";
 import TagChip from "../../Tag/TagChip";
 import TagLabel from "../../Tag/TagLabel";
@@ -40,6 +41,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     severity: "success",
   });
 
+  const { createTag } = useAppContext()
 
   const handleChangeComplete = (color: ColorResult) => {
     setTag((prevTag) => ({
@@ -57,26 +59,19 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     setLoading(true);
     // Create tag
     if (tagToUpdate == undefined) {
-      await axios
-        .post(process.env.API_URL + `/tags`, tag)
-        .then(() => {
-          setAlertMessage?.({
-            message: "Tag created",
-            severity: "success",
-          });
-        })
-        .catch((error) => {
-          setAlertMessage?.({
-            message: "Error creating tag",
-            severity: "error",
-          });
-
-          console.log(error);
-        })
-        .finally(() => {
-          setOpenSnack?.(true);
-          setOpen(false);
+      var result = await createTag(tag)
+      if (result) {
+        setAlertMessage?.({
+          message: "Tag created",
+          severity: "success",
         });
+      } else {
+        setAlertMessage?.({
+          message: "Error creating tag",
+          severity: "error",
+        });
+      }
+
     } else {
       // Edit tag
       await axios
@@ -95,11 +90,9 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
 
           console.log(error);
         })
-        .finally(() => {
-          setOpenSnack?.(true);
-          setOpen(false);
-        });
     }
+    setOpenSnack?.(true);
+    setOpen(false);
     setLoading(false);
     setTag(defaultTag);
   }
