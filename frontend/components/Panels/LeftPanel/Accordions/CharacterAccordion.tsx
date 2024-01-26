@@ -11,38 +11,25 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Character } from "../../../../interfaces";
+import { useAppContext } from "../../../../pages/_app";
 import CharacterList from "../../../Character/CharacterList";
 import CharacterForm from "../../../Forms/CharacterForm";
 import SearchBar from "../../../SearchBar";
-export default function ArtistAccordion() {
-  const [characters, setCharacters] = useState<Character[]>([]);
+export default function CharacterAccordion() {
+  const { characters } = useAppContext();
+  const [charactersList, setCharactersList] = useState<Character[]>([]);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  const getCharacters = async () => {
-    var res = await axios.get(process.env.API_URL + "/characters");
-    setCharacters(res.data);
-  }
-  useEffect(() => {
 
-    getCharacters();
-
-  }, []);
-
-  useEffect(() => {
-
-    getCharacters();
-
-  }, [open]);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     var temp = characters.filter((character) =>
       character.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
-    setCharacters(temp);
+    setCharactersList(temp);
   }
 
   function onSearchIconClick() {
@@ -52,7 +39,7 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setCharacters(characters);
+      setCharactersList(characters);
     }
   }
 
@@ -98,7 +85,7 @@ export default function ArtistAccordion() {
             show={showSearchBar}
             focus={showSearchBar}
           />
-          <CharacterList characters={characters} clickable />
+          <CharacterList characters={charactersList.length == 0 ? characters : charactersList} clickable />
         </Stack>
       </AccordionDetails>
       <CharacterForm open={open} setOpen={setOpen} />

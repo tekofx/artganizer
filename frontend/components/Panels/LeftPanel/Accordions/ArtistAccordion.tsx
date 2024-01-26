@@ -12,18 +12,19 @@ import {
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArtistForm } from "../../../Forms";
 import SearchBar from "../../../SearchBar";
 
-import axios from "axios";
 import { Artist } from "../../../../interfaces";
+import { useAppContext } from "../../../../pages/_app";
 import ArtistList from "../../../Artist/ArtistList";
 
 
 
 export default function ArtistAccordion() {
-  const [artists, setArtists] = useState<Artist[]>([]);
+  const { artists } = useAppContext();
+  const [artistsList, setArtistsList] = useState<Artist[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
@@ -32,7 +33,7 @@ export default function ArtistAccordion() {
     var temp = artists.filter((artist) =>
       artist.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
-    setArtists(temp);
+    setArtistsList(temp);
   }
   function onSearchIconClick() {
     if (!expanded) setExpanded(!expanded);
@@ -41,23 +42,10 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setArtists(artists);
+      setArtistsList(artists);
     }
   }
-  const getArtists = async () => {
-    var res = await axios.get(process.env.API_URL + "/artists");
-    setArtists(res.data);
-    console.log(res.data);
-  }
-  useEffect(() => {
-    getArtists();
 
-  }, []);
-
-  useEffect(() => {
-    getArtists();
-
-  }, [open]);
 
   return (
     <Accordion expanded={expanded}>
@@ -99,7 +87,7 @@ export default function ArtistAccordion() {
             show={showSearchBar}
             focus={showSearchBar}
           />
-          <ArtistList artists={artists} clickable />
+          <ArtistList artists={artistsList.length == 0 ? artists : artistsList} clickable />
         </Stack>
       </AccordionDetails>
       <ArtistForm open={open} setOpen={setOpen} />
