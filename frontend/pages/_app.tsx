@@ -10,7 +10,7 @@ import LateralPanel from "../components/Panels/LeftPanel";
 import { Artist, Character, Submission, Tag } from "../interfaces";
 import { handleCreateArtist, handleEditArtist, handleRemoveArtist } from "../src/api/artists";
 import { handleCreateCharacter, handleEditCharacter, handleRemoveCharacter } from "../src/api/characters";
-import { handleCreateSubmission, handleEditSubmission } from "../src/api/submissions";
+import { handleCreateSubmission, handleEditSubmission, handleRemoveSubmission } from "../src/api/submissions";
 import { handleCreateTag } from "../src/api/tags";
 import createEmotionCache from "../src/createEmotionCache";
 import theme from "../src/theme";
@@ -53,6 +53,8 @@ interface AppContextType {
   removeCharacter(character: Character): Promise<boolean | undefined>;
   // eslint-disable-next-line no-unused-vars
   editSubmission(submission: Submission): Promise<Submission | undefined>;
+  // eslint-disable-next-line no-unused-vars
+  removeSubmission(submission: Submission): Promise<boolean | undefined>;
 
 }
 
@@ -80,6 +82,14 @@ export default function MyApp(props: MyAppProps) {
       setSubmissions([...submissions.filter(s => s.id != submission.id), submissionEdited]);
     }
     return submissionEdited;
+  }
+
+  async function removeSubmission(submission: Submission) {
+    const status = await handleRemoveSubmission(submission);
+    if (status) {
+      setSubmissions([...submissions.filter(s => s.id != submission.id)]);
+    }
+    return status;
   }
 
   async function createArtist(artist: Artist) {
@@ -181,7 +191,7 @@ export default function MyApp(props: MyAppProps) {
           submissions, setSubmissions,
           createSubmission, createArtist, createCharacter, createTag,
           editArtist, editCharacter, editSubmission,
-          removeArtist, removeCharacter
+          removeArtist, removeCharacter, removeSubmission
         }}>
           <Grid container>
             <Grid item lg={2} position="fixed">

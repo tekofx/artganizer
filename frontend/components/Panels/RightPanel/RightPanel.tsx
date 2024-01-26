@@ -8,10 +8,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import Submission from "../../../interfaces/Submission";
+import { useAppContext } from "../../../pages/_app";
 import Edit from "./Edit";
 import Info from "./Info";
 
@@ -21,13 +21,13 @@ interface RightPanelProps {
 }
 
 export default function RightPanel(props: RightPanelProps) {
+  const { removeSubmission } = useAppContext();
   const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editShow, setEditShow] = useState(false);
 
-  async function removeSubmission() {
-    var submission = props.submission;
-    await axios.delete(process.env.API_URL + `/submissions/${submission.id}`);
+  async function onYesClick() {
+    await removeSubmission(props.submission);
     router.push("/");
   }
   const handleClickOpenDialog = () => {
@@ -76,7 +76,7 @@ export default function RightPanel(props: RightPanelProps) {
               variant="contained"
               size="small"
               startIcon={<DoneIcon />}
-              onClick={removeSubmission}
+              onClick={onYesClick}
             >
               Yes
             </Button>

@@ -54,3 +54,19 @@ export async function handleEditSubmission(
 
   return status;
 }
+
+export async function handleRemoveSubmission(
+  submission: Submission
+): Promise<boolean | undefined> {
+  // Remove submission
+  var status = await axios
+    .delete(process.env.API_URL + `/submissions/${submission.id}`)
+    .then(() => {
+      return true;
+    })
+    .catch(() => {
+      return undefined;
+    });
+
+  return status;
+}
