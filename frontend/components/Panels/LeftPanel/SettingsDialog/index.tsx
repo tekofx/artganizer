@@ -13,10 +13,8 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import Settings from "../../../../interfaces/Settings";
-import { defaultSettings } from "../../../../src/emptyEntities";
+import React, { Dispatch, SetStateAction } from "react";
+import { useAppContext } from "../../../../pages/_app";
 import GallerySettings from "./Settings/GallerySettings";
 interface SettingsDialogProps {
   open: boolean;
@@ -24,43 +22,17 @@ interface SettingsDialogProps {
 }
 export default function SettingsDialog(props: SettingsDialogProps) {
   const [value, setValue] = React.useState(0);
-  const [settings, setSettings] = useState<Settings>(defaultSettings);
-
-  useEffect(() => {
-    const getSettings = async () => {
-      var res = await axios.get(process.env.API_URL + "/settings");
-      setSettings(res.data);
-    }
-    getSettings();
-  }
-    , []);
+  const { settings, setSettings, editSettings, resetSettings } =
+    useAppContext();
 
   async function updateSettings() {
-    await axios
-      .put(process.env.API_URL + "/settings", settings)
-      .then(() => {
-        setSettings(settings);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        props.setOpen(false);
-      });
+    await editSettings(settings);
+    props.setOpen(false);
   }
 
-  async function resetSettings() {
-    await axios
-      .delete(process.env.API_URL + "/settings")
-      .then((res) => {
-        setSettings(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        props.setOpen(false);
-      });
+  async function onResetClick() {
+    await resetSettings();
+    props.setOpen(false);
   }
   interface TabPanelProps {
     children?: React.ReactNode;
@@ -137,7 +109,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         <Button onClick={updateSettings} variant="contained" color="primary">
           Save
         </Button>
-        <Button onClick={resetSettings} variant="outlined" color="primary">
+        <Button onClick={onResetClick} variant="outlined" color="primary">
           Reset to default
         </Button>
         <Button variant="outlined" onClick={() => props.setOpen(false)}>

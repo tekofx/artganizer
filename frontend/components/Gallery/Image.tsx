@@ -1,11 +1,9 @@
 import { Grid, Paper, Rating, Typography } from "@mui/material";
-import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import Settings from "../../interfaces/Settings";
 import Submission from "../../interfaces/Submission";
-import { defaultSettings } from "../../src/emptyEntities";
+import { useAppContext } from "../../pages/_app";
 import { formatDate } from "../../src/formatters";
 import ArtistLabel from "../Artist/ArtistLabel";
 import TagList from "../Tag/TagList";
@@ -17,15 +15,7 @@ interface ImageProps {
 
 export default function Image({ image, width }: ImageProps) {
   const router = useRouter();
-  const [settings, setSettings] = useState<Settings>(defaultSettings);
-  useEffect(() => {
-    const getSettings = async () => {
-      var res = await axios.get(process.env.API_URL + "/settings");
-      setSettings(res.data);
-    };
-    getSettings();
-  }
-    , []);
+  const { settings } = useAppContext();
 
   function gallerySettingsAllFalse() {
     return (
