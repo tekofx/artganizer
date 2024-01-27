@@ -14,7 +14,14 @@ import {
   useState,
 } from "react";
 import LateralPanel from "../components/Panels/LeftPanel";
-import { Artist, Character, Settings, Submission, Tag } from "../interfaces";
+import {
+  Artist,
+  Character,
+  Filters,
+  Settings,
+  Submission,
+  Tag,
+} from "../interfaces";
 import {
   handleCreateArtist,
   handleEditArtist,
@@ -38,7 +45,7 @@ import {
 
 import { handleEditSettings, handleResetSettings } from "../src/api/settings";
 import createEmotionCache from "../src/createEmotionCache";
-import { defaultSettings } from "../src/emptyEntities";
+import { defaultSettings, emptyFilters } from "../src/emptyEntities";
 import theme from "../src/theme";
 import "../styles/styles.css";
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -63,6 +70,8 @@ interface AppContextType {
   setSubmissions: Dispatch<SetStateAction<Submission[]>>;
   settings: Settings;
   setSettings: Dispatch<SetStateAction<Settings>>;
+  filters: Filters;
+  setFilters: Dispatch<SetStateAction<Filters>>;
   // eslint-disable-next-line no-unused-vars
   createSubmission(
     submission: Submission,
@@ -107,6 +116,7 @@ export default function MyApp(props: MyAppProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
+  const [filters, setFilters] = useState<Filters>(emptyFilters);
 
   async function createSubmission(
     submission: Submission,
@@ -286,6 +296,8 @@ export default function MyApp(props: MyAppProps) {
             setSubmissions,
             settings,
             setSettings,
+            filters,
+            setFilters,
             createSubmission,
             createArtist,
             createCharacter,

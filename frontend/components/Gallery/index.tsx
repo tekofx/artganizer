@@ -1,17 +1,26 @@
 import { Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Artist, Character, Filters } from "../../interfaces";
+import { Artist, Character } from "../../interfaces";
 import Submission from "../../interfaces/Submission";
 import { useAppContext } from "../../pages/_app";
 import { filterSubmissionsByColor } from "../../src/colorManagement";
 import Image from "./Image";
 
-export default function Gallery({ filters, character, artist }: { filters: Filters, character?: Character, artist?: Artist }) {
-  const { submissions, setSubmissions } = useAppContext();
+export default function Gallery({
+  character,
+  artist,
+}: {
+  character?: Character;
+  artist?: Artist;
+}) {
+  const { submissions, filters } = useAppContext();
 
-  const [gallerySubmissions, setGallerySubmissions] = useState<Submission[]>([]);
+  const [gallerySubmissions, setGallerySubmissions] = useState<Submission[]>(
+    []
+  );
 
   useEffect(() => {
+    console.log(filters);
     var temp = submissions;
 
     if (character) {
@@ -23,23 +32,19 @@ export default function Gallery({ filters, character, artist }: { filters: Filte
 
     if (artist) {
       temp = temp.filter(
-        (submission: Submission) =>
-          submission.artist?.id === artist.id
+        (submission: Submission) => submission.artist?.id === artist.id
       );
     }
 
     if (filters.title) {
       temp = temp.filter((submission: Submission) =>
-        submission.title
-          .toLowerCase()
-          .includes(filters.title.toLowerCase())
+        submission.title.toLowerCase().includes(filters.title.toLowerCase())
       );
     }
 
     if (filters.rating != -1) {
       temp = temp.filter(
-        (submission: Submission) =>
-          submission.rating >= filters.rating
+        (submission: Submission) => submission.rating >= filters.rating
       );
     }
     if (filters.tags.length > 0) {

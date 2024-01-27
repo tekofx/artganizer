@@ -1,14 +1,15 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PersonIcon from "@mui/icons-material/Person";
 import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
-import { Filters } from "../../../../interfaces";
+import { MouseEvent, useEffect, useState } from "react";
 import Character from "../../../../interfaces/Character";
+import { useAppContext } from "../../../../pages/_app";
 import CharacterAutocomplete from "../../../Character/CharacterAutocomplete";
-export default function CharacterFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
+export default function CharacterFilter() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [characters, setCharacters] = useState<Character[]>([]);
   const [invisible, setInvisible] = useState<boolean>(true);
+  const { filters, setFilters } = useAppContext();
 
   const open = Boolean(anchorEl);
 
@@ -19,21 +20,19 @@ export default function CharacterFilter({ filters, setFilters }: { filters: Filt
     setAnchorEl(null);
   };
 
-
   useEffect(() => {
-    console.log(filters.characters)
     if (filters.characters.length != 0) {
       setInvisible(false);
     } else {
       setInvisible(true);
     }
-  }, [filters]);
+  }, [filters.characters]);
 
   useEffect(() => {
-    setFilters({ ...filters, characters: characters });
-  }
-    , [characters]);
-
+    var newFilter = { ...filters };
+    newFilter.characters = characters;
+    setFilters(newFilter);
+  }, [characters]);
 
   return (
     <div>
