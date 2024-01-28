@@ -1,87 +1,100 @@
-import { Autocomplete, Button, Paper, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Artist } from "../../interfaces";
 import { useAppContext } from "../../pages/_app";
 import ArtistLabel from "./ArtistLabel";
 interface TagListProps {
-    selectedArtist: Artist | undefined;
-    setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
+  selectedArtist: Artist | undefined;
+  setSelectedArtist: Dispatch<SetStateAction<Artist | undefined>>;
 }
 
-
 export default function ArtistAutocomplete({
-    setSelectedArtist,
+  setSelectedArtist,
 }: TagListProps) {
-    const { artists, createArtist } = useAppContext();
+  const { artists, createArtist } = useAppContext();
 
-    const [inputValue, setInputValue] = useState("");
-    const [selectedArtists, setSelectedArtists] = useState<Artist[]>([]); // Needed to make autocomplete with multiple work
+  const [inputValue, setInputValue] = useState("");
+  const [selectedArtists, setSelectedArtists] = useState<Artist[]>([]); // Needed to make autocomplete with multiple work
 
+  function handleDeleteArtist(artist: Artist) {
+    setSelectedArtists([]);
+    setSelectedArtist(artist);
+  }
 
-
-    function handleDeleteArtist(artist: Artist) {
-        setSelectedArtists([]);
-        setSelectedArtist(artist);
-
+  async function onAddArtist() {
+    var newArtist: Artist = {
+      name: inputValue,
+      description: "",
+      id: -1,
+      socials: [],
+      submissions: [],
+      image: "",
+    };
+    var result = await createArtist(newArtist);
+    if (result) {
+      setSelectedArtists([result]);
+      setSelectedArtist(result);
+      setInputValue("");
     }
+  }
 
-    async function onAddArtist() {
-        var newArtist: Artist = { name: inputValue, description: "", id: -1, socials: [], submissions: [], image: "" };
-        var result = await createArtist(newArtist);
-        if (result) {
-            setSelectedArtists([result]);
-            setSelectedArtist(result);
-            setInputValue("");
+  return (
+    <Autocomplete
+      sx={{ minWidth: "20rem" }}
+      multiple
+      options={artists}
+      getOptionLabel={(artist) => artist.name}
+      value={selectedArtists}
+      inputValue={inputValue}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+      }}
+      onChange={(event, newValue) => {
+        const latestValue = newValue[newValue.length - 1];
+        setSelectedArtists([latestValue]);
+        setSelectedArtist(latestValue);
+      }}
+      renderInput={(params) => {
+        return <TextField {...params} variant="outlined" label="Artist" />;
+      }}
+      // Render elements in list
+      renderOption={(props, artist) => {
+        const isSelected = selectedArtists.some(
+          (selectedArtist) => selectedArtist.id === artist.id
+        );
+        if (isSelected) {
+          props["aria-selected"] = true;
         }
-    }
-
-    return (
-        <Autocomplete
-            sx={{ minWidth: "20rem" }}
-            multiple
-            options={artists}
-            getOptionLabel={(artist) => artist.name}
-            value={selectedArtists}
-            inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
-            }}
-            onChange={(event, newValue) => {
-                const latestValue = newValue[newValue.length - 1];
-                setSelectedArtists([latestValue]);
-                setSelectedArtist(latestValue);
-            }}
-            renderInput={(params) => {
-                return (
-                    <TextField
-                        {...params}
-                        variant="outlined"
-                        label="Artist"
-                    />
-                );
-            }}
-            // Render elements in list
-            renderOption={(props, artist) => {
-                const isSelected = selectedArtists.some((selectedArtist) => selectedArtist.id === artist.id);
-                if (isSelected) {
-                    props["aria-selected"] = true;
-                }
-                return (
-                    <li {...props}>
-                        <ArtistLabel artist={artist} />
-                    </li>
-                );
-            }}
-
-            // Render selected elements
-            renderTags={(value) =>
-                value.map((artist) => (
-                    <Paper key={artist.id} sx={{ borderRadius: "20" }}>
-                        <ArtistLabel artist={artist} onDelete={() => handleDeleteArtist(artist)} />
-                    </Paper>
-                ))
-            }
-            noOptionsText={<Button onClick={onAddArtist}>Create artist {inputValue}</Button>}
-        />
-    );
+        return (
+          <li {...props}>
+            <ArtistLabel artist={artist} />
+          </li>
+        );
+      }}
+      // Render selected elements
+      renderTags={(value) =>
+        value.map((artist) => (
+          <Paper key={artist.id} sx={{ borderRadius: "20" }}>
+            <ArtistLabel
+              artist={artist}
+              onDelete={() => handleDeleteArtist(artist)}
+            />
+          </Paper>
+        ))
+      }
+      noOptionsText={
+        inputValue != "" ? (
+          <Button onClick={onAddArtist}>Create artist {inputValue}</Button>
+        ) : (
+          <Typography>Type a name to create an Artist</Typography>
+        )
+      }
+    />
+  );
 }
