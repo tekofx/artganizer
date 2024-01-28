@@ -1,23 +1,21 @@
-import { Stack, Paper } from "@mui/material";
-import { DataContext } from "../../../pages/_app";
-import { useContext } from "react";
+import { Paper, Stack } from "@mui/material";
 
+import { useAppContext } from "../../../pages/_app";
+import SearchBar from "../../SearchBar";
 import {
-  RatingFilter,
-  ColorFilter,
-  ClearFilters,
-  TagFilter,
   ArtistFilter,
   CharacterFilter,
+  ClearFilters,
+  ColorFilter,
+  RatingFilter,
+  TagFilter,
 } from "./Filters";
-import SearchBar from "../../SearchBar";
 export default function TopPanel() {
-  const { data, setData } = useContext(DataContext);
-
+  const { filters, setFilters } = useAppContext();
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    var newData = { ...data };
-    newData.filters.title = event.target.value;
-    setData(newData);
+    event.preventDefault();
+    setFilters({ ...filters, title: event.target.value });
+    console.log(filters);
   }
   return (
     <Paper sx={{ width: "100%", p: 1, position: "sticky", top: 0 }}>

@@ -1,8 +1,8 @@
-import { Stack, Avatar, Typography, IconButton } from "@mui/material";
-import Artist from "../../interfaces/Artist";
+import ClearIcon from "@mui/icons-material/Clear";
+import { Avatar, IconButton, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ClearIcon from "@mui/icons-material/Clear";
+import Artist from "../../interfaces/Artist";
 
 interface ArtistLabelProps {
   artist?: Artist;

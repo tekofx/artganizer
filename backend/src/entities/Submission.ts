@@ -1,18 +1,14 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  OneToOne,
-  JoinColumn,
-  PrimaryColumn,
-  ManyToOne,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { Artist } from "./Artist";
-import { Tag } from "./Tag";
 import { Character } from "./Character";
+import { Tag } from "./Tag";
 
 @Entity()
 export class Submission {
@@ -39,7 +35,7 @@ export class Submission {
   height: number;
 
   @ManyToOne(() => Artist, (artist) => artist.submissions, {
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
   })
   artist: Artist;
 
@@ -67,5 +63,15 @@ export class Submission {
   @Column()
   filename: string;
 
+  // Original image
+  @Column()
+  original_image: string;
+
+  // Thumbnail image
+  @Column()
+  thumbnail: string;
+
+  // Display image
+  @Column()
   image: string;
 }

@@ -1,15 +1,23 @@
 import { Paper, Stack } from "@mui/material";
-import React, { useContext, useRef } from "react";
-import { DataContext } from "../../../pages/_app";
-import { Submission } from "../../../interfaces";
+import axios from "axios";
 import { useRouter } from "next/router";
+import React, { useEffect, useRef } from "react";
+import { Submission } from "../../../interfaces";
 interface BottomPanelProps {
   current: Submission;
 }
 export default function BottomPanel({ current }: BottomPanelProps) {
-  const { data } = useContext(DataContext);
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
+  const [submissions, setSubmissions] = React.useState<Submission[]>([]);
+
+  useEffect(() => {
+    const getSubmissions = async () => {
+      var res = await axios.get(process.env.API_URL + "/submissions");
+      setSubmissions(res.data);
+    };
+    getSubmissions();
+  }, []);
 
   const handleWheel = (e: React.WheelEvent) => {
     if (ref.current) {
@@ -18,15 +26,15 @@ export default function BottomPanel({ current }: BottomPanelProps) {
   };
   return (
     <Paper
-      sx={{ overflowX: "auto", maxHeight: "20vh" }}
+      sx={{ overflowX: "auto", maxHeight: "20vh", height: "100%" }}
       onWheel={handleWheel}
       ref={ref}
     >
       <Stack direction="row" sx={{ width: "max-content" }}>
-        {data.submissions.map((submission) => (
+        {submissions.map((submission) => (
           <img
             key={submission.id}
-            src={submission.image}
+            src={submission.thumbnail}
             height="150px"
             style={{
               border: submission.id == current.id ? "10px solid #555" : "none",

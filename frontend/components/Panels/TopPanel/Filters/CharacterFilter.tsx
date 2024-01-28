@@ -1,15 +1,15 @@
-import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext, useEffect } from "react";
-import { DataContext } from "../../../../pages/_app";
-import Character from "../../../../interfaces/Character";
-import CharacterSelect from "../../../Character/CharacterSelect";
 import PersonIcon from "@mui/icons-material/Person";
+import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
+import { MouseEvent, useEffect, useState } from "react";
+import Character from "../../../../interfaces/Character";
+import { useAppContext } from "../../../../pages/_app";
+import CharacterAutocomplete from "../../../Character/CharacterAutocomplete";
 export default function CharacterFilter() {
-  const { data, setData } = useContext(DataContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [characters, setCharacters] = useState<Character[]>([]);
   const [invisible, setInvisible] = useState<boolean>(true);
+  const { filters, setFilters } = useAppContext();
 
   const open = Boolean(anchorEl);
 
@@ -21,34 +21,18 @@ export default function CharacterFilter() {
   };
 
   useEffect(() => {
-    if (characters?.length != 0) {
+    if (filters.characters.length != 0) {
       setInvisible(false);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          characters: characters,
-        },
-      }));
     } else {
       setInvisible(true);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          characters: [],
-        },
-      }));
     }
-  }, [characters]);
+  }, [filters.characters]);
 
   useEffect(() => {
-    if (data.filters.characters != undefined) {
-      setCharacters(data.filters.characters);
-    } else {
-      setCharacters([]);
-    }
-  }, [data.filters.characters]);
+    var newFilter = { ...filters };
+    newFilter.characters = characters;
+    setFilters(newFilter);
+  }, [characters]);
 
   return (
     <div>
@@ -79,7 +63,7 @@ export default function CharacterFilter() {
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <CharacterSelect
+              <CharacterAutocomplete
                 selectedCharacters={characters}
                 setSelectedCharacters={setCharacters}
               />

@@ -1,29 +1,30 @@
+import DoneIcon from "@mui/icons-material/Done";
 import {
+  Button,
+  Container,
   Grid,
-  Typography,
+  Paper,
   Rating,
   Stack,
   TextField,
-  Button,
-  Container,
+  Typography,
 } from "@mui/material";
-import Submission from "../../../interfaces/Submission";
-import { useState, Dispatch, SetStateAction, useContext } from "react";
-import ArtistSelect from "../../Artist/ArtistSelect";
+import { Dispatch, SetStateAction, useState } from "react";
 import Artist from "../../../interfaces/Artist";
-import axios from "axios";
-import DoneIcon from "@mui/icons-material/Done";
-import TagSelect from "../../Tag/TagSelect";
-import Tag from "../../../interfaces/Tag";
-import { DataContext } from "../../../pages/_app";
-import CharacterSelect from "../../Character/CharacterSelect";
 import Character from "../../../interfaces/Character";
+import Submission from "../../../interfaces/Submission";
+import Tag from "../../../interfaces/Tag";
+import { useAppContext } from "../../../pages/_app";
+import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
+import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
+import TagAutocomplete from "../../Tag/TagAutocomplete";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;
   setSubmission: Dispatch<SetStateAction<Submission>>;
 }
 export default function Edit(props: InfoProps) {
+  const { editSubmission } = useAppContext();
   const [submission, setSubmission] = useState<Submission>(props.submission);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     props.submission.tags
@@ -32,87 +33,85 @@ export default function Edit(props: InfoProps) {
     props.submission.characters
   );
 
-  const { setData } = useContext(DataContext);
 
   const [selectedArtist, setSelectedArtist] = useState<Artist | undefined>(
     props.submission?.artist
   );
 
-  async function editSubmission() {
+  async function onOkButton() {
     submission.tags = selectedTags;
     submission.artist = selectedArtist;
     submission.characters = selectedCharacters;
-    await axios
-      .put(process.env.API_URL + `/submissions/${submission.id}`, {
-        submission,
-      })
-      .then((response) => {
-        props.setSubmission(response.data);
-        setData((prevData) => ({
-          ...prevData,
-          submissions: prevData.submissions.map((submission) => {
-            if (submission.id === response.data.id) {
-              return response.data;
-            } else {
-              return submission;
-            }
-          }),
-        }));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    props.setEditShow(false);
+
+    var result = await editSubmission(submission);
+    if (result) {
+      setSubmission(result);
+      props.setEditShow(false);
+      props.setSubmission(result);
+    }
   }
 
   return (
-    <Container sx={{ paddingLeft: 1, overflowY: "auto", maxHeight: "95vh" }}>
+    <Container sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}>
       <Grid container spacing={2} alignContent="center" sx={{ paddingTop: 3 }}>
         <Grid item lg={12}>
           <Stack spacing={1}>
-            <TextField
-              label="Title"
-              value={submission?.title}
-              onChange={(event) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  title: event.target.value,
-                }));
-              }}
-            />
-            <TextField
-              label="Description"
-              multiline
-              value={submission?.description}
-              onChange={(event) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  description: event.target.value,
-                }));
-              }}
-            />
-            <Typography>Rating</Typography>
-            <Rating
-              value={submission.rating}
-              onChange={(event, newValue) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  rating: newValue || 0,
-                }));
-              }}
-            />
-            <TagSelect
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-            />
-            <ArtistSelect
-              selectedArtist={selectedArtist}
-              setSelectedArtist={setSelectedArtist}
-            />
-            <CharacterSelect
-              selectedCharacters={selectedCharacters}
-              setSelectedCharacters={setSelectedCharacters}
-            />
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <Stack spacing={1}>
+
+
+                <TextField
+                  label="Title"
+                  value={submission?.title}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      title: event.target.value,
+                    }));
+                  }}
+                />
+                <TextField
+                  label="Description"
+                  multiline
+                  value={submission?.description}
+                  onChange={(event) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      description: event.target.value,
+                    }));
+                  }}
+                />
+                <Typography>Rating</Typography>
+                <Rating
+                  value={submission.rating}
+                  onChange={(event, newValue) => {
+                    setSubmission((prevSubmission) => ({
+                      ...prevSubmission,
+                      rating: newValue || 0,
+                    }));
+                  }}
+                />
+              </Stack>
+
+            </Paper>
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <TagAutocomplete
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
+              />
+            </Paper>
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <ArtistAutocomplete
+                selectedArtist={selectedArtist}
+                setSelectedArtist={setSelectedArtist}
+              />
+            </Paper>
+            <Paper elevation={0} sx={{ padding: 2 }}>
+              <CharacterAutocomplete
+                selectedCharacters={selectedCharacters}
+                setSelectedCharacters={setSelectedCharacters}
+              />
+            </Paper>
           </Stack>
         </Grid>
 
@@ -120,7 +119,7 @@ export default function Edit(props: InfoProps) {
           <Button
             variant="contained"
             startIcon={<DoneIcon />}
-            onClick={editSubmission}
+            onClick={onOkButton}
           >
             Ok
           </Button>

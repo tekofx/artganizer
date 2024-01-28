@@ -1,6 +1,6 @@
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { Chip } from "@mui/material";
 import Tag from "../../interfaces/Tag";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 interface TagChipProps {
   tag: Tag;
   onDelete?: any;

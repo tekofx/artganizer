@@ -1,31 +1,30 @@
-import { Typography, Paper, Rating, Grid } from "@mui/material";
-import Submission from "../../interfaces/Submission";
-import { formatDate } from "../../src/formatters";
-import TagList from "../Tag/TagList";
-import ArtistLabel from "../Artist/ArtistLabel";
-import { useContext } from "react";
-import { DataContext } from "../../pages/_app";
-import Settings from "../../interfaces/Settings";
-import { useRouter } from "next/router";
+import { Grid, Paper, Rating, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { Settings } from "../../interfaces";
+import Submission from "../../interfaces/Submission";
+import { useAppContext } from "../../pages/_app";
+import { formatDate } from "../../src/formatters";
+import ArtistLabel from "../Artist/ArtistLabel";
+import TagList from "../Tag/TagList";
 interface ImageProps {
-  image: Submission;
+  submission: Submission;
   width?: string;
   predefinedSettings?: Settings;
 }
 
-export default function Image({ image, width }: ImageProps) {
-  const { data } = useContext(DataContext);
+export default function Image({ submission, width }: ImageProps) {
   const router = useRouter();
+  const { settings } = useAppContext();
 
   function gallerySettingsAllFalse() {
     return (
-      !data.settings.galleryInfo.artist &&
-      !data.settings.galleryInfo.date &&
-      !data.settings.galleryInfo.dimensions &&
-      !data.settings.galleryInfo.rating &&
-      !data.settings.galleryInfo.tags &&
-      !data.settings.galleryInfo.title
+      !settings.galleryInfo.artist &&
+      !settings.galleryInfo.date &&
+      !settings.galleryInfo.dimensions &&
+      !settings.galleryInfo.rating &&
+      !settings.galleryInfo.tags &&
+      !settings.galleryInfo.title
     );
   }
 
@@ -41,10 +40,10 @@ export default function Image({ image, width }: ImageProps) {
       component={motion.div}
       whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
-      onClick={() => router.push(`/submission/${image.id}`)}
+      onClick={() => router.push(`/submission/${submission.id}`)}
     >
       <img
-        src={image.image}
+        src={submission.image}
         style={{
           width: "100%",
           height: "auto",
@@ -61,42 +60,42 @@ export default function Image({ image, width }: ImageProps) {
           display: gallerySettingsAllFalse() == true ? "none" : "block",
         }}
       >
-        {data.settings.galleryInfo.title && (
+        {settings.galleryInfo.title && (
           <Grid item xs={12}>
-            <Typography>{image.title}</Typography>
+            <Typography>{submission.title}</Typography>
           </Grid>
         )}
 
-        {data.settings.galleryInfo.date && (
+        {settings.galleryInfo.date && (
           <Grid item>
-            <Typography>{formatDate(image.date)}</Typography>
+            <Typography>{formatDate(submission.date)}</Typography>
           </Grid>
         )}
-        {data.settings.galleryInfo.rating && (
+        {settings.galleryInfo.rating && (
           <Grid item>
-            <Rating value={image.rating} readOnly />
+            <Rating value={submission.rating} readOnly />
           </Grid>
         )}
-        {data.settings.galleryInfo.dimensions && (
+        {settings.galleryInfo.dimensions && (
           <Grid item>
             <Typography>
-              {image.width}x{image.height}
+              {submission.width}x{submission.height}
             </Typography>
           </Grid>
         )}
 
-        {data.settings.galleryInfo.artist && image.artist != undefined && (
+        {settings.galleryInfo.artist && submission.artist != undefined && (
           <>
             <Grid item xs={12}></Grid>
             <Grid item>
-              <ArtistLabel artist={image.artist} />
+              <ArtistLabel artist={submission.artist} />
             </Grid>
           </>
         )}
 
-        {data.settings.galleryInfo.tags && image.tags.length > 0 && (
+        {settings.galleryInfo.tags && submission.tags.length > 0 && (
           <Grid item>
-            <TagList tags={image.tags} />
+            <TagList tags={submission.tags} />
           </Grid>
         )}
       </Grid>

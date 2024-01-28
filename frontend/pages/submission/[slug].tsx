@@ -1,30 +1,38 @@
-import { useRouter } from "next/router";
-import { useEffect, useState, useContext } from "react";
 import { Grid, Paper } from "@mui/material";
+import axios from "axios";
+import { GetServerSideProps, NextPage } from "next";
+import Head from "next/head";
+import { useState } from "react";
+import BottomPanel from "../../components/Panels/BottomPanel";
 import RightPanel from "../../components/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
-import { DataContext } from "../_app";
-import { emptySubmission } from "../../src/emptyEntities";
-import Head from "next/head";
-import BottomPanel from "../../components/Panels/BottomPanel";
-export default function Page() {
-  const [submission, setSubmission] = useState<Submission>(emptySubmission);
-  const { data } = useContext(DataContext);
 
-  const router = useRouter();
+interface PageProps {
+  submission: Submission;
+}
 
-  useEffect(() => {
-    const slug = router.query.slug;
-    if (slug) {
-      var id = parseInt(slug.toString());
-      // Get submission
-      data.submissions.filter((sub: Submission) => {
-        if (sub.id == id) {
-          setSubmission(sub);
-        }
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const slug = context.params?.slug;
+  if (slug) {
+    var id = parseInt(slug.toString());
+    const res = await axios
+      .get(process.env.API_URL + "/submissions/" + id)
+      .catch(() => {
+        return undefined;
       });
-    }
-  }, [router.query.slug]);
+    if (res == undefined) return { notFound: true };
+
+    var submission: Submission = res.data;
+
+    return { props: { submission } };
+  }
+
+  return { notFound: true };
+};
+const Page: NextPage<PageProps> = ({ submission }) => {
+  const [pageSubmission, setPageSubmission] = useState<Submission>(submission);
 
   return (
     <>
@@ -46,12 +54,13 @@ export default function Page() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    height: "84vh",
+                    height: "80vh",
                   }}
                 >
                   <img
                     src={submission?.image}
                     width="auto"
+                    height="100%"
                     style={{ maxHeight: "100vh", maxWidth: "100%" }}
                   />
                 </Paper>
@@ -62,10 +71,14 @@ export default function Page() {
             </Grid>
           </Grid>
           <Grid item lg={3}>
-            <RightPanel submission={submission} setSubmission={setSubmission} />
+            <RightPanel
+              submission={pageSubmission}
+              setSubmission={setPageSubmission}
+            />
           </Grid>
         </Grid>
       </Paper>
     </>
   );
-}
+};
+export default Page;

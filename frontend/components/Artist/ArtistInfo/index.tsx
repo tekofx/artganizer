@@ -1,7 +1,7 @@
-import { Grid, Avatar, Typography, Button, Stack } from "@mui/material";
-import Artist from "../../../interfaces/Artist";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import { Avatar, Button, Grid, Stack, Typography } from "@mui/material";
+import Artist from "../../../interfaces/Artist";
 
 import SocialIcon from "../../SocialIcon";
 interface ArtistInfoProps {
@@ -17,10 +17,10 @@ export default function ArtistInfo({
 }: ArtistInfoProps) {
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
-      <Grid item xs={2}>
+      <Grid item >
         <Avatar sx={{ width: "10rem", height: "10rem" }} src={artist?.image} />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item >
         <Typography variant="h4">{artist?.name}</Typography>
         <Typography variant="h5">{artist?.description}</Typography>
         {artist?.socials?.map((social, index) => (

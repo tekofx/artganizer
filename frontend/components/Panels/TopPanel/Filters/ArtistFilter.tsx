@@ -1,13 +1,13 @@
-import { Button, Paper, Popover, Grid, Badge } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext, useEffect } from "react";
-import { DataContext } from "../../../../pages/_app";
-import ArtistSelect from "../../../Artist/ArtistSelect";
-import Artist from "../../../../interfaces/Artist";
 import BrushIcon from "@mui/icons-material/Brush";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
+import { MouseEvent, useEffect, useState } from "react";
+import Artist from "../../../../interfaces/Artist";
+import { useAppContext } from "../../../../pages/_app";
+import ArtistAutocomplete from "../../../Artist/ArtistAutocomplete";
 
 export default function ArtistFilter() {
-  const { data, setData } = useContext(DataContext);
+  const { filters, setFilters } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [artist, setArtist] = useState<Artist>();
   const [invisible, setInvisible] = useState<boolean>(true);
@@ -22,34 +22,20 @@ export default function ArtistFilter() {
   };
 
   useEffect(() => {
-    if (artist != undefined) {
+    if (filters.artist != undefined) {
+      setArtist(filters.artist);
       setInvisible(false);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          artist: artist,
-        },
-      }));
-    } else {
-      setInvisible(true);
-      setData((prevData) => ({
-        ...prevData,
-        filters: {
-          ...prevData.filters,
-          artist: undefined,
-        },
-      }));
-    }
-  }, [artist]);
-
-  useEffect(() => {
-    if (data.filters.artist != undefined) {
-      setArtist(data.filters.artist);
     } else {
       setArtist(undefined);
+      setInvisible(true);
     }
-  }, [data.filters.artist]);
+  }, [filters.artist]);
+
+  useEffect(() => {
+    var newFilter = { ...filters };
+    newFilter.artist = artist;
+    setFilters(newFilter);
+  }, [artist]);
 
   return (
     <div>
@@ -80,7 +66,7 @@ export default function ArtistFilter() {
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <ArtistSelect
+              <ArtistAutocomplete
                 selectedArtist={artist}
                 setSelectedArtist={setArtist}
               />

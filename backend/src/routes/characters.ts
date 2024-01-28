@@ -1,11 +1,10 @@
 import express, { Request, Response } from "express";
-import "reflect-metadata";
-import { Submission } from "../entities/Submission";
-import { CharacterRepo } from "../typeorm.config";
 import * as fs from "fs";
-import * as path from "path";
-import sharp from "sharp";
 import multer, { FileFilterCallback } from "multer";
+import * as path from "path";
+import "reflect-metadata";
+import sharp from "sharp";
+import { CharacterRepo } from "../typeorm.config";
 const charactersDir = path.join(__dirname, "../../data/uploads/characters");
 if (!fs.existsSync(charactersDir)) {
   fs.mkdirSync(charactersDir, { recursive: true });
@@ -53,11 +52,26 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   const characters = await CharacterRepo.find();
-  for (const character of characters) {
-    character.image =
-      process.env.URL + "/characters/uploads/" + character.id + ".jpg";
-  }
   res.send(characters);
+});
+
+router.get("/:characterId", async (req: Request, res: Response) => {
+  if (req.params.characterId == null) {
+    res.status(400).send("Character ID not provided");
+    return;
+  }
+
+  var characterId: number = parseInt(req.params.characterId);
+  const queryBuilder = CharacterRepo.createQueryBuilder("character");
+  queryBuilder.where("character.id = :id", { id: characterId });
+
+  var character = await queryBuilder.getOne();
+  if (character == null) {
+    res.status(404).send("Character not found");
+    return;
+  }
+
+  res.send(character);
 });
 router.use("/uploads", express.static(charactersDir));
 
@@ -90,9 +104,10 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
+      character.image = process.env.URL + "/characters/" + id;
+      await CharacterRepo.save(character);
     }
 
-    character.image = process.env.URL + "/characters/" + id;
     res.send(character);
   }
 );
@@ -124,22 +139,22 @@ router.post(
 }); */
 
 router.put(
-  "/:id",
+  "/:characterId",
   uploadCharacterPic.single("image"),
   async (req: Request, res: Response) => {
-    if (req.params.id == null) {
+    if (req.params.characterId == null) {
       res.status(400).send("submission ID not provided");
       if (file?.path) {
         fs.unlinkSync(file.path);
       }
       return;
     }
-    var characterId: number = parseInt(req.params.id);
+    var characterId: number = parseInt(req.params.characterId);
+
     var file = req.file;
 
-    var character = await CharacterRepo.findOne({
-      where: { id: characterId },
-    });
+    var character = await CharacterRepo.findOne({ where: { id: characterId } });
+    console.log(character);
 
     if (character == null) {
       res.status(404).send("character not found");
@@ -168,15 +183,23 @@ router.put(
         .catch((error) => {
           console.log(error);
         });
+      character.image =
+        process.env.URL + "/characters/uploads/" + characterId + ".jpg";
     }
 
-    var { id, name, description } = req.body;
+    var { name, description } = req.body;
     character.name = name;
     character.description = description;
-    var result = await CharacterRepo.save(character);
-    result.image = process.env.URL + "/characters/uploads" + characterId;
 
-    res.send(result);
+    var result;
+    try {
+      result = await CharacterRepo.save(character);
+
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("error");
+    }
   }
 );
 router.delete("/:id", async (req: Request, res: Response) => {

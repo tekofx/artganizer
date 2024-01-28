@@ -1,6 +1,6 @@
-import { Grid, Avatar, Typography, Button, Stack } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import { Avatar, Button, Grid, Stack, Typography } from "@mui/material";
 import Character from "../../interfaces/Character";
 interface CharacterInfoProps {
   character?: Character;
@@ -21,8 +21,9 @@ export default function CharacterInfo(props: CharacterInfoProps) {
         <Typography variant="h4">{props.character?.name}</Typography>
         <Typography variant="h5">{props.character?.description}</Typography>
       </Grid>
+      <Grid item xs></Grid>
       <Grid item>
-        <Stack direction="row" width="100%" spacing={2} justifyContent="center">
+        <Stack direction="column" width="100%" spacing={2} justifyContent="center">
           <Button
             variant="contained"
             startIcon={<EditIcon />}

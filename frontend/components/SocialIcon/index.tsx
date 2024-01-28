@@ -1,15 +1,15 @@
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import CloudIcon from "@mui/icons-material/Cloud";
-import RedditIcon from "@mui/icons-material/Reddit";
-import PinterestIcon from "@mui/icons-material/Pinterest";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
 import LanguageIcon from "@mui/icons-material/Language";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import PinterestIcon from "@mui/icons-material/Pinterest";
+import RedditIcon from "@mui/icons-material/Reddit";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import { IconButton, Tooltip } from "@mui/material";
+import { Fa500Px, FaDeviantart, FaGithub, FaMastodon } from "react-icons/fa";
 import Social from "../../interfaces/Social";
-import { FaDeviantart, FaGithub, FaMastodon, Fa500Px } from "react-icons/fa";
 import { FurAffinityIcon, ItakuIcon } from "./Icons";
-import { Tooltip, IconButton } from "@mui/material";
 
 const socialMediaIcons = {
   instagram: <InstagramIcon />,

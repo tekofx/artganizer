@@ -1,8 +1,8 @@
-import { Button } from "@mui/material";
-import { DataContext } from "../../../../pages/_app";
-import { useContext, useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
+import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Filters } from "../../../../interfaces";
+import { useAppContext } from "../../../../pages/_app";
 const emptyFilters: Filters = {
   rating: -1,
   tags: [],
@@ -12,30 +12,28 @@ const emptyFilters: Filters = {
   color: "",
 };
 export default function ClearFilters() {
-  const { data, setData } = useContext(DataContext);
   const [show, setShow] = useState<boolean>(false);
+  const { filters, setFilters } = useAppContext();
 
   function clearFilters() {
-    var newData = { ...data };
-    newData.filters = emptyFilters;
-    setData(newData);
+    setFilters(emptyFilters);
   }
 
   useEffect(() => {
     const filtersAreEmpty =
-      data.filters.rating === emptyFilters.rating &&
-      data.filters.tags.length === emptyFilters.tags.length &&
-      data.filters.artist === emptyFilters.artist &&
-      data.filters.title === emptyFilters.title &&
-      data.filters.color === emptyFilters.color &&
-      data.filters.characters.length === emptyFilters.characters.length;
+      filters.rating === emptyFilters.rating &&
+      filters.tags.length === emptyFilters.tags.length &&
+      filters.artist === emptyFilters.artist &&
+      filters.title === emptyFilters.title &&
+      filters.color === emptyFilters.color &&
+      filters.characters.length === emptyFilters.characters.length;
 
     if (filtersAreEmpty) {
       setShow(false);
     } else {
       setShow(true);
     }
-  }, [data.filters]);
+  }, [filters]);
 
   return (
     <div>

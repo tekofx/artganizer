@@ -1,24 +1,23 @@
 import {
-  Stack,
-  TextField,
-  Grid,
-  Button,
-  IconButton,
   Avatar,
+  Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
 } from "@mui/material";
-import ProgressButton from "../ProgressButon";
-import { useState, useContext, useEffect } from "react";
-import { DataContext } from "../../../pages/_app";
-import axios from "axios";
-import LimitedTextField from "../../LimitedTextField";
-import Character from "../../../interfaces/Character";
-import { emptyCharacter } from "../../../src/emptyEntities";
-import Snack from "../../Snack";
+import { useState } from "react";
 import { AlertMessage } from "../../../interfaces";
+import Character from "../../../interfaces/Character";
+import { useAppContext } from "../../../pages/_app";
+import { emptyCharacter } from "../../../src/emptyEntities";
+import LimitedTextField from "../../LimitedTextField";
+import Snack from "../../Snack";
+import ProgressButton from "../ProgressButon";
 
 interface Props {
   open: boolean;
@@ -30,6 +29,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
   const [character, setCharacter] = useState<Character>(
     name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
   );
+  const { createCharacter } = useAppContext();
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
   const [openSnack, setOpenSnack] = useState<boolean>(false);
@@ -37,13 +37,6 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
     message: "Submission created",
     severity: "success",
   });
-
-  const { data, setData } = useContext(DataContext);
-  useEffect(() => {
-    setCharacter(
-      name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
-    );
-  }, [name]);
 
   function resetForm() {
     setImage("/placeholder.jpg");
@@ -59,35 +52,23 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
 
   async function postCharacter() {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("name", character.name);
-    formData.append("description", character.description);
-    formData.append("image", character.image);
-
-    await axios
-      .post(process.env.API_URL + "/characters", formData)
-      .then((response) => {
-        var newData = { ...data };
-        newData.characters.push(response.data);
-        setData(newData);
-        setAlertMessage?.({
-          message: "Character created",
-          severity: "success",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setAlertMessage({
-          message: "Error creating character",
-          severity: "error",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-        setOpen(false);
-        setOpenSnack(true);
-        resetForm();
+    var result = await createCharacter(character);
+    if (result) {
+      setAlertMessage({
+        message: "Character created",
+        severity: "success",
       });
+    } else {
+      setAlertMessage({
+        message: "Error: Character not created",
+        severity: "error",
+      });
+    }
+
+    setLoading(false);
+    setOpen(false);
+    setOpenSnack(true);
+    resetForm();
   }
 
   function onCancel() {
@@ -103,7 +84,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
           <Grid container spacing={2}>
             <Grid item lg={4}>
               <input
-                accept="image/*"
+                accept="image/png, image/jpeg"
                 id="character-form"
                 multiple
                 type="file"
@@ -145,15 +126,15 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
           </Grid>
         </DialogContent>
         <DialogActions>
+          <Button disabled={loading} onClick={onCancel}>
+            Cancel
+          </Button>
           <ProgressButton
             loading={loading}
             disabled={character.name == ""}
             onClick={postCharacter}
             text="Create"
           />
-          <Button disabled={loading} onClick={onCancel}>
-            Cancel
-          </Button>
         </DialogActions>
       </Dialog>
       <Snack

@@ -1,23 +1,19 @@
-import {
-  MenuItem,
-  Typography,
-  Menu,
-  Stack,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import PersonIcon from "@mui/icons-material/Person";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import PhotoIcon from "@mui/icons-material/Photo";
-import { useState, MouseEvent } from "react";
-import BrushIcon from "@mui/icons-material/Brush";
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { MouseEvent, useState } from "react";
 
 interface Props {
-  setOpenArtistForm: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenSubmissionForm: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenTagForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenCharacterForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export default function CreateMenu(props: Props) {
   const [anchorCreateMenu, setAnchorCreateMenu] = useState<null | HTMLElement>(
@@ -54,28 +50,6 @@ export default function CreateMenu(props: Props) {
         onClose={handleCloseCreateMenu}
         color="white"
       >
-        <MenuItem
-          onClick={() => {
-            props.setOpenArtistForm(true);
-            handleCloseCreateMenu();
-          }}
-        >
-          <Stack direction="row" spacing={2}>
-            <BrushIcon />
-            <Typography textAlign="center">Artist</Typography>
-          </Stack>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            props.setOpenCharacterForm(true);
-            handleCloseCreateMenu();
-          }}
-        >
-          <Stack direction="row" spacing={2}>
-            <PersonIcon />
-            <Typography textAlign="center">Character</Typography>
-          </Stack>
-        </MenuItem>
         <MenuItem
           onClick={() => {
             props.setOpenSubmissionForm(true);

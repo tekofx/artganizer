@@ -1,30 +1,57 @@
-import { useRouter } from "next/router";
-import { useEffect, useState, useContext } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
 import {
-  Grid,
-  Paper,
-  Typography,
   Button,
   Dialog,
   DialogActions,
   DialogTitle,
+  Grid,
+  Paper,
   Stack,
+  Typography,
 } from "@mui/material";
-import { DataContext } from "../_app";
-import Gallery from "../../components/Gallery";
-import ClearIcon from "@mui/icons-material/Clear";
-import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import { emptyCharacter } from "../../src/emptyEntities";
-import Character from "../../interfaces/Character";
-import CharacterInfo from "../../components/Character/CharacterInfo";
-import CharacterEdit from "../../components/Character/CharacterEdit";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-export default function Page() {
-  const [character, setCharacter] = useState<Character>(emptyCharacter);
+import { useRouter } from "next/router";
+import { useState } from "react";
+import CharacterEdit from "../../components/Character/CharacterEdit";
+import CharacterInfo from "../../components/Character/CharacterInfo";
+import Gallery from "../../components/Gallery";
+import Character from "../../interfaces/Character";
+import { useAppContext } from "../_app";
+
+interface PageProps {
+  character: Character;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const slug = context.params?.slug;
+  if (slug) {
+    var id = parseInt(slug.toString());
+    const res = await axios
+      .get(process.env.API_URL + "/characters/" + id)
+      .catch(() => {
+        return undefined;
+      });
+    if (res == undefined) return { notFound: true };
+
+    var character: Character = res.data;
+
+    return { props: { character } };
+  }
+
+  // Si no hay slug, devuelve notFound: true para mostrar la página 404
+  return { notFound: true };
+};
+
+const Page: NextPage<PageProps> = ({ character }) => {
+  const { removeCharacter } = useAppContext();
+  const [pageCharacter, setPageCharacter] = useState<Character>(character);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { data, setData } = useContext(DataContext);
   const router = useRouter();
   const toggleEdit = () => {
     setEditShow(!editShow);
@@ -36,39 +63,11 @@ export default function Page() {
     setDialogOpen(false);
   };
 
-  async function removeCharacter() {
-    await axios
-      .delete(process.env.API_URL + `/characters/${character?.id}`)
-      .then(() => {
-        // Remove character from data
-        const newData = { ...data };
-        newData.characters = newData.characters.filter(
-          (char: Character) => char.id != character?.id
-        );
-        setData(newData);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        handleCloseDialog();
-        router.push("/");
-      });
+  async function onYesClick() {
+    await removeCharacter(character);
+    handleCloseDialog();
+    router.push("/");
   }
-
-  useEffect(() => {
-    const slug = router.query.slug;
-    if (slug) {
-      var id = parseInt(slug.toString());
-
-      // Get character from data
-      data.characters.filter((character: Character) => {
-        if (character.id == id) {
-          setCharacter(character);
-        }
-      });
-    }
-  }, [router.query.slug]);
 
   return (
     <>
@@ -76,24 +75,24 @@ export default function Page() {
         <title>Artganizer</title>
       </Head>
       <Paper>
-        <Grid container spacing={2} sx={{ paddingLeft: 2 }}>
+        <Grid container spacing={2}>
           <Grid item lg={12}>
             {!editShow ? (
               <CharacterInfo
-                character={character}
+                character={pageCharacter}
                 toggleEdit={toggleEdit}
                 handleClickOpenDialog={handleClickOpenDialog}
               />
             ) : (
               <CharacterEdit
-                character={character}
+                character={pageCharacter}
                 toggleEdit={toggleEdit}
-                setCharacter={setCharacter}
+                setCharacter={setPageCharacter}
               />
             )}
           </Grid>
           <Grid item lg={12}>
-            <Gallery character={character} />
+            <Gallery character={pageCharacter} />
           </Grid>
         </Grid>
         <Dialog open={dialogOpen}>
@@ -108,7 +107,7 @@ export default function Page() {
                 variant="contained"
                 size="small"
                 startIcon={<DoneIcon />}
-                onClick={removeCharacter}
+                onClick={onYesClick}
               >
                 Yes
               </Button>
@@ -126,4 +125,5 @@ export default function Page() {
       </Paper>
     </>
   );
-}
+};
+export default Page;

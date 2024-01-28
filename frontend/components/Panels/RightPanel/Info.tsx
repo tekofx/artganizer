@@ -1,22 +1,22 @@
-import {
-  Grid,
-  Typography,
-  Stack,
-  Container,
-  Paper,
-  Button,
-  Rating,
-} from "@mui/material";
-import TagList from "../../Tag/TagList";
-import Submission from "../../../interfaces/Submission";
-import CharacterList from "../../Character/CharacterList";
-import ColorPalette from "../../Artist/ColorPalette";
-import { convertBytes } from "../../../src/formatters";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
 import DownloadIcon from "@mui/icons-material/Download";
-import ArtistLabel from "../../Artist/ArtistLabel";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Button,
+  Container,
+  Grid,
+  Paper,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
+import Submission from "../../../interfaces/Submission";
+import { convertBytes } from "../../../src/formatters";
+import ArtistLabel from "../../Artist/ArtistLabel";
+import ColorPalette from "../../Artist/ColorPalette";
+import CharacterList from "../../Character/CharacterList";
+import TagList from "../../Tag/TagList";
 interface InfoProps {
   submission: Submission;
   toggleEdit: () => void;
@@ -29,7 +29,7 @@ export default function Info({
 }: InfoProps) {
   async function downloadImage() {
     await axios
-      .get(submission.image + "?download", { responseType: "blob" })
+      .get(submission.original_image + "?download", { responseType: "blob" })
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
@@ -47,6 +47,37 @@ export default function Info({
   return (
     <Container sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}>
       <Grid container spacing={2}>
+        <Grid item lg={12}>
+          <Grid container spacing={2}>
+            <Grid item>
+              <Button
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                onClick={downloadImage}
+              >
+                Download
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                startIcon={<EditIcon />}
+                onClick={toggleEdit}
+              >
+                Edit
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                startIcon={<DeleteForeverIcon />}
+                onClick={handleClickOpenDialog}
+              >
+                Remove
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
         <Grid item lg={12}>
           <Stack spacing={1}>
             <Paper elevation={0} sx={{ padding: 2 }}>
@@ -97,68 +128,42 @@ export default function Info({
           <Paper elevation={0} sx={{ padding: 2 }}>
             <Typography variant="h5">Image Information</Typography>
             <Grid container spacing={1}>
-              {/* <Grid item lg={4}>
+              <Grid item lg={4}>
                 Date
               </Grid>
 
               <Grid item lg={8}>
-                <Typography>{submission.date.getUTCDate()}</Typography>
-              </Grid> */}
-
-              <Grid item lg={4}>
-                Dimensions
-              </Grid>
-              <Grid item lg={8}>
                 <Typography>
-                  {submission.width}x{submission.height}
+                  {new Date(submission.date).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
                 </Typography>
               </Grid>
-              <Grid item lg={4}>
-                Size
-              </Grid>
-              <Grid item lg={8}>
-                {convertBytes(submission.size)}
-              </Grid>
 
-              <Grid item lg={4}>
-                Format
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={2}>
+                  <Typography fontWeight={"bold"}>Dimensions</Typography>
+                  <Typography>
+                    {submission.width}x{submission.height}
+                  </Typography>
+                </Stack>
               </Grid>
-              <Grid item lg={8}>
-                <Typography>{submission.format.toUpperCase()}</Typography>
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={2} alignContent="space-between">
+                  <Typography fontWeight={"bold"}>Size</Typography>
+                  <Typography>{convertBytes(submission.size)}</Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={2}>
+                  <Typography fontWeight={"bold"}>Format</Typography>
+                  <Typography>{submission.format.toUpperCase()}</Typography>
+                </Stack>
               </Grid>
             </Grid>
           </Paper>
-        </Grid>
-        <Grid item lg={12}>
-          <Stack
-            direction="row"
-            width="100%"
-            spacing={2}
-            justifyContent="center"
-          >
-            <Button
-              variant="contained"
-              startIcon={<DownloadIcon />}
-              onClick={downloadImage}
-            >
-              Download
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              onClick={toggleEdit}
-            >
-              Edit
-            </Button>
-
-            <Button
-              variant="contained"
-              startIcon={<DeleteForeverIcon />}
-              onClick={handleClickOpenDialog}
-            >
-              Remove
-            </Button>
-          </Stack>
         </Grid>
       </Grid>
     </Container>

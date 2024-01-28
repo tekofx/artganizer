@@ -1,4 +1,8 @@
+import ClearIcon from "@mui/icons-material/Clear";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -6,52 +10,19 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState, useContext, Dispatch, SetStateAction } from "react";
-import Tag from "../../interfaces/Tag";
+import { Dispatch, SetStateAction, useState } from "react";
 import TagLabel from "../../components/Tag/TagLabel";
-import axios from "axios";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ClearIcon from "@mui/icons-material/Clear";
+import Tag from "../../interfaces/Tag";
+import { useAppContext } from "../../pages/_app";
 import TagForm from "./TagForm";
-import EditIcon from "@mui/icons-material/Edit";
-import { DataContext } from "../../pages/_app";
 
 interface ManageTagsProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function ManageTags(props: ManageTagsProps) {
-  const { data, setData } = useContext(DataContext);
-  const [tags, setTags] = useState<Tag[]>(data.tags);
+  const { tags } = useAppContext();
   const [openTagForm, setOpenTagForm] = useState<boolean>(false);
-
-  async function onClickRemoveTag(tag: Tag) {
-    await axios
-      .delete(process.env.API_URL + `/tags/${tag.id}`)
-      .then(() => {
-        setTags(tags.filter((t) => t.id != tag.id));
-        var submissionUpdated = data.submissions.map((s) => {
-          var index = s.tags.findIndex((t) => t.id == tag.id);
-          if (index != -1) {
-            s.tags.splice(index, 1);
-          }
-          return s;
-        });
-
-        setData({
-          ...data,
-          tags: data.tags.filter((t) => t.id != tag.id),
-          submissions: submissionUpdated,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function onClickEditTag() {
-    setOpenTagForm(true);
-  }
 
   return (
     <>
@@ -74,37 +45,72 @@ export default function ManageTags(props: ManageTagsProps) {
           </Stack>
         </DialogTitle>
         <DialogContent sx={{ p: 5 }}>
+
+          {tags.length == 0 && (
+            <Stack direction="column" spacing={2}>
+
+              <Typography variant="body1" >
+                No tags found
+              </Typography>
+              <Button variant="contained" onClick={() => setOpenTagForm(true)}>
+                Create tag
+              </Button>
+            </Stack>
+          )
+
+          }
           {tags?.map((tag) => (
-            <div key={tag.id}>
-              <Stack
-                direction="row"
-                spacing={3}
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <TagLabel tag={tag} showSubmissions />
-                <div>
-                  <IconButton size="small" onClick={onClickEditTag}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => onClickRemoveTag(tag)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </div>
-              </Stack>
-              <TagForm
-                open={openTagForm}
-                setOpen={setOpenTagForm}
-                tagToUpdate={tag}
-              />
-            </div>
+            <TagElement tag={tag} key={tag.id} />
           ))}
+
         </DialogContent>
       </Dialog>
+      <TagForm
+        open={openTagForm}
+        setOpen={setOpenTagForm}
+      />
     </>
   );
+}
+
+function TagElement({ tag }: { tag: Tag }) {
+  const [openTagForm, setOpenTagForm] = useState<boolean>(false);
+  const { removeTag } = useAppContext();
+
+  async function onClickRemoveTag(tag: Tag) {
+    await removeTag(tag);
+  }
+
+  function onClickEditTag() {
+    setOpenTagForm(true);
+  }
+  return (
+    <div >
+      <Stack
+        direction="row"
+        spacing={3}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <TagLabel tag={tag} showSubmissions />
+        <div>
+          <IconButton size="small" onClick={() => onClickEditTag()}>
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            size="small"
+            color="error"
+            onClick={() => onClickRemoveTag(tag)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      </Stack>
+      <TagForm
+        open={openTagForm}
+        setOpen={setOpenTagForm}
+        tagToUpdate={tag}
+      />
+    </div>
+  )
 }

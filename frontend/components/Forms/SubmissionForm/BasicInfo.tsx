@@ -1,5 +1,5 @@
+import { Grid, Rating, TextField, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { Typography, TextField, Rating, Grid } from "@mui/material";
 
 import Submission from "../../../interfaces/Submission";
 
@@ -28,6 +28,7 @@ export default function BasicInfo({ submission, setSubmission }: Props) {
       <Grid item xs={12}>
         <TextField
           label="Description"
+          multiline
           fullWidth
           value={submission.description}
           onChange={(event) => {

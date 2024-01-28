@@ -1,24 +1,23 @@
 import {
-  Stack,
-  TextField,
-  Grid,
-  Button,
-  IconButton,
   Avatar,
+  Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
 } from "@mui/material";
-import { useState, useContext } from "react";
-import { DataContext } from "../../../pages/_app";
-import axios from "axios";
-import Artist from "../../../interfaces/Artist";
-import LimitedTextField from "../../LimitedTextField";
-import Socials from "./Socials";
-import ProgressButton from "../ProgressButon";
-import Snack from "../../Snack";
+import { useState } from "react";
 import { AlertMessage } from "../../../interfaces";
+import Artist from "../../../interfaces/Artist";
+import { useAppContext } from "../../../pages/_app";
+import LimitedTextField from "../../LimitedTextField";
+import Snack from "../../Snack";
+import ProgressButton from "../ProgressButon";
+import Socials from "./Socials";
 
 const defaultArtist: Artist = {
   id: -1,
@@ -44,7 +43,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
     severity: "success",
   });
 
-  const { data, setData } = useContext(DataContext);
+  const { createArtist } = useAppContext();
 
   function onImageUpload(event: any) {
     const newArtist = { ...artist };
@@ -55,37 +54,24 @@ export default function ArtistForm({ open, setOpen }: Props) {
 
   async function postArtist() {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("name", artist.name);
-    formData.append("description", artist.description);
-    formData.append("image", artist.image);
-    formData.append("socials", JSON.stringify(artist.socials));
-
-    await axios
-      .post(process.env.API_URL + "/artists", formData)
-      .then((response) => {
-        var newData = { ...data };
-        newData.artists.push(response.data);
-        setData(newData);
-        setAlertMessage({
-          message: "Artist created",
-          severity: "success",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setAlertMessage({
-          message: "Error creating artist",
-          severity: "error",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-        setOpen(false);
-        setImage("/placeholder.jpg");
-        setOpenSnack(true);
-        setArtist(defaultArtist);
+    const result = await createArtist(artist);
+    if (result != undefined) {
+      setAlertMessage({
+        message: "Artist created",
+        severity: "success",
       });
+    } else {
+      setAlertMessage({
+        message: "Error creating artist",
+        severity: "error",
+      });
+    }
+
+    setLoading(false);
+    setOpen(false);
+    setImage("/placeholder.jpg");
+    setOpenSnack(true);
+    setArtist(defaultArtist);
   }
 
   function onCancel() {
@@ -102,7 +88,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
           <Grid container spacing={2}>
             <Grid item lg={4}>
               <input
-                accept="image/*"
+                accept="image/png, image/jpeg"
                 id="artist-form-image"
                 multiple
                 type="file"
@@ -148,15 +134,15 @@ export default function ArtistForm({ open, setOpen }: Props) {
           </Grid>
         </DialogContent>
         <DialogActions>
+          <Button disabled={loading} onClick={onCancel}>
+            Cancel
+          </Button>
           <ProgressButton
             loading={loading}
             disabled={artist.name == ""}
             onClick={postArtist}
             text="Create"
           />
-          <Button disabled={loading} onClick={onCancel}>
-            Cancel
-          </Button>
         </DialogActions>
       </Dialog>
       <Snack

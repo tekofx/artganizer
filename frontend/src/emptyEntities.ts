@@ -36,6 +36,8 @@ const emptySubmission: Submission = {
   width: 0,
   size: 0,
   filename: "",
+  original_image: "",
+  thumbnail: "",
 };
 
 const defaultSettings: Settings = {
@@ -43,7 +45,6 @@ const defaultSettings: Settings = {
     title: true,
     tags: false,
     rating: false,
-    characters: false,
     artist: false,
     dimensions: true,
     date: false,
@@ -61,9 +62,9 @@ const emptyFilters: Filters = {
 };
 
 export {
-  emptyArtist,
-  emptySubmission,
   defaultSettings,
+  emptyArtist,
   emptyCharacter,
   emptyFilters,
+  emptySubmission,
 };

@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Submission } from "./Submission";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Social } from "./Social";
+import { Submission } from "./Submission";
 
 @Entity()
 export class Artist {
@@ -17,9 +17,10 @@ export class Artist {
   socials: Social[];
 
   @OneToMany(() => Submission, (submission) => submission.artist, {
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
   })
   submissions: Submission[];
 
+  @Column({ default: "" })
   image: string;
 }

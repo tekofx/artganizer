@@ -1,91 +1,80 @@
-import { useState, useEffect, useContext } from "react";
-import { Typography, Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Artist, Character } from "../../interfaces";
 import Submission from "../../interfaces/Submission";
-import { DataContext } from "../../pages/_app";
-import Artist from "../../interfaces/Artist";
-import Character from "../../interfaces/Character";
-import Image from "./Image";
+import { useAppContext } from "../../pages/_app";
 import { filterSubmissionsByColor } from "../../src/colorManagement";
-interface GalleryProps {
-  artist?: Artist;
-  character?: Character;
-}
+import Image from "./Image";
 
-export default function Gallery({ artist, character }: GalleryProps) {
-  const { data } = useContext(DataContext);
-  const [submissions, setSubmissions] = useState<Submission[]>(
-    data.submissions
+export default function Gallery({
+  character,
+  artist,
+}: {
+  character?: Character;
+  artist?: Artist;
+}) {
+  const { submissions, filters } = useAppContext();
+
+  const [gallerySubmissions, setGallerySubmissions] = useState<Submission[]>(
+    []
   );
 
   useEffect(() => {
-    let temp = data.submissions;
-    if (artist != undefined) {
-      temp = temp.filter((submission) => submission.artist?.id == artist?.id);
-    }
+    console.log(filters);
+    var temp = submissions;
 
-    if (character != undefined) {
-      temp = temp.filter((submission) =>
-        submission.characters.some((c) => c.id === character.id)
+    if (character) {
+      temp = temp.filter((submission: Submission) =>
+        submission.characters?.some((char) => char.id === character.id)
       );
+      console.log(temp);
     }
 
-    if (data.filters.rating > -1) {
+    if (artist) {
       temp = temp.filter(
-        (submission) => submission.rating >= data.filters.rating
+        (submission: Submission) => submission.artist?.id === artist.id
       );
     }
 
-    if (data.filters.tags.length > 0) {
+    if (filters.title) {
+      temp = temp.filter((submission: Submission) =>
+        submission.title.toLowerCase().includes(filters.title.toLowerCase())
+      );
+    }
+
+    if (filters.rating != -1) {
+      temp = temp.filter(
+        (submission: Submission) => submission.rating >= filters.rating
+      );
+    }
+    if (filters.tags.length > 0) {
       // Get all submissions that have at least one of the tags
-      temp = temp.filter((submission) =>
+      temp = temp.filter((submission: Submission) =>
         submission.tags?.some((tag) =>
-          data.filters.tags.some((filterTag) => filterTag.id === tag.id)
+          filters.tags.some((filterTag) => filterTag.id === tag.id)
         )
       );
     }
-
-    if (data.filters.title.length > 0) {
-      temp = temp.filter((submission) =>
-        submission.title
-          .toLowerCase()
-          .includes(data.filters.title.toLowerCase())
-      );
-    }
-
-    if (data.filters.color != "") {
-      temp = filterSubmissionsByColor(temp, data.filters.color, 80);
-    }
-
-    if (data.filters.artist != undefined) {
-      temp = temp.filter(
-        (submission) => submission.artist?.id == data.filters.artist?.id
-      );
-    }
-
-    if (data.filters.characters.length > 0) {
+    if (filters.characters.length > 0) {
       // Get all submissions that have at least one of the characters
-      temp = temp.filter((submission) =>
-        submission.characters?.some((char) =>
-          data.filters.characters.some(
-            (filterChar) => filterChar.id === char.id
+      temp = temp.filter((submission: Submission) =>
+        submission.characters?.some((character) =>
+          filters.characters.some(
+            (filterCharacter) => filterCharacter.id === character.id
           )
         )
       );
     }
-
-    if (temp !== submissions) {
-      setSubmissions(temp);
+    if (filters.color != "") {
+      temp = filterSubmissionsByColor(temp, filters.color, 80);
     }
-  }, [
-    data.filters.rating,
-    data.filters.tags,
-    data.filters.title,
-    data.filters.artist,
-    data.filters.characters,
-    data.filters.color,
-    artist,
-    character,
-  ]);
+    if (filters.artist != undefined) {
+      temp = temp.filter(
+        (submission: Submission) => submission.artist?.id == filters.artist?.id
+      );
+    }
+    setGallerySubmissions(temp);
+  }, [filters, submissions, character, artist]);
 
   return (
     <Paper
@@ -97,12 +86,12 @@ export default function Gallery({ artist, character }: GalleryProps) {
         flexDirection: "column",
       }}
     >
-      {submissions.length == 0 && (
+      {gallerySubmissions.length == 0 && (
         <Typography variant="h1">No submissions yet</Typography>
       )}
       <div style={{ columnCount: 3 }}>
-        {submissions.map((image) => (
-          <Image image={image} key={image.id} />
+        {gallerySubmissions.map((submission) => (
+          <Image submission={submission} key={submission.id} />
         ))}
       </div>
     </Paper>

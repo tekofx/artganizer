@@ -1,10 +1,10 @@
-import { Rating, Button, Menu, MenuItem, Badge } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState, MouseEvent, useContext, useEffect } from "react";
-import { DataContext } from "../../../../pages/_app";
 import GradeIcon from "@mui/icons-material/Grade";
+import { Badge, Button, Menu, MenuItem, Rating } from "@mui/material";
+import { MouseEvent, useEffect, useState } from "react";
+import { useAppContext } from "../../../../pages/_app";
 export default function RatingFilter() {
-  const { data, setData } = useContext(DataContext);
+  const { filters, setFilters } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [invisible, setInvisible] = useState<boolean>(true);
 
@@ -16,12 +16,12 @@ export default function RatingFilter() {
     setAnchorEl(null);
   };
   useEffect(() => {
-    if (data.filters.rating == -1) {
+    if (filters.rating == -1) {
       setInvisible(true);
     } else {
       setInvisible(false);
     }
-  }, [data.filters.rating]);
+  }, [filters.rating]);
   return (
     <div>
       <Button
@@ -51,15 +51,9 @@ export default function RatingFilter() {
         <MenuItem onClick={handleClose}>
           <Rating
             name="simple-controlled"
-            value={data.filters.rating}
+            value={filters.rating}
             onChange={(event, newValue) => {
-              setData((prevData) => ({
-                ...prevData,
-                filters: {
-                  ...prevData.filters,
-                  rating: newValue || -1,
-                },
-              }));
+              setFilters({ ...filters, rating: newValue || -1 });
             }}
           />
         </MenuItem>

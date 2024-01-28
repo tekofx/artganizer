@@ -1,31 +1,58 @@
-import { useRouter } from "next/router";
-import { useEffect, useState, useContext } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
 import {
-  Grid,
-  Paper,
-  Typography,
   Button,
   Dialog,
   DialogActions,
   DialogTitle,
+  Grid,
+  Paper,
   Stack,
+  Typography,
 } from "@mui/material";
-import { DataContext } from "../_app";
-import Artist from "../../interfaces/Artist";
-import Gallery from "../../components/Gallery";
-import ArtistInfo from "../../components/Artist/ArtistInfo";
-import ArtistEdit from "../../components/Artist/ArtistEdit";
-import ClearIcon from "@mui/icons-material/Clear";
-import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import { emptyArtist } from "../../src/emptyEntities";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-export default function Page() {
-  const [artist, setArtist] = useState<Artist>(emptyArtist);
+import { useRouter } from "next/router";
+import { useState } from "react";
+import ArtistEdit from "../../components/Artist/ArtistEdit";
+import ArtistInfo from "../../components/Artist/ArtistInfo";
+import Gallery from "../../components/Gallery";
+import Artist from "../../interfaces/Artist";
+import { useAppContext } from "../_app";
+
+interface PageProps {
+  artist: Artist;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const slug = context.params?.slug;
+  if (slug) {
+    var id = parseInt(slug.toString());
+    const res = await axios
+      .get(process.env.API_URL + "/artists/" + id)
+      .catch(() => {
+        return undefined;
+      });
+    if (res == undefined) return { notFound: true };
+
+    var artist: Artist = res.data;
+
+    return { props: { artist } };
+  }
+
+  return { notFound: true };
+};
+
+const Page: NextPage<PageProps> = ({ artist }) => {
+  const { removeArtist } = useAppContext();
+  const [pageArtist, setPageArtist] = useState<Artist>(artist);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { data, setData } = useContext(DataContext);
   const router = useRouter();
+
   const toggleEdit = () => {
     setEditShow(!editShow);
   };
@@ -36,39 +63,11 @@ export default function Page() {
     setDialogOpen(false);
   };
 
-  async function removeArtist() {
-    await axios
-      .delete(process.env.API_URL + `/artists/${artist?.id}`)
-      .then(() => {
-        // Remove artist from data
-        const newData = { ...data };
-        newData.artists = newData.artists.filter(
-          (art: Artist) => art.id != artist?.id
-        );
-        setData(newData);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        handleCloseDialog();
-        router.push("/");
-      });
+  async function onYesClick() {
+    await removeArtist(artist);
+    handleCloseDialog();
+    router.push("/");
   }
-
-  useEffect(() => {
-    const slug = router.query.slug;
-    if (slug) {
-      var id = parseInt(slug.toString());
-
-      // Get artist from data
-      data.artists.filter((artist: Artist) => {
-        if (artist.id == id) {
-          setArtist(artist);
-        }
-      });
-    }
-  }, [router.query.slug]);
 
   return (
     <>
@@ -80,15 +79,15 @@ export default function Page() {
           <Grid item lg={12}>
             {!editShow ? (
               <ArtistInfo
-                artist={artist}
+                artist={pageArtist}
                 toggleEdit={toggleEdit}
                 handleClickOpenDialog={handleClickOpenDialog}
               />
             ) : (
               <ArtistEdit
-                artist={artist}
+                artist={pageArtist}
                 toggleEdit={toggleEdit}
-                setArtist={setArtist}
+                setArtist={setPageArtist}
               />
             )}
           </Grid>
@@ -108,7 +107,7 @@ export default function Page() {
                 variant="contained"
                 size="small"
                 startIcon={<DoneIcon />}
-                onClick={removeArtist}
+                onClick={onYesClick}
               >
                 Yes
               </Button>
@@ -126,4 +125,5 @@ export default function Page() {
       </Paper>
     </>
   );
-}
+};
+export default Page;

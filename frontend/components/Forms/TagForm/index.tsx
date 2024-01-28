@@ -1,24 +1,23 @@
 import {
-  Stack,
-  TextField,
-  Grid,
-  Typography,
   Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
+import { useState } from "react";
+import { ColorResult, TwitterPicker } from "react-color";
+import AlertMessage from "../../../interfaces/AlertMessage";
+import Tag from "../../../interfaces/Tag";
+import { useAppContext } from "../../../pages/_app";
+import Snack from "../../Snack";
 import TagChip from "../../Tag/TagChip";
 import TagLabel from "../../Tag/TagLabel";
-import Tag from "../../../interfaces/Tag";
-import { useState, useContext } from "react";
-import axios from "axios";
-import { TwitterPicker, ColorResult } from "react-color";
-import { DataContext } from "../../../pages/_app";
-import AlertMessage from "../../../interfaces/AlertMessage";
 import ProgressButton from "../ProgressButon";
-import Snack from "../../Snack";
 const defaultTag: Tag = {
   name: "",
   color: "#FFFFFF",
@@ -41,7 +40,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     severity: "success",
   });
 
-  const { data, setData } = useContext(DataContext);
+  const { createTag, editTag } = useAppContext();
 
   const handleChangeComplete = (color: ColorResult) => {
     setTag((prevTag) => ({
@@ -59,56 +58,35 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     setLoading(true);
     // Create tag
     if (tagToUpdate == undefined) {
-      await axios
-        .post(process.env.API_URL + `/tags`, tag)
-        .then((response) => {
-          const newData = { ...data };
-          newData.tags.push(response.data);
-          setData(newData);
-          setAlertMessage?.({
-            message: "Tag created",
-            severity: "success",
-          });
-        })
-        .catch((error) => {
-          setAlertMessage?.({
-            message: "Error creating tag",
-            severity: "error",
-          });
-
-          console.log(error);
-        })
-        .finally(() => {
-          setOpenSnack?.(true);
-          setOpen(false);
+      var result = await createTag(tag);
+      if (result) {
+        setAlertMessage?.({
+          message: "Tag created",
+          severity: "success",
         });
+      } else {
+        setAlertMessage?.({
+          message: "Error creating tag",
+          severity: "error",
+        });
+      }
     } else {
       // Edit tag
-      await axios
-        .put(process.env.API_URL + `/tags/${tag.id}`, tag)
-        .then((response) => {
-          const newData = { ...data };
-          const index = newData.tags.findIndex((t) => t.id == tag.id);
-          newData.tags[index] = response.data;
-          setData(newData);
-          setAlertMessage?.({
-            message: "Tag updated",
-            severity: "success",
-          });
-        })
-        .catch((error) => {
-          setAlertMessage?.({
-            message: "Error updating tag",
-            severity: "error",
-          });
-
-          console.log(error);
-        })
-        .finally(() => {
-          setOpenSnack?.(true);
-          setOpen(false);
+      var result = await editTag(tag);
+      if (result) {
+        setAlertMessage?.({
+          message: "Tag updated",
+          severity: "success",
         });
+      } else {
+        setAlertMessage?.({
+          message: "Error updating tag",
+          severity: "error",
+        });
+      }
     }
+    setOpenSnack?.(true);
+    setOpen(false);
     setLoading(false);
     setTag(defaultTag);
   }
@@ -160,16 +138,15 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
           </Grid>
         </DialogContent>
         <DialogActions>
+          <Button disabled={loading} onClick={onCancel}>
+            Close
+          </Button>
           <ProgressButton
             loading={loading}
             disabled={tag.name == ""}
             onClick={postTag}
             text={tagToUpdate == undefined ? "Create" : "Update"}
           />
-
-          <Button disabled={loading} onClick={onCancel}>
-            Close
-          </Button>
         </DialogActions>
       </Dialog>
       <Snack

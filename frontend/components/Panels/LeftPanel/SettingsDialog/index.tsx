@@ -1,3 +1,4 @@
+import ClearIcon from "@mui/icons-material/Clear";
 import {
   Box,
   Button,
@@ -13,11 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
-import ClearIcon from "@mui/icons-material/Clear";
-import axios from "axios";
-import { useState, useContext } from "react";
-import Settings from "../../../../interfaces/Settings";
-import { DataContext } from "../../../../pages/_app";
+import { useAppContext } from "../../../../pages/_app";
 import GallerySettings from "./Settings/GallerySettings";
 interface SettingsDialogProps {
   open: boolean;
@@ -25,42 +22,17 @@ interface SettingsDialogProps {
 }
 export default function SettingsDialog(props: SettingsDialogProps) {
   const [value, setValue] = React.useState(0);
-
-  const { data, setData } = useContext(DataContext);
-  const [settings, setSettings] = useState<Settings>(data.settings);
+  const { settings, setSettings, editSettings, resetSettings } =
+    useAppContext();
 
   async function updateSettings() {
-    await axios
-      .put(process.env.API_URL + "/settings", settings)
-      .then(() => {
-        setData({
-          ...data,
-          settings: settings,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        props.setOpen(false);
-      });
+    await editSettings(settings);
+    props.setOpen(false);
   }
 
-  async function resetSettings() {
-    await axios
-      .delete(process.env.API_URL + "/settings")
-      .then((res) => {
-        setData({
-          ...data,
-          settings: res.data,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        props.setOpen(false);
-      });
+  async function onResetClick() {
+    await resetSettings();
+    props.setOpen(false);
   }
   interface TabPanelProps {
     children?: React.ReactNode;
@@ -91,7 +63,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     setValue(newValue);
   };
   return (
-    <Dialog open={props.open} fullWidth>
+    <Dialog open={props.open} maxWidth={"xl"}>
       <DialogTitle>
         <Stack
           direction="row"
@@ -105,7 +77,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
           </IconButton>
         </Stack>
       </DialogTitle>
-      <DialogContent sx={{ height: "50vh" }}>
+      <DialogContent sx={{ height: "80vh" }}>
         <Grid container>
           <Grid item xs={2}>
             <Tabs
@@ -137,7 +109,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         <Button onClick={updateSettings} variant="contained" color="primary">
           Save
         </Button>
-        <Button onClick={resetSettings} variant="outlined" color="primary">
+        <Button onClick={onResetClick} variant="outlined" color="primary">
           Reset to default
         </Button>
         <Button variant="outlined" onClick={() => props.setOpen(false)}>

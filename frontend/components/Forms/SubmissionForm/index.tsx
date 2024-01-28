@@ -1,34 +1,32 @@
-import { useState, useContext, Dispatch, SetStateAction } from "react";
 import {
   Button,
-  Stack,
-  Grid,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
   IconButton,
+  Stack,
 } from "@mui/material";
-import axios from "axios";
-import { DataContext } from "../../../pages/_app";
-import Tag from "../../../interfaces/Tag";
+import { Dispatch, SetStateAction, useState } from "react";
 import Submission from "../../../interfaces/Submission";
+import Tag from "../../../interfaces/Tag";
 
-import Character from "../../../interfaces/Character";
-import Artist from "../../../interfaces/Artist";
 import AlertMessage from "../../../interfaces/AlertMessage";
-import ProgressButton from "../ProgressButon";
-import BasicInfo from "./BasicInfo";
-import AdvancedInfo from "./AdvancedInfo";
+import Artist from "../../../interfaces/Artist";
+import Character from "../../../interfaces/Character";
+import { useAppContext } from "../../../pages/_app";
 import { emptySubmission } from "../../../src/emptyEntities";
 import Snack from "../../Snack";
+import ProgressButton from "../ProgressButon";
+import AdvancedInfo from "./AdvancedInfo";
+import BasicInfo from "./BasicInfo";
 
 interface Props {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function SubmissionForm({ open, setOpen }: Props) {
-  const { data, setData } = useContext(DataContext);
   const [submission, setSubmission] = useState<Submission>(emptySubmission);
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,6 +44,8 @@ export default function SubmissionForm({ open, setOpen }: Props) {
   );
 
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
+
+  const { createSubmission } = useAppContext();
 
   function resetForm() {
     setSubmission(emptySubmission);
@@ -68,63 +68,38 @@ export default function SubmissionForm({ open, setOpen }: Props) {
     setDisabled(false);
   }
 
-  async function saveSubmission() {
+  async function onOkClick() {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("image", submission.image);
-    formData.append("title", submission.title);
-    formData.append("description", submission.description);
-    formData.append("rating", submission.rating.toString());
-    if (selectedTags != undefined) {
-      selectedTags.forEach((tag) => {
-        formData.append("tags", tag.id.toString());
+    submission.characters = selectedCharacters;
+    submission.tags = selectedTags;
+    submission.artist = selectedArtist;
+    var status = await createSubmission(submission);
+    if (status != undefined) {
+      setAlertMessage({
+        message: "Submission created",
+        severity: "success",
+      });
+      console.log(status);
+    } else {
+      setAlertMessage({
+        message: "Error creating submission",
+        severity: "error",
       });
     }
-    if (selectedArtist != undefined) {
-      formData.append("artist", selectedArtist.id.toString());
-    }
-    if (selectedCharacters != undefined) {
-      selectedCharacters.forEach((character) => {
-        formData.append("characters", character.id.toString());
-      });
-    }
-
-    // Create submission
-    await axios
-      .post(process.env.API_URL + `/submissions`, formData)
-      .then((response) => {
-        var newData = { ...data };
-        newData.submissions.push(response.data);
-        setData(newData);
-        setAlertMessage({
-          message: "Submission created",
-          severity: "success",
-        });
-      })
-      .catch(() => {
-        setAlertMessage({
-          message: "Error creating submission",
-          severity: "error",
-        });
-      })
-      .finally(() => {
-        // Reset form
-        setLoading(false);
-        setOpen(false);
-        setOpenSnack(true);
-        resetForm();
-      });
+    setLoading(false);
+    setOpen(false);
+    setOpenSnack(true);
+    resetForm();
   }
-
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth={"xl"}>
         <DialogTitle>Create Submission</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <input
-                accept="image/*"
+                accept="image/png, image/jpeg"
                 id="submission-form-image"
                 multiple
                 type="file"
@@ -137,12 +112,11 @@ export default function SubmissionForm({ open, setOpen }: Props) {
                 </IconButton>
               </label>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <BasicInfo
                 submission={submission}
                 setSubmission={setSubmission}
               />
-
               <AdvancedInfo
                 selectedTags={selectedTags}
                 setSelectedTags={setSelectedTags}
@@ -156,16 +130,15 @@ export default function SubmissionForm({ open, setOpen }: Props) {
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={2}>
-            <ProgressButton
-              loading={loading}
-              disabled={disabled}
-              onClick={saveSubmission}
-              text="Ok"
-            />
-
             <Button disabled={loading} onClick={onCancel}>
               Cancel
             </Button>
+            <ProgressButton
+              loading={loading}
+              disabled={disabled}
+              onClick={onOkClick}
+              text="Ok"
+            />
           </Stack>
         </DialogActions>
       </Dialog>

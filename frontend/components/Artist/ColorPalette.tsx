@@ -1,4 +1,4 @@
-import { Grid, Typography, Tooltip, Grow } from "@mui/material";
+import { Grid, Grow, Tooltip, Typography } from "@mui/material";
 
 interface ColorPaletteProps {
   colors?: string[];

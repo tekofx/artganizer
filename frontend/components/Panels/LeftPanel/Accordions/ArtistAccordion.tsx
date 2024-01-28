@@ -1,35 +1,37 @@
+import AddIcon from "@mui/icons-material/Add";
+import BrushIcon from "@mui/icons-material/Brush";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Grid,
+  IconButton,
   Stack,
   Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  IconButton,
-  Grid,
 } from "@mui/material";
-import BrushIcon from "@mui/icons-material/Brush";
-import AddIcon from "@mui/icons-material/Add";
 
-import { useState, useContext, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { DataContext } from "../../../../pages/_app";
-import SearchBar from "../../../SearchBar";
 import SearchIcon from "@mui/icons-material/Search";
+import { useEffect, useState } from "react";
 import { ArtistForm } from "../../../Forms";
+import SearchBar from "../../../SearchBar";
 
+import { Artist } from "../../../../interfaces";
+import { useAppContext } from "../../../../pages/_app";
 import ArtistList from "../../../Artist/ArtistList";
+
 export default function ArtistAccordion() {
-  const { data } = useContext(DataContext);
-  const [artists, setArtists] = useState(data.artists);
+  const { artists } = useAppContext();
+  const [artistsList, setArtistsList] = useState<Artist[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    var temp = data.artists.filter((artist) =>
+    var temp = artists.filter((artist) =>
       artist.name.toLowerCase().includes(event.target.value.toLowerCase())
     );
-    setArtists(temp);
+    setArtistsList(temp);
   }
   function onSearchIconClick() {
     if (!expanded) setExpanded(!expanded);
@@ -38,13 +40,13 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setArtists(data.artists);
+      setArtistsList(artists);
     }
   }
 
   useEffect(() => {
-    setArtists(data.artists);
-  }, [data.artists]);
+    console.log(artists);
+  }, [artists]);
 
   return (
     <Accordion expanded={expanded}>
@@ -86,7 +88,10 @@ export default function ArtistAccordion() {
             show={showSearchBar}
             focus={showSearchBar}
           />
-          <ArtistList artists={artists} clickable />
+          <ArtistList
+            artists={artistsList.length == 0 ? artists : artistsList}
+            clickable
+          />
         </Stack>
       </AccordionDetails>
       <ArtistForm open={open} setOpen={setOpen} />

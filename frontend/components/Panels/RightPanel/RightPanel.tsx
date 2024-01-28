@@ -1,20 +1,19 @@
-import {
-  Typography,
-  Stack,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-} from "@mui/material";
-import Submission from "../../../interfaces/Submission";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { DataContext } from "../../../pages/_app";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
-import Info from "./Info";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useState } from "react";
+import Submission from "../../../interfaces/Submission";
+import { useAppContext } from "../../../pages/_app";
 import Edit from "./Edit";
+import Info from "./Info";
 
 interface RightPanelProps {
   submission: Submission;
@@ -22,22 +21,13 @@ interface RightPanelProps {
 }
 
 export default function RightPanel(props: RightPanelProps) {
+  const { removeSubmission } = useAppContext();
   const router = useRouter();
-  const { data, setData } = useContext(DataContext);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editShow, setEditShow] = useState(false);
 
-  async function removeSubmission() {
-    var submission = props.submission;
-    await axios.delete(process.env.API_URL + `/submissions/${submission.id}`);
-
-    // Remove submission from data
-    const newData = { ...data };
-    newData.submissions = newData.submissions.filter(
-      (sub: Submission) => sub.id != submission.id
-    );
-    setData(newData);
-
+  async function onYesClick() {
+    await removeSubmission(props.submission);
     router.push("/");
   }
   const handleClickOpenDialog = () => {
@@ -53,7 +43,7 @@ export default function RightPanel(props: RightPanelProps) {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "100%",
       }}
     >
       {!editShow ? (
@@ -86,7 +76,7 @@ export default function RightPanel(props: RightPanelProps) {
               variant="contained"
               size="small"
               startIcon={<DoneIcon />}
-              onClick={removeSubmission}
+              onClick={onYesClick}
             >
               Yes
             </Button>

@@ -1,6 +1,6 @@
-import Tag from "./Tag";
-import Character from "./Character";
 import Artist from "./Artist";
+import Character from "./Character";
+import Tag from "./Tag";
 export default interface Submission {
   id: number;
   title: string;
@@ -13,8 +13,10 @@ export default interface Submission {
   tags: Tag[];
   characters: Character[];
   format: string;
-  image: string;
   filename: string;
+  original_image: string;
+  thumbnail: string;
+  image: string;
   colors: string[];
   size: number;
 }

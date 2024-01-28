@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- Error that removes submissions when artist is removed
+- Layout in submission view
+- Changed Autocomplete for Tags Filter
+
+### Added
+
+- Change components to select Artist, Character and Tags
+- Using Tab when selecting Artist, Characters or Tags, creates them.
+- Page 404 when path does not exists
+
+### Improved
+
+- Submission form wider
+- Changed order of Ok and Cancel buttons in forms
+- Limited type of file to upload when uploading image
+
 ## [0.6.2] - 2023-09-18
 
 ### Fixed
