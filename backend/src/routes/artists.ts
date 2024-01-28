@@ -1,11 +1,10 @@
 import express, { Request, Response } from "express";
-import "reflect-metadata";
-import multer, { FileFilterCallback } from "multer";
 import * as fs from "fs";
+import multer, { FileFilterCallback } from "multer";
 import * as path from "path";
+import "reflect-metadata";
 import sharp from "sharp";
-import { ArtistRepo, SubmissionRepo, SocialRepo } from "../typeorm.config";
-import { Artist, Social } from "../entities";
+import { ArtistRepo, SocialRepo, SubmissionRepo } from "../typeorm.config";
 
 const artistsPicsDir = path.join(__dirname, "../../data/uploads/artistPics");
 if (!fs.existsSync(artistsPicsDir)) {
@@ -107,6 +106,8 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
+      artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
+      await ArtistRepo.save(artist);
     }
 
     if (socials) {
@@ -126,7 +127,6 @@ router.post(
       await ArtistRepo.save(artist);
     }
 
-    artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
     res.send(artist);
   }
 );
@@ -149,7 +149,6 @@ router.get("/:artistId", async (req: Request, res: Response) => {
     res.status(404).send("artist not found");
     return;
   }
-  artist.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
 
   res.send(artist);
 });
@@ -270,13 +269,13 @@ router.put(
         .catch((error) => {
           console.log(error);
         });
+      artist.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
     }
     var { name, description } = req.body;
     artist.name = name;
     artist.description = description;
 
     var result = await ArtistRepo.save(artist);
-    result.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
 
     res.send(result);
   }

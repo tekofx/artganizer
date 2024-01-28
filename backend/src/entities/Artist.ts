@@ -21,5 +21,6 @@ export class Artist {
   })
   submissions: Submission[];
 
+  @Column({ default: "" })
   image: string;
 }

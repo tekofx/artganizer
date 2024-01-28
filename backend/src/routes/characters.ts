@@ -52,10 +52,6 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   const characters = await CharacterRepo.find();
-  for (const character of characters) {
-    character.image =
-      process.env.URL + "/characters/uploads/" + character.id + ".jpg";
-  }
   res.send(characters);
 });
 
@@ -74,8 +70,7 @@ router.get("/:characterId", async (req: Request, res: Response) => {
     res.status(404).send("Character not found");
     return;
   }
-  character.image =
-    process.env.URL + "/characters/uploads/" + character.id + ".jpg";
+
   res.send(character);
 });
 router.use("/uploads", express.static(charactersDir));
@@ -109,9 +104,10 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
+      character.image = process.env.URL + "/characters/" + id;
+      await CharacterRepo.save(character);
     }
 
-    character.image = process.env.URL + "/characters/" + id;
     res.send(character);
   }
 );
@@ -187,6 +183,8 @@ router.put(
         .catch((error) => {
           console.log(error);
         });
+      character.image =
+        process.env.URL + "/characters/uploads/" + characterId + ".jpg";
     }
 
     var { name, description } = req.body;
@@ -196,8 +194,7 @@ router.put(
     var result;
     try {
       result = await CharacterRepo.save(character);
-      result.image =
-        process.env.URL + "/characters/uploads/" + characterId + ".jpg";
+
       res.send(result);
     } catch (error) {
       console.log(error);
