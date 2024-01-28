@@ -1,4 +1,4 @@
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import {
@@ -7,11 +7,11 @@ import {
   Grid,
   Stack,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Artist from "../../../interfaces/Artist";
-import { useAppContext } from '../../../pages/_app';
+import { useAppContext } from "../../../pages/_app";
 import SocialLabel from "../SocialLabel";
 import SocialDialog from "./SocialDialog";
 interface ArtistEditProps {
@@ -30,7 +30,6 @@ export default function ArtistEdit({
   const [socialsDialogOpen, setSocialsDialogOpen] = useState(false);
 
   function onImageUpload(event: any) {
-
     const newArtist = { ...artist };
     newArtist.image = event.target.files[0];
     setArtist(newArtist);
@@ -44,7 +43,6 @@ export default function ArtistEdit({
       setArtist(result);
     }
     toggleEdit();
-
   }
 
   return (
@@ -88,13 +86,17 @@ export default function ArtistEdit({
           />
         </Stack>
       </Grid>
-      <Grid item >
+      <Grid item>
         <Grid container spacing={2} direction="row">
           <Typography>Socials</Typography>
           {/*  <Stack spacing={2} direction="row"> */}
           {artist?.socials?.map((social, index) => (
             <Grid item key={index}>
-              <SocialLabel social={social} artist={artist} setArtist={setArtist} />
+              <SocialLabel
+                social={social}
+                artist={artist}
+                setArtist={setArtist}
+              />
             </Grid>
           ))}
           <Grid item>

@@ -12,15 +12,13 @@ import {
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArtistForm } from "../../../Forms";
 import SearchBar from "../../../SearchBar";
 
 import { Artist } from "../../../../interfaces";
 import { useAppContext } from "../../../../pages/_app";
 import ArtistList from "../../../Artist/ArtistList";
-
-
 
 export default function ArtistAccordion() {
   const { artists } = useAppContext();
@@ -46,6 +44,9 @@ export default function ArtistAccordion() {
     }
   }
 
+  useEffect(() => {
+    console.log(artists);
+  }, [artists]);
 
   return (
     <Accordion expanded={expanded}>
@@ -87,7 +88,10 @@ export default function ArtistAccordion() {
             show={showSearchBar}
             focus={showSearchBar}
           />
-          <ArtistList artists={artistsList.length == 0 ? artists : artistsList} clickable />
+          <ArtistList
+            artists={artistsList.length == 0 ? artists : artistsList}
+            clickable
+          />
         </Stack>
       </AccordionDetails>
       <ArtistForm open={open} setOpen={setOpen} />

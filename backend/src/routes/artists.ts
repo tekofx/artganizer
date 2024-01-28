@@ -58,10 +58,6 @@ router.get("/", async (req: Request, res: Response) => {
     .orderBy("artist.id", "ASC");
 
   const artists = await queryBuilder.getMany();
-  // Add image URL
-  for (const artist of artists) {
-    artist.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
-  }
   res.send(artists);
 });
 
@@ -242,7 +238,6 @@ router.put(
       .where("artist.id = :id", { id: artistId });
 
     const artist = await queryBuilder.getOne();
-    console.log(artist);
 
     if (artist == null) {
       res.status(404).send("artist not found");
