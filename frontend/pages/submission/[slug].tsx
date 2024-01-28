@@ -1,33 +1,38 @@
 import { Grid, Paper } from "@mui/material";
 import axios from "axios";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BottomPanel from "../../components/Panels/BottomPanel";
 import RightPanel from "../../components/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
-import { emptySubmission } from "../../src/emptyEntities";
-export default function Page() {
-  const [submission, setSubmission] = useState<Submission>(emptySubmission);
 
-  const router = useRouter();
+interface PageProps {
+  submission: Submission;
+}
 
-  useEffect(() => {
-    const getSubmission = async (id: number) => {
-      var res = await axios.get(process.env.API_URL + `/submissions/${id}`);
-      setSubmission(res.data);
-    };
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const slug = context.params?.slug;
+  if (slug) {
+    var id = parseInt(slug.toString());
+    const res = await axios
+      .get(process.env.API_URL + "/submissions/" + id)
+      .catch(() => {
+        return undefined;
+      });
+    if (res == undefined) return { notFound: true };
 
-    const slug = router.query.slug;
-    if (slug) {
-      var id = parseInt(slug.toString());
-      // Get submission
-      getSubmission(id);
-      console.log(submission.image);
-    } else {
-      router.push("/404");
-    }
-  }, [router.query.slug]);
+    var submission: Submission = res.data;
+
+    return { props: { submission } };
+  }
+
+  return { notFound: true };
+};
+const Page: NextPage<PageProps> = ({ submission }) => {
+  const [pageSubmission, setPageSubmission] = useState<Submission>(submission);
 
   return (
     <>
@@ -65,10 +70,14 @@ export default function Page() {
             </Grid>
           </Grid>
           <Grid item lg={3}>
-            <RightPanel submission={submission} setSubmission={setSubmission} />
+            <RightPanel
+              submission={pageSubmission}
+              setSubmission={setPageSubmission}
+            />
           </Grid>
         </Grid>
       </Paper>
     </>
   );
-}
+};
+export default Page;

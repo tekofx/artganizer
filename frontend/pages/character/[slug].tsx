@@ -10,18 +10,47 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import axios from "axios";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CharacterEdit from "../../components/Character/CharacterEdit";
 import CharacterInfo from "../../components/Character/CharacterInfo";
 import Gallery from "../../components/Gallery";
 import Character from "../../interfaces/Character";
-import { emptyCharacter, emptyFilters } from "../../src/emptyEntities";
+import { emptyFilters } from "../../src/emptyEntities";
 import { useAppContext } from "../_app";
-export default function Page() {
-  const { characters, removeCharacter } = useAppContext();
-  const [character, setCharacter] = useState<Character>(emptyCharacter);
+
+interface PageProps {
+  character: Character;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const slug = context.params?.slug;
+  if (slug) {
+    var id = parseInt(slug.toString());
+    const res = await axios
+      .get(process.env.API_URL + "/characters/" + id)
+      .catch(() => {
+        return undefined;
+      });
+    if (res == undefined) return { notFound: true };
+
+    var character: Character = res.data;
+
+    return { props: { character } };
+  }
+
+  // Si no hay slug, devuelve notFound: true para mostrar la página 404
+  return { notFound: true };
+};
+
+const Page: NextPage<PageProps> = ({ character }) => {
+  const { removeCharacter } = useAppContext();
+  const [pageCharacter, setPageCharacter] = useState<Character>(character);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
@@ -41,43 +70,30 @@ export default function Page() {
     router.push("/");
   }
 
-  useEffect(() => {
-
-    const slug = router.query.slug;
-    if (slug) {
-      var id = parseInt(slug.toString());
-      // Get character
-      const character = characters.find((character) => character.id === id);
-      if (character) {
-        setCharacter(character);
-      }
-    }
-  }, [router.query.slug]);
-
   return (
     <>
       <Head>
         <title>Artganizer</title>
       </Head>
       <Paper>
-        <Grid container spacing={2} >
+        <Grid container spacing={2}>
           <Grid item lg={12}>
             {!editShow ? (
               <CharacterInfo
-                character={character}
+                character={pageCharacter}
                 toggleEdit={toggleEdit}
                 handleClickOpenDialog={handleClickOpenDialog}
               />
             ) : (
               <CharacterEdit
-                character={character}
+                character={pageCharacter}
                 toggleEdit={toggleEdit}
-                setCharacter={setCharacter}
+                setCharacter={setPageCharacter}
               />
             )}
           </Grid>
           <Grid item lg={12}>
-            <Gallery filters={emptyFilters} character={character} />
+            <Gallery filters={emptyFilters} character={pageCharacter} />
           </Grid>
         </Grid>
         <Dialog open={dialogOpen}>
@@ -110,4 +126,5 @@ export default function Page() {
       </Paper>
     </>
   );
-}
+};
+export default Page;

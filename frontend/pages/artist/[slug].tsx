@@ -32,7 +32,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const slug = context.params?.slug;
   if (slug) {
     var id = parseInt(slug.toString());
-    // Aquí puedes cargar tu artista. Por ejemplo, podrías cargar un artista desde una API:
     const res = await axios
       .get(process.env.API_URL + "/artists/" + id)
       .catch(() => {
@@ -42,11 +41,9 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 
     var artist: Artist = res.data;
 
-    // Devuelve los datos del artista como props
     return { props: { artist } };
   }
 
-  // Si no hay slug, devuelve notFound: true para mostrar la página 404
   return { notFound: true };
 };
 
