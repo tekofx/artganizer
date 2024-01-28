@@ -45,7 +45,6 @@ const defaultSettings: Settings = {
     title: true,
     tags: false,
     rating: false,
-    characters: false,
     artist: false,
     dimensions: true,
     date: false,
