@@ -40,7 +40,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     severity: "success",
   });
 
-  const { createTag, editTag } = useAppContext()
+  const { createTag, editTag } = useAppContext();
 
   const handleChangeComplete = (color: ColorResult) => {
     setTag((prevTag) => ({
@@ -58,7 +58,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     setLoading(true);
     // Create tag
     if (tagToUpdate == undefined) {
-      var result = await createTag(tag)
+      var result = await createTag(tag);
       if (result) {
         setAlertMessage?.({
           message: "Tag created",
@@ -70,10 +70,9 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
           severity: "error",
         });
       }
-
     } else {
       // Edit tag
-      var result = await editTag(tag)
+      var result = await editTag(tag);
       if (result) {
         setAlertMessage?.({
           message: "Tag updated",
@@ -139,16 +138,15 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
           </Grid>
         </DialogContent>
         <DialogActions>
+          <Button disabled={loading} onClick={onCancel}>
+            Close
+          </Button>
           <ProgressButton
             loading={loading}
             disabled={tag.name == ""}
             onClick={postTag}
             text={tagToUpdate == undefined ? "Create" : "Update"}
           />
-
-          <Button disabled={loading} onClick={onCancel}>
-            Close
-          </Button>
         </DialogActions>
       </Dialog>
       <Snack

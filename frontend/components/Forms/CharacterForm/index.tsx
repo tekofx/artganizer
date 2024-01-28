@@ -126,15 +126,15 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
           </Grid>
         </DialogContent>
         <DialogActions>
+          <Button disabled={loading} onClick={onCancel}>
+            Cancel
+          </Button>
           <ProgressButton
             loading={loading}
             disabled={character.name == ""}
             onClick={postCharacter}
             text="Create"
           />
-          <Button disabled={loading} onClick={onCancel}>
-            Cancel
-          </Button>
         </DialogActions>
       </Dialog>
       <Snack

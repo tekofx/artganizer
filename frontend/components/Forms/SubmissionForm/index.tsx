@@ -179,16 +179,15 @@ export default function SubmissionForm({ open, setOpen }: Props) {
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={2}>
+            <Button disabled={loading} onClick={onCancel}>
+              Cancel
+            </Button>
             <ProgressButton
               loading={loading}
               disabled={disabled}
               onClick={onOkClick}
               text="Ok"
             />
-
-            <Button disabled={loading} onClick={onCancel}>
-              Cancel
-            </Button>
           </Stack>
         </DialogActions>
       </Dialog>

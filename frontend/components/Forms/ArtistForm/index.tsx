@@ -134,15 +134,15 @@ export default function ArtistForm({ open, setOpen }: Props) {
           </Grid>
         </DialogContent>
         <DialogActions>
+          <Button disabled={loading} onClick={onCancel}>
+            Cancel
+          </Button>
           <ProgressButton
             loading={loading}
             disabled={artist.name == ""}
             onClick={postArtist}
             text="Create"
           />
-          <Button disabled={loading} onClick={onCancel}>
-            Cancel
-          </Button>
         </DialogActions>
       </Dialog>
       <Snack
