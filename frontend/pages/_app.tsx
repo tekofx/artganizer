@@ -235,6 +235,7 @@ export default function MyApp(props: MyAppProps) {
 
   const getSubmissions = async () =>
     await axios.get(`${process.env.API_URL}/submissions`).then((response) => {
+      console.log(response.data);
       setSubmissions(response.data);
     });
 

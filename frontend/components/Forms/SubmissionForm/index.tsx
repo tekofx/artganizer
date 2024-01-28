@@ -91,59 +91,13 @@ export default function SubmissionForm({ open, setOpen }: Props) {
     setOpenSnack(true);
     resetForm();
   }
-
-  /* async function saveSubmission() {
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("image", submission.image);
-    formData.append("title", submission.title);
-    formData.append("description", submission.description);
-    formData.append("rating", submission.rating.toString());
-    if (selectedTags != undefined) {
-      selectedTags.forEach((tag) => {
-        formData.append("tags", tag.id.toString());
-      });
-    }
-    if (selectedArtist != undefined) {
-      formData.append("artist", selectedArtist.id.toString());
-    }
-    if (selectedCharacters != undefined) {
-      selectedCharacters.forEach((character) => {
-        formData.append("characters", character.id.toString());
-      });
-    }
-
-    // Create submission
-    await axios
-      .post(process.env.API_URL + `/submissions`, formData)
-      .then(() => {
-        setAlertMessage({
-          message: "Submission created",
-          severity: "success",
-        });
-      })
-      .catch(() => {
-        setAlertMessage({
-          message: "Error creating submission",
-          severity: "error",
-        });
-      })
-      .finally(() => {
-        // Reset form
-        setLoading(false);
-        setOpen(false);
-        setOpenSnack(true);
-        resetForm();
-      });
-  } */
-
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth={"xl"}>
         <DialogTitle>Create Submission</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <input
                 accept="image/png, image/jpeg"
                 id="submission-form-image"
@@ -158,12 +112,11 @@ export default function SubmissionForm({ open, setOpen }: Props) {
                 </IconButton>
               </label>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <BasicInfo
                 submission={submission}
                 setSubmission={setSubmission}
               />
-
               <AdvancedInfo
                 selectedTags={selectedTags}
                 setSelectedTags={setSelectedTags}

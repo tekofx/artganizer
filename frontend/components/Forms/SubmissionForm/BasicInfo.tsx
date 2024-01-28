@@ -28,6 +28,7 @@ export default function BasicInfo({ submission, setSubmission }: Props) {
       <Grid item xs={12}>
         <TextField
           label="Description"
+          multiline
           fullWidth
           value={submission.description}
           onChange={(event) => {
