@@ -45,7 +45,6 @@ export default function ArtistForm({ open, setOpen }: Props) {
 
   const { createArtist } = useAppContext();
 
-
   function onImageUpload(event: any) {
     const newArtist = { ...artist };
     newArtist.image = event.target.files[0];
@@ -61,7 +60,6 @@ export default function ArtistForm({ open, setOpen }: Props) {
         message: "Artist created",
         severity: "success",
       });
-
     } else {
       setAlertMessage({
         message: "Error creating artist",
@@ -90,7 +88,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
           <Grid container spacing={2}>
             <Grid item lg={4}>
               <input
-                accept="image/*"
+                accept="image/png, image/jpeg"
                 id="artist-form-image"
                 multiple
                 type="file"

@@ -70,7 +70,12 @@ export default function SubmissionForm({ open, setOpen }: Props) {
 
   async function onOkClick() {
     setLoading(true);
-    var status = await createSubmission(submission, selectedTags, selectedArtist, selectedCharacters);
+    var status = await createSubmission(
+      submission,
+      selectedTags,
+      selectedArtist,
+      selectedCharacters
+    );
     if (status != undefined) {
       setAlertMessage({
         message: "Submission created",
@@ -86,10 +91,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
     setOpen(false);
     setOpenSnack(true);
     resetForm();
-
   }
-
-
 
   /* async function saveSubmission() {
     setLoading(true);
@@ -144,7 +146,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <input
-                accept="image/*"
+                accept="image/png, image/jpeg"
                 id="submission-form-image"
                 multiple
                 type="file"

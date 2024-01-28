@@ -38,7 +38,6 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
     severity: "success",
   });
 
-
   function resetForm() {
     setImage("/placeholder.jpg");
     setCharacter(emptyCharacter);
@@ -56,12 +55,10 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
     var result = await createCharacter(character);
     if (result) {
       setAlertMessage({
-
         message: "Character created",
         severity: "success",
       });
-    }
-    else {
+    } else {
       setAlertMessage({
         message: "Error: Character not created",
         severity: "error",
@@ -87,7 +84,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
           <Grid container spacing={2}>
             <Grid item lg={4}>
               <input
-                accept="image/*"
+                accept="image/png, image/jpeg"
                 id="character-form"
                 multiple
                 type="file"
