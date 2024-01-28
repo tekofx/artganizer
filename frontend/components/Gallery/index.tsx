@@ -90,8 +90,8 @@ export default function Gallery({
         <Typography variant="h1">No submissions yet</Typography>
       )}
       <div style={{ columnCount: 3 }}>
-        {gallerySubmissions.map((image) => (
-          <Image image={image} key={image.id} />
+        {gallerySubmissions.map((submission) => (
+          <Image submission={submission} key={submission.id} />
         ))}
       </div>
     </Paper>

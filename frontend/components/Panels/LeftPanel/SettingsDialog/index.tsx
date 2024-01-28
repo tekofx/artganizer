@@ -63,7 +63,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     setValue(newValue);
   };
   return (
-    <Dialog open={props.open} fullWidth>
+    <Dialog open={props.open} maxWidth={"xl"}>
       <DialogTitle>
         <Stack
           direction="row"
@@ -77,7 +77,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
           </IconButton>
         </Stack>
       </DialogTitle>
-      <DialogContent sx={{ height: "50vh" }}>
+      <DialogContent sx={{ height: "80vh" }}>
         <Grid container>
           <Grid item xs={2}>
             <Tabs

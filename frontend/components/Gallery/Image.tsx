@@ -8,12 +8,12 @@ import { formatDate } from "../../src/formatters";
 import ArtistLabel from "../Artist/ArtistLabel";
 import TagList from "../Tag/TagList";
 interface ImageProps {
-  image: Submission;
+  submission: Submission;
   width?: string;
   predefinedSettings?: Settings;
 }
 
-export default function Image({ image, width }: ImageProps) {
+export default function Image({ submission, width }: ImageProps) {
   const router = useRouter();
   const { settings } = useAppContext();
 
@@ -40,10 +40,10 @@ export default function Image({ image, width }: ImageProps) {
       component={motion.div}
       whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
-      onClick={() => router.push(`/submission/${image.id}`)}
+      onClick={() => router.push(`/submission/${submission.id}`)}
     >
       <img
-        src={image.image}
+        src={submission.image}
         style={{
           width: "100%",
           height: "auto",
@@ -62,40 +62,40 @@ export default function Image({ image, width }: ImageProps) {
       >
         {settings.galleryInfo.title && (
           <Grid item xs={12}>
-            <Typography>{image.title}</Typography>
+            <Typography>{submission.title}</Typography>
           </Grid>
         )}
 
         {settings.galleryInfo.date && (
           <Grid item>
-            <Typography>{formatDate(image.date)}</Typography>
+            <Typography>{formatDate(submission.date)}</Typography>
           </Grid>
         )}
         {settings.galleryInfo.rating && (
           <Grid item>
-            <Rating value={image.rating} readOnly />
+            <Rating value={submission.rating} readOnly />
           </Grid>
         )}
         {settings.galleryInfo.dimensions && (
           <Grid item>
             <Typography>
-              {image.width}x{image.height}
+              {submission.width}x{submission.height}
             </Typography>
           </Grid>
         )}
 
-        {settings.galleryInfo.artist && image.artist != undefined && (
+        {settings.galleryInfo.artist && submission.artist != undefined && (
           <>
             <Grid item xs={12}></Grid>
             <Grid item>
-              <ArtistLabel artist={image.artist} />
+              <ArtistLabel artist={submission.artist} />
             </Grid>
           </>
         )}
 
-        {settings.galleryInfo.tags && image.tags.length > 0 && (
+        {settings.galleryInfo.tags && submission.tags.length > 0 && (
           <Grid item>
-            <TagList tags={image.tags} />
+            <TagList tags={submission.tags} />
           </Grid>
         )}
       </Grid>
