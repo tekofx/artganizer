@@ -29,7 +29,7 @@ export default function Info({
 }: InfoProps) {
   async function downloadImage() {
     await axios
-      .get(submission.image + "?download", { responseType: "blob" })
+      .get(submission.original_image + "?download", { responseType: "blob" })
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");

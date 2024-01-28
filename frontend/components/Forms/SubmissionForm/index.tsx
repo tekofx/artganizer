@@ -81,6 +81,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
         message: "Submission created",
         severity: "success",
       });
+      console.log(status);
     } else {
       setAlertMessage({
         message: "Error creating submission",

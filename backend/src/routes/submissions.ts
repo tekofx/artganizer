@@ -1,18 +1,18 @@
 import express, { Request, Response } from "express";
-import "reflect-metadata";
-import multer, { FileFilterCallback } from "multer";
 import * as fs from "fs";
-import * as path from "path";
-import Vibrant from "node-vibrant";
-import {
-  ArtistRepo,
-  SubmissionRepo,
-  TagRepo,
-  CharacterRepo,
-} from "../typeorm.config";
 import sizeOf from "image-size";
+import multer, { FileFilterCallback } from "multer";
+import Vibrant from "node-vibrant";
+import * as path from "path";
+import "reflect-metadata";
 import sharp from "sharp";
 import { Submission } from "../entities";
+import {
+  ArtistRepo,
+  CharacterRepo,
+  SubmissionRepo,
+  TagRepo,
+} from "../typeorm.config";
 
 const submissionsDir = path.join(__dirname, "../../data/uploads/submissions");
 if (!fs.existsSync(submissionsDir)) {
@@ -34,7 +34,8 @@ const submissionsStorage = multer.diskStorage({
     cb: (error: Error | null, filename: string) => void
   ) {
     // Guardar el archivo con un nombre temporal
-    cb(null, Date.now() + path.extname(file.originalname));
+    //cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   },
 });
 
@@ -99,11 +100,6 @@ router.get("/", async (req: Request, res: Response) => {
 
   const submissions = await queryBuilder.getMany();
 
-  // Add image URL
-  submissions.forEach((submission) => {
-    submission.image = `${process.env.URL}/submissions/uploads/${submission.id}.${submission.format}`;
-  });
-
   res.send(submissions);
 });
 
@@ -156,40 +152,9 @@ router.get("/:submissionId", async (req: Request, res: Response) => {
     res.status(404).send("submission not found");
     return;
   }
-  // Add image URL
-  submission.image = `${process.env.URL}/submissions/uploads/${submission.id}.${submission.format}`;
 
   res.send(submission);
 });
-
-/* router.get("/uploads/:submissionId", async (req: Request, res: Response) => {
-  if (req.params.submissionId == null) {
-    res.status(400).send("submission ID not provided");
-    return;
-  }
-
-  var submissionId: number = parseInt(req.params.submissionId);
-  const submission = await SubmissionRepo.findOne({
-    where: { id: submissionId },
-  });
-
-  if (submission == null) {
-    res.status(404).send("submission not found");
-    return;
-  }
-
-  const filePath = path.join(
-    submissionsDir,
-    submissionId + "." + submission.format
-  );
-
-  if (!fs.existsSync(filePath)) {
-    res.status(404).send("submission file not found");
-    return;
-  }
-
-  return res.sendFile(filePath);
-}); */
 
 router.post(
   "/",
@@ -230,6 +195,9 @@ router.post(
         colors: colorsArray,
         size: image.size,
         filename: image.originalname,
+        image: "",
+        thumbnail: "",
+        original_image: "",
       });
     } catch (error) {
       console.log(error);
@@ -285,15 +253,46 @@ router.post(
         console.log(error);
       });
 
-    // Renombrar el archivo con el ID generado
-    const tempPath = image.path;
-    const newPath = path.join(
-      "data/uploads/submissions",
-      id + path.extname(image.originalname)
-    );
-    await fs.promises.rename(tempPath, newPath);
+    // Crear carpeta con ID submission
+    const submissionDir = "data/uploads/submissions/" + submission.id + "/";
+    const submissionPath = submissionDir + image.originalname;
 
-    submission.image = `${process.env.URL}/submissions/uploads/${id}.${submission.format}`;
+    await fs.promises.mkdir(submissionDir);
+
+    // Mover archivo a carpeta
+    await fs.promises.rename(
+      "data/uploads/submissions/" + image.originalname,
+      submissionDir + image.originalname
+    );
+
+    var thumbnailSize = 300;
+    var imageSize;
+    if (submission.width > 1000 || submission.height > 1000) {
+      imageSize = 1000;
+    } else {
+      imageSize = submission.width;
+    }
+    // Crear copias
+    sharp(submissionPath)
+      .resize(thumbnailSize)
+      .jpeg()
+      .toFile(path.join(submissionDir, "thumbnail.jpg"))
+      .catch((error) => {
+        console.log(error);
+      });
+
+    sharp(submissionPath)
+      .resize(imageSize)
+      .jpeg()
+      .toFile(path.join(submissionDir, "image.jpg"))
+      .catch((error) => {
+        console.log(error);
+      });
+
+    submission.image = `${process.env.URL}/submissions/uploads/${id}/image.jpg`;
+    submission.thumbnail = `${process.env.URL}/submissions/uploads/${id}/thumbnail.jpg`;
+    submission.original_image = `${process.env.URL}/submissions/uploads/${id}/${image.originalname}`;
+    await SubmissionRepo.save(submission);
 
     res.send(submission);
   }
@@ -318,12 +317,11 @@ router.delete("/:submissionId", async (req: Request, res: Response) => {
 
   try {
     // Remove from uploads folder
-    const filePath = path.join(
-      submissionsDir,
-      submissionId + "." + submission.format
-    );
-    fs.unlinkSync(filePath);
-  } catch (error) {}
+    const filePath = path.join(submissionsDir, submissionId.toString());
+    fs.rmSync(filePath, { recursive: true, force: true });
+  } catch (error) {
+    console.log(error);
+  }
 
   // Remove from database
   await SubmissionRepo.remove(submission);

@@ -16,14 +16,14 @@ export default function Page() {
     const getSubmission = async (id: number) => {
       var res = await axios.get(process.env.API_URL + `/submissions/${id}`);
       setSubmission(res.data);
-    }
+    };
 
     const slug = router.query.slug;
     if (slug) {
       var id = parseInt(slug.toString());
       // Get submission
       getSubmission(id);
-
+      console.log(submission.image);
     }
   }, [router.query.slug]);
 

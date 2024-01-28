@@ -15,11 +15,9 @@ export default function BottomPanel({ current }: BottomPanelProps) {
     const getSubmissions = async () => {
       var res = await axios.get(process.env.API_URL + "/submissions");
       setSubmissions(res.data);
-
     };
     getSubmissions();
-  }
-    , []);
+  }, []);
 
   const handleWheel = (e: React.WheelEvent) => {
     if (ref.current) {
@@ -36,7 +34,7 @@ export default function BottomPanel({ current }: BottomPanelProps) {
         {submissions.map((submission) => (
           <img
             key={submission.id}
-            src={submission.image}
+            src={submission.thumbnail}
             height="150px"
             style={{
               border: submission.id == current.id ? "10px solid #555" : "none",
