@@ -26,7 +26,7 @@ export default function BottomPanel({ current }: BottomPanelProps) {
   };
   return (
     <Paper
-      sx={{ overflowX: "auto", maxHeight: "20vh" }}
+      sx={{ overflowX: "auto", maxHeight: "20vh", height: "100%" }}
       onWheel={handleWheel}
       ref={ref}
     >

@@ -54,12 +54,13 @@ const Page: NextPage<PageProps> = ({ submission }) => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    height: "84vh",
+                    height: "80vh",
                   }}
                 >
                   <img
                     src={submission?.image}
                     width="auto"
+                    height="100%"
                     style={{ maxHeight: "100vh", maxWidth: "100%" }}
                   />
                 </Paper>

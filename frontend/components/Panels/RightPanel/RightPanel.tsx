@@ -43,7 +43,7 @@ export default function RightPanel(props: RightPanelProps) {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "100%",
       }}
     >
       {!editShow ? (
