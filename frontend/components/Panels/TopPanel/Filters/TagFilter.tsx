@@ -13,25 +13,23 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
-import { Filters } from "../../../../interfaces";
+import { MouseEvent, useEffect, useState } from "react";
 import Tag from "../../../../interfaces/Tag";
+import { useAppContext } from "../../../../pages/_app";
 import TagChip from "../../../Tag/TagChip";
-export default function TagFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
+export default function TagFilter() {
+  const { filters, setFilters, tags } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [searchedTags, setSearchedTags] = useState<Tag[]>([]);
+  const [searchedTags, setSearchedTags] = useState<Tag[]>(tags);
   const [invisible, setInvisible] = useState<boolean>(true);
 
   useEffect(() => {
-    const getTags = async () => {
-      const res = await axios.get(process.env.API_URL + "/tags");
-      setSearchedTags(res.data);
-      console.log(res.data);
+    if (filters.tags.length == 0) {
+      setInvisible(true);
+    } else {
+      setInvisible(false);
     }
-    getTags();
-  }, []);
-
+  }, [filters]);
   const open = Boolean(anchorEl);
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,14 +54,6 @@ export default function TagFilter({ filters, setFilters }: { filters: Filters, s
       setFilters({ ...filters, tags: [...filters.tags, tag] });
     }
   }
-
-  useEffect(() => {
-    if (filters.tags.length == 0) {
-      setInvisible(true);
-    } else {
-      setInvisible(false);
-    }
-  }, [filters]);
 
   return (
     <div>

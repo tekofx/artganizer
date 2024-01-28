@@ -1,9 +1,10 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GradeIcon from "@mui/icons-material/Grade";
 import { Badge, Button, Menu, MenuItem, Rating } from "@mui/material";
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
-import { Filters } from "../../../../interfaces";
-export default function RatingFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
+import { MouseEvent, useEffect, useState } from "react";
+import { useAppContext } from "../../../../pages/_app";
+export default function RatingFilter() {
+  const { filters, setFilters } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [invisible, setInvisible] = useState<boolean>(true);
 
@@ -20,7 +21,7 @@ export default function RatingFilter({ filters, setFilters }: { filters: Filters
     } else {
       setInvisible(false);
     }
-  }, [filters]);
+  }, [filters.rating]);
   return (
     <div>
       <Button

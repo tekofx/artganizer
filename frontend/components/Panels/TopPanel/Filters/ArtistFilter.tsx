@@ -2,11 +2,12 @@ import BrushIcon from "@mui/icons-material/Brush";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
 import { MouseEvent, useEffect, useState } from "react";
-import { Filters } from "../../../../interfaces";
 import Artist from "../../../../interfaces/Artist";
+import { useAppContext } from "../../../../pages/_app";
 import ArtistAutocomplete from "../../../Artist/ArtistAutocomplete";
 
-export default function ArtistFilter({ filters }: { filters: Filters }) {
+export default function ArtistFilter() {
+  const { filters, setFilters } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [artist, setArtist] = useState<Artist>();
   const [invisible, setInvisible] = useState<boolean>(true);
@@ -20,7 +21,6 @@ export default function ArtistFilter({ filters }: { filters: Filters }) {
     setAnchorEl(null);
   };
 
-
   useEffect(() => {
     if (filters.artist != undefined) {
       setArtist(filters.artist);
@@ -30,6 +30,12 @@ export default function ArtistFilter({ filters }: { filters: Filters }) {
       setInvisible(true);
     }
   }, [filters.artist]);
+
+  useEffect(() => {
+    var newFilter = { ...filters };
+    newFilter.artist = artist;
+    setFilters(newFilter);
+  }, [artist]);
 
   return (
     <div>

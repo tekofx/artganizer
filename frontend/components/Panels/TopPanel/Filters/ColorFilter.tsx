@@ -1,11 +1,12 @@
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Badge, Button, Menu } from "@mui/material";
-import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { ChromePicker } from "react-color";
-import { Filters } from "../../../../interfaces";
+import { useAppContext } from "../../../../pages/_app";
 
-export default function RatingFilter({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
+export default function RatingFilter() {
+  const { filters, setFilters } = useAppContext();
   const [color, setColor] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [invisible, setInvisible] = useState<boolean>(true);
@@ -24,7 +25,11 @@ export default function RatingFilter({ filters, setFilters }: { filters: Filters
     setFilters({ ...filters, color: color.hex });
   };
 
-
+  useEffect(() => {
+    if (filters.color == "") {
+      setInvisible(true);
+    }
+  }, [filters.color]);
 
   return (
     <div>

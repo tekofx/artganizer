@@ -1,7 +1,8 @@
 import ClearIcon from "@mui/icons-material/Clear";
 import { Button } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Filters } from "../../../../interfaces";
+import { useAppContext } from "../../../../pages/_app";
 const emptyFilters: Filters = {
   rating: -1,
   tags: [],
@@ -10,8 +11,9 @@ const emptyFilters: Filters = {
   characters: [],
   color: "",
 };
-export default function ClearFilters({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
+export default function ClearFilters() {
   const [show, setShow] = useState<boolean>(false);
+  const { filters, setFilters } = useAppContext();
 
   function clearFilters() {
     setFilters(emptyFilters);
