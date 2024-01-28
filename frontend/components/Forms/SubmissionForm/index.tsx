@@ -70,12 +70,10 @@ export default function SubmissionForm({ open, setOpen }: Props) {
 
   async function onOkClick() {
     setLoading(true);
-    var status = await createSubmission(
-      submission,
-      selectedTags,
-      selectedArtist,
-      selectedCharacters
-    );
+    submission.characters = selectedCharacters;
+    submission.tags = selectedTags;
+    submission.artist = selectedArtist;
+    var status = await createSubmission(submission);
     if (status != undefined) {
       setAlertMessage({
         message: "Submission created",
