@@ -1,43 +1,18 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import {
-  Badge,
-  Button,
-  Checkbox,
-  Chip,
-  Grid,
-  MenuItem,
-  Paper,
-  Popover,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
 import { MouseEvent, useEffect, useState } from "react";
-import Tag from "../../../../interfaces/Tag";
+import { Tag } from "../../../../interfaces";
 import { useAppContext } from "../../../../pages/_app";
-import TagChip from "../../../Tag/TagChip";
-export default function TagFilter() {
-  const { filters, setFilters, tags } = useAppContext();
+import TagAutocomplete from "../../../Tag/TagAutocomplete";
+
+export default function ArtistFilter() {
+  const { filters, setFilters } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [searchedTags, setSearchedTags] = useState<Tag[]>(tags);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [invisible, setInvisible] = useState<boolean>(true);
 
-  useEffect(() => {
-    if (filters.tags.length == 0) {
-      setInvisible(true);
-    } else {
-      setInvisible(false);
-    }
-  }, [filters]);
   const open = Boolean(anchorEl);
-
-  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    var temp = filters.tags.filter((tag) =>
-      tag.name.toLowerCase().includes(event.target.value.toLowerCase())
-    );
-    setSearchedTags(temp);
-  };
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -46,14 +21,20 @@ export default function TagFilter() {
     setAnchorEl(null);
   };
 
-  function onClick(tag: Tag) {
-    if (filters.tags.includes(tag)) {
-      setFilters({ ...filters, tags: filters.tags.filter((t) => t != tag) });
-      console.log(filters);
+  useEffect(() => {
+    console.log(filters.tags);
+    if (filters.tags.length == 0) {
+      setInvisible(true);
     } else {
-      setFilters({ ...filters, tags: [...filters.tags, tag] });
+      setInvisible(false);
     }
-  }
+  }, [filters.tags]);
+
+  useEffect(() => {
+    var newFilter = { ...filters };
+    newFilter.tags = tags;
+    setFilters(newFilter);
+  }, [tags]);
 
   return (
     <div>
@@ -83,34 +64,8 @@ export default function TagFilter() {
       >
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
-            <Grid item lg={6}>
-              <Typography>Selected Tags</Typography>
-              {filters.tags.map((tag) => (
-                <TagChip key={tag.id} tag={tag} />
-              ))}
-            </Grid>
-            <Grid item lg={6}>
-              <TextField
-                label="Search tags"
-                size="small"
-                onChange={onSearchChange}
-              />
-              {searchedTags.map((tag) => (
-                <MenuItem
-                  key={tag.id}
-                  sx={{ p: 0 }}
-                  onClick={() => onClick(tag)}
-                >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Checkbox
-                      value={tag}
-                      checked={filters.tags.includes(tag)}
-                    />
-                    <Typography>{tag.name}</Typography>
-                    <Chip label={tag.submissionCount} size="small" />
-                  </Stack>
-                </MenuItem>
-              ))}
+            <Grid item lg={12}>
+              <TagAutocomplete selectedTags={tags} setSelectedTags={setTags} />
             </Grid>
           </Grid>
         </Paper>

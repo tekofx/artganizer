@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Error that removes submissions when artist is removed
+- Layout in submission view
+- Changed Autocomplete for Tags Filter
 
 ### Added
 

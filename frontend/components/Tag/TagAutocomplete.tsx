@@ -53,6 +53,7 @@ export default function TagAutocomplete({
   return (
     <Autocomplete
       multiple
+      sx={{ minWidth: "20rem" }}
       options={tags}
       getOptionLabel={(tag) => tag.name}
       value={selectedTags}
