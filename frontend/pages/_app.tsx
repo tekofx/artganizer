@@ -32,6 +32,7 @@ import {
   handleEditCharacter,
   handleRemoveCharacter,
 } from "../src/api/characters";
+import { handleEditSettings, handleResetSettings } from "../src/api/settings";
 import {
   handleCreateSubmission,
   handleEditSubmission,
@@ -42,18 +43,13 @@ import {
   handleEditTag,
   handleRemoveTag,
 } from "../src/api/tags";
-
-import { handleEditSettings, handleResetSettings } from "../src/api/settings";
 import createEmotionCache from "../src/createEmotionCache";
 import { defaultSettings, emptyFilters } from "../src/emptyEntities";
 import theme from "../src/theme";
 import "../styles/styles.css";
+
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
-
-if (process.env.API_URL == undefined) {
-  process.env.API_URL = "http://localhost:3001";
-}
 
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;

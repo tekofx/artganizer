@@ -41,7 +41,9 @@ export async function handleEditSubmission(
 ): Promise<Submission | undefined> {
   // Edit submission
   var status = await axios
-    .put(process.env.API_URL + `/submissions/${submission.id}`, { submission })
+    .put(process.env.API_URL + `/submissions/${submission.id}`, {
+      submission,
+    })
     .then((response) => {
       return response.data;
     })
