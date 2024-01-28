@@ -142,7 +142,7 @@ router.get("/:artistId", async (req: Request, res: Response) => {
   const artist = await queryBuilder.getOne();
 
   if (artist == null) {
-    res.status(404).send("artist not found");
+    res.status(404).send(undefined);
     return;
   }
 

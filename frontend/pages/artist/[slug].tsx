@@ -10,34 +10,53 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import axios from "axios";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ArtistEdit from "../../components/Artist/ArtistEdit";
 import ArtistInfo from "../../components/Artist/ArtistInfo";
 import Gallery from "../../components/Gallery";
 import Artist from "../../interfaces/Artist";
-import { emptyArtist, emptyFilters } from "../../src/emptyEntities";
+import { emptyFilters } from "../../src/emptyEntities";
 import { useAppContext } from "../_app";
-export default function Page() {
-  const { artists, removeArtist } = useAppContext();
-  const [artist, setArtist] = useState<Artist>(emptyArtist);
+
+interface PageProps {
+  artist: Artist;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const slug = context.params?.slug;
+  if (slug) {
+    var id = parseInt(slug.toString());
+    // Aquí puedes cargar tu artista. Por ejemplo, podrías cargar un artista desde una API:
+    const res = await axios
+      .get(process.env.API_URL + "/artists/" + id)
+      .catch(() => {
+        return undefined;
+      });
+    if (res == undefined) return { notFound: true };
+
+    var artist: Artist = res.data;
+
+    // Devuelve los datos del artista como props
+    return { props: { artist } };
+  }
+
+  // Si no hay slug, devuelve notFound: true para mostrar la página 404
+  return { notFound: true };
+};
+
+const Page: NextPage<PageProps> = ({ artist }) => {
+  const { removeArtist } = useAppContext();
+  const [pageArtist, setPageArtist] = useState<Artist>(artist);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const slug = router.query.slug;
-    if (slug) {
-      var id = parseInt(slug.toString());
-      // Get artist
-      const artist = artists.find((artist) => artist.id === id);
-      if (artist) {
-        setArtist(artist);
-      }
-    }
-  }
-    , [router.query.slug]);
   const toggleEdit = () => {
     setEditShow(!editShow);
   };
@@ -64,15 +83,15 @@ export default function Page() {
           <Grid item lg={12}>
             {!editShow ? (
               <ArtistInfo
-                artist={artist}
+                artist={pageArtist}
                 toggleEdit={toggleEdit}
                 handleClickOpenDialog={handleClickOpenDialog}
               />
             ) : (
               <ArtistEdit
-                artist={artist}
+                artist={pageArtist}
                 toggleEdit={toggleEdit}
-                setArtist={setArtist}
+                setArtist={setPageArtist}
               />
             )}
           </Grid>
@@ -110,4 +129,5 @@ export default function Page() {
       </Paper>
     </>
   );
-}
+};
+export default Page;

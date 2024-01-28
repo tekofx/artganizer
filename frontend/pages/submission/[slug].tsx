@@ -24,6 +24,8 @@ export default function Page() {
       // Get submission
       getSubmission(id);
       console.log(submission.image);
+    } else {
+      router.push("/404");
     }
   }, [router.query.slug]);
 
