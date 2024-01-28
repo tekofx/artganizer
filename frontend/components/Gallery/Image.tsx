@@ -1,7 +1,7 @@
 import { Grid, Paper, Rating, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import Settings from "../../interfaces/Settings";
+import { Settings } from "../../interfaces";
 import Submission from "../../interfaces/Submission";
 import { useAppContext } from "../../pages/_app";
 import { formatDate } from "../../src/formatters";

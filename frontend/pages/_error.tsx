@@ -4,7 +4,7 @@ interface Props {
   statusCode?: number;
 }
 
-const Error: NextPage<Props> = ({ statusCode }) => {
+const Error: NextPage<Props> = () => {
   return <NotFound />;
 };
 

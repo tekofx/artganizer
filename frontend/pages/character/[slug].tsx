@@ -19,7 +19,6 @@ import CharacterEdit from "../../components/Character/CharacterEdit";
 import CharacterInfo from "../../components/Character/CharacterInfo";
 import Gallery from "../../components/Gallery";
 import Character from "../../interfaces/Character";
-import { emptyFilters } from "../../src/emptyEntities";
 import { useAppContext } from "../_app";
 
 interface PageProps {
@@ -93,7 +92,7 @@ const Page: NextPage<PageProps> = ({ character }) => {
             )}
           </Grid>
           <Grid item lg={12}>
-            <Gallery filters={emptyFilters} character={pageCharacter} />
+            <Gallery character={pageCharacter} />
           </Grid>
         </Grid>
         <Dialog open={dialogOpen}>

@@ -19,7 +19,6 @@ import ArtistEdit from "../../components/Artist/ArtistEdit";
 import ArtistInfo from "../../components/Artist/ArtistInfo";
 import Gallery from "../../components/Gallery";
 import Artist from "../../interfaces/Artist";
-import { emptyFilters } from "../../src/emptyEntities";
 import { useAppContext } from "../_app";
 
 interface PageProps {
@@ -93,7 +92,7 @@ const Page: NextPage<PageProps> = ({ artist }) => {
             )}
           </Grid>
           <Grid item lg={12}>
-            <Gallery filters={emptyFilters} artist={artist} />
+            <Gallery artist={artist} />
           </Grid>
         </Grid>
         <Dialog open={dialogOpen}>

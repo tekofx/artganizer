@@ -36,6 +36,8 @@ const emptySubmission: Submission = {
   width: 0,
   size: 0,
   filename: "",
+  original_image: "",
+  thumbnail: "",
 };
 
 const defaultSettings: Settings = {
@@ -61,7 +63,9 @@ const emptyFilters: Filters = {
 };
 
 export {
-  defaultSettings, emptyArtist, emptyCharacter,
-  emptyFilters, emptySubmission
+  defaultSettings,
+  emptyArtist,
+  emptyCharacter,
+  emptyFilters,
+  emptySubmission,
 };
-

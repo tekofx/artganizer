@@ -1,7 +1,6 @@
 import { Paper, Stack } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
 
-import { Filters } from "../../../interfaces";
+import { useAppContext } from "../../../pages/_app";
 import SearchBar from "../../SearchBar";
 import {
   ArtistFilter,
@@ -11,12 +10,9 @@ import {
   RatingFilter,
   TagFilter,
 } from "./Filters";
-export default function TopPanel({ filters, setFilters }: { filters: Filters, setFilters: Dispatch<SetStateAction<Filters>> }) {
-
+export default function TopPanel() {
+  const { filters, setFilters } = useAppContext();
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    /* var newData = { ...data };
-    newData.filters.title = event.target.value;
-    setData(newData); */
     event.preventDefault();
     setFilters({ ...filters, title: event.target.value });
     console.log(filters);
@@ -25,12 +21,12 @@ export default function TopPanel({ filters, setFilters }: { filters: Filters, se
     <Paper sx={{ width: "100%", p: 1, position: "sticky", top: 0 }}>
       <Stack direction="row" spacing={1}>
         <SearchBar onChange={onChange} show />
-        <RatingFilter filters={filters} setFilters={setFilters} />
-        <TagFilter filters={filters} setFilters={setFilters} />
-        <ColorFilter filters={filters} setFilters={setFilters} />
-        <ArtistFilter filters={filters} />
-        <CharacterFilter filters={filters} setFilters={setFilters} />
-        <ClearFilters filters={filters} setFilters={setFilters} />
+        <RatingFilter />
+        <TagFilter />
+        <ColorFilter />
+        <ArtistFilter />
+        <CharacterFilter />
+        <ClearFilters />
       </Stack>
     </Paper>
   );

@@ -4,7 +4,7 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import Settings from "../../../../../interfaces/Settings";
+import { Settings } from "../../../../../interfaces";
 
 interface GallerySettingsProps {
   settings: Settings;
