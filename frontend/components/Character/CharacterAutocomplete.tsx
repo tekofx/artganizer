@@ -28,6 +28,9 @@ export default function CharacterAutocomplete({
   }
 
   async function onAddCharacter() {
+    if (inputValue == "") {
+      return;
+    }
     var newCharacter: Character = {
       name: inputValue,
       description: "",
@@ -56,7 +59,22 @@ export default function CharacterAutocomplete({
         setSelectedCharacters(newValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} variant="outlined" label="Characters" />
+        <TextField
+          {...params}
+          variant="outlined"
+          label="Characters"
+          onKeyDown={(event) => {
+            if (event.key === "Tab") {
+              event.preventDefault();
+              const characterExists = characters.some(
+                (character) => character.name === inputValue
+              );
+              if (!characterExists) {
+                onAddCharacter();
+              }
+            }
+          }}
+        />
       )}
       renderOption={(props, character) => {
         const isSelected = selectedCharacters.some(
@@ -84,7 +102,7 @@ export default function CharacterAutocomplete({
       noOptionsText={
         inputValue != "" ? (
           <Button onClick={onAddCharacter}>
-            Create character {inputValue}
+            Tab to Create character {inputValue}
           </Button>
         ) : (
           <Typography>Type a name to create a Character</Typography>

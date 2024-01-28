@@ -28,6 +28,10 @@ export default function ArtistAutocomplete({
   }
 
   async function onAddArtist() {
+    if (inputValue == "") {
+      return;
+    }
+
     var newArtist: Artist = {
       name: inputValue,
       description: "",
@@ -61,7 +65,24 @@ export default function ArtistAutocomplete({
         setSelectedArtist(latestValue);
       }}
       renderInput={(params) => {
-        return <TextField {...params} variant="outlined" label="Artist" />;
+        return (
+          <TextField
+            {...params}
+            variant="outlined"
+            label="Artist"
+            onKeyDown={(event) => {
+              if (event.key === "Tab") {
+                event.preventDefault();
+                const artistExists = artists.some(
+                  (artist) => artist.name === inputValue
+                );
+                if (!artistExists) {
+                  onAddArtist();
+                }
+              }
+            }}
+          />
+        );
       }}
       // Render elements in list
       renderOption={(props, artist) => {
@@ -90,7 +111,9 @@ export default function ArtistAutocomplete({
       }
       noOptionsText={
         inputValue != "" ? (
-          <Button onClick={onAddArtist}>Create artist {inputValue}</Button>
+          <Button onClick={onAddArtist}>
+            Tab to Create artist {inputValue}
+          </Button>
         ) : (
           <Typography>Type a name to create an Artist</Typography>
         )

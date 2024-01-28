@@ -33,6 +33,9 @@ export default function TagAutocomplete({
   }
 
   async function onAddTag() {
+    if (inputValue == "") {
+      return;
+    }
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
     var newTag: Tag = {
       name: inputValue,
@@ -61,7 +64,20 @@ export default function TagAutocomplete({
         setSelectedTags(newValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} variant="outlined" label="Tags" />
+        <TextField
+          {...params}
+          variant="outlined"
+          label="Tags"
+          onKeyDown={(event) => {
+            if (event.key === "Tab") {
+              event.preventDefault();
+              const tagExists = tags.some((tag) => tag.name === inputValue);
+              if (!tagExists) {
+                onAddTag();
+              }
+            }
+          }}
+        />
       )}
       renderOption={(props, tag) => {
         const isSelected = selectedTags.some(
@@ -87,7 +103,7 @@ export default function TagAutocomplete({
       }
       noOptionsText={
         inputValue != "" ? (
-          <Button onClick={onAddTag}>Create tag {inputValue}</Button>
+          <Button onClick={onAddTag}>Tab to Create tag {inputValue}</Button>
         ) : (
           <Typography>Type a name to create a Tag</Typography>
         )
