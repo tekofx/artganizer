@@ -257,37 +257,41 @@ router.post(
     const submissionDir = "data/uploads/submissions/" + submission.id + "/";
     const submissionPath = submissionDir + image.originalname;
 
-    await fs.promises.mkdir(submissionDir);
+    try {
+      await fs.promises.mkdir(submissionDir);
 
-    // Mover archivo a carpeta
-    await fs.promises.rename(
-      "data/uploads/submissions/" + image.originalname,
-      submissionDir + image.originalname
-    );
+      // Mover archivo a carpeta
+      await fs.promises.rename(
+        "data/uploads/submissions/" + image.originalname,
+        submissionDir + image.originalname
+      );
 
-    var thumbnailSize = 300;
-    var imageSize;
-    if (submission.width > 1000 || submission.height > 1000) {
-      imageSize = 1000;
-    } else {
-      imageSize = submission.width;
+      var thumbnailSize = 300;
+      var imageSize;
+      if (submission.width > 1000 || submission.height > 1000) {
+        imageSize = 1000;
+      } else {
+        imageSize = submission.width;
+      }
+      // Crear copias
+      sharp(submissionPath)
+        .resize(thumbnailSize)
+        .jpeg()
+        .toFile(path.join(submissionDir, "thumbnail.jpg"))
+        .catch((error) => {
+          console.log(error);
+        });
+
+      sharp(submissionPath)
+        .resize(imageSize)
+        .jpeg()
+        .toFile(path.join(submissionDir, "image.jpg"))
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      return res.status(400).send("Error when uploading submission");
     }
-    // Crear copias
-    sharp(submissionPath)
-      .resize(thumbnailSize)
-      .jpeg()
-      .toFile(path.join(submissionDir, "thumbnail.jpg"))
-      .catch((error) => {
-        console.log(error);
-      });
-
-    sharp(submissionPath)
-      .resize(imageSize)
-      .jpeg()
-      .toFile(path.join(submissionDir, "image.jpg"))
-      .catch((error) => {
-        console.log(error);
-      });
 
     submission.image = `${process.env.URL}/submissions/uploads/${id}/image.jpg`;
     submission.thumbnail = `${process.env.URL}/submissions/uploads/${id}/thumbnail.jpg`;
