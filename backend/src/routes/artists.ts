@@ -102,7 +102,8 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
-      artist.image = process.env.URL + "/artists/uploads/" + artist.id;
+      artist.image =
+        "http://localhost:3001" + "/artists/uploads/" + artist.id + ".jpg";
       await ArtistRepo.save(artist);
     }
 
@@ -263,7 +264,8 @@ router.put(
         .catch((error) => {
           console.log(error);
         });
-      artist.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
+      artist.image =
+        "http://localhost:3001" + "/artists/uploads/" + artist.id + ".jpg";
     }
     var { name, description } = req.body;
     artist.name = name;

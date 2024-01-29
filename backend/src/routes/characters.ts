@@ -73,7 +73,6 @@ router.get("/:characterId", async (req: Request, res: Response) => {
 
   res.send(character);
 });
-router.use("/uploads", express.static(charactersDir));
 
 router.post(
   "/",
@@ -104,7 +103,7 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
-      character.image = process.env.URL + "/characters/" + id;
+      character.image = "http://localhost:3001" + "/characters/" + id;
       await CharacterRepo.save(character);
     }
 
@@ -112,7 +111,7 @@ router.post(
   }
 );
 
-/* router.get("/uploads/:characterId", async (req: Request, res: Response) => {
+router.get("/uploads/:characterId", async (req: Request, res: Response) => {
   if (req.params.characterId == null) {
     res.status(400).send("Character ID not provided");
     return;
@@ -136,7 +135,7 @@ router.post(
   }
 
   return res.sendFile(filePath);
-}); */
+});
 
 router.put(
   "/:characterId",
@@ -184,7 +183,7 @@ router.put(
           console.log(error);
         });
       character.image =
-        process.env.URL + "/characters/uploads/" + characterId + ".jpg";
+        "http://localhost:3001" + "/characters/uploads/" + characterId;
     }
 
     var { name, description } = req.body;

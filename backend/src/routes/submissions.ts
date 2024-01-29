@@ -295,9 +295,9 @@ router.post(
       return res.status(400).send("Error when uploading submission");
     }
 
-    submission.image = `${process.env.URL}/submissions/uploads/${id}/image.jpg`;
-    submission.thumbnail = `${process.env.URL}/submissions/uploads/${id}/thumbnail.jpg`;
-    submission.original_image = `${process.env.URL}/submissions/uploads/${id}/${image.originalname}`;
+    submission.image = `http://localhost:3001/submissions/uploads/${id}/image.jpg`;
+    submission.thumbnail = `http://localhost:3001/submissions/uploads/${id}/thumbnail.jpg`;
+    submission.original_image = `http://localhost:3001/submissions/uploads/${id}/${image.originalname}`;
     await SubmissionRepo.save(submission);
 
     res.send(submission);
