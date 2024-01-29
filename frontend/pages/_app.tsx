@@ -225,28 +225,28 @@ export default function MyApp(props: MyAppProps) {
   }
 
   const getArtists = async () =>
-    await axios.get(`${process.env.API_URL}/artists`).then((response) => {
+    await axios.get(`http://localhost:3000/api/artists`).then((response) => {
       setArtists(response.data);
     });
 
   const getSubmissions = async () =>
-    await axios.get(`${process.env.API_URL}/submissions`).then((response) => {
+    await axios.get(`http://localhost:3000/api/submissions`).then((response) => {
       console.log(response.data);
       setSubmissions(response.data);
     });
 
   const getCharacters = async () =>
-    await axios.get(`${process.env.API_URL}/characters`).then((response) => {
+    await axios.get(`http://localhost:3000/api/characters`).then((response) => {
       setCharacters(response.data);
     });
 
   const getTags = async () =>
-    await axios.get(`${process.env.API_URL}/tags`).then((response) => {
+    await axios.get(`http://localhost:3000/api/tags`).then((response) => {
       setTags(response.data);
     });
 
   const getSettings = async () =>
-    await axios.get(`${process.env.API_URL}/settings`).then((response) => {
+    await axios.get(`http://localhost:3000/api/settings`).then((response) => {
       setSettings(response.data);
     });
 

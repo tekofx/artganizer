@@ -25,7 +25,7 @@ export async function handleCreateSubmission(
 
   // Create submission
   var status = await axios
-    .post(process.env.API_URL + `/submissions`, formData)
+    .post("http://localhost:3000/api" + `/submissions`, formData)
     .then((response) => {
       return response.data;
     })
@@ -41,7 +41,7 @@ export async function handleEditSubmission(
 ): Promise<Submission | undefined> {
   // Edit submission
   var status = await axios
-    .put(process.env.API_URL + `/submissions/${submission.id}`, {
+    .put("http://localhost:3000/api" + `/submissions/${submission.id}`, {
       submission,
     })
     .then((response) => {
@@ -59,7 +59,7 @@ export async function handleRemoveSubmission(
 ): Promise<boolean | undefined> {
   // Remove submission
   var status = await axios
-    .delete(process.env.API_URL + `/submissions/${submission.id}`)
+    .delete("http://localhost:3000/api" + `/submissions/${submission.id}`)
     .then(() => {
       return true;
     })
