@@ -111,31 +111,7 @@ router.post(
   }
 );
 
-router.get("/uploads/:characterId", async (req: Request, res: Response) => {
-  if (req.params.characterId == null) {
-    res.status(400).send("Character ID not provided");
-    return;
-  }
-
-  var characterId: number = parseInt(req.params.characterId);
-  const Character = await CharacterRepo.findOne({
-    where: { id: characterId },
-  });
-
-  if (Character == null) {
-    res.status(404).send("Character not found");
-    return;
-  }
-
-  const filePath = path.join(charactersDir, characterId + ".jpg");
-
-  if (!fs.existsSync(filePath)) {
-    res.status(404).send("character image not found");
-    return;
-  }
-
-  return res.sendFile(filePath);
-});
+router.use("/uploads", express.static(charactersDir));
 
 router.put(
   "/:characterId",
@@ -183,7 +159,7 @@ router.put(
           console.log(error);
         });
       character.image =
-        "http://localhost:3001" + "/characters/uploads/" + characterId;
+        "http://localhost:3001" + "/characters/uploads/" + characterId + ".jpg";
     }
 
     var { name, description } = req.body;
