@@ -14,14 +14,15 @@ RUN yarn install --network-timeout 500000
 FROM node:16-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY frontend ./frontend
+COPY package.json ./package.json
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn build:frontedn
+RUN yarn build:frontend
 
 # If using npm comment out above and use below instead
 # RUN npm run build
@@ -37,18 +38,28 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/frontend/public ./public
+
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown -R nextjs:nodejs /app
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./frontend
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./fronted/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules /app/node_modules
+RUN npm install -g ts-node concurrently
 COPY backend ./backend
-
+RUN mkdir ./backend/data
+COPY package.json ./package.json
 USER nextjs
 
 EXPOSE 3000
+EXPOSE 3001
 
 ENV PORT 3000
+CMD ["sh", "-c", "node ./server.js & ts-node ./backend/src/index.ts"]
+#CMD ["npm", "start"]
+#CMD [ "sleep", "10000"]
 
-CMD ["bash", "-c", "node ./frontend/server.js && ts-node ./backend/index.ts" ]
