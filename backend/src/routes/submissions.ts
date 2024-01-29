@@ -14,7 +14,7 @@ import {
   TagRepo,
 } from "../typeorm.config";
 
-const submissionsDir = path.join(__dirname, "../../data/uploads/submissions");
+const submissionsDir = "backend/data/uploads/submissions";
 if (!fs.existsSync(submissionsDir)) {
   fs.mkdirSync(submissionsDir, { recursive: true });
 }
@@ -254,7 +254,8 @@ router.post(
       });
 
     // Crear carpeta con ID submission
-    const submissionDir = "data/uploads/submissions/" + submission.id + "/";
+    const submissionDir =
+      "backend/data/uploads/submissions/" + submission.id + "/";
     const submissionPath = submissionDir + image.originalname;
 
     try {
@@ -262,7 +263,7 @@ router.post(
 
       // Mover archivo a carpeta
       await fs.promises.rename(
-        "data/uploads/submissions/" + image.originalname,
+        "backend/data/uploads/submissions/" + image.originalname,
         submissionDir + image.originalname
       );
 
@@ -290,6 +291,7 @@ router.post(
           console.log(error);
         });
     } catch (error) {
+      await SubmissionRepo.remove(submission);
       return res.status(400).send("Error when uploading submission");
     }
 

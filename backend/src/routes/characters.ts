@@ -5,7 +5,7 @@ import * as path from "path";
 import "reflect-metadata";
 import sharp from "sharp";
 import { CharacterRepo } from "../typeorm.config";
-const charactersDir = path.join(__dirname, "../../data/uploads/characters");
+const charactersDir = "backend/data/uploads/characters";
 if (!fs.existsSync(charactersDir)) {
   fs.mkdirSync(charactersDir, { recursive: true });
 }
@@ -216,7 +216,6 @@ router.delete("/:id", async (req: Request, res: Response) => {
     return;
   }
 
-  // Remove from data/uploads folder
   const filePath = path.join(charactersDir, characterId + ".jpg");
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);

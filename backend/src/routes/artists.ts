@@ -6,7 +6,7 @@ import "reflect-metadata";
 import sharp from "sharp";
 import { ArtistRepo, SocialRepo, SubmissionRepo } from "../typeorm.config";
 
-const artistsPicsDir = path.join(__dirname, "../../data/uploads/artistPics");
+const artistsPicsDir = "backend/data/uploads/artists";
 if (!fs.existsSync(artistsPicsDir)) {
   fs.mkdirSync(artistsPicsDir, { recursive: true });
 }
@@ -102,7 +102,7 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
-      artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
+      artist.image = process.env.URL + "/artists/uploads/" + artist.id;
       await ArtistRepo.save(artist);
     }
 
@@ -163,7 +163,6 @@ router.delete("/:artistId", async (req: Request, res: Response) => {
     return;
   }
 
-  // Remove from data/uploads folder
   const filePath = path.join(artistsPicsDir, artistId + ".jpg");
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);

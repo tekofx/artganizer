@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
-import "reflect-metadata";
-import path from "path";
 import fs from "fs";
+import "reflect-metadata";
 
 const router = express.Router();
 const defaultSettings = {
@@ -16,7 +15,8 @@ const defaultSettings = {
     rating: false,
   },
 };
-const settingsFile = path.join(__dirname, "../../data/settings.json");
+
+const settingsFile = "backend/data/settings.json";
 if (!fs.existsSync(settingsFile)) {
   fs.writeFileSync(settingsFile, JSON.stringify(defaultSettings));
 }
