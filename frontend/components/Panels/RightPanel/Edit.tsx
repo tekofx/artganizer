@@ -6,8 +6,7 @@ import {
   Paper,
   Rating,
   Stack,
-  TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Artist from "../../../interfaces/Artist";
@@ -17,6 +16,7 @@ import Tag from "../../../interfaces/Tag";
 import { useAppContext } from "../../../pages/_app";
 import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
 import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
+import LimitedTextField from "../../LimitedTextField";
 import TagAutocomplete from "../../Tag/TagAutocomplete";
 interface InfoProps {
   submission: Submission;
@@ -60,7 +60,8 @@ export default function Edit(props: InfoProps) {
               <Stack spacing={1}>
 
 
-                <TextField
+                <LimitedTextField
+                  maxLength={50}
                   label="Title"
                   value={submission?.title}
                   onChange={(event) => {
@@ -70,7 +71,8 @@ export default function Edit(props: InfoProps) {
                     }));
                   }}
                 />
-                <TextField
+                <LimitedTextField
+                  maxLength={500}
                   label="Description"
                   multiline
                   value={submission?.description}
