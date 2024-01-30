@@ -8,7 +8,7 @@ import { convertBytes } from "../../../../src/formatters";
 import ArtistLabel from "../../../Artist/ArtistLabel";
 import ColorPalette from "../../../Artist/ColorPalette";
 import CharacterList from "../../../Character/CharacterList";
-import TagList from "../../../Tag/TagList";
+import TagList from "../../../Tag/TagChipList";
 interface InfoProps {
   submission: Submission;
   toggleEdit: () => void;
@@ -90,7 +90,7 @@ export default function Info({
           <Paper elevation={0} sx={{ padding: 2 }}>
             <Stack spacing={1}>
               <Typography>Tags</Typography>
-              <TagList tags={submission.tags} />
+              <TagList />
             </Stack>
           </Paper>
         )}

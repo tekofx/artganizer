@@ -6,7 +6,7 @@ import Submission from "../../interfaces/Submission";
 import { useAppContext } from "../../pages/_app";
 import { formatDate } from "../../src/formatters";
 import ArtistLabel from "../Artist/ArtistLabel";
-import TagList from "../Tag/TagList";
+import TagChipList from "../Tag/TagChipList";
 interface ImageProps {
   submission: Submission;
   width?: string;
@@ -95,7 +95,7 @@ export default function Image({ submission, width }: ImageProps) {
 
         {settings.galleryInfo.tags && submission.tags.length > 0 && (
           <Grid item>
-            <TagList tags={submission.tags} />
+            <TagChipList tags={submission.tags} />
           </Grid>
         )}
       </Grid>
