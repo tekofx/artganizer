@@ -7,8 +7,7 @@ import {
   DialogTitle,
   Grid,
   IconButton,
-  Stack,
-  TextField,
+  Stack
 } from "@mui/material";
 import { useState } from "react";
 import { AlertMessage } from "../../../interfaces";
@@ -103,8 +102,10 @@ export default function ArtistForm({ open, setOpen }: Props) {
             </Grid>
             <Grid item lg={8}>
               <Stack spacing={2}>
-                <TextField
+                <LimitedTextField
                   label="Name"
+                  multiline={false}
+                  maxLength={20}
                   value={artist.name}
                   onChange={(event) => {
                     setArtist((prevSubmission) => ({

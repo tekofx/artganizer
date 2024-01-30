@@ -7,8 +7,7 @@ import {
   DialogTitle,
   Grid,
   IconButton,
-  Stack,
-  TextField,
+  Stack
 } from "@mui/material";
 import { useState } from "react";
 import { AlertMessage } from "../../../interfaces";
@@ -99,8 +98,10 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
             </Grid>
             <Grid item lg={8}>
               <Stack spacing={2}>
-                <TextField
+                <LimitedTextField
                   label="Name"
+                  maxLength={20}
+                  multiline={false}
                   value={character.name}
                   onChange={(event) => {
                     setCharacter((prevCharacter) => ({
