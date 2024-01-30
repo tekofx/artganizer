@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Submission: Hovering the mouse over the submission caused the animation to go through the top bar
+- Separation in Artist and Character forms
 
 ## [0.9.1] - 2024-01-24
 
