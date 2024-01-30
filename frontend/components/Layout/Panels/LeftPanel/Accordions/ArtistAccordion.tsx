@@ -36,7 +36,7 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setSearch("");
+      setSearch(undefined);
     }
   }
 
