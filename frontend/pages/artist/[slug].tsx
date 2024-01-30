@@ -29,13 +29,14 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
   const slug = context.params?.slug;
+  const { req } = context;
+  const protocol = req.headers["x-forwarded-proto"] || "http";
+  const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
   if (slug) {
     var id = parseInt(slug.toString());
-    const res = await axios
-      .get("http://localhost:3000/api/artists/" + id)
-      .catch(() => {
-        return undefined;
-      });
+    const res = await axios.get(`${baseUrl}/api/artists/${id}`).catch(() => {
+      return undefined;
+    });
     if (res == undefined) return { notFound: true };
 
     var artist: Artist = res.data;

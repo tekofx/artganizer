@@ -18,7 +18,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const { req } = context;
   const protocol = req.headers["x-forwarded-proto"] || "http";
   const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
-  console.log(baseUrl);
   if (slug) {
     var id = parseInt(slug.toString());
     const res = await axios
