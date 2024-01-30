@@ -12,24 +12,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Character } from "../../../../../interfaces";
-import { useAppContext } from "../../../../../pages/_app";
 import CharacterList from "../../../../Character/CharacterList";
 import CharacterForm from "../../../../Forms/CharacterForm";
 import SearchBar from "../../../../SearchBar";
 export default function CharacterAccordion() {
-  const { characters } = useAppContext();
-  const [charactersList, setCharactersList] = useState<Character[]>([]);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
+  const [search, setSearch] = useState<string | undefined>(undefined);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    var temp = characters.filter((character) =>
-      character.name.toLowerCase().includes(event.target.value.toLowerCase())
-    );
-    setCharactersList(temp);
+    setSearch(event.target.value);
   }
 
   function onSearchIconClick() {
@@ -39,7 +32,7 @@ export default function CharacterAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setCharactersList(characters);
+      setSearch(undefined);
     }
   }
 
@@ -85,7 +78,7 @@ export default function CharacterAccordion() {
             show={showSearchBar}
             focus={showSearchBar}
           />
-          <CharacterList characters={charactersList.length == 0 ? characters : charactersList} clickable />
+          <CharacterList search={search} clickable />
         </Stack>
       </AccordionDetails>
       <CharacterForm open={open} setOpen={setOpen} />

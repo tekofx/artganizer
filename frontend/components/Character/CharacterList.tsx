@@ -1,23 +1,16 @@
 import { Typography } from "@mui/material";
-import Character from "../../interfaces/Character";
+import { useAppContext } from "../../pages/_app";
 import CharacterLabel from "./CharacterLabel";
 interface CharacterListProps {
-  characters: Character[];
+  search?: string;
   clickable?: boolean;
 }
-function sortByName(artists: Character[]): Character[] {
-  return artists.sort(function (a, b) {
-    var textA = a.name.toUpperCase();
-    var textB = b.name.toUpperCase();
 
-    return textA < textB ? -1 : textA > textB ? 1 : 0;
-  });
-}
 export default function CharacterList({
-  characters,
+  search,
   clickable,
 }: CharacterListProps) {
-  characters = sortByName(characters);
+  const { characters } = useAppContext();
   return (
     <div
       style={{
@@ -26,13 +19,17 @@ export default function CharacterList({
       }}
     >
       {characters?.length == 0 && <Typography>No characters</Typography>}
-      {characters?.map((character) => (
-        <CharacterLabel
-          key={character.id}
-          character={character}
-          clickable={clickable}
-        />
-      ))}
+      {characters
+        .filter((artist) =>
+          artist.name.toLowerCase().includes(search === undefined ? "" : search)
+        )
+        .map((character) => (
+          <CharacterLabel
+            key={character.id}
+            character={character}
+            clickable={clickable}
+          />
+        ))}
     </div>
   );
 }
