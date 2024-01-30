@@ -1,6 +1,7 @@
 import { Grid, Rating, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
+import { SubmissionData } from "../../../../common/entitiesData";
 import Submission from "../../../interfaces/Submission";
 import LimitedTextField from "../../LimitedTextField";
 
@@ -17,7 +18,7 @@ export default function BasicInfo({ submission, setSubmission }: Props) {
         <LimitedTextField
           label="Title"
           fullWidth
-          maxLength={50}
+          maxLength={SubmissionData.titleLenght}
           value={submission.title}
           onChange={(event) => {
             setSubmission((prevSubmission) => ({
@@ -31,7 +32,7 @@ export default function BasicInfo({ submission, setSubmission }: Props) {
         <LimitedTextField
           label="Description"
           multiline
-          maxLength={500}
+          maxLength={SubmissionData.descriptionLenght}
           fullWidth
           value={submission.description}
           onChange={(event) => {

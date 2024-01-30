@@ -9,6 +9,7 @@ import {
   Typography
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
+import { ArtistData } from "../../../../common/entitiesData";
 import Artist from "../../../interfaces/Artist";
 import { useAppContext } from "../../../pages/_app";
 import LimitedTextField from "../../LimitedTextField";
@@ -60,7 +61,7 @@ export default function ArtistEdit({
         <Stack spacing={2}>
           <LimitedTextField
             label="Name"
-            maxLength={20}
+            maxLength={ArtistData.nameLenght}
             value={artist?.name}
             onChange={(event) => {
               if (artist) {
@@ -74,7 +75,7 @@ export default function ArtistEdit({
 
           <LimitedTextField
             label="Description"
-            maxLength={200}
+            maxLength={ArtistData.descriptionLenght}
             multiline
             value={artist?.description}
             onChange={(event) => {

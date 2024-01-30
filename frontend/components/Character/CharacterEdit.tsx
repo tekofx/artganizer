@@ -1,6 +1,7 @@
 import DoneIcon from "@mui/icons-material/Done";
 import { Avatar, Button, Grid, Stack } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
+import { CharacterData } from "../../../common/entitiesData";
 import Character from "../../interfaces/Character";
 import { useAppContext } from "../../pages/_app";
 import LimitedTextField from "../LimitedTextField";
@@ -45,7 +46,7 @@ export default function CharacterEdit({ character, toggleEdit, setCharacter }: C
       <Grid item>
         <Stack spacing={2}>
           <LimitedTextField
-            maxLength={20}
+            maxLength={CharacterData.nameLenght}
             label="Name"
             value={character?.name}
             onChange={(event) => {
@@ -59,7 +60,7 @@ export default function CharacterEdit({ character, toggleEdit, setCharacter }: C
           />
 
           <LimitedTextField
-            maxLength={200}
+            maxLength={CharacterData.descriptionLenght}
             label="Description"
             multiline
             value={character?.description}

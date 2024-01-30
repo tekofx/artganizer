@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { ColorResult, TwitterPicker } from "react-color";
+import { TagData } from "../../../../common/entitiesData";
 import AlertMessage from "../../../interfaces/AlertMessage";
 import Tag from "../../../interfaces/Tag";
 import { useAppContext } from "../../../pages/_app";
@@ -100,7 +101,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
             <Grid item lg={6}>
               <LimitedTextField
                 label="Name"
-                maxLength={20}
+                maxLength={TagData.nameLenght}
                 value={tag.name}
                 fullWidth
                 onChange={(event) => {

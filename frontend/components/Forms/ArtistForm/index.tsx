@@ -10,6 +10,7 @@ import {
   Stack
 } from "@mui/material";
 import { useState } from "react";
+import { ArtistData } from "../../../../common/entitiesData";
 import { AlertMessage } from "../../../interfaces";
 import Artist from "../../../interfaces/Artist";
 import { useAppContext } from "../../../pages/_app";
@@ -17,7 +18,6 @@ import LimitedTextField from "../../LimitedTextField";
 import Snack from "../../Snack";
 import ProgressButton from "../ProgressButon";
 import Socials from "./Socials";
-
 const defaultArtist: Artist = {
   id: -1,
   name: "",
@@ -105,7 +105,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
                 <LimitedTextField
                   label="Name"
                   multiline={false}
-                  maxLength={20}
+                  maxLength={ArtistData.nameLenght}
                   value={artist.name}
                   onChange={(event) => {
                     setArtist((prevSubmission) => ({
@@ -116,7 +116,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
                 />
                 <LimitedTextField
                   label="Description"
-                  maxLength={200}
+                  maxLength={ArtistData.descriptionLenght}
                   multiline
                   value={artist.description}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

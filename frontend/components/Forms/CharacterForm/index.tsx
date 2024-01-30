@@ -10,6 +10,7 @@ import {
   Stack
 } from "@mui/material";
 import { useState } from "react";
+import { CharacterData } from "../../../../common/entitiesData";
 import { AlertMessage } from "../../../interfaces";
 import Character from "../../../interfaces/Character";
 import { useAppContext } from "../../../pages/_app";
@@ -17,7 +18,6 @@ import { emptyCharacter } from "../../../src/emptyEntities";
 import LimitedTextField from "../../LimitedTextField";
 import Snack from "../../Snack";
 import ProgressButton from "../ProgressButon";
-
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -100,7 +100,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
               <Stack spacing={2}>
                 <LimitedTextField
                   label="Name"
-                  maxLength={20}
+                  maxLength={CharacterData.nameLenght}
                   multiline={false}
                   value={character.name}
                   onChange={(event) => {
@@ -112,7 +112,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
                 />
                 <LimitedTextField
                   label="Description"
-                  maxLength={200}
+                  maxLength={CharacterData.descriptionLenght}
                   multiline
                   value={character.description}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

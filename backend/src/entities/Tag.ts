@@ -1,10 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { TagData } from "../../../common/entitiesData";
+
 @Entity()
 export class Tag {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 20 })
+  @Column({ length: TagData.nameLenght })
   name: string;
 
   @Column({ length: 7, default: "#ffffff" })
