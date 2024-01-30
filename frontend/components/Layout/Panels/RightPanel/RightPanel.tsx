@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
-import Submission from "../../../interfaces/Submission";
-import { useAppContext } from "../../../pages/_app";
+import Submission from "../../../../interfaces/Submission";
+import { useAppContext } from "../../../../pages/_app";
 import Edit from "./Edit";
 import Info from "./Info";
 

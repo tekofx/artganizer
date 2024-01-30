@@ -12,11 +12,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Character } from "../../../../interfaces";
-import { useAppContext } from "../../../../pages/_app";
-import CharacterList from "../../../Character/CharacterList";
-import CharacterForm from "../../../Forms/CharacterForm";
-import SearchBar from "../../../SearchBar";
+import { Character } from "../../../../../interfaces";
+import { useAppContext } from "../../../../../pages/_app";
+import CharacterList from "../../../../Character/CharacterList";
+import CharacterForm from "../../../../Forms/CharacterForm";
+import SearchBar from "../../../../SearchBar";
 export default function CharacterAccordion() {
   const { characters } = useAppContext();
   const [charactersList, setCharactersList] = useState<Character[]>([]);

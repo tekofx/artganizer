@@ -2,7 +2,7 @@ import { Paper, Stack } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef } from "react";
-import { Submission } from "../../../interfaces";
+import { Submission } from "../../../../interfaces";
 interface BottomPanelProps {
   current: Submission;
 }

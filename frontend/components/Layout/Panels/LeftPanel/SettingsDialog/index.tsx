@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
-import { useAppContext } from "../../../../pages/_app";
+import { useAppContext } from "../../../../../pages/_app";
 import GallerySettings from "./Settings/GallerySettings";
 interface SettingsDialogProps {
   open: boolean;

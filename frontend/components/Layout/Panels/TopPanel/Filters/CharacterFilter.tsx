@@ -1,16 +1,15 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import PersonIcon from "@mui/icons-material/Person";
 import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
 import { MouseEvent, useEffect, useState } from "react";
-import { Tag } from "../../../../interfaces";
-import { useAppContext } from "../../../../pages/_app";
-import TagAutocomplete from "../../../Tag/TagAutocomplete";
-
-export default function ArtistFilter() {
-  const { filters, setFilters } = useAppContext();
+import Character from "../../../../../interfaces/Character";
+import { useAppContext } from "../../../../../pages/_app";
+import CharacterAutocomplete from "../../../../Character/CharacterAutocomplete";
+export default function CharacterFilter() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [characters, setCharacters] = useState<Character[]>([]);
   const [invisible, setInvisible] = useState<boolean>(true);
+  const { filters, setFilters } = useAppContext();
 
   const open = Boolean(anchorEl);
 
@@ -22,19 +21,18 @@ export default function ArtistFilter() {
   };
 
   useEffect(() => {
-    console.log(filters.tags);
-    if (filters.tags.length == 0) {
-      setInvisible(true);
-    } else {
+    if (filters.characters.length != 0) {
       setInvisible(false);
+    } else {
+      setInvisible(true);
     }
-  }, [filters.tags]);
+  }, [filters.characters]);
 
   useEffect(() => {
     var newFilter = { ...filters };
-    newFilter.tags = tags;
+    newFilter.characters = characters;
     setFilters(newFilter);
-  }, [tags]);
+  }, [characters]);
 
   return (
     <div>
@@ -47,11 +45,11 @@ export default function ArtistFilter() {
         endIcon={<ExpandMoreIcon />}
         startIcon={
           <Badge variant="dot" color="error" invisible={invisible}>
-            <LocalOfferIcon />
+            <PersonIcon />
           </Badge>
         }
       >
-        Tags
+        Characters
       </Button>
       <Popover
         open={open}
@@ -65,7 +63,10 @@ export default function ArtistFilter() {
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <TagAutocomplete selectedTags={tags} setSelectedTags={setTags} />
+              <CharacterAutocomplete
+                selectedCharacters={characters}
+                setSelectedCharacters={setCharacters}
+              />
             </Grid>
           </Grid>
         </Paper>

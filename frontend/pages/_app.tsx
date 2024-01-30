@@ -13,7 +13,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import LateralPanel from "../components/Panels/LeftPanel";
+import LateralPanel from "../components/Layout/Panels/LeftPanel";
 import {
   Artist,
   Character,

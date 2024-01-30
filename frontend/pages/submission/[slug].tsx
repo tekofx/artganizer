@@ -3,8 +3,8 @@ import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import BottomPanel from "../../components/Panels/BottomPanel";
-import RightPanel from "../../components/Panels/RightPanel/RightPanel";
+import BottomPanel from "../../components/Layout/Panels/BottomPanel";
+import RightPanel from "../../components/Layout/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
 
 interface PageProps {
