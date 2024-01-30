@@ -16,22 +16,18 @@ import { useEffect, useState } from "react";
 import { ArtistForm } from "../../../../Forms";
 import SearchBar from "../../../../SearchBar";
 
-import { Artist } from "../../../../../interfaces";
 import { useAppContext } from "../../../../../pages/_app";
 import ArtistList from "../../../../Artist/ArtistList";
 
 export default function ArtistAccordion() {
   const { artists } = useAppContext();
-  const [artistsList, setArtistsList] = useState<Artist[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
+  const [search, setSearch] = useState<string | undefined>(undefined);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    var temp = artists.filter((artist) =>
-      artist.name.toLowerCase().includes(event.target.value.toLowerCase())
-    );
-    setArtistsList(temp);
+    setSearch(event.target.value);
   }
   function onSearchIconClick() {
     if (!expanded) setExpanded(!expanded);
@@ -40,7 +36,7 @@ export default function ArtistAccordion() {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
-      setArtistsList(artists);
+      setSearch("");
     }
   }
 
@@ -88,10 +84,7 @@ export default function ArtistAccordion() {
             show={showSearchBar}
             focus={showSearchBar}
           />
-          <ArtistList
-            artists={artistsList.length == 0 ? artists : artistsList}
-            clickable
-          />
+          <ArtistList search={search} clickable />
         </Stack>
       </AccordionDetails>
       <ArtistForm open={open} setOpen={setOpen} />

@@ -1,22 +1,14 @@
 import { Typography } from "@mui/material";
-import Artist from "../../interfaces/Artist";
+import { useAppContext } from "../../pages/_app";
 import ArtistLabel from "./ArtistLabel";
 interface ArtistListProps {
-  artists: Artist[];
+  search?: string;
   clickable?: boolean;
 }
 
-function sortByName(artists: Artist[]): Artist[] {
-  return artists.sort(function (a, b) {
-    var textA = a.name.toUpperCase();
-    var textB = b.name.toUpperCase();
+export default function ArtistList({ search, clickable }: ArtistListProps) {
+  const { artists } = useAppContext();
 
-    return textA < textB ? -1 : textA > textB ? 1 : 0;
-  });
-}
-
-export default function ArtistList({ artists, clickable }: ArtistListProps) {
-  artists = sortByName(artists);
   return (
     <div
       style={{
@@ -25,9 +17,13 @@ export default function ArtistList({ artists, clickable }: ArtistListProps) {
       }}
     >
       {artists.length == 0 && <Typography>No artists</Typography>}
-      {artists.map((artist) => (
-        <ArtistLabel key={artist.id} artist={artist} clickable={clickable} />
-      ))}
+      {artists
+        .filter((artist) =>
+          artist.name.toLowerCase().includes(search === undefined ? "" : search)
+        )
+        .map((artist) => (
+          <ArtistLabel key={artist.id} artist={artist} clickable={clickable} />
+        ))}
     </div>
   );
 }
