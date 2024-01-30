@@ -10,24 +10,16 @@ services:
     ports:
       - "3306:3306"
 
-  frontend:
-    image: ghcr.io/tekofx/artganizer-frontend:latest
-    container_name: frontend
-    build: frontend
+  artganizer:
+    image: ghcr.io/tekofx/artganizer
+    container_name: artganizer
     env_file: .env
-    depends_on:
-      - backend
+    volumes:
+      - ./backend/data:/app/backend/data
     ports:
-      - 3000:3000
-
-  backend:
-    image: ghcr.io/tekofx/artganizer-backend:latest
-    container_name: backend
-    build: backend
-    env_file: .env
+      - 3000:3000 # Web
+      - 3001:3001 # Backend
     depends_on:
       - db
-    volumes:
-      - ./backend/data:/express-docker/data
-    ports:
-      - 3001:3001
+    restart: unless-stopped
+    command: tail -F anything
