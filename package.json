@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"nodemon backend/src/index.ts\" \"cd frontend && next dev\"",
     "dev:frontend": "cd frontend && next dev",
-    "dev:backend": "cd backend && nodemon src/index.ts",
+    "dev:backend": "nodemon backend/src/index.ts",
     "build:frontend": "cd frontend && next build",
     "build:backend": "cd backend && webpack",
     "start": "concurrently \"cd backend && ts-node src/index.ts\" \"cd frontend && node .next/standalone/server.js\"",
