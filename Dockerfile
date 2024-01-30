@@ -15,6 +15,7 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend ./frontend
+COPY common ./common
 COPY package.json ./package.json
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -48,6 +49,7 @@ COPY --from=builder /app/frontend/.next/static ./.next/static
 COPY --from=builder /app/node_modules /app/node_modules
 RUN npm install -g ts-node
 COPY backend ./backend
+COPY common ./common
 RUN mkdir ./backend/data
 COPY package.json ./package.json
 VOLUME ./backend/data
