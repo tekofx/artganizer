@@ -13,13 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get tag
-        id: tag
-        uses: dawidd6/action-get-tag@v1
-        with:
-          # Optionally strip `v` prefix
-          strip_v: true
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -40,5 +33,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/tekofx/artganizer:latest
-            ghcr.io/tekofx/artganizer:${{steps.tag.outputs.tag}}
+            ghcr.io/tekofx/artganizer:dev
