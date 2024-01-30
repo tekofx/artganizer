@@ -1,14 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { CharacterData } from "../../../common/entitiesData";
 
 @Entity()
 export class Character {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 20 })
+  @Column({ length: CharacterData.nameLenght })
   name: string;
 
-  @Column({ length: 200, default: "" })
+  @Column({ length: CharacterData.descriptionLenght, default: "" })
   description: string;
 
   @Column({ default: "" })

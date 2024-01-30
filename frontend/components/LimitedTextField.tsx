@@ -1,36 +1,32 @@
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
+import React from "react";
 
 interface Props {
   maxLength: number;
   label: string;
-  multiline: boolean;
+  multiline?: boolean;
+  fullWidth?: boolean;
   value: string;
   // eslint-disable-next-line no-unused-vars
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function LimitedTextField(props: Props) {
-  const [value, setValue] = useState(props.value);
+export default function LimitedTextField({ maxLength, label, multiline, fullWidth, value, onChange }: Props) {
 
-  const handleChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setValue(event.target.value);
-  };
 
   return (
     <TextField
-      label={props.label}
-      multiline={props.multiline}
+      label={label}
+      multiline={multiline ? true : false}
+      fullWidth={fullWidth ? true : false}
       value={value}
-      onChange={handleChange}
-      inputProps={{ maxLength: props.maxLength }}
+      onChange={onChange}
+      inputProps={{ maxLength: maxLength }}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            {props.maxLength - value.length}
+            {maxLength - value.length}
           </InputAdornment>
         ),
       }}

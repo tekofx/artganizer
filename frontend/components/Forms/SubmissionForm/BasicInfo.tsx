@@ -1,7 +1,9 @@
-import { Grid, Rating, TextField, Typography } from "@mui/material";
+import { Grid, Rating, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
+import { SubmissionData } from "../../../../common/entitiesData";
 import Submission from "../../../interfaces/Submission";
+import LimitedTextField from "../../LimitedTextField";
 
 interface Props {
   submission: Submission;
@@ -13,9 +15,10 @@ export default function BasicInfo({ submission, setSubmission }: Props) {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6">Basic Info</Typography>
-        <TextField
+        <LimitedTextField
           label="Title"
           fullWidth
+          maxLength={SubmissionData.titleLenght}
           value={submission.title}
           onChange={(event) => {
             setSubmission((prevSubmission) => ({
@@ -26,9 +29,10 @@ export default function BasicInfo({ submission, setSubmission }: Props) {
         />
       </Grid>
       <Grid item xs={12}>
-        <TextField
+        <LimitedTextField
           label="Description"
           multiline
+          maxLength={SubmissionData.descriptionLenght}
           fullWidth
           value={submission.description}
           onChange={(event) => {

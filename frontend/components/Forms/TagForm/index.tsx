@@ -6,14 +6,15 @@ import {
   DialogTitle,
   Grid,
   Stack,
-  TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useState } from "react";
 import { ColorResult, TwitterPicker } from "react-color";
+import { TagData } from "../../../../common/entitiesData";
 import AlertMessage from "../../../interfaces/AlertMessage";
 import Tag from "../../../interfaces/Tag";
 import { useAppContext } from "../../../pages/_app";
+import LimitedTextField from "../../LimitedTextField";
 import Snack from "../../Snack";
 import TagChip from "../../Tag/TagChip";
 import TagLabel from "../../Tag/TagLabel";
@@ -98,8 +99,9 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
         <DialogContent>
           <Grid container spacing={2} paddingTop={2}>
             <Grid item lg={6}>
-              <TextField
+              <LimitedTextField
                 label="Name"
+                maxLength={TagData.nameLenght}
                 value={tag.name}
                 fullWidth
                 onChange={(event) => {

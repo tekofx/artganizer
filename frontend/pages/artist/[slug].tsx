@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   if (slug) {
     var id = parseInt(slug.toString());
     const res = await axios
-      .get(process.env.API_URL + "/artists/" + id)
+      .get("http://localhost:3000/api" + "/artists/" + id)
       .catch(() => {
         return undefined;
       });

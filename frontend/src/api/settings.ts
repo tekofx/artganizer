@@ -5,7 +5,7 @@ export async function handleEditSettings(
   settings: Settings
 ): Promise<Settings | undefined> {
   var result = await axios
-    .put(process.env.API_URL + "/settings/", settings)
+    .put("http://localhost:3000/api" + "/settings/", settings)
     .then((response) => {
       return response.data;
     })
@@ -17,7 +17,7 @@ export async function handleEditSettings(
 
 export async function handleResetSettings(): Promise<Settings | undefined> {
   var result = await axios
-    .delete(process.env.API_URL + "/settings/")
+    .delete("http://localhost:3000/api" + "/settings/")
     .then((response) => {
       return response.data;
     })

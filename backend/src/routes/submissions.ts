@@ -14,7 +14,7 @@ import {
   TagRepo,
 } from "../typeorm.config";
 
-const submissionsDir = path.join(__dirname, "../../data/uploads/submissions");
+const submissionsDir = "backend/data/uploads/submissions";
 if (!fs.existsSync(submissionsDir)) {
   fs.mkdirSync(submissionsDir, { recursive: true });
 }
@@ -164,24 +164,24 @@ router.post(
 
     var image = req.file;
     if (!image) {
-      res.status(400).send("image not provided or not an image");
+      res.status(400).send("Image not provided");
       return;
     }
     var colorsArray: string[] = [];
-
-    // Get colors
-    await Vibrant.from(image.path).getPalette((err, palette) => {
-      for (const colorName in palette) {
-        const color = palette[colorName];
-        if (color) {
-          const hex = color.hex;
-          colorsArray.push(hex);
-        }
-      }
-    });
-
     var submission: Submission;
+
     try {
+      // Get colors
+      await Vibrant.from(image.path).getPalette((err, palette) => {
+        for (const colorName in palette) {
+          const color = palette[colorName];
+          if (color) {
+            const hex = color.hex;
+            colorsArray.push(hex);
+          }
+        }
+      });
+
       // Obtener las dimensiones de la imagen
       const dimensions = sizeOf(image.path);
 
@@ -199,9 +199,19 @@ router.post(
         thumbnail: "",
         original_image: "",
       });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).send("Error creating submission");
+
+      await SubmissionRepo.save(submission);
+    } catch (error: any) {
+      fs.unlink(image.path, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
+      if (error.code === "ER_DATA_TOO_LONG") {
+        return res.status(400).send("Name or description too long");
+      }
+      return res.status(400).send("Error when uploading submission");
     }
 
     if (artist) {
@@ -225,24 +235,20 @@ router.post(
       submission.tags = tagObjs;
     }
 
-    try {
-      if (characters) {
-        if (!Array.isArray(characters)) {
-          characters = [characters];
-        }
-        var characterObjs = [];
-        for (var i = 0; i < characters.length; i++) {
-          var characterObj = await CharacterRepo.findOne({
-            where: { id: characters[i] },
-          });
-          if (characterObj) {
-            characterObjs.push(characterObj);
-          }
-        }
-        submission.characters = characterObjs;
+    if (characters) {
+      if (!Array.isArray(characters)) {
+        characters = [characters];
       }
-    } catch (error) {
-      console.log(error);
+      var characterObjs = [];
+      for (var i = 0; i < characters.length; i++) {
+        var characterObj = await CharacterRepo.findOne({
+          where: { id: characters[i] },
+        });
+        if (characterObj) {
+          characterObjs.push(characterObj);
+        }
+      }
+      submission.characters = characterObjs;
     }
 
     var id = await SubmissionRepo.save(submission)
@@ -254,7 +260,8 @@ router.post(
       });
 
     // Crear carpeta con ID submission
-    const submissionDir = "data/uploads/submissions/" + submission.id + "/";
+    const submissionDir =
+      "backend/data/uploads/submissions/" + submission.id + "/";
     const submissionPath = submissionDir + image.originalname;
 
     try {
@@ -262,7 +269,7 @@ router.post(
 
       // Mover archivo a carpeta
       await fs.promises.rename(
-        "data/uploads/submissions/" + image.originalname,
+        "backend/data/uploads/submissions/" + image.originalname,
         submissionDir + image.originalname
       );
 
@@ -274,7 +281,7 @@ router.post(
         imageSize = submission.width;
       }
       // Crear copias
-      sharp(submissionPath)
+      await sharp(submissionPath)
         .resize(thumbnailSize)
         .jpeg()
         .toFile(path.join(submissionDir, "thumbnail.jpg"))
@@ -282,7 +289,7 @@ router.post(
           console.log(error);
         });
 
-      sharp(submissionPath)
+      await sharp(submissionPath)
         .resize(imageSize)
         .jpeg()
         .toFile(path.join(submissionDir, "image.jpg"))
@@ -290,12 +297,25 @@ router.post(
           console.log(error);
         });
     } catch (error) {
-      return res.status(400).send("Error when uploading submission");
+      fs.unlink(image.path, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
+      fs.unlink(submissionPath, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
+      await SubmissionRepo.remove(submission);
+      return res.status(400).send("Error when uploading submission image");
     }
 
-    submission.image = `${process.env.URL}/submissions/uploads/${id}/image.jpg`;
-    submission.thumbnail = `${process.env.URL}/submissions/uploads/${id}/thumbnail.jpg`;
-    submission.original_image = `${process.env.URL}/submissions/uploads/${id}/${image.originalname}`;
+    submission.image = `http://localhost:3001/submissions/uploads/${id}/image.jpg`;
+    submission.thumbnail = `http://localhost:3001/submissions/uploads/${id}/thumbnail.jpg`;
+    submission.original_image = `http://localhost:3001/submissions/uploads/${id}/${image.originalname}`;
     await SubmissionRepo.save(submission);
 
     res.send(submission);

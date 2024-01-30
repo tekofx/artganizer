@@ -5,7 +5,7 @@ import * as path from "path";
 import "reflect-metadata";
 import sharp from "sharp";
 import { CharacterRepo } from "../typeorm.config";
-const charactersDir = path.join(__dirname, "../../data/uploads/characters");
+const charactersDir = "backend/data/uploads/characters";
 if (!fs.existsSync(charactersDir)) {
   fs.mkdirSync(charactersDir, { recursive: true });
 }
@@ -73,7 +73,6 @@ router.get("/:characterId", async (req: Request, res: Response) => {
 
   res.send(character);
 });
-router.use("/uploads", express.static(charactersDir));
 
 router.post(
   "/",
@@ -91,7 +90,7 @@ router.post(
       });
 
     if (file) {
-      sharp(file.path)
+      await sharp(file.path)
         .resize(500)
         .jpeg()
         .toFile(path.join(charactersDir, id + ".jpg"))
@@ -104,7 +103,7 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
-      character.image = process.env.URL + "/characters/" + id;
+      character.image = "http://localhost:3001" + "/characters/" + id;
       await CharacterRepo.save(character);
     }
 
@@ -112,31 +111,7 @@ router.post(
   }
 );
 
-/* router.get("/uploads/:characterId", async (req: Request, res: Response) => {
-  if (req.params.characterId == null) {
-    res.status(400).send("Character ID not provided");
-    return;
-  }
-
-  var characterId: number = parseInt(req.params.characterId);
-  const Character = await CharacterRepo.findOne({
-    where: { id: characterId },
-  });
-
-  if (Character == null) {
-    res.status(404).send("Character not found");
-    return;
-  }
-
-  const filePath = path.join(charactersDir, characterId + ".jpg");
-
-  if (!fs.existsSync(filePath)) {
-    res.status(404).send("character image not found");
-    return;
-  }
-
-  return res.sendFile(filePath);
-}); */
+router.use("/uploads", express.static(charactersDir));
 
 router.put(
   "/:characterId",
@@ -171,7 +146,7 @@ router.put(
 
     // Convertir a JPG y Renombrar el archivo con el ID generado
     if (file) {
-      sharp(file.path)
+      await sharp(file.path)
         .jpeg()
         .toFile(path.join(charactersDir, characterId + ".jpg"))
         .then(() => {
@@ -184,7 +159,7 @@ router.put(
           console.log(error);
         });
       character.image =
-        process.env.URL + "/characters/uploads/" + characterId + ".jpg";
+        "http://localhost:3001" + "/characters/uploads/" + characterId + ".jpg";
     }
 
     var { name, description } = req.body;
@@ -216,7 +191,6 @@ router.delete("/:id", async (req: Request, res: Response) => {
     return;
   }
 
-  // Remove from data/uploads folder
   const filePath = path.join(charactersDir, characterId + ".jpg");
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);

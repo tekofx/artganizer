@@ -4,9 +4,10 @@ import multer, { FileFilterCallback } from "multer";
 import * as path from "path";
 import "reflect-metadata";
 import sharp from "sharp";
+import { Artist } from "../entities";
 import { ArtistRepo, SocialRepo, SubmissionRepo } from "../typeorm.config";
 
-const artistsPicsDir = path.join(__dirname, "../../data/uploads/artistPics");
+const artistsPicsDir = "backend/data/uploads/artists";
 if (!fs.existsSync(artistsPicsDir)) {
   fs.mkdirSync(artistsPicsDir, { recursive: true });
 }
@@ -71,56 +72,68 @@ router.post(
       res.status(400).send("name not provided");
       return;
     }
-
     const artist = ArtistRepo.create({ name, description });
-    var id = await ArtistRepo.save(artist)
-      .then((artist) => {
-        return artist.id;
-      })
-      .catch((error) => {
-        if (error.name == "ER_DATA_TOO_LONG") {
-          res.status(400).send("Data too long");
-        } else {
-          res.status(400).send("An error ocurred");
-          console.log(error);
-        }
-        return;
-      });
 
-    // Convertir a JPG y Renombrar el archivo con el ID generado
-    if (file) {
-      sharp(file.path)
-        .resize(500)
-        .jpeg()
-        .toFile(path.join(artistsPicsDir, id + ".jpg"))
-        .then(() => {
-          // Eliminar el archivo temporal
-          if (file?.path) {
-            fs.unlinkSync(file.path);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      artist.image = process.env.URL + "/artists/data/uploads/" + artist.id;
-      await ArtistRepo.save(artist);
+    try {
+      var id = await ArtistRepo.save(artist).then((artist) => {
+        return artist.id;
+      });
+    } catch (error: any) {
+      if (error.code === "ER_DATA_TOO_LONG") {
+        res.status(400).send("Name or description too long");
+      } else {
+        console.log(error);
+        res.status(400).send("An error occurred");
+      }
+      return;
+    }
+    try {
+      // Convertir a JPG y Renombrar el archivo con el ID generado
+      if (file) {
+        await sharp(file.path)
+          .resize(500)
+          .jpeg()
+          .toFile(path.join(artistsPicsDir, id + ".jpg"))
+          .then(() => {
+            // Eliminar el archivo temporal
+            if (file?.path) {
+              fs.unlinkSync(file.path);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        artist.image =
+          "http://localhost:3001" + "/artists/uploads/" + id + ".jpg";
+        await ArtistRepo.save(artist);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("An error when saving picture occurred");
+      return;
     }
 
-    if (socials) {
-      socials = JSON.parse(socials);
-      var socialsObjs = [];
-      for (const social of socials) {
-        const newSocial = SocialRepo.create({
-          name: social.name,
-          url: social.url,
-          artist: artist,
-        });
-        await SocialRepo.save(newSocial);
-        socialsObjs.push(newSocial);
-      }
-      artist.socials = socialsObjs;
+    try {
+      if (socials) {
+        socials = JSON.parse(socials);
+        var socialsObjs = [];
+        for (const social of socials) {
+          const newSocial = SocialRepo.create({
+            name: social.name,
+            url: social.url,
+            artist: artist,
+          });
+          await SocialRepo.save(newSocial);
+          socialsObjs.push(newSocial);
+        }
+        artist.socials = socialsObjs;
 
-      await ArtistRepo.save(artist);
+        await ArtistRepo.save(artist);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("An error when saving socials occurred");
+      return;
     }
 
     res.send(artist);
@@ -163,7 +176,6 @@ router.delete("/:artistId", async (req: Request, res: Response) => {
     return;
   }
 
-  // Remove from data/uploads folder
   const filePath = path.join(artistsPicsDir, artistId + ".jpg");
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);
@@ -193,31 +205,6 @@ router.get("/:artistId/submissions", async (req: Request, res: Response) => {
   }
 
   res.send(submissions);
-});
-router.get("/uploads/:artistId", async (req: Request, res: Response) => {
-  if (req.params.artistId == null) {
-    res.status(400).send("Artist ID not provided");
-    return;
-  }
-
-  var artistId: number = parseInt(req.params.artistId);
-  const artist = await ArtistRepo.findOne({
-    where: { id: artistId },
-  });
-
-  if (artist == null) {
-    res.status(404).send("artist not found");
-    return;
-  }
-
-  const filePath = path.join(artistsPicsDir, artistId + ".jpg");
-
-  if (!fs.existsSync(filePath)) {
-    res.status(404).send("artist image not found");
-    return;
-  }
-
-  return res.sendFile(filePath);
 });
 
 router.use("/uploads", express.static(artistsPicsDir));
@@ -252,7 +239,7 @@ router.put(
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
-      sharp(file.path)
+      await sharp(file.path)
         .jpeg()
         .toFile(path.join(artistsPicsDir, artistId + ".jpg"))
         .then(() => {
@@ -264,7 +251,8 @@ router.put(
         .catch((error) => {
           console.log(error);
         });
-      artist.image = process.env.URL + "/artists/uploads/" + artist.id + ".jpg";
+      artist.image =
+        "http://localhost:3001" + "/artists/uploads/" + artist.id + ".jpg";
     }
     var { name, description } = req.body;
     artist.name = name;

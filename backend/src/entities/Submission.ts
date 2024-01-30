@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { SubmissionData } from "../../../common/entitiesData";
 import { Artist } from "./Artist";
 import { Character } from "./Character";
 import { Tag } from "./Tag";
@@ -16,10 +17,10 @@ export class Submission {
   /* @OneToMany(() => User, user => user.favorites) */
   id: number;
 
-  @Column({ length: 50, default: "Untitled" })
+  @Column({ length: SubmissionData.titleLenght, default: "Untitled" })
   title: string;
 
-  @Column({ length: 500, default: "" })
+  @Column({ length: SubmissionData.descriptionLenght, default: "" })
   description: string;
 
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })

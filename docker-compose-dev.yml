@@ -6,28 +6,26 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
-    env_file: .dev.env
+    env_file: .env
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
-  frontend:
-    build: frontend
-    container_name: frontend
-    env_file: .dev.env
-    image: frontend
-    depends_on:
-      - backend
-    ports:
-      - 3000:3000
-
-  backend:
-    build: backend
-    container_name: backend
-    env_file: .dev.env
-    image: backend
-    depends_on:
-      - db
+  artganizer:
+    container_name: artganizer
+    build: .
+    image: artganizer
+    env_file: .env
     volumes:
-      - ./backend/data:/express-docker/data
+      - ./backend/data:/app/backend/data
     ports:
-      - 3001:3001
+      - 3000:3000 # Web
+      - 3001:3001 # Backend
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped

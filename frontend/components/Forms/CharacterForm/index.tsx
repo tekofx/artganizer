@@ -7,10 +7,10 @@ import {
   DialogTitle,
   Grid,
   IconButton,
-  Stack,
-  TextField,
+  Stack
 } from "@mui/material";
 import { useState } from "react";
+import { CharacterData } from "../../../../common/entitiesData";
 import { AlertMessage } from "../../../interfaces";
 import Character from "../../../interfaces/Character";
 import { useAppContext } from "../../../pages/_app";
@@ -18,7 +18,6 @@ import { emptyCharacter } from "../../../src/emptyEntities";
 import LimitedTextField from "../../LimitedTextField";
 import Snack from "../../Snack";
 import ProgressButton from "../ProgressButon";
-
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -81,7 +80,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Create Character</DialogTitle>
         <DialogContent sx={{ p: 2 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={4}>
             <Grid item lg={4}>
               <input
                 accept="image/png, image/jpeg"
@@ -98,9 +97,11 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
               </label>
             </Grid>
             <Grid item lg={8}>
-              <Stack spacing={2}>
-                <TextField
+              <Stack spacing={2} sx={{ paddingTop: 1 }}>
+                <LimitedTextField
                   label="Name"
+                  maxLength={CharacterData.nameLenght}
+                  multiline={false}
                   value={character.name}
                   onChange={(event) => {
                     setCharacter((prevCharacter) => ({
@@ -111,7 +112,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
                 />
                 <LimitedTextField
                   label="Description"
-                  maxLength={200}
+                  maxLength={CharacterData.descriptionLenght}
                   multiline
                   value={character.description}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

@@ -18,7 +18,7 @@ export default function TopPanel() {
     console.log(filters);
   }
   return (
-    <Paper sx={{ width: "100%", p: 1, position: "sticky", top: 0 }}>
+    <Paper sx={{ width: "100%", p: 1, position: "sticky", top: 0, zIndex: 4000 }}>
       <Stack direction="row" spacing={1}>
         <SearchBar onChange={onChange} show />
         <RatingFilter />

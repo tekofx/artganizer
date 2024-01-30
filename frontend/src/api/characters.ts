@@ -10,7 +10,7 @@ export async function handleCreateCharacter(
   formData.append("image", character.image);
 
   var result = await axios
-    .post(process.env.API_URL + "/characters", formData)
+    .post("http://localhost:3000/api" + "/characters", formData)
     .then((response) => {
       return response.data;
     })
@@ -32,7 +32,7 @@ export async function handleEditCharacter(
   formData.append("description", character.description);
 
   var result = await axios
-    .put(process.env.API_URL + "/characters/" + character.id, formData)
+    .put("http://localhost:3000/api" + "/characters/" + character.id, formData)
     .then((response) => {
       return response.data;
     })
@@ -46,7 +46,7 @@ export async function handleRemoveCharacter(
   character: Character
 ): Promise<boolean | undefined> {
   var result = await axios
-    .delete(process.env.API_URL + "/characters/" + character.id)
+    .delete("http://localhost:3000/api" + "/characters/" + character.id)
     .then(() => {
       return true;
     })

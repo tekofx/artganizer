@@ -73,19 +73,21 @@ export default function SubmissionForm({ open, setOpen }: Props) {
     submission.characters = selectedCharacters;
     submission.tags = selectedTags;
     submission.artist = selectedArtist;
-    var status = await createSubmission(submission);
-    if (status != undefined) {
+    try {
+      await createSubmission(submission);
       setAlertMessage({
         message: "Submission created",
         severity: "success",
       });
-      console.log(status);
-    } else {
+    } catch (e: any) {
+      console.log(e.message);
       setAlertMessage({
-        message: "Error creating submission",
+        message: e.message,
         severity: "error",
       });
     }
+
+
     setLoading(false);
     setOpen(false);
     setOpenSnack(true);

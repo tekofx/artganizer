@@ -43,7 +43,7 @@ export default function SocialDialog({
     if (social == undefined) {
       await axios
         .post(
-          process.env.API_URL + `/artists/${artist.id}/socials`,
+          "http://localhost:3000/api" + `/artists/${artist.id}/socials`,
           socialDialog
         )
         .then((response) => {
@@ -58,8 +58,8 @@ export default function SocialDialog({
       console.log("Edit social");
       await axios
         .put(
-          process.env.API_URL +
-            `/artists/${artist.id}/socials/${socialDialog.id}`,
+          "http://localhost:3000/api" +
+          `/artists/${artist.id}/socials/${socialDialog.id}`,
           social
         )
         .then((response) => {

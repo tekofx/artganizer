@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Submission } from "../../interfaces";
+import ApiError from "./ApiError";
 
 export async function handleCreateSubmission(
   submission: Submission
-): Promise<Submission | undefined> {
+): Promise<Submission> {
   const formData = new FormData();
   formData.append("image", submission.image);
   formData.append("title", submission.title);
@@ -24,16 +25,16 @@ export async function handleCreateSubmission(
   }
 
   // Create submission
-  var status = await axios
-    .post(process.env.API_URL + `/submissions`, formData)
+
+  return await axios
+    .post("http://localhost:3000/api" + `/submissions`, formData)
     .then((response) => {
       return response.data;
     })
-    .catch(() => {
-      return undefined;
+    .catch((error: AxiosError) => {
+      var message: string = "error: " + error.response?.data;
+      throw new ApiError(message);
     });
-
-  return status;
 }
 
 export async function handleEditSubmission(
@@ -41,7 +42,7 @@ export async function handleEditSubmission(
 ): Promise<Submission | undefined> {
   // Edit submission
   var status = await axios
-    .put(process.env.API_URL + `/submissions/${submission.id}`, {
+    .put("http://localhost:3000/api" + `/submissions/${submission.id}`, {
       submission,
     })
     .then((response) => {
@@ -59,7 +60,7 @@ export async function handleRemoveSubmission(
 ): Promise<boolean | undefined> {
   // Remove submission
   var status = await axios
-    .delete(process.env.API_URL + `/submissions/${submission.id}`)
+    .delete("http://localhost:3000/api" + `/submissions/${submission.id}`)
     .then(() => {
       return true;
     })

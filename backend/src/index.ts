@@ -1,12 +1,12 @@
+import cors from "cors";
 import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { AppDataSource } from "./typeorm.config";
 import artist from "./routes/artists";
-import submission from "./routes/submissions";
-import tags from "./routes/tags";
 import characters from "./routes/characters";
 import settings from "./routes/settings";
-import cors from "cors";
+import submission from "./routes/submissions";
+import tags from "./routes/tags";
+import { AppDataSource } from "./typeorm.config";
 
 const port = 3001;
 
@@ -35,7 +35,7 @@ app.use("/characters", characters);
 app.use("/settings", settings);
 
 app.listen(port, () => {
-  console.log(`[server]: Server is running at ${process.env.URL}`);
+  console.log(`[server]: Server is running at http://localhost:3001`);
 });
 
 AppDataSource.initialize()

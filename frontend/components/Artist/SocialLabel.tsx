@@ -22,7 +22,7 @@ export default function SocialLabel({
   async function removeSocial() {
     await axios
       .delete(
-        process.env.API_URL + `/artists/${artist.id}/socials/${social.id}`
+        "http://localhost:3000/api" + `/artists/${artist.id}/socials/${social.id}`
       )
       .then(() => {
         setArtist({
@@ -33,7 +33,7 @@ export default function SocialLabel({
       .catch((error) => {
         console.log(error);
       })
-      .finally(() => {});
+      .finally(() => { });
   }
 
   async function editSocial() {

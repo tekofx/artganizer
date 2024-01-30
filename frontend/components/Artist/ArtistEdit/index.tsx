@@ -6,12 +6,13 @@ import {
   Button,
   Grid,
   Stack,
-  TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
+import { ArtistData } from "../../../../common/entitiesData";
 import Artist from "../../../interfaces/Artist";
 import { useAppContext } from "../../../pages/_app";
+import LimitedTextField from "../../LimitedTextField";
 import SocialLabel from "../SocialLabel";
 import SocialDialog from "./SocialDialog";
 interface ArtistEditProps {
@@ -58,8 +59,9 @@ export default function ArtistEdit({
       </Grid>
       <Grid item>
         <Stack spacing={2}>
-          <TextField
+          <LimitedTextField
             label="Name"
+            maxLength={ArtistData.nameLenght}
             value={artist?.name}
             onChange={(event) => {
               if (artist) {
@@ -71,8 +73,9 @@ export default function ArtistEdit({
             }}
           />
 
-          <TextField
+          <LimitedTextField
             label="Description"
+            maxLength={ArtistData.descriptionLenght}
             multiline
             value={artist?.description}
             onChange={(event) => {

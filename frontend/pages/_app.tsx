@@ -69,7 +69,7 @@ interface AppContextType {
   filters: Filters;
   setFilters: Dispatch<SetStateAction<Filters>>;
   // eslint-disable-next-line no-unused-vars
-  createSubmission(submission: Submission): Promise<Submission | undefined>;
+  createSubmission(submission: Submission): Promise<Submission>;
   // eslint-disable-next-line no-unused-vars
   createArtist(artist: Artist): Promise<Artist | undefined>;
   // eslint-disable-next-line no-unused-vars
@@ -110,10 +110,14 @@ export default function MyApp(props: MyAppProps) {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
 
   async function createSubmission(submission: Submission) {
-    const submissionCreated = await handleCreateSubmission(submission);
-    if (submissionCreated) {
-      setSubmissions([...submissions, submissionCreated]);
+    var submissionCreated: Submission;
+    try {
+      submissionCreated = await handleCreateSubmission(submission);
+    } catch (e: any) {
+      console.log("app.tsx: " + e.message)
+      throw e;
     }
+    setSubmissions([...submissions, submissionCreated]);
     getTags();
     return submissionCreated;
   }
@@ -225,28 +229,28 @@ export default function MyApp(props: MyAppProps) {
   }
 
   const getArtists = async () =>
-    await axios.get(`${process.env.API_URL}/artists`).then((response) => {
+    await axios.get(`http://localhost:3000/api/artists`).then((response) => {
       setArtists(response.data);
     });
 
   const getSubmissions = async () =>
-    await axios.get(`${process.env.API_URL}/submissions`).then((response) => {
+    await axios.get(`http://localhost:3000/api/submissions`).then((response) => {
       console.log(response.data);
       setSubmissions(response.data);
     });
 
   const getCharacters = async () =>
-    await axios.get(`${process.env.API_URL}/characters`).then((response) => {
+    await axios.get(`http://localhost:3000/api/characters`).then((response) => {
       setCharacters(response.data);
     });
 
   const getTags = async () =>
-    await axios.get(`${process.env.API_URL}/tags`).then((response) => {
+    await axios.get(`http://localhost:3000/api/tags`).then((response) => {
       setTags(response.data);
     });
 
   const getSettings = async () =>
-    await axios.get(`${process.env.API_URL}/settings`).then((response) => {
+    await axios.get(`http://localhost:3000/api/settings`).then((response) => {
       setSettings(response.data);
     });
 

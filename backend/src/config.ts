@@ -8,7 +8,6 @@ interface Config {
 }
 
 let config: Config;
-
 try {
   config = require("../config.json");
   console.log("Using config.json");
@@ -22,5 +21,4 @@ try {
     MYSQL_HOST: process.env.MYSQL_HOST || "localhost",
   };
 }
-
 export { config };
