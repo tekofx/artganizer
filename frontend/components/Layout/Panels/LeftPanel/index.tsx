@@ -10,10 +10,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { ArtistForm, SubmissionForm, TagForm } from "../../../Forms";
 import CharacterForm from "../../../Forms/CharacterForm";
+import SettingsMenu from "../../Menu";
+import CreateMenu from "../../Menu/CreateMenu";
 import ArtistAccordion from "./Accordions/ArtistAccordion";
 import CharacterAccordion from "./Accordions/CharacterAccordion";
-import CreateMenu from "./Menus/CreateMenu";
-import SettingsMenu from "./Menus/Menu";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
@@ -24,7 +24,10 @@ export default function LeftPanel() {
   const router = useRouter();
 
   return (
-    <Paper sx={{ minHeight: "100vh", position: "sticky", top: 0 }} elevation={0}>
+    <Paper
+      sx={{ minHeight: "100vh", position: "sticky", top: 0 }}
+      elevation={0}
+    >
       <Grid container sx={{ p: 2 }}>
         {/* Superior bar */}
         <Grid item lg={12}>

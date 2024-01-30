@@ -11,9 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import ManageTags from "../../../../Forms/ManageTags";
-import About from "../About";
-import SettingsDialog from "../SettingsDialog";
+import ManageTags from "../../Forms/ManageTags";
+import About from "../Panels/LeftPanel/About";
+import SettingsDialog from "../Panels/LeftPanel/SettingsDialog";
+
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -61,7 +62,9 @@ export default function SettingMenu() {
         </IconButton>
       </Tooltip>
       <Menu
-        sx={{ mt: "45px" }}
+        sx={{
+          top: { xs: -40, lg: 40 },
+        }}
         id="menu-appbar"
         anchorEl={anchorElUser}
         anchorOrigin={{
