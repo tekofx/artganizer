@@ -80,7 +80,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Create Character</DialogTitle>
         <DialogContent sx={{ p: 2 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={4}>
             <Grid item lg={4}>
               <input
                 accept="image/png, image/jpeg"
@@ -97,7 +97,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
               </label>
             </Grid>
             <Grid item lg={8}>
-              <Stack spacing={2}>
+              <Stack spacing={2} sx={{ paddingTop: 1 }}>
                 <LimitedTextField
                   label="Name"
                   maxLength={CharacterData.nameLenght}

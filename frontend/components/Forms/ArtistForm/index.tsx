@@ -101,7 +101,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
               </label>
             </Grid>
             <Grid item lg={8}>
-              <Stack spacing={2}>
+              <Stack spacing={2} sx={{ paddingTop: 1 }}>
                 <LimitedTextField
                   label="Name"
                   multiline={false}
