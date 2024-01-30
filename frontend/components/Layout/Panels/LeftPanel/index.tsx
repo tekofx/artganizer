@@ -25,43 +25,50 @@ export default function LeftPanel() {
 
   return (
     <Paper
-      sx={{ minHeight: "100vh", position: "sticky", top: 0 }}
+      sx={{
+        minHeight: "100vh",
+        position: "sticky",
+        top: 0,
+        paddingLeft: 2,
+        paddingRight: 2,
+      }}
       elevation={0}
     >
-      <Grid container sx={{ p: 2 }}>
+      <Grid
+        container
+        sx={{ p: 2 }}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         {/* Superior bar */}
-        <Grid item lg={12}>
-          <Grid container justifyContent="space-between" alignItems="center">
-            <Grid item>
-              <SettingsMenu />
-            </Grid>
+        <Grid item>
+          <SettingsMenu />
+        </Grid>
 
-            <Grid item>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Avatar src="/logo.jpg" sx={{ width: 25, height: 25 }} />
-                <Typography
-                  variant="h5"
-                  onClick={() => router.push("/")}
-                  sx={{ cursor: "pointer" }}
-                >
-                  Artganizer
-                </Typography>
-              </Stack>
-            </Grid>
-            <Grid item>
-              <CreateMenu
-                setOpenSubmissionForm={setOpenSubmissionForm}
-                setOpenTagForm={setOpenTagForm}
-              />
-            </Grid>
-          </Grid>
+        <Grid item>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Avatar src="/logo.jpg" sx={{ width: 25, height: 25 }} />
+            <Typography
+              variant="h5"
+              onClick={() => router.push("/")}
+              sx={{ cursor: "pointer" }}
+            >
+              Artganizer
+            </Typography>
+          </Stack>
         </Grid>
-        <Grid item lg={12}>
-          <MenuList>
-            <ArtistAccordion />
-            <CharacterAccordion />
-          </MenuList>
+        <Grid item>
+          <CreateMenu
+            setOpenSubmissionForm={setOpenSubmissionForm}
+            setOpenTagForm={setOpenTagForm}
+          />
         </Grid>
+      </Grid>
+      <Grid item lg={12}>
+        <MenuList>
+          <ArtistAccordion />
+          <CharacterAccordion />
+        </MenuList>
       </Grid>
       <ArtistForm open={openArtistForm} setOpen={setOpenArtistForm} />
       <SubmissionForm

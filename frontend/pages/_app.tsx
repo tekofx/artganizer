@@ -309,14 +309,16 @@ export default function MyApp(props: MyAppProps) {
           <Grid container>
             <Grid
               item
-              lg={2}
+              md={4}
+              lg={3}
+              xl={2}
               sx={{
-                display: { xs: "none", sm: "none", md: "none", lg: "block" },
+                display: { xs: "none", sm: "none", md: "block", lg: "block" },
               }}
             >
               <LateralPanel />
             </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={10}>
+            <Grid item xs={12} sm={12} md={8} lg={9} xl={10}>
               <Component {...pageProps} />
             </Grid>
             <Grid
