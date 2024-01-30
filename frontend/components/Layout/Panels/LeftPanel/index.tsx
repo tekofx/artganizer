@@ -10,10 +10,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { ArtistForm, SubmissionForm, TagForm } from "../../../Forms";
 import CharacterForm from "../../../Forms/CharacterForm";
+import SettingsMenu from "../../Menu";
+import CreateMenu from "../../Menu/CreateMenu";
 import ArtistAccordion from "./Accordions/ArtistAccordion";
 import CharacterAccordion from "./Accordions/CharacterAccordion";
-import SettingsMenu from "./Menu";
-import CreateMenu from "./Menu/CreateMenu";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
