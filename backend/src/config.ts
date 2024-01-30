@@ -8,7 +8,6 @@ interface Config {
 }
 
 let config: Config;
-console.log(process.env);
 try {
   config = require("../config.json");
   console.log("Using config.json");
