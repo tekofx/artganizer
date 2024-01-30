@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogTitle,
   Grid,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -42,7 +43,8 @@ export default function RightPanel(props: RightPanelProps) {
   };
 
   return (
-    <div
+    <Paper
+      elevation={0}
       style={{
         height: "100%",
       }}
@@ -94,6 +96,6 @@ export default function RightPanel(props: RightPanelProps) {
           </Stack>
         </DialogActions>
       </Dialog>
-    </div>
+    </Paper>
   );
 }
