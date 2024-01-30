@@ -1,5 +1,5 @@
 import DoneIcon from "@mui/icons-material/Done";
-import { Button, Grid, Paper, Rating, Stack, Typography } from "@mui/material";
+import { Button, Grid, Rating, Stack, Typography } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Artist from "../../../../interfaces/Artist";
 import Character from "../../../../interfaces/Character";
@@ -43,75 +43,65 @@ export default function Edit(props: InfoProps) {
   }
 
   return (
-    <Grid container spacing={2} alignContent="center" sx={{ paddingTop: 3 }}>
+    <Grid container spacing={2} alignContent="center" sx={{ p: 2 }}>
       <Grid item xs={12}>
-        <Paper elevation={0} sx={{ padding: 2 }}>
-          <Stack spacing={1}>
-            <LimitedTextField
-              maxLength={50}
-              label="Title"
-              value={submission?.title}
-              onChange={(event) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  title: event.target.value,
-                }));
-              }}
-            />
-            <LimitedTextField
-              maxLength={500}
-              label="Description"
-              multiline
-              value={submission?.description}
-              onChange={(event) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  description: event.target.value,
-                }));
-              }}
-            />
-          </Stack>
-        </Paper>
-      </Grid>
-      <Grid item xs={12}>
-        <Paper elevation={0} sx={{ padding: 2 }}>
-          <Stack>
-            <Typography>Rating</Typography>
-            <Rating
-              value={submission.rating}
-              onChange={(event, newValue) => {
-                setSubmission((prevSubmission) => ({
-                  ...prevSubmission,
-                  rating: newValue || 0,
-                }));
-              }}
-            />
-          </Stack>
-        </Paper>
-      </Grid>
-      <Grid item xs={12}>
-        <Paper elevation={0} sx={{ padding: 2 }}>
-          <TagAutocomplete
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
+        <Stack spacing={1}>
+          <LimitedTextField
+            maxLength={50}
+            label="Title"
+            value={submission?.title}
+            onChange={(event) => {
+              setSubmission((prevSubmission) => ({
+                ...prevSubmission,
+                title: event.target.value,
+              }));
+            }}
           />
-        </Paper>
+          <LimitedTextField
+            maxLength={500}
+            label="Description"
+            multiline
+            value={submission?.description}
+            onChange={(event) => {
+              setSubmission((prevSubmission) => ({
+                ...prevSubmission,
+                description: event.target.value,
+              }));
+            }}
+          />
+        </Stack>
       </Grid>
       <Grid item xs={12}>
-        <Paper elevation={0} sx={{ padding: 2 }}>
-          <ArtistAutocomplete
-            selectedArtist={selectedArtist}
-            setSelectedArtist={setSelectedArtist}
+        <Stack>
+          <Typography>Rating</Typography>
+          <Rating
+            value={submission.rating}
+            onChange={(event, newValue) => {
+              setSubmission((prevSubmission) => ({
+                ...prevSubmission,
+                rating: newValue || 0,
+              }));
+            }}
           />
-        </Paper>
+        </Stack>
       </Grid>
       <Grid item xs={12}>
-        <Paper elevation={0} sx={{ padding: 2 }}>
-          <CharacterAutocomplete
-            selectedCharacters={selectedCharacters}
-            setSelectedCharacters={setSelectedCharacters}
-          />
-        </Paper>
+        <TagAutocomplete
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <ArtistAutocomplete
+          selectedArtist={selectedArtist}
+          setSelectedArtist={setSelectedArtist}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <CharacterAutocomplete
+          selectedCharacters={selectedCharacters}
+          setSelectedCharacters={setSelectedCharacters}
+        />
       </Grid>
 
       <Grid item xs={12}>
