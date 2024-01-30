@@ -21,5 +21,4 @@ try {
     MYSQL_HOST: process.env.MYSQL_HOST || "localhost",
   };
 }
-console.log("config " + JSON.stringify(config));
 export { config };
