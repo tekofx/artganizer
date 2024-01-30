@@ -90,7 +90,7 @@ router.post(
       });
 
     if (file) {
-      sharp(file.path)
+      await sharp(file.path)
         .resize(500)
         .jpeg()
         .toFile(path.join(charactersDir, id + ".jpg"))
@@ -146,7 +146,7 @@ router.put(
 
     // Convertir a JPG y Renombrar el archivo con el ID generado
     if (file) {
-      sharp(file.path)
+      await sharp(file.path)
         .jpeg()
         .toFile(path.join(charactersDir, characterId + ".jpg"))
         .then(() => {

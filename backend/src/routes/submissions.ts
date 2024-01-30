@@ -275,7 +275,7 @@ router.post(
         imageSize = submission.width;
       }
       // Crear copias
-      sharp(submissionPath)
+      await sharp(submissionPath)
         .resize(thumbnailSize)
         .jpeg()
         .toFile(path.join(submissionDir, "thumbnail.jpg"))
@@ -283,7 +283,7 @@ router.post(
           console.log(error);
         });
 
-      sharp(submissionPath)
+      await sharp(submissionPath)
         .resize(imageSize)
         .jpeg()
         .toFile(path.join(submissionDir, "image.jpg"))
