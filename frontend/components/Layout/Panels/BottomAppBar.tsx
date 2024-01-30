@@ -29,7 +29,6 @@ export default function BottomAppBar() {
           <BottomNavigationAction label="Tags" icon={<SearchIcon />} />
         </BottomNavigation>
         <Menu />
-        <Menu />
         <StyledFab color="secondary" aria-label="add">
           <SearchIcon />
         </StyledFab>
