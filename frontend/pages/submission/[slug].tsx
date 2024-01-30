@@ -15,14 +15,23 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
   const slug = context.params?.slug;
+  /* const { req } = context;
+  const protocol = req.headers["x-forwarded-proto"] || "http";
+  const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
+  console.log(baseUrl); */
   if (slug) {
     var id = parseInt(slug.toString());
-    const res = await axios.get("/api/submissions/" + id).catch(() => {
-      return undefined;
-    });
+    const res = await axios
+      .get("http://localhost:3000" + "/api/submissions/" + id)
+      .then((response) => {
+        return response.data;
+      })
+      .catch(() => {
+        return undefined;
+      });
     if (res == undefined) return { notFound: true };
 
-    var submission: Submission = res.data;
+    var submission: Submission = res;
 
     return { props: { submission } };
   }
