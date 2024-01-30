@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Textfield with limited characters in all forms an edits
 - Docker: Now artganizer frontend and backend runs in only 1 image.
 
+### Fixed
+
+- Submission: Hovering the mouse over the submission caused the animation to go through the top bar
+
 ## [0.9.1] - 2024-01-24
 
 ### Fixed
