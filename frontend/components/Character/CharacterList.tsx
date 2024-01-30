@@ -1,16 +1,27 @@
 import { Typography } from "@mui/material";
+import { Character } from "../../interfaces";
 import { useAppContext } from "../../pages/_app";
 import CharacterLabel from "./CharacterLabel";
 interface CharacterListProps {
   search?: string;
   clickable?: boolean;
+  charactersProp?: Character[];
 }
 
 export default function CharacterList({
   search,
   clickable,
+  charactersProp,
 }: CharacterListProps) {
   const { characters } = useAppContext();
+
+  function getCharacters() {
+    if (charactersProp == undefined) {
+      return characters;
+    }
+    return charactersProp;
+  }
+
   return (
     <div
       style={{
@@ -18,8 +29,8 @@ export default function CharacterList({
         overflowY: "auto",
       }}
     >
-      {characters?.length == 0 && <Typography>No characters</Typography>}
-      {characters
+      {characters.length == 0 && <Typography>No characters</Typography>}
+      {getCharacters()
         .filter((artist) =>
           artist.name.toLowerCase().includes(search === undefined ? "" : search)
         )
