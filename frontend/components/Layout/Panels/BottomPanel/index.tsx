@@ -13,7 +13,7 @@ export default function BottomPanel({ current }: BottomPanelProps) {
 
   useEffect(() => {
     const getSubmissions = async () => {
-      var res = await axios.get("http://localhost:3000/api" + "/submissions");
+      var res = await axios.get("/api/submissions");
       setSubmissions(res.data);
     };
     getSubmissions();

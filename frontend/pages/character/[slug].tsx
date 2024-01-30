@@ -31,11 +31,9 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const slug = context.params?.slug;
   if (slug) {
     var id = parseInt(slug.toString());
-    const res = await axios
-      .get("http://localhost:3000/api" + "/characters/" + id)
-      .catch(() => {
-        return undefined;
-      });
+    const res = await axios.get("/api/characters/" + id).catch(() => {
+      return undefined;
+    });
     if (res == undefined) return { notFound: true };
 
     var character: Character = res.data;

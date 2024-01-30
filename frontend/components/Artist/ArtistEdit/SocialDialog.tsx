@@ -42,10 +42,7 @@ export default function SocialDialog({
     // Create social
     if (social == undefined) {
       await axios
-        .post(
-          "http://localhost:3000/api" + `/artists/${artist.id}/socials`,
-          socialDialog
-        )
+        .post(`/api/artists/${artist.id}/socials`, socialDialog)
         .then((response) => {
           console.log(response.data);
           setArtist({ ...artist, socials: [...artist.socials, response.data] });
@@ -57,11 +54,7 @@ export default function SocialDialog({
       // Edit social
       console.log("Edit social");
       await axios
-        .put(
-          "http://localhost:3000/api" +
-          `/artists/${artist.id}/socials/${socialDialog.id}`,
-          social
-        )
+        .put(`/api/artists/${artist.id}/socials/${socialDialog.id}`, social)
         .then((response) => {
           console.log(response.data);
           setArtist({

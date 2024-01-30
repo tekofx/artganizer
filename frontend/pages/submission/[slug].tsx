@@ -17,11 +17,9 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const slug = context.params?.slug;
   if (slug) {
     var id = parseInt(slug.toString());
-    const res = await axios
-      .get("http://localhost:3000/api" + "/submissions/" + id)
-      .catch(() => {
-        return undefined;
-      });
+    const res = await axios.get("/api/submissions/" + id).catch(() => {
+      return undefined;
+    });
     if (res == undefined) return { notFound: true };
 
     var submission: Submission = res.data;

@@ -115,7 +115,7 @@ export default function MyApp(props: MyAppProps) {
     try {
       submissionCreated = await handleCreateSubmission(submission);
     } catch (e: any) {
-      console.log("app.tsx: " + e.message)
+      console.log("app.tsx: " + e.message);
       throw e;
     }
     setSubmissions([...submissions, submissionCreated]);
@@ -230,28 +230,33 @@ export default function MyApp(props: MyAppProps) {
   }
 
   const getArtists = async () =>
-    await axios.get(`http://localhost:3000/api/artists`).then((response) => {
-      setArtists(response.data);
-    });
+    await axios
+      .get(`/api/artists`)
+      .then((response) => {
+        setArtists(response.data);
+      })
+      .catch((error) => {
+        console.log("artists: " + error);
+      });
 
   const getSubmissions = async () =>
-    await axios.get(`http://localhost:3000/api/submissions`).then((response) => {
+    await axios.get(`/api/submissions`).then((response) => {
       console.log(response.data);
       setSubmissions(response.data);
     });
 
   const getCharacters = async () =>
-    await axios.get(`http://localhost:3000/api/characters`).then((response) => {
+    await axios.get(`/api/characters`).then((response) => {
       setCharacters(response.data);
     });
 
   const getTags = async () =>
-    await axios.get(`http://localhost:3000/api/tags`).then((response) => {
+    await axios.get(`/api/tags`).then((response) => {
       setTags(response.data);
     });
 
   const getSettings = async () =>
-    await axios.get(`http://localhost:3000/api/settings`).then((response) => {
+    await axios.get(`/api/settings`).then((response) => {
       setSettings(response.data);
     });
 
@@ -302,15 +307,26 @@ export default function MyApp(props: MyAppProps) {
           }}
         >
           <Grid container>
-            <Grid item lg={2} sx={{ display: { xs: "none", sm: "none", md: "none", lg: "block" } }}>
+            <Grid
+              item
+              lg={2}
+              sx={{
+                display: { xs: "none", sm: "none", md: "none", lg: "block" },
+              }}
+            >
               <LateralPanel />
             </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={10} >
+            <Grid item xs={12} sm={12} md={12} lg={10}>
               <Component {...pageProps} />
             </Grid>
-            <Grid item xs={12} sx={{ display: { xs: "block", sm: "block", md: "block", lg: "none" } }}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: { xs: "block", sm: "block", md: "block", lg: "none" },
+              }}
+            >
               <BottomAppBar />
-
             </Grid>
           </Grid>
         </AppContext.Provider>
