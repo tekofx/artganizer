@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Submission } from "../../interfaces";
+import ApiError from "./ApiError";
 
 export async function handleCreateSubmission(
   submission: Submission
-): Promise<Submission | undefined> {
+): Promise<Submission> {
   const formData = new FormData();
   formData.append("image", submission.image);
   formData.append("title", submission.title);
@@ -24,17 +25,16 @@ export async function handleCreateSubmission(
   }
 
   // Create submission
-  var status = await axios
+
+  return await axios
     .post("http://localhost:3000/api" + `/submissions`, formData)
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
-      console.log(error);
-      return undefined;
+    .catch((error: AxiosError) => {
+      var message: string = "error: " + error.response?.data;
+      throw new ApiError(message);
     });
-
-  return status;
 }
 
 export async function handleEditSubmission(

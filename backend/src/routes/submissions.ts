@@ -164,24 +164,24 @@ router.post(
 
     var image = req.file;
     if (!image) {
-      res.status(400).send("image not provided or not an image");
+      res.status(400).send("Image not provided");
       return;
     }
     var colorsArray: string[] = [];
-
-    // Get colors
-    await Vibrant.from(image.path).getPalette((err, palette) => {
-      for (const colorName in palette) {
-        const color = palette[colorName];
-        if (color) {
-          const hex = color.hex;
-          colorsArray.push(hex);
-        }
-      }
-    });
-
     var submission: Submission;
+
     try {
+      // Get colors
+      await Vibrant.from(image.path).getPalette((err, palette) => {
+        for (const colorName in palette) {
+          const color = palette[colorName];
+          if (color) {
+            const hex = color.hex;
+            colorsArray.push(hex);
+          }
+        }
+      });
+
       // Obtener las dimensiones de la imagen
       const dimensions = sizeOf(image.path);
 
@@ -199,9 +199,13 @@ router.post(
         thumbnail: "",
         original_image: "",
       });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).send("Error creating submission");
+
+      await SubmissionRepo.save(submission);
+    } catch (error: any) {
+      if (error.code === "ER_DATA_TOO_LONG") {
+        return res.status(400).send("Name or description too long");
+      }
+      return res.status(400).send("Error when uploading submission");
     }
 
     if (artist) {
@@ -292,7 +296,7 @@ router.post(
         });
     } catch (error) {
       await SubmissionRepo.remove(submission);
-      return res.status(400).send("Error when uploading submission");
+      return res.status(400).send("Error when uploading submission image");
     }
 
     submission.image = `http://localhost:3001/submissions/uploads/${id}/image.jpg`;

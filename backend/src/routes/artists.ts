@@ -4,6 +4,7 @@ import multer, { FileFilterCallback } from "multer";
 import * as path from "path";
 import "reflect-metadata";
 import sharp from "sharp";
+import { Artist } from "../entities";
 import { ArtistRepo, SocialRepo, SubmissionRepo } from "../typeorm.config";
 
 const artistsPicsDir = "backend/data/uploads/artists";
@@ -71,57 +72,68 @@ router.post(
       res.status(400).send("name not provided");
       return;
     }
-
     const artist = ArtistRepo.create({ name, description });
-    var id = await ArtistRepo.save(artist)
-      .then((artist) => {
-        return artist.id;
-      })
-      .catch((error) => {
-        if (error.name == "ER_DATA_TOO_LONG") {
-          res.status(400).send("Data too long");
-        } else {
-          res.status(400).send("An error ocurred");
-          console.log(error);
-        }
-        return;
-      });
 
-    // Convertir a JPG y Renombrar el archivo con el ID generado
-    if (file) {
-      await sharp(file.path)
-        .resize(500)
-        .jpeg()
-        .toFile(path.join(artistsPicsDir, id + ".jpg"))
-        .then(() => {
-          // Eliminar el archivo temporal
-          if (file?.path) {
-            fs.unlinkSync(file.path);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      artist.image =
-        "http://localhost:3001" + "/artists/uploads/" + artist.id + ".jpg";
-      await ArtistRepo.save(artist);
+    try {
+      var id = await ArtistRepo.save(artist).then((artist) => {
+        return artist.id;
+      });
+    } catch (error: any) {
+      if (error.code === "ER_DATA_TOO_LONG") {
+        res.status(400).send("Name or description too long");
+      } else {
+        console.log(error);
+        res.status(400).send("An error occurred");
+      }
+      return;
+    }
+    try {
+      // Convertir a JPG y Renombrar el archivo con el ID generado
+      if (file) {
+        await sharp(file.path)
+          .resize(500)
+          .jpeg()
+          .toFile(path.join(artistsPicsDir, id + ".jpg"))
+          .then(() => {
+            // Eliminar el archivo temporal
+            if (file?.path) {
+              fs.unlinkSync(file.path);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        artist.image =
+          "http://localhost:3001" + "/artists/uploads/" + id + ".jpg";
+        await ArtistRepo.save(artist);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("An error when saving picture occurred");
+      return;
     }
 
-    if (socials) {
-      socials = JSON.parse(socials);
-      var socialsObjs = [];
-      for (const social of socials) {
-        const newSocial = SocialRepo.create({
-          name: social.name,
-          url: social.url,
-          artist: artist,
-        });
-        await SocialRepo.save(newSocial);
-        socialsObjs.push(newSocial);
-      }
-      artist.socials = socialsObjs;
+    try {
+      if (socials) {
+        socials = JSON.parse(socials);
+        var socialsObjs = [];
+        for (const social of socials) {
+          const newSocial = SocialRepo.create({
+            name: social.name,
+            url: social.url,
+            artist: artist,
+          });
+          await SocialRepo.save(newSocial);
+          socialsObjs.push(newSocial);
+        }
+        artist.socials = socialsObjs;
 
-      await ArtistRepo.save(artist);
+        await ArtistRepo.save(artist);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("An error when saving socials occurred");
+      return;
     }
 
     res.send(artist);

@@ -69,7 +69,7 @@ interface AppContextType {
   filters: Filters;
   setFilters: Dispatch<SetStateAction<Filters>>;
   // eslint-disable-next-line no-unused-vars
-  createSubmission(submission: Submission): Promise<Submission | undefined>;
+  createSubmission(submission: Submission): Promise<Submission>;
   // eslint-disable-next-line no-unused-vars
   createArtist(artist: Artist): Promise<Artist | undefined>;
   // eslint-disable-next-line no-unused-vars
@@ -110,10 +110,14 @@ export default function MyApp(props: MyAppProps) {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
 
   async function createSubmission(submission: Submission) {
-    const submissionCreated = await handleCreateSubmission(submission);
-    if (submissionCreated) {
-      setSubmissions([...submissions, submissionCreated]);
+    var submissionCreated: Submission;
+    try {
+      submissionCreated = await handleCreateSubmission(submission);
+    } catch (e: any) {
+      console.log("app.tsx: " + e.message)
+      throw e;
     }
+    setSubmissions([...submissions, submissionCreated]);
     getTags();
     return submissionCreated;
   }
