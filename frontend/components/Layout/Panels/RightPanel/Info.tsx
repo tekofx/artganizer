@@ -1,15 +1,7 @@
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Rating,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, Paper, Rating, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import Submission from "../../../../interfaces/Submission";
 import { convertBytes } from "../../../../src/formatters";
@@ -45,10 +37,14 @@ export default function Info({
   }
 
   return (
-    <Container sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}>
-      <Grid container spacing={2}>
-        <Grid item lg={12}>
-          <Grid container spacing={2}>
+    <Grid
+      container
+      spacing={1}
+      sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}
+    >
+      <Grid item xs={12}>
+        <Paper elevation={0} sx={{ padding: 2 }}>
+          <Grid container spacing={2} justifyContent="center">
             <Grid item>
               <Button
                 variant="contained"
@@ -77,95 +73,97 @@ export default function Info({
               </Button>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item lg={12}>
-          <Stack spacing={1}>
-            <Paper elevation={0} sx={{ padding: 2 }}>
-              <Stack spacing="1">
-                <Typography variant="h4">{submission.title}</Typography>
-                <Typography variant="body1">
-                  {submission.description}
-                </Typography>
-                <Typography>Rating</Typography>
-                <Rating value={submission.rating} readOnly />
-              </Stack>
-            </Paper>
-            {submission.tags && (
-              <Paper elevation={0} sx={{ padding: 2 }}>
-                <Stack spacing={1}>
-                  <Typography>Tags</Typography>
-                  <TagList tags={submission.tags} />
-                </Stack>
-              </Paper>
-            )}
-            {submission.artist && (
-              <Paper elevation={0} sx={{ padding: 2 }}>
-                <Stack spacing={1}>
-                  <Typography>Artist</Typography>
-                  <ArtistLabel artist={submission.artist} clickable />
-                </Stack>
-              </Paper>
-            )}
-            {submission.characters && (
-              <Paper elevation={0} sx={{ padding: 2 }}>
-                <Stack spacing={1}>
-                  <Typography>Characters</Typography>
-                  <CharacterList characters={submission.characters} clickable />
-                </Stack>
-              </Paper>
-            )}
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+        <Paper elevation={0} sx={{ padding: 2 }}>
+          <Stack spacing="1" sx={{ width: "100%" }}>
+            <Typography variant="h4">{submission.title}</Typography>
+            <Typography variant="body1">{submission.description}</Typography>
+            <Typography>Rating</Typography>
+            <Rating value={submission.rating} readOnly />
           </Stack>
-        </Grid>
-        <Grid item lg={12}>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+        {submission.tags && (
           <Paper elevation={0} sx={{ padding: 2 }}>
             <Stack spacing={1}>
-              <Typography>Colors</Typography>
-              <ColorPalette colors={submission.colors} />
+              <Typography>Tags</Typography>
+              <TagList tags={submission.tags} />
             </Stack>
           </Paper>
-        </Grid>
-        <Grid item lg={12}>
-          <Paper elevation={0} sx={{ padding: 2 }}>
-            <Typography variant="h5">Image Information</Typography>
-            <Grid container spacing={1}>
-              <Grid item lg={4}>
-                Date
-              </Grid>
-
-              <Grid item lg={8}>
-                <Typography>
-                  {new Date(submission.date).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                  })}
-                </Typography>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Stack direction="row" spacing={2}>
-                  <Typography fontWeight={"bold"}>Dimensions</Typography>
-                  <Typography>
-                    {submission.width}x{submission.height}
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack direction="row" spacing={2} alignContent="space-between">
-                  <Typography fontWeight={"bold"}>Size</Typography>
-                  <Typography>{convertBytes(submission.size)}</Typography>
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack direction="row" spacing={2}>
-                  <Typography fontWeight={"bold"}>Format</Typography>
-                  <Typography>{submission.format.toUpperCase()}</Typography>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
+        )}
       </Grid>
-    </Container>
+      <Grid item xs={12}>
+        {submission.artist && (
+          <Paper elevation={0} sx={{ padding: 2 }}>
+            <Stack spacing={1}>
+              <Typography>Artist</Typography>
+              <ArtistLabel artist={submission.artist} clickable />
+            </Stack>
+          </Paper>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        {submission.characters && (
+          <Paper elevation={0} sx={{ padding: 2 }}>
+            <Stack spacing={1}>
+              <Typography>Characters</Typography>
+              <CharacterList characters={submission.characters} clickable />
+            </Stack>
+          </Paper>
+        )}
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        <Paper elevation={0} sx={{ padding: 2 }}>
+          <Stack spacing={1}>
+            <Typography>Colors</Typography>
+            <ColorPalette colors={submission.colors} />
+          </Stack>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        <Paper elevation={0} sx={{ padding: 2 }}>
+          <Typography variant="h5">Image Information</Typography>
+          <Grid container spacing={1}>
+            <Grid item lg={4}>
+              Date
+            </Grid>
+
+            <Grid item lg={8}>
+              <Typography>
+                {new Date(submission.date).toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Stack direction="row" spacing={2}>
+                <Typography fontWeight={"bold"}>Dimensions</Typography>
+                <Typography>
+                  {submission.width}x{submission.height}
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack direction="row" spacing={2} alignContent="space-between">
+                <Typography fontWeight={"bold"}>Size</Typography>
+                <Typography>{convertBytes(submission.size)}</Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack direction="row" spacing={2}>
+                <Typography fontWeight={"bold"}>Format</Typography>
+                <Typography>{submission.format.toUpperCase()}</Typography>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }

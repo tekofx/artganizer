@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  Grid,
   Stack,
   Typography,
 } from "@mui/material";
@@ -46,23 +47,25 @@ export default function RightPanel(props: RightPanelProps) {
         height: "100%",
       }}
     >
-      {!editShow ? (
-        <>
-          <Info
-            submission={props.submission}
-            toggleEdit={toggleEdit}
-            handleClickOpenDialog={handleClickOpenDialog}
-          />
-        </>
-      ) : (
-        <>
-          <Edit
-            submission={props.submission}
-            setEditShow={setEditShow}
-            setSubmission={props.setSubmission}
-          />
-        </>
-      )}
+      <Grid container>
+        {!editShow ? (
+          <Grid item xs={12}>
+            <Info
+              submission={props.submission}
+              toggleEdit={toggleEdit}
+              handleClickOpenDialog={handleClickOpenDialog}
+            />
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <Edit
+              submission={props.submission}
+              setEditShow={setEditShow}
+              setSubmission={props.setSubmission}
+            />
+          </Grid>
+        )}
+      </Grid>
 
       <Dialog open={dialogOpen}>
         <DialogTitle>
