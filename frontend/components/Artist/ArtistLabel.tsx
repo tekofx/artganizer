@@ -19,7 +19,7 @@ export default function Page({
 
   function handleClick() {
     if (clickable) {
-      router.push(`/artist/${artist?.id}`);
+      router.push(`/artists/${artist?.id}`);
     }
   }
 

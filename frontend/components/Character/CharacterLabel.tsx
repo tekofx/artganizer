@@ -18,7 +18,7 @@ export default function Page({
 
   function handleClick() {
     if (clickable) {
-      router.push(`/character/${character?.id}`);
+      router.push(`/characters/${character?.id}`);
     }
   }
 

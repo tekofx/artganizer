@@ -8,6 +8,7 @@ import AppBar from "@mui/material/AppBar";
 import Fab from "@mui/material/Fab";
 import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/material/styles";
+import { useRouter } from "next/router";
 const StyledFab = styled(Fab)({
   position: "absolute",
   zIndex: 1,
@@ -18,6 +19,24 @@ const StyledFab = styled(Fab)({
 });
 
 export default function BottomAppBar() {
+  const router = useRouter();
+
+  function onArtistsClick() {
+    router.push("/artists");
+  }
+
+  function onCharactersClick() {
+    router.push("/characters");
+  }
+
+  function onSubmissionsClick() {
+    router.push("/");
+  }
+
+  function onTagsClick() {
+    router.push("/tags");
+  }
+
   return (
     <AppBar
       position="fixed"
@@ -26,10 +45,27 @@ export default function BottomAppBar() {
     >
       <Toolbar sx={{ top: "auto", bottom: 0, paddingLeft: 0, paddingRight: 0 }}>
         <BottomNavigation showLabels sx={{ width: "100%" }}>
-          <BottomNavigationAction label="Artists" icon={<BrushIcon />} />
-          <BottomNavigationAction label="Characters" icon={<PersonIcon />} />
-          <BottomNavigationAction label="Submissions" icon={<PhotoIcon />} />
-          <BottomNavigationAction label="Tags" icon={<LocalOfferIcon />} />
+          <BottomNavigationAction
+            label="Artists"
+            icon={<BrushIcon />}
+            onClick={onArtistsClick}
+          />
+          <BottomNavigationAction
+            label="Characters"
+            icon={<PersonIcon />}
+            onClick={onCharactersClick}
+          />
+
+          <BottomNavigationAction
+            label="Submissions"
+            icon={<PhotoIcon />}
+            onClick={onSubmissionsClick}
+          />
+          <BottomNavigationAction
+            label="Tags"
+            icon={<LocalOfferIcon />}
+            onClick={onTagsClick}
+          />
         </BottomNavigation>
         <StyledFab color="secondary" aria-label="add">
           <SearchIcon />
