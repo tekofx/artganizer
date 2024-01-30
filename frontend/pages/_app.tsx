@@ -13,6 +13,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import BottomAppBar from "../components/Layout/Panels/BottomAppBar";
 import LateralPanel from "../components/Layout/Panels/LeftPanel";
 import {
   Artist,
@@ -306,6 +307,10 @@ export default function MyApp(props: MyAppProps) {
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={10} >
               <Component {...pageProps} />
+            </Grid>
+            <Grid item xs={12} sx={{ display: { xs: "block", sm: "block", md: "block", lg: "none" } }}>
+              <BottomAppBar />
+
             </Grid>
           </Grid>
         </AppContext.Provider>
