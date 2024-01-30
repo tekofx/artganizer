@@ -202,6 +202,12 @@ router.post(
 
       await SubmissionRepo.save(submission);
     } catch (error: any) {
+      fs.unlink(image.path, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
       if (error.code === "ER_DATA_TOO_LONG") {
         return res.status(400).send("Name or description too long");
       }
@@ -229,24 +235,20 @@ router.post(
       submission.tags = tagObjs;
     }
 
-    try {
-      if (characters) {
-        if (!Array.isArray(characters)) {
-          characters = [characters];
-        }
-        var characterObjs = [];
-        for (var i = 0; i < characters.length; i++) {
-          var characterObj = await CharacterRepo.findOne({
-            where: { id: characters[i] },
-          });
-          if (characterObj) {
-            characterObjs.push(characterObj);
-          }
-        }
-        submission.characters = characterObjs;
+    if (characters) {
+      if (!Array.isArray(characters)) {
+        characters = [characters];
       }
-    } catch (error) {
-      console.log(error);
+      var characterObjs = [];
+      for (var i = 0; i < characters.length; i++) {
+        var characterObj = await CharacterRepo.findOne({
+          where: { id: characters[i] },
+        });
+        if (characterObj) {
+          characterObjs.push(characterObj);
+        }
+      }
+      submission.characters = characterObjs;
     }
 
     var id = await SubmissionRepo.save(submission)
@@ -295,6 +297,18 @@ router.post(
           console.log(error);
         });
     } catch (error) {
+      fs.unlink(image.path, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
+      fs.unlink(submissionPath, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
       await SubmissionRepo.remove(submission);
       return res.status(400).send("Error when uploading submission image");
     }
