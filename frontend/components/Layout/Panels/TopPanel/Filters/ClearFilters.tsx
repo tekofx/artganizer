@@ -1,8 +1,8 @@
 import ClearIcon from "@mui/icons-material/Clear";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Filters } from "../../../../interfaces";
-import { useAppContext } from "../../../../pages/_app";
+import { Filters } from "../../../../../interfaces";
+import { useAppContext } from "../../../../../pages/_app";
 const emptyFilters: Filters = {
   rating: -1,
   tags: [],

@@ -13,12 +13,12 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
-import { ArtistForm } from "../../../Forms";
-import SearchBar from "../../../SearchBar";
+import { ArtistForm } from "../../../../Forms";
+import SearchBar from "../../../../SearchBar";
 
-import { Artist } from "../../../../interfaces";
-import { useAppContext } from "../../../../pages/_app";
-import ArtistList from "../../../Artist/ArtistList";
+import { Artist } from "../../../../../interfaces";
+import { useAppContext } from "../../../../../pages/_app";
+import ArtistList from "../../../../Artist/ArtistList";
 
 export default function ArtistAccordion() {
   const { artists } = useAppContext();

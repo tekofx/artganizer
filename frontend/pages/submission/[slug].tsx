@@ -3,8 +3,8 @@ import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import BottomPanel from "../../components/Panels/BottomPanel";
-import RightPanel from "../../components/Panels/RightPanel/RightPanel";
+import BottomPanel from "../../components/Layout/Panels/BottomPanel";
+import RightPanel from "../../components/Layout/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
 
 interface PageProps {
@@ -15,16 +15,23 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
   const slug = context.params?.slug;
+  /* const { req } = context;
+  const protocol = req.headers["x-forwarded-proto"] || "http";
+  const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
+  console.log(baseUrl); */
   if (slug) {
     var id = parseInt(slug.toString());
     const res = await axios
-      .get("http://localhost:3000/api" + "/submissions/" + id)
+      .get("http://localhost:3000" + "/api/submissions/" + id)
+      .then((response) => {
+        return response.data;
+      })
       .catch(() => {
         return undefined;
       });
     if (res == undefined) return { notFound: true };
 
-    var submission: Submission = res.data;
+    var submission: Submission = res;
 
     return { props: { submission } };
   }

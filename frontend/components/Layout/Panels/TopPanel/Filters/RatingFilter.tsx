@@ -1,13 +1,10 @@
-import ColorLensIcon from "@mui/icons-material/ColorLens";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Badge, Button, Menu } from "@mui/material";
+import GradeIcon from "@mui/icons-material/Grade";
+import { Badge, Button, Menu, MenuItem, Rating } from "@mui/material";
 import { MouseEvent, useEffect, useState } from "react";
-import { ChromePicker } from "react-color";
-import { useAppContext } from "../../../../pages/_app";
-
+import { useAppContext } from "../../../../../pages/_app";
 export default function RatingFilter() {
   const { filters, setFilters } = useAppContext();
-  const [color, setColor] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [invisible, setInvisible] = useState<boolean>(true);
 
@@ -18,19 +15,13 @@ export default function RatingFilter() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const handleColorChange = (color: any) => {
-    setColor(color.hex);
-    setInvisible(false);
-    setFilters({ ...filters, color: color.hex });
-  };
-
   useEffect(() => {
-    if (filters.color == "") {
+    if (filters.rating == -1) {
       setInvisible(true);
+    } else {
+      setInvisible(false);
     }
-  }, [filters.color]);
-
+  }, [filters.rating]);
   return (
     <div>
       <Button
@@ -39,14 +30,14 @@ export default function RatingFilter() {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        endIcon={<ExpandMoreIcon />}
         startIcon={
           <Badge variant="dot" color="error" invisible={invisible}>
-            <ColorLensIcon />
+            <GradeIcon />
           </Badge>
         }
+        endIcon={<ExpandMoreIcon />}
       >
-        Color
+        Rating
       </Button>
       <Menu
         id="basic-menu"
@@ -57,8 +48,15 @@ export default function RatingFilter() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <ChromePicker color={color} onChange={handleColorChange} />
-        <Button onClick={handleClose}>Close</Button>
+        <MenuItem onClick={handleClose}>
+          <Rating
+            name="simple-controlled"
+            value={filters.rating}
+            onChange={(event, newValue) => {
+              setFilters({ ...filters, rating: newValue || -1 });
+            }}
+          />
+        </MenuItem>
       </Menu>
     </div>
   );

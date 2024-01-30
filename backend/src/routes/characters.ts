@@ -103,7 +103,7 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
-      character.image = "http://localhost:3001" + "/characters/" + id;
+      character.image = "/api/characters/" + id;
       await CharacterRepo.save(character);
     }
 
@@ -158,8 +158,7 @@ router.put(
         .catch((error) => {
           console.log(error);
         });
-      character.image =
-        "http://localhost:3001" + "/characters/uploads/" + characterId + ".jpg";
+      character.image = "/api/characters/uploads/" + characterId + ".jpg";
     }
 
     var { name, description } = req.body;

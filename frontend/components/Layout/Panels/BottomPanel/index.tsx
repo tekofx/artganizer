@@ -1,23 +1,15 @@
 import { Paper, Stack } from "@mui/material";
-import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef } from "react";
-import { Submission } from "../../../interfaces";
+import React, { useRef } from "react";
+import { Submission } from "../../../../interfaces";
+import { useAppContext } from "../../../../pages/_app";
 interface BottomPanelProps {
   current: Submission;
 }
 export default function BottomPanel({ current }: BottomPanelProps) {
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
-  const [submissions, setSubmissions] = React.useState<Submission[]>([]);
-
-  useEffect(() => {
-    const getSubmissions = async () => {
-      var res = await axios.get("http://localhost:3000/api" + "/submissions");
-      setSubmissions(res.data);
-    };
-    getSubmissions();
-  }, []);
+  const { submissions } = useAppContext();
 
   const handleWheel = (e: React.WheelEvent) => {
     if (ref.current) {

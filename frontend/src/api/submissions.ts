@@ -27,7 +27,7 @@ export async function handleCreateSubmission(
   // Create submission
 
   return await axios
-    .post("http://localhost:3000/api" + `/submissions`, formData)
+    .post("/api/submissions", formData)
     .then((response) => {
       return response.data;
     })
@@ -42,7 +42,7 @@ export async function handleEditSubmission(
 ): Promise<Submission | undefined> {
   // Edit submission
   var status = await axios
-    .put("http://localhost:3000/api" + `/submissions/${submission.id}`, {
+    .put(`/api/submissions/${submission.id}`, {
       submission,
     })
     .then((response) => {
@@ -60,7 +60,7 @@ export async function handleRemoveSubmission(
 ): Promise<boolean | undefined> {
   // Remove submission
   var status = await axios
-    .delete("http://localhost:3000/api" + `/submissions/${submission.id}`)
+    .delete(`/api/submissions/${submission.id}`)
     .then(() => {
       return true;
     })

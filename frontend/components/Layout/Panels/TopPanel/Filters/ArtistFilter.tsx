@@ -1,15 +1,16 @@
+import BrushIcon from "@mui/icons-material/Brush";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import PersonIcon from "@mui/icons-material/Person";
 import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
 import { MouseEvent, useEffect, useState } from "react";
-import Character from "../../../../interfaces/Character";
-import { useAppContext } from "../../../../pages/_app";
-import CharacterAutocomplete from "../../../Character/CharacterAutocomplete";
-export default function CharacterFilter() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [invisible, setInvisible] = useState<boolean>(true);
+import Artist from "../../../../../interfaces/Artist";
+import { useAppContext } from "../../../../../pages/_app";
+import ArtistAutocomplete from "../../../../Artist/ArtistAutocomplete";
+
+export default function ArtistFilter() {
   const { filters, setFilters } = useAppContext();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [artist, setArtist] = useState<Artist>();
+  const [invisible, setInvisible] = useState<boolean>(true);
 
   const open = Boolean(anchorEl);
 
@@ -21,18 +22,20 @@ export default function CharacterFilter() {
   };
 
   useEffect(() => {
-    if (filters.characters.length != 0) {
+    if (filters.artist != undefined) {
+      setArtist(filters.artist);
       setInvisible(false);
     } else {
+      setArtist(undefined);
       setInvisible(true);
     }
-  }, [filters.characters]);
+  }, [filters.artist]);
 
   useEffect(() => {
     var newFilter = { ...filters };
-    newFilter.characters = characters;
+    newFilter.artist = artist;
     setFilters(newFilter);
-  }, [characters]);
+  }, [artist]);
 
   return (
     <div>
@@ -45,11 +48,11 @@ export default function CharacterFilter() {
         endIcon={<ExpandMoreIcon />}
         startIcon={
           <Badge variant="dot" color="error" invisible={invisible}>
-            <PersonIcon />
+            <BrushIcon />
           </Badge>
         }
       >
-        Characters
+        Artist
       </Button>
       <Popover
         open={open}
@@ -63,9 +66,9 @@ export default function CharacterFilter() {
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <CharacterAutocomplete
-                selectedCharacters={characters}
-                setSelectedCharacters={setCharacters}
+              <ArtistAutocomplete
+                selectedArtist={artist}
+                setSelectedArtist={setArtist}
               />
             </Grid>
           </Grid>

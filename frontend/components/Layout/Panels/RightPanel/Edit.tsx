@@ -9,15 +9,15 @@ import {
   Typography
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
-import Artist from "../../../interfaces/Artist";
-import Character from "../../../interfaces/Character";
-import Submission from "../../../interfaces/Submission";
-import Tag from "../../../interfaces/Tag";
-import { useAppContext } from "../../../pages/_app";
-import ArtistAutocomplete from "../../Artist/ArtistAutocomplete";
-import CharacterAutocomplete from "../../Character/CharacterAutocomplete";
-import LimitedTextField from "../../LimitedTextField";
-import TagAutocomplete from "../../Tag/TagAutocomplete";
+import Artist from "../../../../interfaces/Artist";
+import Character from "../../../../interfaces/Character";
+import Submission from "../../../../interfaces/Submission";
+import Tag from "../../../../interfaces/Tag";
+import { useAppContext } from "../../../../pages/_app";
+import ArtistAutocomplete from "../../../Artist/ArtistAutocomplete";
+import CharacterAutocomplete from "../../../Character/CharacterAutocomplete";
+import LimitedTextField from "../../../LimitedTextField";
+import TagAutocomplete from "../../../Tag/TagAutocomplete";
 interface InfoProps {
   submission: Submission;
   setEditShow: Dispatch<SetStateAction<boolean>>;

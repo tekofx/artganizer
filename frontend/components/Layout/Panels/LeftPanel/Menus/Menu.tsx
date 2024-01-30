@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import ManageTags from "../../../Forms/ManageTags";
+import ManageTags from "../../../../Forms/ManageTags";
 import About from "../About";
 import SettingsDialog from "../SettingsDialog";
 export default function SettingMenu() {

@@ -11,12 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import Submission from "../../../interfaces/Submission";
-import { convertBytes } from "../../../src/formatters";
-import ArtistLabel from "../../Artist/ArtistLabel";
-import ColorPalette from "../../Artist/ColorPalette";
-import CharacterList from "../../Character/CharacterList";
-import TagList from "../../Tag/TagList";
+import Submission from "../../../../interfaces/Submission";
+import { convertBytes } from "../../../../src/formatters";
+import ArtistLabel from "../../../Artist/ArtistLabel";
+import ColorPalette from "../../../Artist/ColorPalette";
+import CharacterList from "../../../Character/CharacterList";
+import TagList from "../../../Tag/TagList";
 interface InfoProps {
   submission: Submission;
   toggleEdit: () => void;

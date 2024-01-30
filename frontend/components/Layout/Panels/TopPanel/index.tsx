@@ -1,7 +1,7 @@
 import { Paper, Stack } from "@mui/material";
 
-import { useAppContext } from "../../../pages/_app";
-import SearchBar from "../../SearchBar";
+import { useAppContext } from "../../../../pages/_app";
+import SearchBar from "../../../SearchBar";
 import {
   ArtistFilter,
   CharacterFilter,

@@ -10,7 +10,7 @@ export async function handleCreateArtist(
   formData.append("socials", JSON.stringify(artist.socials));
 
   var result = await axios
-    .post("http://localhost:3000/api" + "/artists", formData)
+    .post("/api/artists", formData)
     .then((response) => {
       return response.data;
     })
@@ -33,7 +33,7 @@ export async function handleEditArtist(
   formData.append("socials", JSON.stringify(artist.socials));
 
   var result = await axios
-    .put("http://localhost:3000/api" + "/artists/" + artist.id, formData)
+    .put("/api/artists/" + artist.id, formData)
     .then((response) => {
       return response.data;
     })
@@ -47,7 +47,7 @@ export async function handleRemoveArtist(
   artist: Artist
 ): Promise<boolean | undefined> {
   var result = await axios
-    .delete("http://localhost:3000/api" + "/artists/" + artist.id)
+    .delete("/api/artists/" + artist.id)
     .then(() => {
       return true;
     })
