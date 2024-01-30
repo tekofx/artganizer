@@ -16,6 +16,7 @@ export default function ArtistsPage() {
         Characters
       </Typography>
       <SearchBar onChange={onChange} show fullWidth />
+      <br />
       <TagLabelList search={search} />
     </Paper>
   );
