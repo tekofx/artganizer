@@ -15,14 +15,14 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
 ) => {
   const slug = context.params?.slug;
-  /* const { req } = context;
+  const { req } = context;
   const protocol = req.headers["x-forwarded-proto"] || "http";
   const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
-  console.log(baseUrl); */
+  console.log(baseUrl);
   if (slug) {
     var id = parseInt(slug.toString());
     const res = await axios
-      .get("http://localhost:3000" + "/api/submissions/" + id)
+      .get(baseUrl + "/api/submissions/" + id)
       .then((response) => {
         return response.data;
       })
