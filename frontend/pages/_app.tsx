@@ -301,10 +301,10 @@ export default function MyApp(props: MyAppProps) {
           }}
         >
           <Grid container>
-            <Grid item lg={2} position="fixed">
+            <Grid item lg={2} sx={{ display: { xs: "none", sm: "none", md: "none", lg: "block" } }}>
               <LateralPanel />
             </Grid>
-            <Grid item lg={10} style={{ marginLeft: "16.66%" }}>
+            <Grid item xs={12} sm={12} md={12} lg={10} >
               <Component {...pageProps} />
             </Grid>
           </Grid>
