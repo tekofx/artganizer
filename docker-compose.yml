@@ -22,4 +22,3 @@ services:
     depends_on:
       - db
     restart: unless-stopped
-    command: tail -F anything
