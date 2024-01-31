@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Improved
 
 - New Gallery: The submissions now are shown by rows
+- Filters: Changed Artist filter to Artists. Now you can filter by more then 1 artist.
 
 ### [1.0.1] - 2024-01-30
 
