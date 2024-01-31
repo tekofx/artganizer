@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BottomAppbar: Improved layout and design
 - New Pages: Pages artists, characters and tags
 
+### Improved
+
+- New Gallery: The submissions now are shown by rows
+
 ### [1.0.1] - 2024-01-30
 
 ### Fixed
