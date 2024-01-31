@@ -20,10 +20,11 @@ export default function ClearFilters() {
   }
 
   useEffect(() => {
+    console.log(filters);
     const filtersAreEmpty =
       filters.rating === emptyFilters.rating &&
       filters.tags.length === emptyFilters.tags.length &&
-      filters.artists === emptyFilters.artists &&
+      filters.artists.length === emptyFilters.artists.length &&
       filters.title === emptyFilters.title &&
       filters.color === emptyFilters.color &&
       filters.characters.length === emptyFilters.characters.length;
