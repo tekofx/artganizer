@@ -1,4 +1,3 @@
-import AddIcon from '@mui/icons-material/Add';
 import BrushIcon from "@mui/icons-material/Brush";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import PersonIcon from "@mui/icons-material/Person";
@@ -10,6 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import { useEffect, useState } from 'react';
+import CreatePopup from './CreatePopup';
 const StyledFab = styled(Fab)({
   position: "absolute",
   zIndex: 1,
@@ -69,7 +69,7 @@ export default function BottomAppBar() {
           ))}
         </BottomNavigation>
         <StyledFab color="secondary" aria-label="add">
-          <AddIcon />
+          <CreatePopup />
         </StyledFab>
         {/* <Box sx={{ flexGrow: 1 }} />
         <IconButton color="inherit">
