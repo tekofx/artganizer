@@ -73,9 +73,9 @@ export default function Gallery({
     if (filters.color != "") {
       temp = filterSubmissionPhotosByColor(temp, filters.color, 80);
     }
-    if (filters.artist != undefined) {
-      temp = temp.filter(
-        (photo: SubmissionPhoto) => photo.submission.artist?.id == filters.artist?.id
+    if (filters.artists.length > 0) {
+      temp = temp.filter((photo: SubmissionPhoto) =>
+        filters.artists.some((artist) => artist.id === photo.submission.artist?.id)
       );
     }
     setPhotos(temp);

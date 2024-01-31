@@ -4,12 +4,12 @@ import { Badge, Button, Grid, Paper, Popover } from "@mui/material";
 import { MouseEvent, useEffect, useState } from "react";
 import Artist from "../../../../../interfaces/Artist";
 import { useAppContext } from "../../../../../pages/_app";
-import ArtistAutocomplete from "../../../../Artist/ArtistAutocomplete";
+import ArtistsAutocomplete from "../../../../Artist/ArtistsAutocomplete";
 
 export default function ArtistFilter() {
   const { filters, setFilters } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [artist, setArtist] = useState<Artist>();
+  const [artists, setArtists] = useState<Artist[]>([]);
   const [invisible, setInvisible] = useState<boolean>(true);
 
   const open = Boolean(anchorEl);
@@ -22,20 +22,21 @@ export default function ArtistFilter() {
   };
 
   useEffect(() => {
-    if (filters.artist != undefined) {
-      setArtist(filters.artist);
+    if (filters.artists.length > 0) {
+      setArtists(filters.artists);
       setInvisible(false);
     } else {
-      setArtist(undefined);
+      setArtists([]);
       setInvisible(true);
     }
-  }, [filters.artist]);
+  }, [filters.artists]);
 
   useEffect(() => {
     var newFilter = { ...filters };
-    newFilter.artist = artist;
+    newFilter.artists = artists;
     setFilters(newFilter);
-  }, [artist]);
+    console.log(artists)
+  }, [artists]);
 
   return (
     <div>
@@ -52,7 +53,7 @@ export default function ArtistFilter() {
           </Badge>
         }
       >
-        Artist
+        Artists
       </Button>
       <Popover
         open={open}
@@ -66,9 +67,9 @@ export default function ArtistFilter() {
         <Paper sx={{ p: 2 }}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <ArtistAutocomplete
-                selectedArtist={artist}
-                setSelectedArtist={setArtist}
+              <ArtistsAutocomplete
+                selectedArtists={artists}
+                setSelectedArtists={setArtists}
               />
             </Grid>
           </Grid>

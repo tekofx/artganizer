@@ -55,7 +55,7 @@ const defaultSettings: Settings = {
 const emptyFilters: Filters = {
   rating: -1,
   tags: [],
-  artist: undefined,
+  artists: [],
   title: "",
   characters: [],
   color: "",

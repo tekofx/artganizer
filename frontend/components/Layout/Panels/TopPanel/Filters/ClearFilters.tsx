@@ -6,7 +6,7 @@ import { useAppContext } from "../../../../../pages/_app";
 const emptyFilters: Filters = {
   rating: -1,
   tags: [],
-  artist: undefined,
+  artists: [],
   title: "",
   characters: [],
   color: "",
@@ -23,7 +23,7 @@ export default function ClearFilters() {
     const filtersAreEmpty =
       filters.rating === emptyFilters.rating &&
       filters.tags.length === emptyFilters.tags.length &&
-      filters.artist === emptyFilters.artist &&
+      filters.artists === emptyFilters.artists &&
       filters.title === emptyFilters.title &&
       filters.color === emptyFilters.color &&
       filters.characters.length === emptyFilters.characters.length;

@@ -1,4 +1,4 @@
-import ArtistFilter from "./ArtistFilter";
+import ArtistFilter from "./ArtistsFilter";
 import CharacterFilter from "./CharacterFilter";
 import ClearFilters from "./ClearFilters";
 import ColorFilter from "./ColorFilter";
