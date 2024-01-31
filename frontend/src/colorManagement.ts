@@ -1,3 +1,4 @@
+import { SubmissionPhoto } from "../interfaces";
 import Submission from "../interfaces/Submission";
 
 function hexToRgb(hex: string) {
@@ -23,4 +24,16 @@ function filterSubmissionsByColor(
   );
 }
 
-export { filterSubmissionsByColor };
+function filterSubmissionPhotosByColor(
+  submissionPhotos: SubmissionPhoto[],
+  color: string,
+  threshold: number // 0-255
+): SubmissionPhoto[] {
+  return submissionPhotos.filter((photo) =>
+    photo.submission.colors.some(
+      (c: string) => colorDistance(c, color) <= threshold
+    )
+  );
+}
+
+export { filterSubmissionPhotosByColor, filterSubmissionsByColor };
