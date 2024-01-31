@@ -114,7 +114,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
                 </IconButton>
               </label>
             </Grid>
-            <Grid item xs={12} lg={12}>
+            <Grid item xs={12} lg={6}>
               <BasicInfo
                 submission={submission}
                 setSubmission={setSubmission}
