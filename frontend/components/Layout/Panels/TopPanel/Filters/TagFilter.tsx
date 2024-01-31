@@ -22,7 +22,6 @@ export default function ArtistFilter() {
   };
 
   useEffect(() => {
-    console.log(filters.tags);
     if (filters.tags.length == 0) {
       setInvisible(true);
     } else {
