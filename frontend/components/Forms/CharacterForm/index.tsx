@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -81,7 +82,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
         <DialogTitle>Create Character</DialogTitle>
         <DialogContent sx={{ p: 2 }}>
           <Grid container spacing={4}>
-            <Grid item lg={4}>
+            <Grid item xs={12} lg={4}>
               <input
                 accept="image/png, image/jpeg"
                 id="character-form"
@@ -90,13 +91,15 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
                 hidden
                 onChange={onImageUpload}
               />
-              <label htmlFor="character-form">
-                <IconButton component="span">
-                  <Avatar src={image} sx={{ width: "8rem", height: "8rem" }} />
-                </IconButton>
-              </label>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <label htmlFor="artist-form-image">
+                  <IconButton component="span">
+                    <Avatar src={image} sx={{ width: "20vh", height: "20vh" }} />
+                  </IconButton>
+                </label>
+              </Box>
             </Grid>
-            <Grid item lg={8}>
+            <Grid item xs={12} lg={8}>
               <Stack spacing={2} sx={{ paddingTop: 1 }}>
                 <LimitedTextField
                   label="Name"
