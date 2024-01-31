@@ -98,7 +98,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
         <DialogTitle>Create Tag</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} paddingTop={2}>
-            <Grid item lg={6}>
+            <Grid item xs={12} lg={6}>
               <LimitedTextField
                 label="Name"
                 maxLength={TagData.nameLenght}
@@ -112,7 +112,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
                 }}
               />
             </Grid>
-            <Grid item lg={6}>
+            <Grid item xs={12} lg={6}>
               <TwitterPicker
                 triangle="hide"
                 color={tag.color}
@@ -125,14 +125,16 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
                     },
                     body: {
                       padding: 0,
+                      width: "100%",
                     },
+
                   },
                 }}
               />
             </Grid>
             <Grid item>
               <Typography>Preview</Typography>
-              <Stack direction="column" spacing={2}>
+              <Stack direction="row" spacing={2}>
                 <TagLabel tag={tag} />
                 <TagChip tag={tag} />
               </Stack>

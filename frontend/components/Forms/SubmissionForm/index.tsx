@@ -99,7 +99,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
         <DialogTitle>Create Submission</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={12} lg={6}>
               <input
                 accept="image/png, image/jpeg"
                 id="submission-form-image"
@@ -114,7 +114,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
                 </IconButton>
               </label>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} lg={12}>
               <BasicInfo
                 submission={submission}
                 setSubmission={setSubmission}
