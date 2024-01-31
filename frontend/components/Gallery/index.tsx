@@ -1,6 +1,8 @@
 import { Paper, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Artist, Character } from "../../interfaces";
+import PhotoAlbum from "react-photo-album";
+import { Artist, Character, SubmissionPhoto } from "../../interfaces";
 import Submission from "../../interfaces/Submission";
 import { useAppContext } from "../../pages/_app";
 import { filterSubmissionsByColor } from "../../src/colorManagement";
@@ -13,11 +15,22 @@ export default function Gallery({
   character?: Character;
   artist?: Artist;
 }) {
-  const { submissions, filters } = useAppContext();
+  const { submissions, filters, settings } = useAppContext();
+  const router = useRouter();
 
   const [gallerySubmissions, setGallerySubmissions] = useState<Submission[]>(
     []
   );
+  function gallerySettingsAllFalse() {
+    return (
+      !settings.galleryInfo.artist &&
+      !settings.galleryInfo.date &&
+      !settings.galleryInfo.dimensions &&
+      !settings.galleryInfo.rating &&
+      !settings.galleryInfo.tags &&
+      !settings.galleryInfo.title
+    );
+  }
 
   useEffect(() => {
     console.log(filters);
@@ -76,6 +89,18 @@ export default function Gallery({
     setGallerySubmissions(temp);
   }, [filters, submissions, character, artist]);
 
+
+
+
+  var photos: SubmissionPhoto[] = submissions.map((submission) => ({
+    src: submission.image,
+    width: submission.width,
+    height: submission.height,
+    title: submission.title,
+    submission: submission,
+
+  }));
+
   return (
     <Paper
       sx={{
@@ -89,11 +114,14 @@ export default function Gallery({
       {gallerySubmissions.length == 0 && (
         <Typography variant="h1">No submissions yet</Typography>
       )}
-      <div style={{ columnCount: 3 }}>
-        {gallerySubmissions.map((submission) => (
-          <Image submission={submission} key={submission.id} />
-        ))}
-      </div>
+      <PhotoAlbum layout="rows" photos={photos} targetRowHeight={300}
+
+
+        renderPhoto={({ photo, wrapperStyle, renderDefaultPhoto }) => (
+          <Image photo={photo} wrapperStyle={wrapperStyle} renderDefaultPhoto={renderDefaultPhoto} />
+
+        )}
+      />
     </Paper>
   );
 }

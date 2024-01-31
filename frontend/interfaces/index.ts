@@ -5,6 +5,7 @@ import Filters from "./Filters";
 import { Settings } from "./Settings";
 import Social from "./Social";
 import Submission from "./Submission";
+import SubmissionPhoto from "./SubmissionPhoto";
 import Tag from "./Tag";
 
 export type {
@@ -15,5 +16,6 @@ export type {
   Settings,
   Social,
   Submission,
+  SubmissionPhoto,
   Tag,
 };
