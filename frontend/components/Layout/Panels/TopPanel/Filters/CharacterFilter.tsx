@@ -22,9 +22,11 @@ export default function CharacterFilter() {
 
   useEffect(() => {
     if (filters.characters.length != 0) {
+      setCharacters(filters.characters);
       setInvisible(false);
     } else {
       setInvisible(true);
+      setCharacters([]);
     }
   }, [filters.characters]);
 
