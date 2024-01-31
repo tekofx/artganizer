@@ -23,8 +23,10 @@ export default function ArtistFilter() {
 
   useEffect(() => {
     if (filters.artists.length > 0) {
+      setArtists(filters.artists);
       setInvisible(false);
     } else {
+      setArtists([]);
       setInvisible(true);
     }
   }, [filters.artists]);
@@ -33,7 +35,6 @@ export default function ArtistFilter() {
     var newFilter = { ...filters };
     newFilter.artists = artists;
     setFilters(newFilter);
-    console.log(artists)
   }, [artists]);
 
   return (

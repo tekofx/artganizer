@@ -23,8 +23,10 @@ export default function ArtistFilter() {
 
   useEffect(() => {
     if (filters.tags.length == 0) {
+      setTags([]);
       setInvisible(true);
     } else {
+      setTags(filters.tags);
       setInvisible(false);
     }
   }, [filters.tags]);
