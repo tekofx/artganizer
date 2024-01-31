@@ -95,7 +95,7 @@ export default function Gallery({
       {photos.length == 0 && (
         <Typography variant="h1">No submissions yet</Typography>
       )}
-      <PhotoAlbum layout="rows" photos={photos} targetRowHeight={300}
+      <PhotoAlbum layout="rows" photos={photos} rowConstraints={{ singleRowMaxHeight: 300 }}
 
 
         renderPhoto={({ photo, wrapperStyle, renderDefaultPhoto }) => (
