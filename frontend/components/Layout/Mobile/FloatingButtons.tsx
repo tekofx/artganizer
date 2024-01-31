@@ -16,6 +16,17 @@ export default function FloatingButtons({ toggleEdit, toggleRemove }: FloatingBu
         open: { opacity: 1, y: 0, display: "block" },
         closed: { opacity: 0, y: "60px", display: "none" },
     };
+
+    function onEditClick() {
+        toggleEdit();
+        setShow(false);
+    }
+
+    function onRemoveClick() {
+        toggleRemove();
+        setShow(false);
+    }
+
     return (
         <Stack direction="column-reverse" spacing={2} sx={{ p: 4, position: "fixed", bottom: 60, right: 10 }}>
 
@@ -27,7 +38,7 @@ export default function FloatingButtons({ toggleEdit, toggleRemove }: FloatingBu
                 animate={show ? "open" : "closed"}
                 transition={{ duration: 0.2 }}
             >
-                <Fab color="primary" aria-label="edit" onClick={toggleEdit}>
+                <Fab color="primary" aria-label="edit" onClick={onEditClick}>
                     <EditIcon />
                 </Fab>
             </motion.div>
@@ -36,7 +47,7 @@ export default function FloatingButtons({ toggleEdit, toggleRemove }: FloatingBu
                 animate={show ? "open" : "closed"}
                 transition={{ duration: 0.2 }}
             >
-                <Fab color="primary" aria-label="delete" onClick={toggleRemove} >
+                <Fab color="primary" aria-label="delete" onClick={onRemoveClick} >
                     <DeleteForeverIcon />
                 </Fab>
             </motion.div>

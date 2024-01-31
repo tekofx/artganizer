@@ -48,7 +48,7 @@ export default function ArtistEdit({
 
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
-      <Grid item>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
         <Stack spacing={2} direction="column">
           <Avatar sx={{ width: "10rem", height: "10rem" }} src={image} />
           <Button variant="contained" component="label">
@@ -57,7 +57,7 @@ export default function ArtistEdit({
           </Button>
         </Stack>
       </Grid>
-      <Grid item>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
         <Stack spacing={2}>
           <LimitedTextField
             label="Name"
@@ -89,12 +89,14 @@ export default function ArtistEdit({
           />
         </Stack>
       </Grid>
-      <Grid item>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
         <Grid container spacing={2} direction="row">
-          <Typography>Socials</Typography>
-          {/*  <Stack spacing={2} direction="row"> */}
+          <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
+
+            <Typography>Socials</Typography>
+          </Grid>
           {artist?.socials?.map((social, index) => (
-            <Grid item key={index}>
+            <Grid item key={index} xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
               <SocialLabel
                 social={social}
                 artist={artist}
@@ -102,29 +104,30 @@ export default function ArtistEdit({
               />
             </Grid>
           ))}
-          <Grid item>
+          <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
             <Button
-              variant="contained"
+              variant="outlined"
               startIcon={<AddIcon />}
               onClick={() => setSocialsDialogOpen(true)}
             >
               Add Social
             </Button>
           </Grid>
-          {/* </Stack> */}
         </Grid>
       </Grid>
       <Grid item xs></Grid>
-      <Grid item>
-        <Stack spacing={2}>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
+        <Stack spacing={2} direction={{ xs: "row", lg: "column" }}>
           <Button
             variant="contained"
+            fullWidth
             startIcon={<DoneIcon />}
             onClick={() => onOkClick()}
           >
             Ok
           </Button>
           <Button
+            fullWidth
             variant="contained"
             startIcon={<ClearIcon />}
             onClick={() => toggleEdit()}
