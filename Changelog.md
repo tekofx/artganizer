@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- UI: Added mobile layout
 - BottomAppbar: Improved layout and design
 - New Pages: Pages artists, characters and tags
 
