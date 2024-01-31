@@ -11,13 +11,20 @@ export default function ArtistsPage() {
   }
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{
+      p: 2, minHeight: "100vh",
+      overflowY: "auto",
+      maxHeight: "100vh",
+    }} >
       <Typography variant="h1" align="center">
-        Characters
+        Tags
       </Typography>
       <SearchBar onChange={onChange} show fullWidth />
       <br />
-      <TagLabelList search={search} />
+      <Paper elevation={2} sx={{ p: 2 }}>
+
+        <TagLabelList search={search} />
+      </Paper>
     </Paper>
   );
 }

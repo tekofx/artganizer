@@ -11,7 +11,11 @@ export default function ArtistsPage() {
   }
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{
+      p: 2, minHeight: "100vh",
+      overflowY: "auto",
+      maxHeight: "100vh",
+    }}>
       <Typography variant="h1" align="center">
         Artists
       </Typography>
