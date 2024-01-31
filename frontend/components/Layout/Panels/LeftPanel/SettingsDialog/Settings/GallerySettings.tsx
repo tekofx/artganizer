@@ -5,54 +5,12 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { Settings, Submission } from "../../../../../../interfaces";
-import Image from "../../../../../Gallery/Image";
+import { Settings } from "../../../../../../interfaces";
 
 interface GallerySettingsProps {
   settings: Settings;
   setSettings: React.Dispatch<React.SetStateAction<Settings>>;
 }
-
-var testSubmission: Submission = {
-  id: 0,
-  title: "Title",
-  description: " description",
-  date: new Date(),
-  format: "PNG",
-  image: "/placeholder.jpg",
-  original_image: "/placeholder.jpg",
-  thumbnail: "/placeholder.jpg",
-  filename: "image.png",
-  colors: ["#FFFFFF"],
-  height: 200,
-  width: 400,
-  rating: 3,
-  size: 200,
-  artist: {
-    id: 1,
-    description: "Description",
-    image: "/placeholder.jpg",
-    name: "Artist",
-    socials: [],
-    submissions: [],
-  },
-  tags: [
-    {
-      id: 0,
-      color: "#FFFFFF",
-      name: "Tag",
-      submissionCount: 1,
-    },
-  ],
-  characters: [
-    {
-      description: "Description",
-      id: 1,
-      name: "Character",
-      image: "/placeholder.jpg",
-    },
-  ],
-};
 
 export default function GallerySettings({
   settings,
@@ -75,7 +33,7 @@ export default function GallerySettings({
           submission
         </Typography>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <FormGroup>
           <FormControlLabel
             label="Title"
@@ -118,9 +76,6 @@ export default function GallerySettings({
             checked={settings.galleryInfo.colors}
           />
         </FormGroup>
-      </Grid>
-      <Grid item xs={6}>
-        <Image submission={testSubmission} />
       </Grid>
     </Grid>
   );
