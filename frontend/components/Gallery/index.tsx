@@ -97,6 +97,20 @@ export default function Gallery({
       )}
       <PhotoAlbum layout="rows" photos={photos} rowConstraints={{ singleRowMaxHeight: 300 }}
 
+        targetRowHeight={(containerWidth: number) => {
+          console.log(containerWidth);
+          if (containerWidth <= 300) {
+            return 100;
+          }
+          if (containerWidth <= 600) {
+            return 200;
+          }
+          return 300;
+
+        }}
+
+        breakpoints={[300, 600, 1200]}
+
 
         renderPhoto={({ photo, wrapperStyle, renderDefaultPhoto }) => (
           <Image photo={photo} wrapperStyle={wrapperStyle} renderDefaultPhoto={renderDefaultPhoto} />
