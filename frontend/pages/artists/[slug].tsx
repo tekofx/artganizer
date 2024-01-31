@@ -1,5 +1,6 @@
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
+
 import {
   Button,
   Dialog,
@@ -8,8 +9,9 @@ import {
   Grid,
   Paper,
   Stack,
-  Typography,
+  Typography
 } from "@mui/material";
+
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
@@ -18,6 +20,7 @@ import { useState } from "react";
 import ArtistEdit from "../../components/Artist/ArtistEdit";
 import ArtistInfo from "../../components/Artist/ArtistInfo";
 import Gallery from "../../components/Gallery";
+import FloatingButtons from "../../components/Layout/Mobile/FloatingButtons";
 import Artist from "../../interfaces/Artist";
 import { useAppContext } from "../_app";
 
@@ -54,6 +57,7 @@ const Page: NextPage<PageProps> = ({ artist }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
 
+
   const toggleEdit = () => {
     setEditShow(!editShow);
   };
@@ -75,9 +79,11 @@ const Page: NextPage<PageProps> = ({ artist }) => {
       <Head>
         <title>{artist.name} | Artganizer</title>
       </Head>
+
       <Paper>
+        <FloatingButtons toggleEdit={toggleEdit} toggleRemove={handleClickOpenDialog} />
         <Grid container spacing={2}>
-          <Grid item lg={12}>
+          <Grid item xs={12} >
             {!editShow ? (
               <ArtistInfo
                 artist={pageArtist}
@@ -92,10 +98,11 @@ const Page: NextPage<PageProps> = ({ artist }) => {
               />
             )}
           </Grid>
-          <Grid item lg={12}>
+          <Grid item xs={12} display="flex" alignItems="center" justifyContent="center">
             <Gallery artist={artist} />
           </Grid>
         </Grid>
+
         <Dialog open={dialogOpen}>
           <DialogTitle>
             <Typography>
@@ -124,6 +131,7 @@ const Page: NextPage<PageProps> = ({ artist }) => {
           </DialogActions>
         </Dialog>
       </Paper>
+
     </>
   );
 };
