@@ -13,23 +13,29 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 import { ArtistForm, SubmissionForm, TagForm } from "../../../Forms";
 import CharacterForm from "../../../Forms/CharacterForm";
 
 export default function CreateButton() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Estado para la posición del menú
+  const [menuPosition, setMenuPosition] = useState<{ top: number, left: number } | null>(null);
+
   const [openSubmissionForm, setOpenSubmissionForm] = useState<boolean>(false);
   const [openTagForm, setOpenTagForm] = useState<boolean>(false);
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
   const [openCharacterForm, setOpenCharacterForm] = useState<boolean>(false);
-  const [anchorCreateMenu, setAnchorCreateMenu] = useState<null | HTMLElement>(
-    null
-  );
-  const handleCloseCreateMenu = () => {
-    setAnchorCreateMenu(null);
+  const handleOpenCreateMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Abre el menú
+    setMenuOpen(true);
+    // Establece la posición del menú
+    setMenuPosition({ top: event.clientY, left: event.clientX });
   };
-  const handleOpenCreateMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorCreateMenu({ top: event.clientY, left: event.clientX });
+
+  const handleCloseCreateMenu = () => {
+    // Cierra el menú
+    setMenuOpen(false);
   };
   const StyledFab = styled(Fab)({
     position: "absolute",
@@ -91,7 +97,7 @@ export default function CreateButton() {
         sx={{ top: -80 }}
         id="menu-appbar"
         anchorReference="anchorPosition"
-        anchorPosition={anchorCreateMenu || undefined}
+        anchorPosition={menuPosition || undefined}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "center",
@@ -101,7 +107,7 @@ export default function CreateButton() {
           vertical: "top",
           horizontal: "center",
         }}
-        open={Boolean(anchorCreateMenu)}
+        open={menuOpen}
         onClose={handleCloseCreateMenu}
         color="white"
       >
