@@ -7,6 +7,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import theme from "../../../../src/theme";
 import CreatePopup from "./CreateButton";
 
 export default function BottomAppBar() {
@@ -47,10 +48,15 @@ export default function BottomAppBar() {
     <AppBar
       position="fixed"
       color="primary"
-      sx={{ top: "auto", bottom: 0, paddingLeft: 0, paddingRight: 0 }}
+      sx={{ top: "auto", bottom: 0, p: 0 }}
     >
-      <Toolbar sx={{ top: "auto", bottom: 0, paddingLeft: 0, paddingRight: 0 }}>
-        <BottomNavigation showLabels sx={{ width: "100%" }} value={value}>
+      <Toolbar sx={{
+        top: "auto", bottom: 0, p: 0, height: "64px",
+        [theme.breakpoints.down('md')]: {
+          p: 0, // Elimina el padding horizontal en tamaños xs y menores
+        },
+      }}>
+        <BottomNavigation showLabels sx={{ width: "100%", height: "100%" }} value={value}>
           {pages.map((page) => (
             <BottomNavigationAction
               key={page.id}
