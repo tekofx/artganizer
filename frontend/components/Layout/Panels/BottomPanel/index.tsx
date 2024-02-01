@@ -32,7 +32,7 @@ export default function BottomPanel({ current }: BottomPanelProps) {
               border: submission.id == current.id ? "10px solid #555" : "none",
               cursor: "pointer",
             }}
-            onClick={() => router.push(`/submission/${submission.id}`)}
+            onClick={() => router.push(`/submissions/${submission.id}`)}
           />
         ))}
       </Stack>
