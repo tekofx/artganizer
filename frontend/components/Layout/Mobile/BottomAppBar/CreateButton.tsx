@@ -29,7 +29,7 @@ export default function CreateButton() {
     setAnchorCreateMenu(null);
   };
   const handleOpenCreateMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorCreateMenu(event.currentTarget);
+    setAnchorCreateMenu({ top: event.clientY, left: event.clientX });
   };
   const StyledFab = styled(Fab)({
     position: "absolute",
@@ -90,9 +90,10 @@ export default function CreateButton() {
       <Menu
         sx={{ top: -80 }}
         id="menu-appbar"
-        anchorEl={anchorCreateMenu}
+        anchorReference="anchorPosition"
+        anchorPosition={anchorCreateMenu || undefined}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
         keepMounted
