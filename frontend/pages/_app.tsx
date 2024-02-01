@@ -1,5 +1,5 @@
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
@@ -103,6 +103,7 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [artists, setArtists] = useState<Artist[]>([]);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -321,15 +322,15 @@ export default function MyApp(props: MyAppProps) {
             <Grid item xs={12} sm={12} md={8} lg={9} xl={10}>
               <Component {...pageProps} />
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: { xs: "block", sm: "block", md: "block", lg: "none" },
-              }}
-            >
-              <BottomAppBar />
-            </Grid>
+
+            {isMobile && (
+              <Grid
+                item
+                xs={12}
+              >
+                <BottomAppBar />
+              </Grid>
+            )}
           </Grid>
         </AppContext.Provider>
       </ThemeProvider>
