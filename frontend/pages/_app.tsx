@@ -57,6 +57,7 @@ export interface MyAppProps extends AppProps {
 }
 
 interface AppContextType {
+  isMobile: boolean;
   artists: Artist[];
   setArtists: Dispatch<SetStateAction<Artist[]>>;
   characters: Character[];
@@ -305,6 +306,7 @@ export default function MyApp(props: MyAppProps) {
             removeTag,
             editSettings,
             resetSettings,
+            isMobile
           }}
         >
           <Grid container>

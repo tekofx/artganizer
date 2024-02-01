@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 };
 
 const Page: NextPage<PageProps> = ({ artist }) => {
-  const { removeArtist } = useAppContext();
+  const { removeArtist, isMobile } = useAppContext();
   const [pageArtist, setPageArtist] = useState<Artist>(artist);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -81,7 +81,11 @@ const Page: NextPage<PageProps> = ({ artist }) => {
       </Head>
 
       <Paper>
-        <FloatingButtons toggleEdit={toggleEdit} toggleRemove={handleClickOpenDialog} />
+        {isMobile && (
+
+          <FloatingButtons toggleEdit={toggleEdit} toggleRemove={handleClickOpenDialog} />
+        )
+        }
         <Grid container spacing={2}>
           <Grid item xs={12} >
             {!editShow ? (
