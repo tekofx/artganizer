@@ -2,7 +2,7 @@ import { Grid, Paper } from "@mui/material";
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BottomPanel from "../../components/Layout/Panels/BottomPanel";
 import RightPanel from "../../components/Layout/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
@@ -39,6 +39,11 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 };
 const Page: NextPage<PageProps> = ({ submission }) => {
   const [pageSubmission, setPageSubmission] = useState<Submission>(submission);
+
+  useEffect(() => {
+    setPageSubmission(submission);
+  }
+    , [submission]);
 
   return (
     <>
