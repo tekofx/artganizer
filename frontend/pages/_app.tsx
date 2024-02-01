@@ -13,7 +13,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import BottomAppBar from "../components/Layout/Panels/BottomAppBar";
+import BottomAppBar from "../components/Layout/Mobile/BottomAppBar";
 import LateralPanel from "../components/Layout/Panels/LeftPanel";
 import {
   Artist,
