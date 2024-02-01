@@ -8,7 +8,7 @@ import {
   ClearFilters,
   ColorFilter,
   RatingFilter,
-  TagFilter,
+  TagFilter
 } from "./Filters";
 export default function TopPanel() {
   const { filters, setFilters } = useAppContext();

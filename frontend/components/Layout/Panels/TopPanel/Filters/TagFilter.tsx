@@ -22,7 +22,9 @@ export default function ArtistFilter() {
   };
 
   useEffect(() => {
+    console.log("filter.tags changed")
     if (filters.tags.length == 0) {
+      if (tags.length == 0) return;
       setTags([]);
       setInvisible(true);
     } else {
@@ -32,6 +34,7 @@ export default function ArtistFilter() {
   }, [filters.tags]);
 
   useEffect(() => {
+    console.log("tags changed")
     var newFilter = { ...filters };
     newFilter.tags = tags;
     setFilters(newFilter);

@@ -21,12 +21,13 @@ export default function CharacterFilter() {
   };
 
   useEffect(() => {
-    if (filters.characters.length > 0) {
-      setCharacters(filters.characters);
-      setInvisible(false);
-    } else {
+    if (filters.characters.length == 0) {
+      if (characters.length == 0) return;
       setCharacters([]);
       setInvisible(true);
+    } else {
+      setCharacters(filters.characters);
+      setInvisible(false);
     }
   }, [filters.characters]);
 

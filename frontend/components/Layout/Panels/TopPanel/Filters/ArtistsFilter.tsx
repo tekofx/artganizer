@@ -22,16 +22,19 @@ export default function ArtistFilter() {
   };
 
   useEffect(() => {
-    if (filters.artists.length > 0) {
-      setArtists(filters.artists);
-      setInvisible(false);
-    } else {
+    console.log("filter.artists changed");
+    if (filters.artists.length == 0) {
+      if (artists.length == 0) return;
       setArtists([]);
       setInvisible(true);
+    } else {
+      setArtists(filters.artists);
+      setInvisible(false);
     }
   }, [filters.artists]);
 
   useEffect(() => {
+    console.log("artists changed");
     var newFilter = { ...filters };
     newFilter.artists = artists;
     setFilters(newFilter);
