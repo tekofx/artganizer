@@ -52,36 +52,33 @@ const Page: NextPage<PageProps> = ({ submission }) => {
         }}
       >
         <Grid container spacing={{ xs: 2, lg: 0 }}>
-          <Grid item xs={12} lg={9}>
-            <Grid container>
-              <Grid item xs={12}>
-                <Paper
-                  elevation={3}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "80vh",
-                  }}
-                >
-                  <img
-                    src={submission?.image}
-                    width="auto"
-                    height="100%"
-                    style={{ maxHeight: "100vh", maxWidth: "100%" }}
-                  />
-                </Paper>
-              </Grid>
-              <Grid item xs={12} sx={{ display: { xs: "none", lg: "block" } }}>
-                <BottomPanel current={submission} />
-              </Grid>
-            </Grid>
+          <Grid item xs={9}>
+            <Paper
+              elevation={3}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "85vh",
+              }}
+            >
+              <img
+                src={submission?.image}
+                width="auto"
+                height="100%"
+                style={{ maxHeight: "100vh", maxWidth: "100%" }}
+              />
+            </Paper>
           </Grid>
           <Grid item xs={12} lg={3}>
             <RightPanel
               submission={pageSubmission}
               setSubmission={setPageSubmission}
             />
+
+          </Grid>
+          <Grid item xs={12} sx={{ display: { xs: "none", lg: "block" } }}>
+            <BottomPanel current={submission} />
           </Grid>
         </Grid>
       </Paper>

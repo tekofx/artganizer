@@ -46,7 +46,8 @@ export default function RightPanel(props: RightPanelProps) {
     <Paper
       elevation={0}
       style={{
-        height: "100%",
+        height: "85vh",
+        overflowY: "scroll",
       }}
     >
       <Grid container>
