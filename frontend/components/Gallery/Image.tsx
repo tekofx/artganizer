@@ -42,7 +42,7 @@ export default function Image({ photo, renderDefaultPhoto, wrapperStyle }: Image
       component={motion.div}
       whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
-      onClick={() => router.push(`/submission/${photo.submission.id}`)}
+      onClick={() => router.push(`/submissions/${photo.submission.id}`)}
     >
 
       <Grid container >
