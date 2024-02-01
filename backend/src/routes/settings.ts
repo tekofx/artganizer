@@ -1,6 +1,12 @@
 import express, { Request, Response } from "express";
 import fs from "fs";
 import "reflect-metadata";
+import {
+  ArtistRepo,
+  CharacterRepo,
+  SubmissionRepo,
+  TagRepo,
+} from "../typeorm.config";
 
 const router = express.Router();
 const defaultSettings = {
@@ -39,6 +45,26 @@ router.delete("/", async (req: Request, res: Response) => {
   // Reset settings.json
   fs.writeFileSync(settingsFile, JSON.stringify(defaultSettings));
   res.send(defaultSettings);
+});
+
+router.get("/export", async (req: Request, res: Response) => {
+  //TODO: Implementar
+  // Export all data from app and send as zip
+
+  // Create JSONs with each entity
+  var artists = await ArtistRepo.find();
+  var artistsJSON = JSON.stringify(artists);
+
+  var characters = await CharacterRepo.find();
+  var charactersJSON = JSON.stringify(characters);
+
+  var tags = await TagRepo.find();
+  var tagsJSON = JSON.stringify(tags);
+
+  var submissions = await SubmissionRepo.find();
+  var submissionsJSON = JSON.stringify(submissions);
+
+  res.send(artistsJSON);
 });
 
 export default router;
