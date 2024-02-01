@@ -98,7 +98,6 @@ export default function Gallery({
       <PhotoAlbum layout="rows" photos={photos} rowConstraints={{ singleRowMaxHeight: 300 }}
 
         targetRowHeight={(containerWidth: number) => {
-          console.log(containerWidth);
           if (containerWidth <= 300) {
             return 100;
           }
