@@ -27,10 +27,12 @@ export default function BottomAppBar() {
 
   useEffect(() => {
     function getIdFromPath(path: string) {
-      const page = pages.find((page) => page.navigate === path);
-      if (page) {
-        return page.id;
-      }
+      // Check if path contains substring
+      if (path.includes("artists")) return 0;
+      if (path.includes("characters")) return 1;
+      if (path.includes("submissions")) return 2;
+      if (path == "/") return 2;
+      if (path.includes("tags")) return 3;
       return 0;
     }
     console.log(router.pathname);
