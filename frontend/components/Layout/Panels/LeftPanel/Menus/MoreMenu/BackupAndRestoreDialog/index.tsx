@@ -27,7 +27,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                     spacing={2}
                     justifyContent="space-between"
                 >
-                    <Typography variant="h6">Settings</Typography>
+                    <Typography variant="h6">Backup and Restore</Typography>
                     <IconButton onClick={() => props.setOpen(false)}>
                         <ClearIcon />
                     </IconButton>
