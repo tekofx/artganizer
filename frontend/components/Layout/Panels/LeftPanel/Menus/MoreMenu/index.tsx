@@ -1,3 +1,4 @@
+import BackupIcon from '@mui/icons-material/Backup';
 import InfoIcon from "@mui/icons-material/Info";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,10 +12,10 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import ManageTags from "../../Forms/ManageTags";
-import About from "../Panels/LeftPanel/About";
-import SettingsDialog from "../Panels/LeftPanel/SettingsDialog";
-
+import ManageTags from "../../../../../Forms/ManageTags";
+import About from "./About";
+import BackupAndRestoreDialog from "./BackupAndRestoreDialog";
+import SettingsDialog from "./SettingsDialog";
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -23,6 +24,7 @@ export default function SettingMenu() {
   const [openTagManager, setOpenTagManager] = useState<boolean>(false);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [openAbout, setOpenAbout] = useState<boolean>(false);
+  const [openBackupAndRestore, setOpenBackupAndRestore] = useState<boolean>(false);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -43,6 +45,15 @@ export default function SettingMenu() {
         handleCloseUserMenu();
         setOpenSettings(true);
       },
+    },
+    {
+      name: "Backup and Restore",
+      icon: <BackupIcon />,
+      onclick: () => {
+        handleCloseUserMenu();
+        setOpenBackupAndRestore(true);
+      }
+
     },
     {
       name: "About",
@@ -92,6 +103,7 @@ export default function SettingMenu() {
       <ManageTags open={openTagManager} setOpen={setOpenTagManager} />
       <SettingsDialog open={openSettings} setOpen={setOpenSettings} />
       <About open={openAbout} setOpen={setOpenAbout} />
+      <BackupAndRestoreDialog open={openBackupAndRestore} setOpen={setOpenBackupAndRestore} />
     </>
   );
 }

@@ -5,7 +5,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { Settings } from "../../../../../../interfaces";
+import { Settings } from "../../../../../../../../interfaces";
 
 interface GallerySettingsProps {
   settings: Settings;
