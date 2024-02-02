@@ -18,6 +18,7 @@ import { useState } from "react";
 import CharacterEdit from "../../components/Character/CharacterEdit";
 import CharacterInfo from "../../components/Character/CharacterInfo";
 import Gallery from "../../components/Gallery";
+import FloatingButtons from "../../components/Layout/Mobile/FloatingButtons";
 import Character from "../../interfaces/Character";
 import { useAppContext } from "../_app";
 
@@ -49,7 +50,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 };
 
 const Page: NextPage<PageProps> = ({ character }) => {
-  const { removeCharacter } = useAppContext();
+  const { removeCharacter, isMobile } = useAppContext();
   const [pageCharacter, setPageCharacter] = useState<Character>(character);
   const [editShow, setEditShow] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -76,6 +77,11 @@ const Page: NextPage<PageProps> = ({ character }) => {
         <title>Artganizer</title>
       </Head>
       <Paper>
+        {isMobile && (
+
+          <FloatingButtons toggleEdit={toggleEdit} toggleRemove={handleClickOpenDialog} />
+        )
+        }
         <Grid container spacing={2}>
           <Grid item lg={12}>
             {!editShow ? (

@@ -11,18 +11,28 @@ interface CharacterInfoProps {
 export default function CharacterInfo(props: CharacterInfoProps) {
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
-      <Grid item>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
         <Avatar
           sx={{ width: "10rem", height: "10rem" }}
           src={props.character?.image}
         />
       </Grid>
-      <Grid item>
+      {/* This Grid only show in lg */}
+      <Grid item xs={12} lg display={{ xs: "none", lg: "block" }} alignItems="center" justifyContent="center">
         <Typography variant="h4">{props.character?.name}</Typography>
         <Typography variant="h5">{props.character?.description}</Typography>
       </Grid>
-      <Grid item xs></Grid>
-      <Grid item>
+
+      {/* This Grids only show in <lg */}
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "none" }} alignItems="center" justifyContent="center">
+        <Typography variant="h4">{props.character?.name}</Typography>
+      </Grid>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "none" }} alignItems="center" justifyContent="center">
+        <Typography variant="h5">{props.character?.description}</Typography>
+      </Grid>
+
+
+      <Grid item xs={12} lg={2} display={{ xs: "none", lg: "block" }} alignItems="center" justifyContent="center">
         <Stack direction="column" width="100%" spacing={2} justifyContent="center">
           <Button
             variant="contained"

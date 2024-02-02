@@ -1,3 +1,4 @@
+import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import { Avatar, Button, Grid, Stack } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -34,7 +35,7 @@ export default function CharacterEdit({ character, toggleEdit, setCharacter }: C
 
   return (
     <Grid container spacing={2} sx={{ p: 4 }}>
-      <Grid item>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
         <Stack spacing={2} direction="column">
           <Avatar sx={{ width: "10rem", height: "10rem" }} src={image} />
           <Button variant="contained" component="label">
@@ -43,7 +44,7 @@ export default function CharacterEdit({ character, toggleEdit, setCharacter }: C
           </Button>
         </Stack>
       </Grid>
-      <Grid item>
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
         <Stack spacing={2}>
           <LimitedTextField
             maxLength={CharacterData.nameLenght}
@@ -76,14 +77,23 @@ export default function CharacterEdit({ character, toggleEdit, setCharacter }: C
         </Stack>
       </Grid>
       <Grid item xs></Grid>
-      <Grid item>
-        <Stack direction="row" width="100%" spacing={2} justifyContent="center">
+      <Grid item xs={12} lg display={{ xs: "flex", lg: "block" }} alignItems="center" justifyContent="center">
+        <Stack spacing={2} direction={{ xs: "row", lg: "column" }}>
           <Button
             variant="contained"
+            fullWidth
             startIcon={<DoneIcon />}
-            onClick={onOkClick}
+            onClick={() => onOkClick()}
           >
             Ok
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            startIcon={<ClearIcon />}
+            onClick={() => toggleEdit()}
+          >
+            Cancel
           </Button>
         </Stack>
       </Grid>
