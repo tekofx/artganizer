@@ -11,15 +11,61 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
+import axios, { AxiosResponse } from "axios";
+import { Dispatch, SetStateAction, useState } from "react";
+import { AlertMessage } from "../../../../../../../interfaces";
+import Snack from "../../../../../../Snack";
 interface SettingsDialogProps {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function SettingsDialog(props: SettingsDialogProps) {
 
+    const [alertMessage, setAlertMessage] = useState<AlertMessage>({ message: "", severity: "success" });
+    const [open, setOpen] = useState(false);
+
+    async function downloadBackup() {
+        await axios.get("/api/settings/export").then((res: AxiosResponse) => {
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "export.zip");
+            link.click();
+            link.remove();
+            setAlertMessage({ message: "Backup downloaded", severity: "success" });
+            setOpen(true);
+        }
+        ).catch((err) => {
+            console.log(err);
+            setAlertMessage({ message: "Error downloading backup", severity: "error" });
+            setOpen(true);
+        }
+        );
+    }
+
+    async function onFileUpload(event: any) {
+        const data = new FormData();
+        data.append("import", event.target.files[0]);
+        await axios.post("/api/settings/import", data).then(() => {
+            console.log("Backup restored");
+            setAlertMessage({ message: "Backup restored", severity: "success" });
+            setOpen(true);
+        }
+        ).catch((err) => {
+            console.log(err);
+            setAlertMessage({ message: "Error restoring backup", severity: "error" });
+            setOpen(true);
+        }
+        );
+    }
+
     return (
         <Dialog open={props.open} maxWidth={"xl"}>
+            <Snack
+                open={open}
+                setOpen={setOpen}
+                alertMessage={alertMessage}
+            />
             <DialogTitle>
                 <Stack
                     direction="row"
@@ -36,10 +82,13 @@ export default function SettingsDialog(props: SettingsDialogProps) {
             <DialogContent >
                 <Grid container spacing={2}>
                     <Grid item>
-                        <Button variant="contained" color="primary" startIcon={<CloudDownloadIcon />}>Backup</Button>
+                        <Button variant="contained" color="primary" startIcon={<CloudDownloadIcon />} onClick={downloadBackup}>Backup</Button>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" color="primary" startIcon={<RestoreIcon />}>Restore</Button>
+                        <Button variant="contained" component="label" color="primary" startIcon={<RestoreIcon />}>
+                            Restore
+                            <input type="file" hidden accept="application/zip" onChange={onFileUpload} />
+                        </Button>
                     </Grid>
 
                 </Grid>

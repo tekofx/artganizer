@@ -86,6 +86,9 @@ const fileFilter = (
 const uploadImport = multer({
   storage: importStorage,
   fileFilter: fileFilter,
+  limits: {
+    fileSize: 1024 * 1024 * 100, // 100MB
+  },
 });
 router.get("/", async (req: Request, res: Response) => {
   // Send content of settings.json
@@ -198,6 +201,10 @@ router.post(
   "/import",
   uploadImport.single("import"),
   async (req: Request, res: Response) => {
+    // empty export folder
+
+    console.log(req.headers);
+    console.log("File:", req.file);
     var file = req.file;
 
     if (!file) {
@@ -245,7 +252,7 @@ router.post(
     fs.writeFileSync(settingsFile, JSON.stringify(settings));
 
     // Remove import contents of import folder
-    fsExtra.emptyDirSync(importFolder);
+    //fsExtra.emptyDirSync(importFolder);
 
     return res.json({ message: "Imported successfully" });
   }
