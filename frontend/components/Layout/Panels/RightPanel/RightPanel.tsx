@@ -46,7 +46,7 @@ export default function RightPanel(props: RightPanelProps) {
     <Paper
       elevation={0}
       style={{
-        height: isMobile ? "auto" : "100%",
+        height: isMobile ? "auto" : "85vh",
         overflowY: "scroll",
       }}
     >
