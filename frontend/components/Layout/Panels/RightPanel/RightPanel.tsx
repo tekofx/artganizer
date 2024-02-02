@@ -23,7 +23,7 @@ interface RightPanelProps {
 }
 
 export default function RightPanel(props: RightPanelProps) {
-  const { removeSubmission } = useAppContext();
+  const { removeSubmission, isMobile } = useAppContext();
   const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editShow, setEditShow] = useState(false);
@@ -46,7 +46,7 @@ export default function RightPanel(props: RightPanelProps) {
     <Paper
       elevation={0}
       style={{
-        height: "85vh",
+        height: isMobile ? "auto" : "100%",
         overflowY: "scroll",
       }}
     >

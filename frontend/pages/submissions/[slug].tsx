@@ -7,6 +7,7 @@ import BottomPanel from "../../components/Layout/Panels/BottomPanel";
 import RightPanel from "../../components/Layout/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
 import theme from "../../src/theme";
+import { useAppContext } from "../_app";
 
 interface PageProps {
   submission: Submission;
@@ -45,7 +46,7 @@ const Page: NextPage<PageProps> = ({ submission }) => {
   const [pageSubmission, setPageSubmission] = useState<Submission>(submission);
   const [imageStyle, setImageStyle] = useState({ style: { height: 'auto', width: '100%' }, paperHeightXS: "100%" });
   const [imageType, setImageType] = useState<ImageType>("horizontal");
-  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isMobile } = useAppContext();
 
 
   const matchesXS = useMediaQuery(theme.breakpoints.down('sm'));
@@ -79,13 +80,13 @@ const Page: NextPage<PageProps> = ({ submission }) => {
 
   useEffect(() => {
     if (imageType == "vertical") {
-      if (matchesMobile) {
+      if (isMobile) {
         setImageStyle({ style: { width: '100%', height: 'auto' }, paperHeightXS: "85vh" });
         return;
       }
       setImageStyle({ style: { width: 'auto', height: '100%' }, paperHeightXS: "100%" });
     } else {
-      if (matchesMobile) {
+      if (isMobile) {
         setImageStyle({ style: { height: 'auto', width: '100%' }, paperHeightXS: "85vh" });
         return;
       }
@@ -130,9 +131,23 @@ const Page: NextPage<PageProps> = ({ submission }) => {
             />
 
           </Grid>
-          <Grid item xs={12} sx={{ display: { xs: "none", lg: "block" } }}>
-            <BottomPanel current={submission} />
-          </Grid>
+
+          {isMobile && (
+            <Grid item xs={12} >
+              <br />
+              <br />
+
+            </Grid>
+          )
+          }
+
+          {
+            !isMobile && (
+
+              <Grid item xs={12} >
+                <BottomPanel current={submission} />
+              </Grid>
+            )}
         </Grid>
       </Paper>
     </>
