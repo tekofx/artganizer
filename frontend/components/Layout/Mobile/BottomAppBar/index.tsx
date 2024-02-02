@@ -36,7 +36,6 @@ export default function BottomAppBar() {
       if (path.includes("tags")) return 3;
       return 0;
     }
-    console.log(router.pathname);
     setValue(getIdFromPath(router.pathname));
   }, []);
 

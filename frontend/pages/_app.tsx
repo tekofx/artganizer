@@ -238,12 +238,11 @@ export default function MyApp(props: MyAppProps) {
         setArtists(response.data);
       })
       .catch((error) => {
-        console.log("artists: " + error);
+        console.log(error);
       });
 
   const getSubmissions = async () =>
     await axios.get(`/api/submissions`).then((response) => {
-      console.log(response.data);
       setSubmissions(response.data);
     });
 

@@ -22,7 +22,6 @@ export default function ArtistFilter() {
   };
 
   useEffect(() => {
-    console.log("filter.artists changed");
     if (filters.artists.length == 0) {
       if (artists.length == 0) return;
       setArtists([]);
@@ -34,7 +33,6 @@ export default function ArtistFilter() {
   }, [filters.artists]);
 
   useEffect(() => {
-    console.log("artists changed");
     var newFilter = { ...filters };
     newFilter.artists = artists;
     setFilters(newFilter);

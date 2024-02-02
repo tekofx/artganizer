@@ -26,7 +26,6 @@ export async function handleEditCharacter(
   const formData = new FormData();
   if (character.image) {
     formData.append("image", character.image);
-    console.log("image");
   }
   formData.append("name", character.name);
   formData.append("description", character.description);

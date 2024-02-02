@@ -44,7 +44,6 @@ export default function SocialDialog({
       await axios
         .post(`/api/artists/${artist.id}/socials`, socialDialog)
         .then((response) => {
-          console.log(response.data);
           setArtist({ ...artist, socials: [...artist.socials, response.data] });
         })
         .catch((error) => {
@@ -52,11 +51,9 @@ export default function SocialDialog({
         });
     } else {
       // Edit social
-      console.log("Edit social");
       await axios
         .put(`/api/artists/${artist.id}/socials/${socialDialog.id}`, social)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           setArtist({
             ...artist,
             socials: artist.socials.map((s) =>

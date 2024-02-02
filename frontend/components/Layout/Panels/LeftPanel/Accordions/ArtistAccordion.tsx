@@ -41,7 +41,6 @@ export default function ArtistAccordion() {
   }
 
   useEffect(() => {
-    console.log(artists);
   }, [artists]);
 
   return (

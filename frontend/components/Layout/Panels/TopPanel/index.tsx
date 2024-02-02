@@ -15,7 +15,6 @@ export default function TopPanel() {
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault();
     setFilters({ ...filters, title: event.target.value });
-    console.log(filters);
   }
   return (
     <Paper

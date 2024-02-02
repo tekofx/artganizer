@@ -32,7 +32,6 @@ export default function Gallery({
       temp = temp.filter((photo: SubmissionPhoto) =>
         photo.submission.characters?.some((char) => char.id === character.id)
       );
-      console.log(temp);
     }
 
     if (artist) {

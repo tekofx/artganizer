@@ -20,7 +20,6 @@ export default function ClearFilters() {
   }
 
   useEffect(() => {
-    console.log(filters);
     const filtersAreEmpty =
       filters.rating === emptyFilters.rating &&
       filters.tags.length === emptyFilters.tags.length &&

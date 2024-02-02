@@ -1,4 +1,4 @@
-import { Grid, Paper, useMediaQuery } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import BottomPanel from "../../components/Layout/Panels/BottomPanel";
 import RightPanel from "../../components/Layout/Panels/RightPanel/RightPanel";
 import Submission from "../../interfaces/Submission";
-import theme from "../../src/theme";
 import { useAppContext } from "../_app";
 
 interface PageProps {
@@ -22,7 +21,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const { req } = context;
   const protocol = req.headers["x-forwarded-proto"] || "http";
   const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
-  console.log(baseUrl)
   if (slug) {
     var id = parseInt(slug.toString());
     const res = await axios
@@ -48,23 +46,8 @@ const Page: NextPage<PageProps> = ({ submission }) => {
   const [imageType, setImageType] = useState<ImageType>("horizontal");
   const { isMobile } = useAppContext();
 
-
-  const matchesXS = useMediaQuery(theme.breakpoints.down('sm'));
-  const matchesSM = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const matchesMD = useMediaQuery(theme.breakpoints.between('md', 'lg'));
-  const matchesLG = useMediaQuery(theme.breakpoints.between('lg', 'xl'));
-  const matchesXL = useMediaQuery(theme.breakpoints.up('xl'));
-  console.log({
-    matchesXS,
-    matchesSM,
-    matchesMD,
-    matchesLG,
-    matchesXL,
-  });
-
   useEffect(() => {
     setPageSubmission(submission);
-    console.log(imageStyle)
     const img = new Image();
     img.src = submission?.image;
     img.onload = () => {

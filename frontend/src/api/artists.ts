@@ -26,7 +26,6 @@ export async function handleEditArtist(
   const formData = new FormData();
   if (artist.image) {
     formData.append("image", artist.image);
-    console.log("image");
   }
   formData.append("name", artist.name);
   formData.append("description", artist.description);
