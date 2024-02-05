@@ -1,9 +1,9 @@
 import {
   Button,
+  Grid,
   IconButton,
-  Stack,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
@@ -53,45 +53,59 @@ export default function Socials({ artist, setArtist }: SocialProps) {
     setArtist({ ...artist, socials: newSocials });
   }
   return (
-    <Stack spacing={2}>
-      <Typography>Socials</Typography>
+    <Grid container spacing={1}>
+      <Grid item xs={12}>
+        <Typography>Socials</Typography>
+      </Grid>
 
       {artist.socials.map((value, i) => (
-        <Stack direction="row" alignItems="center" spacing={2} key={i}>
-          <SocialIcon social={value} clickable={false} />
-          <TextField
-            label="Social Name"
-            value={value.name}
-            onChange={(event) => {
-              handleSocialNameChange(event, i);
-            }}
-          />
-          <TextField
-            label="URL"
-            value={value.url}
-            onChange={(event) => {
-              handleSocialURLChange(event, i);
-            }}
-          />
-
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              removeSocial(i);
-            }}
-          >
-            <ClearIcon />
-          </IconButton>
-        </Stack>
+        <Grid item xs={12} key={i}>
+          <Grid container spacing={2}>
+            <Grid item>
+              <SocialIcon social={value} clickable={false} />
+            </Grid>
+            <Grid item>
+              <TextField
+                label="Social Name"
+                value={value.name}
+                onChange={(event) => {
+                  handleSocialNameChange(event, i);
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                label="URL"
+                value={value.url}
+                onChange={(event) => {
+                  handleSocialURLChange(event, i);
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <IconButton
+                aria-label="delete"
+                onClick={() => {
+                  removeSocial(i);
+                }}
+              >
+                <ClearIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Grid>
       ))}
-      <Button
-        variant="contained"
-        onClick={() => {
-          addEmptySocial();
-        }}
-      >
-        Add Social
-      </Button>
-    </Stack>
+      <Grid item xs={12}>
+
+        <Button
+          variant="contained"
+          onClick={() => {
+            addEmptySocial();
+          }}
+        >
+          Add Social
+        </Button>
+      </Grid>
+    </Grid>
   );
 }

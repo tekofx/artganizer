@@ -45,7 +45,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
 
   const [selectedCharacters, setSelectedCharacters] = useState<Character[]>([]);
 
-  const { createSubmission } = useAppContext();
+  const { createSubmission, isMobile } = useAppContext();
 
   function resetForm() {
     setSubmission(emptySubmission);
@@ -95,7 +95,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
   }
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth={"xl"}>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth={"xl"} fullScreen={isMobile ? true : false}>
         <DialogTitle>Create Submission</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>

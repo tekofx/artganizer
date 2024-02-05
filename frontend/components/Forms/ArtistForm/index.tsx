@@ -43,7 +43,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
     severity: "success",
   });
 
-  const { createArtist } = useAppContext();
+  const { createArtist, isMobile } = useAppContext();
 
   function onImageUpload(event: any) {
     const newArtist = { ...artist };
@@ -82,7 +82,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={isMobile ? true : false}>
         <DialogTitle>Create Artist</DialogTitle>
         <DialogContent sx={{ p: 2 }}>
           <Grid container spacing={2} >

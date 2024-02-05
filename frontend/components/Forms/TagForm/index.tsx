@@ -41,7 +41,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
     severity: "success",
   });
 
-  const { createTag, editTag } = useAppContext();
+  const { createTag, editTag, isMobile } = useAppContext();
 
   const handleChangeComplete = (color: ColorResult) => {
     setTag((prevTag) => ({
@@ -94,7 +94,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={isMobile ? true : false}>
         <DialogTitle>Create Tag</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} paddingTop={2}>

@@ -29,7 +29,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
   const [character, setCharacter] = useState<Character>(
     name ? { ...emptyCharacter, name: name } : { ...emptyCharacter }
   );
-  const { createCharacter } = useAppContext();
+  const { createCharacter, isMobile } = useAppContext();
   const [image, setImage] = useState<string>("/placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(false);
   const [openSnack, setOpenSnack] = useState<boolean>(false);
@@ -78,7 +78,7 @@ export default function CharacterForm({ open, setOpen, name }: Props) {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={isMobile ? true : false}>
         <DialogTitle>Create Character</DialogTitle>
         <DialogContent sx={{ p: 2 }}>
           <Grid container spacing={4}>
