@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UI: Added mobile layout
 - BottomAppbar: Improved layout and design
 - New Pages: Pages artists, characters and tags
+- Backup/Restore: Option to download all data as a zip and to restore the data using this zip
 
 ### Improved
 
