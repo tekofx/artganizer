@@ -1,8 +1,8 @@
 import AdmZip from "adm-zip";
-import archiver from "archiver";
 import express, { Request, Response } from "express";
 import fs from "fs";
 import fsExtra from "fs-extra";
+import JSZip from "jszip";
 import multer, { FileFilterCallback } from "multer";
 import path from "path";
 import "reflect-metadata";
@@ -115,39 +115,57 @@ router.delete("/", async (req: Request, res: Response) => {
   fs.writeFileSync(settingsFile, JSON.stringify(defaultSettings));
   res.send(defaultSettings);
 });
+async function addFolderToZip(zip: JSZip, folderPath: string) {
+  const entries = fs.readdirSync(folderPath, { withFileTypes: true });
 
+  for (let entry of entries) {
+    const fullPath = path.join(folderPath, entry.name);
+    if (entry.isDirectory()) {
+      const subFolderZip = zip.folder(entry.name);
+      if (!subFolderZip) {
+        throw new Error("Error creating subfolder in zip");
+      }
+      await addFolderToZip(subFolderZip, fullPath);
+    } else {
+      const fileData = fs.readFileSync(fullPath);
+      zip.file(entry.name, fileData);
+    }
+  }
+}
 router.get("/export", async (req: Request, res: Response) => {
+  // Remove contents of export folder
+  fsExtra.emptyDirSync(exportDataFolder);
+
+  // Remove latest export.zip
+  if (fs.existsSync(`${exportFolder}/export.zip`)) {
+    fs.unlinkSync(`${exportFolder}/export.zip`);
+  }
+
   // Create JSONs with each entity
   var artists = await ArtistRepo.find();
-  var artistsJSON = JSON.stringify(artists);
 
   var characters = await CharacterRepo.find();
-  var charactersJSON = JSON.stringify(characters);
 
   var tags = await TagRepo.find();
-  var tagsJSON = JSON.stringify(tags);
 
   var socials = await SocialRepo.find();
-  var socialsJSON = JSON.stringify(socials);
 
   var submissions = await SubmissionRepo.find();
-  var submissionsJSON = JSON.stringify(submissions);
 
   // Get settings from file
   const settings = JSON.parse(fs.readFileSync(settingsFile, "utf8").toString());
-  var settingsJSON = JSON.stringify(settings);
 
   // Create JSON file
   const exportFile = `${exportDataFolder}/export.json`;
   fs.writeFileSync(
     exportFile,
     JSON.stringify({
-      artists: artistsJSON,
-      characters: charactersJSON,
-      tags: tagsJSON,
-      socials: socialsJSON,
-      submissions: submissionsJSON,
-      settings: settingsJSON,
+      artists: artists,
+      characters: characters,
+      tags: tags,
+      socials: socials,
+      submissions: submissions,
+      settings: settings,
     })
   );
 
@@ -155,54 +173,22 @@ router.get("/export", async (req: Request, res: Response) => {
   await fsExtra.copy("backend/data/uploads", `${exportDataFolder}/uploads`);
 
   // Zip the export folder
-  const output = fs.createWriteStream(`${exportFolder}/export.zip`);
-  const archive = archiver("zip", {
-    zlib: { level: 9 }, // Sets the compression level.
-  });
+  const zip = new JSZip();
 
-  // Good practice to catch warnings (ie stat failures and other non-blocking errors)
-  archive.on("warning", function (err) {
-    if (err.code === "ENOENT") {
-      // log warning
-    } else {
-      // throw error
-      throw err;
-    }
-  });
+  await addFolderToZip(zip, exportDataFolder);
 
-  // Good practice to catch this error explicitly
-  archive.on("error", function (err) {
-    throw err;
-  });
-
-  // Pipe archive data to the file
-  archive.pipe(output);
-
-  // Append directories
-  archive.directory(exportDataFolder, false);
-
-  // Finalize the archive (ie we are done appending files but streams have to finish yet)
-  archive.finalize().then(() => {
-    console.log("Archive finalized");
-  });
-
-  const zipFile = path.resolve(`${exportFolder}/export.zip`);
-  console.log("Zip file:", zipFile);
-
-  archive.on("end", function () {
-    console.log("Archive wrote %d bytes", archive.pointer());
-  });
-
-  // Listen for all archive data to be processed
-  output.on("close", function () {
-    console.log(archive.pointer() + " total bytes");
-    console.log(
-      "archiver has been finalized and the output file descriptor has closed."
-    );
-    res.download(zipFile);
-  });
+  // Save to disk
+  const zipFile = `${exportFolder}/export.zip`;
+  zip
+    .generateNodeStream({ type: "nodebuffer", streamFiles: true })
+    .pipe(fs.createWriteStream(zipFile))
+    .on("finish", function () {
+      console.log(zipFile + " written.");
+      return res.send({ url: "/settings/export/export.zip" });
+    });
 });
 
+router.use("/export", express.static(exportFolder));
 router.post(
   "/import",
   uploadImport.single("backup"),

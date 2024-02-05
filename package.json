@@ -30,6 +30,7 @@
     "fs-extra": "^11.2.0",
     "image-size": "^1.0.2",
     "jsonwebtoken": "^9.0.1",
+    "jszip": "^3.10.1",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "next": "^13.4.19",

@@ -32,13 +32,22 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     };
 
     async function downloadBackup() {
-        await axios.get("/api/settings/export").then((res: AxiosResponse) => {
+        await axios.get("/api/settings/export").then(() => {
+            console.log("Created backup");
+        }
+        ).catch((err) => {
+            console.log(err);
+        }
+        );
+
+        await axios.get("/api/settings/export/export.zip?download", { responseType: "blob" }).then((res: AxiosResponse) => {
+            console.log(res.data);
             const url = window.URL.createObjectURL(new Blob([res.data]));
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", "export.zip");
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'export.zip'); // o cualquier otro nombre de archivo
+            document.body.appendChild(link);
             link.click();
-            link.remove();
             setAlertMessage({ message: "Backup downloaded", severity: "success" });
             setOpen(true);
         }
