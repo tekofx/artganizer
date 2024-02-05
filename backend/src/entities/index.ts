@@ -1,6 +1,7 @@
+import { Artist } from "./Artist";
+import { Character } from "./Character";
+import { Social } from "./Social";
 import { Submission } from "./Submission";
 import { Tag } from "./Tag";
-import { Character } from "./Character";
-import { Artist } from "./Artist";
-import { Social } from "./Social";
-export { Artist, Submission, Tag, Character, Social };
+import { User } from "./User";
+export { Artist, Character, Social, Submission, Tag, User };
