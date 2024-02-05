@@ -25,11 +25,6 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null); // eslint-disable-line
     const [open, setOpen] = useState(false);
 
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSelectedFile(event.target.files ? event.target.files[0] : null);
-
-        console.log(event.target.files);
-    };
 
     async function downloadBackup() {
         await axios.get("/api/settings/export").then(() => {
@@ -41,7 +36,6 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         );
 
         await axios.get("/api/settings/export/export.zip?download", { responseType: "blob" }).then((res: AxiosResponse) => {
-            console.log(res.data);
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -59,12 +53,14 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         );
     }
 
-    async function onFileUpload() {
-        if (!selectedFile) {
+    async function onFileUpload(event: ChangeEvent<HTMLInputElement>) {
+        if (!event.target.files) {
             return;
         }
+
+        var file = event.target.files[0];
         const data = new FormData();
-        data.append("backup", selectedFile);
+        data.append("backup", file);
         console.log("making request")
         await axios.post("/api/settings/import", data).then(() => {
             console.log("Backup restored");
@@ -105,11 +101,10 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                         <Button variant="contained" color="primary" startIcon={<CloudDownloadIcon />} onClick={downloadBackup}>Backup</Button>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" component="label" color="primary" startIcon={<RestoreIcon />}>
+                        <Button variant="contained" component="label" color="primary" startIcon={<RestoreIcon />} >
                             Add restore file
-                            <input type="file" hidden accept="application/zip" onChange={handleFileChange} />
+                            <input type="file" hidden accept="application/zip" onChange={onFileUpload} />
                         </Button>
-                        <Button variant="contained" color="primary" startIcon={<RestoreIcon />} onClick={onFileUpload}>Restore</Button>
                     </Grid>
 
                 </Grid>
