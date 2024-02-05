@@ -74,11 +74,17 @@ const fileFilter = (
   cb: FileFilterCallback
 ) => {
   // Verificar si el archivo es un zip
-  if (file.mimetype.startsWith("application/zip")) {
+  if (
+    file.mimetype === "application/zip" ||
+    file.mimetype === "application/x-zip-compressed" ||
+    file.mimetype === "application/octet-stream"
+  ) {
     // Aceptar el archivo
+    console.log("File supported");
     cb(null, true);
   } else {
     // Rechazar el archivo
+    console.log("File not supported");
     cb(null, false);
   }
 };
@@ -199,7 +205,7 @@ router.get("/export", async (req: Request, res: Response) => {
 
 router.post(
   "/import",
-  uploadImport.single("import"),
+  uploadImport.single("backup"),
   async (req: Request, res: Response) => {
     // empty export folder
 

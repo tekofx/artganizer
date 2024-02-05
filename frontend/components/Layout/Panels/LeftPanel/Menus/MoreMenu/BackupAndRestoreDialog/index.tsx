@@ -11,8 +11,8 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import axios, { AxiosResponse } from "axios";
-import { Dispatch, SetStateAction, useState } from "react";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { AlertMessage } from "../../../../../../../interfaces";
 import Snack from "../../../../../../Snack";
 interface SettingsDialogProps {
@@ -22,7 +22,14 @@ interface SettingsDialogProps {
 export default function SettingsDialog(props: SettingsDialogProps) {
 
     const [alertMessage, setAlertMessage] = useState<AlertMessage>({ message: "", severity: "success" });
+    const [selectedFile, setSelectedFile] = useState<File | null>(null); // eslint-disable-line
     const [open, setOpen] = useState(false);
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setSelectedFile(event.target.files ? event.target.files[0] : null);
+
+        console.log(event.target.files);
+    };
 
     async function downloadBackup() {
         await axios.get("/api/settings/export").then((res: AxiosResponse) => {
@@ -43,16 +50,20 @@ export default function SettingsDialog(props: SettingsDialogProps) {
         );
     }
 
-    async function onFileUpload(event: any) {
+    async function onFileUpload() {
+        if (!selectedFile) {
+            return;
+        }
         const data = new FormData();
-        data.append("import", event.target.files[0]);
+        data.append("backup", selectedFile);
+        console.log("making request")
         await axios.post("/api/settings/import", data).then(() => {
             console.log("Backup restored");
             setAlertMessage({ message: "Backup restored", severity: "success" });
             setOpen(true);
         }
-        ).catch((err) => {
-            console.log(err);
+        ).catch((err: AxiosError) => {
+            console.log(err.cause);
             setAlertMessage({ message: "Error restoring backup", severity: "error" });
             setOpen(true);
         }
@@ -86,14 +97,15 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                     </Grid>
                     <Grid item>
                         <Button variant="contained" component="label" color="primary" startIcon={<RestoreIcon />}>
-                            Restore
-                            <input type="file" hidden accept="application/zip" onChange={onFileUpload} />
+                            Add restore file
+                            <input type="file" hidden accept="application/zip" onChange={handleFileChange} />
                         </Button>
+                        <Button variant="contained" color="primary" startIcon={<RestoreIcon />} onClick={onFileUpload}>Restore</Button>
                     </Grid>
 
                 </Grid>
             </DialogContent>
 
-        </Dialog>
+        </Dialog >
     );
 }
