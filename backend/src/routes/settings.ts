@@ -210,12 +210,12 @@ router.post(
     // Read the JSON file
     const importFile = `${importFolder}/export.json`;
     const data = JSON.parse(fs.readFileSync(importFile, "utf8").toString());
-    var artists = JSON.parse(data.artists);
-    var characters = JSON.parse(data.characters);
-    var tags = JSON.parse(data.tags);
-    var socials = JSON.parse(data.socials);
-    var submissions = JSON.parse(data.submissions);
-    var settings = JSON.parse(data.settings);
+    var artists = data.artists;
+    var characters = data.characters;
+    var tags = data.tags;
+    var socials = data.socials;
+    var submissions = data.submissions;
+    var settings = data.settings;
 
     for (let artist of artists) {
       await ArtistRepo.save(artist);
