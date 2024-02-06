@@ -1,8 +1,10 @@
 // components/Layout.js
 import { Grid } from '@mui/material';
+import { useAppContext } from 'pages/_app';
 import BottomAppBar from './Mobile/BottomAppBar';
 import LeftPanel from './Panels/LeftPanel';
-const Layout = ({ children }) => {
+export default function Layout({ children }) {
+    const { isMobile } = useAppContext();
     return (
         <Grid container>
             <Grid
@@ -20,17 +22,16 @@ const Layout = ({ children }) => {
                 {children}
             </Grid>
 
-            <Grid
-                item
-                xs={12}
-                sx={{
-                    display: { xs: "block", lg: "none" },
-                }}
-            >
-                <BottomAppBar />
-            </Grid>
+            {
+                isMobile && (
+                    <Grid
+                        item
+                        xs={12}
+                    >
+                        <BottomAppBar />
+                    </Grid>
+                )
+            }
         </Grid>
     );
 };
-
-export default Layout;
