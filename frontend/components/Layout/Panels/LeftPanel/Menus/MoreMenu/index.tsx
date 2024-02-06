@@ -12,12 +12,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import About from "components/Layout/Panels/LeftPanel/Menus/MoreMenu/About";
+import LogOut from 'components/Layout/Panels/LeftPanel/Menus/MoreMenu/LogOut';
 import { MouseEvent, useState } from "react";
 import ManageTags from "../../../../../Forms/ManageTags";
-import About from "./About";
-import BackupAndRestoreDialog from "./BackupAndRestoreDialog";
-import LogOut from './LogOut';
-import SettingsDialog from "./SettingsDialog";
+import BackupAndRestoreDialog from "./BackupAndRestore";
+import SettingsDialog from "./Settings";
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {

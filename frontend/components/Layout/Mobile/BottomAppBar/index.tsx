@@ -1,15 +1,16 @@
 import BrushIcon from "@mui/icons-material/Brush";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from "@mui/icons-material/Person";
 import PhotoIcon from "@mui/icons-material/Photo";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
+import MoreMenu from "components/Layout/Panels/LeftPanel/Menus/MoreMenu";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import theme from "../../../../src/theme";
 import CreatePopup from "./CreateButton";
-
 export default function BottomAppBar() {
   const router = useRouter();
   const [value, setValue] = useState(0);
@@ -64,9 +65,16 @@ export default function BottomAppBar() {
               onClick={(event) => onClick(event, page.id)}
             />
           ))}
+          <BottomNavigationAction
+            key={1}
+            label="More"
+            icon={<MenuIcon />}
+          />
         </BottomNavigation>
 
         <CreatePopup />
+        <MoreMenu />
+
       </Toolbar>
     </AppBar>
   );
