@@ -6,7 +6,7 @@ import PhotoIcon from "@mui/icons-material/Photo";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import MoreMenu from "components/Layout/Panels/LeftPanel/Menus/More";
+import MoreMenu from "components/Layout/Panels/LeftPanel/Menus/More/Menu";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import theme from "../../../../src/theme";
@@ -14,6 +14,10 @@ import CreatePopup from "./CreateButton";
 export default function BottomAppBar() {
   const router = useRouter();
   const [value, setValue] = useState(0);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
   const pages = [
     { id: 0, page: "Artists", navigate: "/artists", icon: <BrushIcon /> },
@@ -69,11 +73,12 @@ export default function BottomAppBar() {
             key={1}
             label="More"
             icon={<MenuIcon />}
+            onClick={handleOpenUserMenu}
           />
         </BottomNavigation>
 
         <CreatePopup />
-        <MoreMenu />
+        <MoreMenu anchorElUser={anchorElUser} setAnchorElUser={setAnchorElUser} />
 
       </Toolbar>
     </AppBar>
