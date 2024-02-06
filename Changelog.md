@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BottomAppbar: Improved layout and design
 - New Pages: Pages artists, characters and tags
 - Backup/Restore: Option to download all data as a zip and to restore the data using this zip
+- Login: Now you have to create a user and login to use the app
 
 ### Improved
 
