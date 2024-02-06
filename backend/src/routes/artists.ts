@@ -4,7 +4,7 @@ import multer, { FileFilterCallback } from "multer";
 import * as path from "path";
 import "reflect-metadata";
 import sharp from "sharp";
-import { Artist } from "../entities";
+import auth from "../middleware/auth";
 import { ArtistRepo, SocialRepo, SubmissionRepo } from "../typeorm.config";
 
 const artistsPicsDir = "backend/data/uploads/artists";
@@ -53,7 +53,7 @@ const uploadArtistPics = multer({
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", auth, async (req: Request, res: Response) => {
   const queryBuilder = ArtistRepo.createQueryBuilder("artist")
     .leftJoinAndSelect("artist.socials", "social")
     .orderBy("artist.id", "ASC");
@@ -64,6 +64,7 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post(
   "/",
+  auth,
   uploadArtistPics.single("image"),
   async (req: Request, res: Response) => {
     var { name, description, socials } = req.body;
@@ -139,7 +140,7 @@ router.post(
   }
 );
 
-router.get("/:artistId", async (req: Request, res: Response) => {
+router.get("/:artistId", auth, async (req: Request, res: Response) => {
   if (req.params.artistId == null) {
     res.status(400).send("artist ID not provided");
     return;
@@ -161,7 +162,7 @@ router.get("/:artistId", async (req: Request, res: Response) => {
   res.send(artist);
 });
 
-router.delete("/:artistId", async (req: Request, res: Response) => {
+router.delete("/:artistId", auth, async (req: Request, res: Response) => {
   if (req.params.artistId == null) {
     res.status(400).send("artist ID not provided");
     return;
@@ -186,30 +187,37 @@ router.delete("/:artistId", async (req: Request, res: Response) => {
   res.send(artist);
 });
 
-router.get("/:artistId/submissions", async (req: Request, res: Response) => {
-  if (req.params.artistId == null) {
-    res.status(400).send("artist ID not provided");
-    return;
+router.get(
+  "/:artistId/submissions",
+  auth,
+  async (req: Request, res: Response) => {
+    if (req.params.artistId == null) {
+      res.status(400).send("artist ID not provided");
+      return;
+    }
+
+    var artistId: number = parseInt(req.params.artistId);
+    const submissions = await SubmissionRepo.createQueryBuilder("submission")
+      .leftJoinAndSelect("submission.artist", "artist")
+      .where("artist.id = :id", { id: artistId })
+      .getMany();
+
+    if (submissions.length === 0) {
+      res
+        .status(404)
+        .send("artist not found or no submissions found for artist");
+      return;
+    }
+
+    res.send(submissions);
   }
-
-  var artistId: number = parseInt(req.params.artistId);
-  const submissions = await SubmissionRepo.createQueryBuilder("submission")
-    .leftJoinAndSelect("submission.artist", "artist")
-    .where("artist.id = :id", { id: artistId })
-    .getMany();
-
-  if (submissions.length === 0) {
-    res.status(404).send("artist not found or no submissions found for artist");
-    return;
-  }
-
-  res.send(submissions);
-});
+);
 
 router.use("/uploads", express.static(artistsPicsDir));
 
 router.put(
   "/:artistId",
+  auth,
   uploadArtistPics.single("image"),
   async (req: Request, res: Response) => {
     if (req.params.artistId == null) {
@@ -262,7 +270,7 @@ router.put(
   }
 );
 
-router.post("/:artistId/socials", async (req: Request, res: Response) => {
+router.post("/:artistId/socials", auth, async (req: Request, res: Response) => {
   if (req.params.artistId == null) {
     res.status(400).send("artist ID not provided");
     return;
@@ -291,6 +299,7 @@ router.post("/:artistId/socials", async (req: Request, res: Response) => {
 
 router.put(
   "/:artistId/socials/:socialId",
+  auth,
   async (req: Request, res: Response) => {
     if (req.params.artistId == null) {
       res.status(400).send("artist ID not provided");
@@ -333,6 +342,7 @@ router.put(
 
 router.delete(
   "/:artistId/socials/:socialId",
+  auth,
   async (req: Request, res: Response) => {
     if (req.params.artistId == null) {
       res.status(400).send("artist ID not provided");

@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { AlertMessage } from 'interfaces';
 import { useRouter } from 'next/router';
+import { useAppContext } from 'pages/_app';
 import * as React from 'react';
 import Cookies from "universal-cookie";
 
@@ -19,16 +20,20 @@ export default function Login({ setAlertMessage, setShowAlert }: RegisterProps) 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const router = useRouter();
+    const { getAllAppData } = useAppContext();
+
 
     async function login() {
         await axios.post('/api/login', {
             username: username,
             password: password
         })
-            .then((response) => {
+            .then(async (response) => {
+
                 setShowAlert(false);
                 var cookies = new Cookies();
                 cookies.set("TOKEN", response.data.token, { path: "/" })
+                await getAllAppData();
                 router.push('/');
             })
             .catch((error) => {

@@ -2,7 +2,6 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { useMediaQuery } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import axios from "axios";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import {
@@ -13,6 +12,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import Cookies from "universal-cookie";
 import {
   Artist,
   Character,
@@ -24,28 +24,33 @@ import {
 import {
   handleCreateArtist,
   handleEditArtist,
+  handleGetArtists,
   handleRemoveArtist,
 } from "../src/api/artists";
 import {
   handleCreateCharacter,
   handleEditCharacter,
+  handleGetCharacters,
   handleRemoveCharacter,
 } from "../src/api/characters";
-import { handleEditSettings, handleResetSettings } from "../src/api/settings";
+import { handleEditSettings, handleGetSettings, handleResetSettings } from "../src/api/settings";
 import {
   handleCreateSubmission,
   handleEditSubmission,
+  handleGetSubmissions,
   handleRemoveSubmission,
 } from "../src/api/submissions";
 import {
   handleCreateTag,
   handleEditTag,
+  handleGetTags,
   handleRemoveTag,
 } from "../src/api/tags";
 import createEmotionCache from "../src/createEmotionCache";
 import { defaultSettings, emptyFilters } from "../src/emptyEntities";
 import theme from "../src/theme";
 import "../styles/styles.css";
+var cookies = new Cookies();
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -96,6 +101,13 @@ interface AppContextType {
   editSettings(settings: Settings): Promise<Settings | undefined>;
   // eslint-disable-next-line no-unused-vars
   resetSettings(): Promise<Settings | undefined>;
+
+  getAllAppData(): Promise<void>;
+  getArtists(): Promise<void>;
+  getCharacters(): Promise<void>;
+  getTags(): Promise<void>;
+  getSubmissions(): Promise<void>;
+  getSettings(): Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -109,6 +121,15 @@ export default function MyApp(props: MyAppProps) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [filters, setFilters] = useState<Filters>(emptyFilters);
+
+
+  async function getAllAppData() {
+    await getArtists();
+    await getSubmissions();
+    await getCharacters();
+    await getTags();
+    await getSettings();
+  }
 
   async function createSubmission(submission: Submission) {
     var submissionCreated: Submission;
@@ -142,6 +163,16 @@ export default function MyApp(props: MyAppProps) {
     return status;
   }
 
+  async function getArtists() {
+    try {
+      const response = await handleGetArtists();
+      setArtists(response);
+    } catch (e: any) {
+      console.log("app.tsx: " + e.message);
+      throw e;
+    }
+  }
+
   async function createArtist(artist: Artist) {
     const artistCreated = await handleCreateArtist(artist);
     getArtists();
@@ -163,6 +194,17 @@ export default function MyApp(props: MyAppProps) {
     }
     return status;
   }
+
+  async function getCharacters() {
+    try {
+      const response = await handleGetCharacters();
+      setCharacters(response);
+    } catch (e: any) {
+      console.log("app.tsx: " + e.message);
+      throw e;
+    }
+  }
+
 
   async function createCharacter(character: Character) {
     const characterCreated = await handleCreateCharacter(character);
@@ -190,6 +232,16 @@ export default function MyApp(props: MyAppProps) {
     return status;
   }
 
+  async function getTags() {
+    try {
+      const response = await handleGetTags();
+      setTags(response);
+    } catch (e: any) {
+      console.log("app.tsx: " + e.message);
+      throw e;
+    }
+  }
+
   async function createTag(tag: Tag) {
     const tagCreated = await handleCreateTag(tag);
     if (tagCreated) {
@@ -212,7 +264,15 @@ export default function MyApp(props: MyAppProps) {
     }
     return status;
   }
-
+  async function getSettings() {
+    try {
+      const response = await handleGetSettings();
+      setSettings(response || defaultSettings);
+    } catch (e: any) {
+      console.log("app.tsx: " + e.message);
+      throw e;
+    }
+  }
   async function editSettings(settings: Settings) {
     const status = await handleEditSettings(settings);
     if (status) {
@@ -229,37 +289,21 @@ export default function MyApp(props: MyAppProps) {
     return status;
   }
 
-  const getArtists = async () =>
-    await axios
-      .get(`/api/artists`)
-      .then((response) => {
-        setArtists(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-  const getSubmissions = async () =>
-    await axios.get(`/api/submissions`).then((response) => {
-      setSubmissions(response.data);
-    });
-
-  const getCharacters = async () =>
-    await axios.get(`/api/characters`).then((response) => {
-      setCharacters(response.data);
-    });
-
-  const getTags = async () =>
-    await axios.get(`/api/tags`).then((response) => {
-      setTags(response.data);
-    });
-
-  const getSettings = async () =>
-    await axios.get(`/api/settings`).then((response) => {
-      setSettings(response.data);
-    });
+  async function getSubmissions() {
+    try {
+      const response = await handleGetSubmissions();
+      setSubmissions(response);
+    } catch (e: any) {
+      console.log("app.tsx: " + e.message);
+      throw e;
+    }
+  }
 
   useEffect(() => {
+    console.log(cookies.get("TOKEN"));
+    if (cookies.get("TOKEN") == undefined) {
+      return;
+    }
     getArtists();
     getSubmissions();
     getCharacters();
@@ -303,7 +347,14 @@ export default function MyApp(props: MyAppProps) {
             removeTag,
             editSettings,
             resetSettings,
-            isMobile
+            isMobile,
+            getArtists,
+            getCharacters,
+            getTags,
+            getSubmissions,
+            getSettings,
+            getAllAppData,
+
           }}
         >
           <Component {...pageProps} />

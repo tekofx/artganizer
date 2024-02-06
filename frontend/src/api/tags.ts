@@ -1,6 +1,19 @@
 import axios from "axios";
 import { Tag } from "../../interfaces";
 
+export async function handleGetTags(): Promise<Tag[]> {
+  var result = await axios
+    .get("/api/tags")
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return [];
+    });
+
+  return result;
+}
+
 export async function handleCreateTag(tag: Tag): Promise<Tag | undefined> {
   var result = await axios
     .post("/api/tags", tag)

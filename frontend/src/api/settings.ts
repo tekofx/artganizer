@@ -1,6 +1,18 @@
 import axios from "axios";
 import { Settings } from "../../interfaces";
 
+export async function handleGetSettings(): Promise<Settings | undefined> {
+  var result = await axios
+    .get("/api/settings/")
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return undefined;
+    });
+  return result;
+}
+
 export async function handleEditSettings(
   settings: Settings
 ): Promise<Settings | undefined> {

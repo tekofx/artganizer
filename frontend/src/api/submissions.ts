@@ -2,6 +2,17 @@ import axios, { AxiosError } from "axios";
 import { Submission } from "../../interfaces";
 import ApiError from "./ApiError";
 
+export async function handleGetSubmissions(): Promise<Submission[]> {
+  return await axios
+    .get("/api/submissions")
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return [];
+    });
+}
+
 export async function handleCreateSubmission(
   submission: Submission
 ): Promise<Submission> {

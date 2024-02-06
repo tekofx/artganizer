@@ -1,5 +1,19 @@
 import axios from "axios";
 import { Artist } from "../../interfaces";
+import AxiosOptions from "./AxiosOptions";
+
+export async function handleGetArtists(): Promise<Artist[]> {
+  var result = await axios
+    .get("/api/artists", AxiosOptions)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return [];
+    });
+  return result;
+}
+
 export async function handleCreateArtist(
   artist: Artist
 ): Promise<Artist | undefined> {

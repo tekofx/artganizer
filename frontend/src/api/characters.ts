@@ -1,6 +1,18 @@
 import axios from "axios";
 import { Character } from "../../interfaces";
 
+export async function handleGetCharacters(): Promise<Character[]> {
+  var result = await axios
+    .get("/api/characters")
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return [];
+    });
+  return result;
+}
+
 export async function handleCreateCharacter(
   character: Character
 ): Promise<Character | undefined> {
