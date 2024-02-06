@@ -41,7 +41,7 @@ app.use(
 );
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("Artganizer Backend Working");
 });
 
 app.use("/artists", artist);
