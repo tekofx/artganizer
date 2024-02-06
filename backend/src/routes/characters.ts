@@ -4,6 +4,7 @@ import multer, { FileFilterCallback } from "multer";
 import * as path from "path";
 import "reflect-metadata";
 import sharp from "sharp";
+import auth from "../middleware/auth";
 import { CharacterRepo } from "../typeorm.config";
 const charactersDir = "backend/data/uploads/characters";
 if (!fs.existsSync(charactersDir)) {
@@ -50,12 +51,12 @@ const uploadCharacterPic = multer({
 });
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", auth, async (req: Request, res: Response) => {
   const characters = await CharacterRepo.find();
   res.send(characters);
 });
 
-router.get("/:characterId", async (req: Request, res: Response) => {
+router.get("/:characterId", auth, async (req: Request, res: Response) => {
   if (req.params.characterId == null) {
     res.status(400).send("Character ID not provided");
     return;
@@ -76,6 +77,7 @@ router.get("/:characterId", async (req: Request, res: Response) => {
 
 router.post(
   "/",
+  auth,
   uploadCharacterPic.single("image"),
   async (req: Request, res: Response) => {
     const { name, description } = req.body;
@@ -115,6 +117,7 @@ router.use("/uploads", express.static(charactersDir));
 
 router.put(
   "/:characterId",
+  auth,
   uploadCharacterPic.single("image"),
   async (req: Request, res: Response) => {
     if (req.params.characterId == null) {
@@ -176,7 +179,7 @@ router.put(
     }
   }
 );
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", auth, async (req: Request, res: Response) => {
   if (req.params.id == null) {
     res.status(400).send("artist ID not provided");
     return;

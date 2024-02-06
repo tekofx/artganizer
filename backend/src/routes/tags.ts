@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import "reflect-metadata";
-import { Submission } from "../entities/Submission";
-import { TagRepo, SubmissionRepo } from "../typeorm.config";
+import auth from "../middleware/auth";
+import { SubmissionRepo, TagRepo } from "../typeorm.config";
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", auth, async (req: Request, res: Response) => {
   //const tags = await TagRepo.find();
   const tags = await TagRepo.createQueryBuilder("tag")
     .select([
@@ -23,13 +23,13 @@ router.get("/", async (req: Request, res: Response) => {
   res.send(tags);
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", auth, async (req: Request, res: Response) => {
   var id = parseInt(req.params.id);
   const label = await TagRepo.findOne({ where: { id: id } });
   res.send(label);
 });
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", auth, async (req: Request, res: Response) => {
   const { name, color } = req.body;
   const label = TagRepo.create({ name: name, color: color });
   const tag = await TagRepo.save(label);
@@ -37,7 +37,7 @@ router.post("/", async (req: Request, res: Response) => {
   res.send(tag);
 });
 
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:id", auth, async (req: Request, res: Response) => {
   var id = parseInt(req.params.id);
   const { name, color } = req.body;
   const label = await TagRepo.findOne({ where: { id: id } });
@@ -61,7 +61,7 @@ router.put("/:id", async (req: Request, res: Response) => {
   res.send(updatedLabel);
 });
 
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", auth, async (req: Request, res: Response) => {
   var id = parseInt(req.params.id);
   const tag = await TagRepo.findOne({ where: { id: id } });
   if (tag == null) {

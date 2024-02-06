@@ -6,6 +6,7 @@ import JSZip from "jszip";
 import multer, { FileFilterCallback } from "multer";
 import path from "path";
 import "reflect-metadata";
+import auth from "../middleware/auth";
 import {
   ArtistRepo,
   CharacterRepo,
@@ -13,7 +14,23 @@ import {
   SubmissionRepo,
   TagRepo,
 } from "../typeorm.config";
+async function addFolderToZip(zip: JSZip, folderPath: string) {
+  const entries = fs.readdirSync(folderPath, { withFileTypes: true });
 
+  for (let entry of entries) {
+    const fullPath = path.join(folderPath, entry.name);
+    if (entry.isDirectory()) {
+      const subFolderZip = zip.folder(entry.name);
+      if (!subFolderZip) {
+        throw new Error("Error creating subfolder in zip");
+      }
+      await addFolderToZip(subFolderZip, fullPath);
+    } else {
+      const fileData = fs.readFileSync(fullPath);
+      zip.file(entry.name, fileData);
+    }
+  }
+}
 const router = express.Router();
 const defaultSettings = {
   galleryInfo: {
@@ -96,13 +113,13 @@ const uploadImport = multer({
     fileSize: 1024 * 1024 * 100, // 100MB
   },
 });
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", auth, async (req: Request, res: Response) => {
   // Send content of settings.json
   const settings = JSON.parse(fs.readFileSync(settingsFile, "utf8").toString());
   res.send(settings);
 });
 
-router.put("/", async (req: Request, res: Response) => {
+router.put("/", auth, async (req: Request, res: Response) => {
   // Update settings.json
   const settings = JSON.parse(fs.readFileSync(settingsFile, "utf8").toString());
   const newSettings = { ...settings, ...req.body };
@@ -110,29 +127,13 @@ router.put("/", async (req: Request, res: Response) => {
   res.send(newSettings);
 });
 
-router.delete("/", async (req: Request, res: Response) => {
+router.delete("/", auth, async (req: Request, res: Response) => {
   // Reset settings.json
   fs.writeFileSync(settingsFile, JSON.stringify(defaultSettings));
   res.send(defaultSettings);
 });
-async function addFolderToZip(zip: JSZip, folderPath: string) {
-  const entries = fs.readdirSync(folderPath, { withFileTypes: true });
 
-  for (let entry of entries) {
-    const fullPath = path.join(folderPath, entry.name);
-    if (entry.isDirectory()) {
-      const subFolderZip = zip.folder(entry.name);
-      if (!subFolderZip) {
-        throw new Error("Error creating subfolder in zip");
-      }
-      await addFolderToZip(subFolderZip, fullPath);
-    } else {
-      const fileData = fs.readFileSync(fullPath);
-      zip.file(entry.name, fileData);
-    }
-  }
-}
-router.get("/export", async (req: Request, res: Response) => {
+router.get("/export", auth, async (req: Request, res: Response) => {
   // Remove contents of export folder
   fsExtra.emptyDirSync(exportDataFolder);
 
@@ -188,9 +189,10 @@ router.get("/export", async (req: Request, res: Response) => {
     });
 });
 
-router.use("/export", express.static(exportFolder));
+router.use("/export", auth, express.static(exportFolder));
 router.post(
   "/import",
+  auth,
   uploadImport.single("backup"),
   async (req: Request, res: Response) => {
     // empty export folder

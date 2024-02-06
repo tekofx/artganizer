@@ -7,6 +7,7 @@ import * as path from "path";
 import "reflect-metadata";
 import sharp from "sharp";
 import { Submission } from "../entities";
+import auth from "../middleware/auth";
 import {
   ArtistRepo,
   CharacterRepo,
@@ -62,7 +63,7 @@ const uploadSubmissions = multer({
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", auth, async (req: Request, res: Response) => {
   var { tags, characters, artist } = req.query;
 
   const queryBuilder = SubmissionRepo.createQueryBuilder("submission");
@@ -103,7 +104,7 @@ router.get("/", async (req: Request, res: Response) => {
   res.send(submissions);
 });
 
-router.get("/:submissionId", async (req: Request, res: Response) => {
+router.get("/:submissionId", auth, async (req: Request, res: Response) => {
   var { tags, characters, artist } = req.query;
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
@@ -158,6 +159,7 @@ router.get("/:submissionId", async (req: Request, res: Response) => {
 
 router.post(
   "/",
+  auth,
   uploadSubmissions.single("image"),
   async (req: Request, res: Response) => {
     var { title, description, rating, artist, tags, characters } = req.body;
@@ -323,7 +325,7 @@ router.post(
 );
 router.use("/uploads", express.static(submissionsDir));
 
-router.delete("/:submissionId", async (req: Request, res: Response) => {
+router.delete("/:submissionId", auth, async (req: Request, res: Response) => {
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
     return;
@@ -353,7 +355,7 @@ router.delete("/:submissionId", async (req: Request, res: Response) => {
   res.send(submission);
 });
 
-router.put("/:submissionId", async (req: Request, res: Response) => {
+router.put("/:submissionId", auth, async (req: Request, res: Response) => {
   if (req.params.submissionId == null) {
     res.status(400).send("submission ID not provided");
     return;
