@@ -1,9 +1,10 @@
 import axios from "axios";
 import { Character } from "../../interfaces";
+import AxiosOptions from "./AxiosOptions";
 
 export async function handleGetCharacters(): Promise<Character[]> {
   var result = await axios
-    .get("/api/characters")
+    .get("/api/characters", AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -22,7 +23,7 @@ export async function handleCreateCharacter(
   formData.append("image", character.image);
 
   var result = await axios
-    .post("/api/characters", formData)
+    .post("/api/characters", formData, AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -43,7 +44,7 @@ export async function handleEditCharacter(
   formData.append("description", character.description);
 
   var result = await axios
-    .put("/api/characters/" + character.id, formData)
+    .put(`/api/characters/${character.id}`, formData, AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -57,7 +58,7 @@ export async function handleRemoveCharacter(
   character: Character
 ): Promise<boolean | undefined> {
   var result = await axios
-    .delete("/api/characters/" + character.id)
+    .delete(`/api/characters/${character.id}`, AxiosOptions)
     .then(() => {
       return true;
     })

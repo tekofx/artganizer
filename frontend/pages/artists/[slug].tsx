@@ -13,6 +13,7 @@ import {
 import Layout from "components/Layout";
 
 import axios from "axios";
+import cookie from "cookie";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -35,9 +36,25 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const { req } = context;
   const protocol = req.headers["x-forwarded-proto"] || "http";
   const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
+
+  const cookies = context.req.headers.cookie;
+  if (!cookies) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  const token = cookie.parse(cookies).TOKEN;
   if (slug) {
     var id = parseInt(slug.toString());
-    const res = await axios.get(`${baseUrl}/api/artists/${id}`).catch(() => {
+    const res = await axios.get(`${baseUrl}/api/artists/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      }
+    }).catch(() => {
       return undefined;
     });
     if (res == undefined) return { notFound: true };

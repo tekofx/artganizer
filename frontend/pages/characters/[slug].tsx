@@ -11,6 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
+import Layout from "components/Layout";
+import cookie from "cookie";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -21,7 +23,6 @@ import Gallery from "../../components/Gallery";
 import FloatingButtons from "../../components/Layout/Mobile/FloatingButtons";
 import Character from "../../interfaces/Character";
 import { useAppContext } from "../_app";
-import Layout from "components/Layout";
 
 interface PageProps {
   character: Character;
@@ -34,9 +35,26 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const { req } = context;
   const protocol = req.headers["x-forwarded-proto"] || "http";
   const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
+  const cookies = context.req.headers.cookie;
+
+  if (!cookies) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+  const token = cookie.parse(cookies).TOKEN;
+
+
   if (slug) {
     var id = parseInt(slug.toString());
-    const res = await axios.get(`${baseUrl}/api/characters/${id}`).catch(() => {
+    const res = await axios.get(`${baseUrl}/api/characters/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      }
+    }).catch(() => {
       return undefined;
     });
     if (res == undefined) return { notFound: true };

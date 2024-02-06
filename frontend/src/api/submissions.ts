@@ -1,10 +1,11 @@
 import axios, { AxiosError } from "axios";
 import { Submission } from "../../interfaces";
 import ApiError from "./ApiError";
+import AxiosOptions from "./AxiosOptions";
 
 export async function handleGetSubmissions(): Promise<Submission[]> {
   return await axios
-    .get("/api/submissions")
+    .get("/api/submissions", AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -38,7 +39,7 @@ export async function handleCreateSubmission(
   // Create submission
 
   return await axios
-    .post("/api/submissions", formData)
+    .post("/api/submissions", formData, AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -53,9 +54,13 @@ export async function handleEditSubmission(
 ): Promise<Submission | undefined> {
   // Edit submission
   var status = await axios
-    .put(`/api/submissions/${submission.id}`, {
-      submission,
-    })
+    .put(
+      `/api/submissions/${submission.id}`,
+      {
+        submission,
+      },
+      AxiosOptions
+    )
     .then((response) => {
       return response.data;
     })
@@ -71,7 +76,7 @@ export async function handleRemoveSubmission(
 ): Promise<boolean | undefined> {
   // Remove submission
   var status = await axios
-    .delete(`/api/submissions/${submission.id}`)
+    .delete(`/api/submissions/${submission.id}`, AxiosOptions)
     .then(() => {
       return true;
     })

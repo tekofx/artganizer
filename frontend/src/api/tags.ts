@@ -1,9 +1,10 @@
 import axios from "axios";
 import { Tag } from "../../interfaces";
+import AxiosOptions from "./AxiosOptions";
 
 export async function handleGetTags(): Promise<Tag[]> {
   var result = await axios
-    .get("/api/tags")
+    .get("/api/tags", AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -16,7 +17,7 @@ export async function handleGetTags(): Promise<Tag[]> {
 
 export async function handleCreateTag(tag: Tag): Promise<Tag | undefined> {
   var result = await axios
-    .post("/api/tags", tag)
+    .post("/api/tags", tag, AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -29,7 +30,7 @@ export async function handleCreateTag(tag: Tag): Promise<Tag | undefined> {
 
 export async function handleEditTag(tag: Tag): Promise<Tag | undefined> {
   var result = await axios
-    .put(`/api/tags/${tag.id}`, tag)
+    .put(`/api/tags/${tag.id}`, tag, AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -42,7 +43,7 @@ export async function handleEditTag(tag: Tag): Promise<Tag | undefined> {
 
 export async function handleRemoveTag(tag: Tag): Promise<boolean | undefined> {
   var result = await axios
-    .delete(`/api/tags/${tag.id}`)
+    .delete(`/api/tags/${tag.id}`, AxiosOptions)
     .then((response) => {
       return response.data;
     })

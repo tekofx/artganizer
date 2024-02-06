@@ -1,6 +1,7 @@
 import { Grid, Paper } from "@mui/material";
 import axios from "axios";
 import Layout from "components/Layout";
+import cookie from "cookie";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -22,10 +23,24 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const { req } = context;
   const protocol = req.headers["x-forwarded-proto"] || "http";
   const baseUrl = req ? `${protocol}://${req.headers.host}` : "";
+  const cookies = context.req.headers.cookie;
+  if (!cookies) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+  const token = cookie.parse(cookies).TOKEN;
   if (slug) {
     var id = parseInt(slug.toString());
     const res = await axios
-      .get(baseUrl + "/api/submissions/" + id)
+      .get(`${baseUrl}/api/submissions/${id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        }
+      })
       .then((response) => {
         return response.data;
       })

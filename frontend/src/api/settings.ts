@@ -1,9 +1,10 @@
 import axios from "axios";
 import { Settings } from "../../interfaces";
+import AxiosOptions from "./AxiosOptions";
 
 export async function handleGetSettings(): Promise<Settings | undefined> {
   var result = await axios
-    .get("/api/settings/")
+    .get("/api/settings/", AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -17,7 +18,7 @@ export async function handleEditSettings(
   settings: Settings
 ): Promise<Settings | undefined> {
   var result = await axios
-    .put("/api/settings/", settings)
+    .put("/api/settings/", settings, AxiosOptions)
     .then((response) => {
       return response.data;
     })
@@ -29,7 +30,7 @@ export async function handleEditSettings(
 
 export async function handleResetSettings(): Promise<Settings | undefined> {
   var result = await axios
-    .delete("/api/settings/")
+    .delete("/api/settings/", AxiosOptions)
     .then((response) => {
       return response.data;
     })
