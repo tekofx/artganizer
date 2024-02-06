@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import * as React from 'react';
+import Cookies from "universal-cookie";
 import theme from '../src/theme';
 
 
@@ -25,6 +26,8 @@ export default function SignIn() {
         })
             .then((response) => {
                 console.log(response);
+                var cookies = new Cookies();
+                cookies.set("TOKEN", response.data.token, { path: "/" })
             })
             .catch((error) => {
                 console.log(error);
