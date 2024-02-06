@@ -1,6 +1,6 @@
 import BrushIcon from "@mui/icons-material/Brush";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import PhotoIcon from "@mui/icons-material/Photo";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
@@ -15,7 +15,7 @@ export default function BottomAppBar() {
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
+  const handleOpenUserMenu = (event: any) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -54,13 +54,22 @@ export default function BottomAppBar() {
       color="primary"
       sx={{ top: "auto", bottom: 0, p: 0 }}
     >
-      <Toolbar sx={{
-        top: "auto", bottom: 0, p: 0, height: "64px",
-        [theme.breakpoints.down('md')]: {
-          p: 0, // Elimina el padding horizontal en tamaños xs y menores
-        },
-      }}>
-        <BottomNavigation showLabels sx={{ width: "100%", height: "100%" }} value={value}>
+      <Toolbar
+        sx={{
+          top: "auto",
+          bottom: 0,
+          p: 0,
+          height: "64px",
+          [theme.breakpoints.down("md")]: {
+            p: 0, // Elimina el padding horizontal en tamaños xs y menores
+          },
+        }}
+      >
+        <BottomNavigation
+          showLabels
+          sx={{ width: "100%", height: "100%" }}
+          value={value}
+        >
           {pages.map((page) => (
             <BottomNavigationAction
               key={page.id}
@@ -78,8 +87,10 @@ export default function BottomAppBar() {
         </BottomNavigation>
 
         <CreatePopup />
-        <MoreMenu anchorElUser={anchorElUser} setAnchorElUser={setAnchorElUser} />
-
+        <MoreMenu
+          anchorElUser={anchorElUser}
+          setAnchorElUser={setAnchorElUser}
+        />
       </Toolbar>
     </AppBar>
   );
