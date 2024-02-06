@@ -3,6 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
+import AxiosOptions from "src/api/AxiosOptions";
 import { Artist, Social } from "../../interfaces";
 import SocialIcon from "../SocialIcon";
 import SocialDialog from "./ArtistEdit/SocialDialog";
@@ -21,7 +22,7 @@ export default function SocialLabel({
 
   async function removeSocial() {
     await axios
-      .delete(`/api/artists/${artist.id}/socials/${social.id}`)
+      .delete(`/api/artists/${artist.id}/socials/${social.id}`, AxiosOptions)
       .then(() => {
         setArtist({
           ...artist,
