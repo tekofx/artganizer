@@ -6,6 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import MoreMenu from "components/Layout/Panels/LeftPanel/Menus/More";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { ArtistForm, SubmissionForm, TagForm } from "../../../Forms";
@@ -13,7 +14,6 @@ import CharacterForm from "../../../Forms/CharacterForm";
 import ArtistAccordion from "./Accordions/ArtistAccordion";
 import CharacterAccordion from "./Accordions/CharacterAccordion";
 import CreateMenu from "./Menus/CreateMenu";
-import SettingsMenu from "./Menus/MoreMenu";
 
 export default function LeftPanel() {
   const [openArtistForm, setOpenArtistForm] = useState<boolean>(false);
@@ -42,7 +42,7 @@ export default function LeftPanel() {
       >
         {/* Superior bar */}
         <Grid item>
-          <SettingsMenu />
+          <MoreMenu />
         </Grid>
 
         <Grid item>

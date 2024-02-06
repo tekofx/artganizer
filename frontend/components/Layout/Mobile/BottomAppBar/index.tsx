@@ -6,7 +6,7 @@ import PhotoIcon from "@mui/icons-material/Photo";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import MoreMenu from "components/Layout/Panels/LeftPanel/Menus/MoreMenu";
+import MoreMenu from "components/Layout/Panels/LeftPanel/Menus/More";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import theme from "../../../../src/theme";
