@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import AxiosOptions from "src/api/AxiosOptions";
 import { Artist, Social } from "../../../interfaces";
 import SocialIcon from "../../SocialIcon";
 interface SocialsDialogProps {
@@ -42,7 +43,7 @@ export default function SocialDialog({
     // Create social
     if (social == undefined) {
       await axios
-        .post(`/api/artists/${artist.id}/socials`, socialDialog)
+        .post(`/api/artists/${artist.id}/socials`, socialDialog, AxiosOptions)
         .then((response) => {
           setArtist({ ...artist, socials: [...artist.socials, response.data] });
         })
@@ -52,7 +53,11 @@ export default function SocialDialog({
     } else {
       // Edit social
       await axios
-        .put(`/api/artists/${artist.id}/socials/${socialDialog.id}`, social)
+        .put(
+          `/api/artists/${artist.id}/socials/${socialDialog.id}`,
+          social,
+          AxiosOptions
+        )
         .then(() => {
           setArtist({
             ...artist,
