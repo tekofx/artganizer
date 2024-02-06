@@ -1,6 +1,5 @@
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
-
 import {
   Button,
   Dialog,
@@ -11,6 +10,7 @@ import {
   Stack,
   Typography
 } from "@mui/material";
+import Layout from "components/Layout";
 
 import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
@@ -75,7 +75,7 @@ const Page: NextPage<PageProps> = ({ artist }) => {
   }
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>{artist.name} | Artganizer</title>
       </Head>
@@ -136,7 +136,7 @@ const Page: NextPage<PageProps> = ({ artist }) => {
         </Dialog>
       </Paper>
 
-    </>
+    </Layout>
   );
 };
 export default Page;

@@ -21,6 +21,7 @@ import Gallery from "../../components/Gallery";
 import FloatingButtons from "../../components/Layout/Mobile/FloatingButtons";
 import Character from "../../interfaces/Character";
 import { useAppContext } from "../_app";
+import Layout from "components/Layout";
 
 interface PageProps {
   character: Character;
@@ -72,7 +73,7 @@ const Page: NextPage<PageProps> = ({ character }) => {
   }
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Artganizer</title>
       </Head>
@@ -130,7 +131,7 @@ const Page: NextPage<PageProps> = ({ character }) => {
           </DialogActions>
         </Dialog>
       </Paper>
-    </>
+    </Layout>
   );
 };
 export default Page;

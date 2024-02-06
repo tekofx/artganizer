@@ -1,5 +1,5 @@
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import { Grid, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
@@ -13,8 +13,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import BottomAppBar from "../components/Layout/Mobile/BottomAppBar";
-import LateralPanel from "../components/Layout/Panels/LeftPanel";
 import {
   Artist,
   Character,
@@ -308,31 +306,7 @@ export default function MyApp(props: MyAppProps) {
             isMobile
           }}
         >
-          <Grid container>
-            <Grid
-              item
-              md={4}
-              lg={3}
-              xl={2}
-              sx={{
-                display: { xs: "none", sm: "none", md: "block", lg: "block" },
-              }}
-            >
-              <LateralPanel />
-            </Grid>
-            <Grid item xs={12} sm={12} md={8} lg={9} xl={10}>
-              <Component {...pageProps} />
-            </Grid>
-
-            {isMobile && (
-              <Grid
-                item
-                xs={12}
-              >
-                <BottomAppBar />
-              </Grid>
-            )}
-          </Grid>
+          <Component {...pageProps} />
         </AppContext.Provider>
       </ThemeProvider>
     </CacheProvider>

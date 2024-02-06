@@ -1,5 +1,6 @@
 import { Grid, Paper } from "@mui/material";
 import axios from "axios";
+import Layout from "components/Layout";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -80,7 +81,7 @@ const Page: NextPage<PageProps> = ({ submission }) => {
     , [imageType]);
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>{submission?.title}</title>
       </Head>
@@ -133,7 +134,7 @@ const Page: NextPage<PageProps> = ({ submission }) => {
             )}
         </Grid>
       </Paper>
-    </>
+    </Layout>
   );
 };
 
