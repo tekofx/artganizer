@@ -1,6 +1,7 @@
 import BackupIcon from '@mui/icons-material/Backup';
 import InfoIcon from "@mui/icons-material/Info";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
 import {
@@ -15,6 +16,7 @@ import { MouseEvent, useState } from "react";
 import ManageTags from "../../../../../Forms/ManageTags";
 import About from "./About";
 import BackupAndRestoreDialog from "./BackupAndRestoreDialog";
+import LogOut from './LogOut';
 import SettingsDialog from "./SettingsDialog";
 export default function SettingMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -25,6 +27,7 @@ export default function SettingMenu() {
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [openAbout, setOpenAbout] = useState<boolean>(false);
   const [openBackupAndRestore, setOpenBackupAndRestore] = useState<boolean>(false);
+  const [openLogOut, setOpenLogOut] = useState<boolean>(false);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -63,6 +66,14 @@ export default function SettingMenu() {
         setOpenAbout(true);
       },
     },
+    {
+      name: "Log Out",
+      icon: <LogoutIcon />,
+      onclick: () => {
+        handleCloseUserMenu();
+        setOpenLogOut(true);
+      },
+    }
   ];
 
   return (
@@ -104,6 +115,7 @@ export default function SettingMenu() {
       <SettingsDialog open={openSettings} setOpen={setOpenSettings} />
       <About open={openAbout} setOpen={setOpenAbout} />
       <BackupAndRestoreDialog open={openBackupAndRestore} setOpen={setOpenBackupAndRestore} />
+      <LogOut open={openLogOut} setOpen={setOpenLogOut} />
     </>
   );
 }
