@@ -22,7 +22,7 @@ interface SettingsDialogProps {
 }
 export default function SettingsDialog(props: SettingsDialogProps) {
   const [value, setValue] = React.useState(0);
-  const { settings, setSettings, editSettings, resetSettings } =
+  const { settings, setSettings, editSettings, resetSettings, isMobile } =
     useAppContext();
 
   async function updateSettings() {
@@ -63,7 +63,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
     setValue(newValue);
   };
   return (
-    <Dialog open={props.open} maxWidth={"xl"}>
+    <Dialog open={props.open} maxWidth={"xl"} sx={{ zIndex: 6000 }}>
       <DialogTitle>
         <Stack
           direction="row"
@@ -79,9 +79,9 @@ export default function SettingsDialog(props: SettingsDialogProps) {
       </DialogTitle>
       <DialogContent sx={{ height: "80vh" }}>
         <Grid container>
-          <Grid item xs={2}>
+          <Grid item xs={12} md={2}>
             <Tabs
-              orientation="vertical"
+              orientation={isMobile ? "horizontal" : "vertical"}
               variant="scrollable"
               value={value}
               sx={{ borderRight: 1, borderColor: "divider" }}
@@ -92,7 +92,7 @@ export default function SettingsDialog(props: SettingsDialogProps) {
               <Tab label="Artist" />
             </Tabs>
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={12} md={10}>
             <TabPanel value={value} index={0}>
               <GallerySettings settings={settings} setSettings={setSettings} />
             </TabPanel>
