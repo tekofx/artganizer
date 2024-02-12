@@ -14,7 +14,6 @@ interface PageProps {
   submission: Submission;
 }
 
-type ImageType = "vertical" | "horizontal";
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context
@@ -60,7 +59,6 @@ const Page: NextPage<PageProps> = ({ submission }) => {
   const [pageSubmission, setPageSubmission] = useState<Submission>(submission);
   const { isMobile } = useAppContext();
 
-  const [imageType, setImageType] = useState<ImageType | null>(null);
   const [width, setWidth] = useState("auto");
   const [height, setHeight] = useState("auto");
 
@@ -76,12 +74,10 @@ const Page: NextPage<PageProps> = ({ submission }) => {
         setWidth("auto")
         setHeight("100%")
       }
-      setImageType("vertical")
     } else {
       // Horizontal
       setWidth("100%")
       setHeight("auto")
-      setImageType("horizontal")
     }
   }, [submission]);
 
