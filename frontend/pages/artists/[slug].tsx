@@ -50,7 +50,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const token = cookie.parse(cookies).TOKEN;
   if (slug) {
     var id = parseInt(slug.toString());
-    console.log(id)
     const res = await axios.get(`${baseUrl}/api/artists/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
