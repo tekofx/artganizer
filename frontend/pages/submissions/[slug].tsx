@@ -58,42 +58,32 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 };
 const Page: NextPage<PageProps> = ({ submission }) => {
   const [pageSubmission, setPageSubmission] = useState<Submission>(submission);
-  const [imageStyle, setImageStyle] = useState({ style: { height: 'auto', width: '100%' }, paperHeightXS: "100%" });
-  const [imageType, setImageType] = useState<ImageType>("horizontal");
   const { isMobile } = useAppContext();
 
+  const [imageType, setImageType] = useState<ImageType | null>(null);
+  const [width, setWidth] = useState("auto");
+  const [height, setHeight] = useState("auto");
+
+
   useEffect(() => {
-    setPageSubmission(submission);
-    const img = new Image();
-    img.src = submission?.image;
-    img.onload = () => {
-      if (img.width < img.height) {
-        setImageType("vertical");
+    if (submission.height > submission.width) {
+      // Vertical
+      if (isMobile) {
+        setWidth("100%")
+        setHeight("auto")
       } else {
-        setImageType("horizontal");
-      }
-    };
-  }
-    , [submission]);
 
-
-  useEffect(() => {
-    if (imageType == "vertical") {
-      if (isMobile) {
-        setImageStyle({ style: { width: '100%', height: 'auto' }, paperHeightXS: "85vh" });
-        return;
+        setWidth("auto")
+        setHeight("100%")
       }
-      setImageStyle({ style: { width: 'auto', height: '100%' }, paperHeightXS: "100%" });
+      setImageType("vertical")
     } else {
-      if (isMobile) {
-        setImageStyle({ style: { height: 'auto', width: '100%' }, paperHeightXS: "85vh" });
-        return;
-      }
-      setImageStyle({ style: { height: 'auto', width: '100%' }, paperHeightXS: "100%" });
-
+      // Horizontal
+      setWidth("100%")
+      setHeight("auto")
+      setImageType("horizontal")
     }
-  }
-    , [imageType]);
+  }, [submission]);
 
   return (
     <Layout>
@@ -114,12 +104,15 @@ const Page: NextPage<PageProps> = ({ submission }) => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: { xs: imageStyle.paperHeightXS, lg: "85vh" }
+                height: { xs: "auto", lg: "85vh" }
               }}
             >
               <img
                 src={submission?.image}
-                style={imageStyle.style}
+                style={{
+                  width: width,
+                  height: height
+                }}
               />
             </Paper>
           </Grid>
