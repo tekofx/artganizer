@@ -26,6 +26,6 @@ services:
       - 3000:3000 # Web
       - 3001:3001 # Backend
     depends_on:
-      db:
+      artganizer-db:
         condition: service_healthy
     restart: unless-stopped
