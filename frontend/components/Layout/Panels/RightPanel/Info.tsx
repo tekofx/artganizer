@@ -1,7 +1,7 @@
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, Grid, Paper, Rating, Stack, Typography } from "@mui/material";
+import { Grid, IconButton, Paper, Rating, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import Submission from "../../../../interfaces/Submission";
 import { convertBytes } from "../../../../src/formatters";
@@ -43,40 +43,27 @@ export default function Info({
       sx={{ paddingLeft: "0", maxHeight: "100vh", overflowY: "auto" }}
     >
       <Grid item xs={12}>
-        <Paper elevation={0} sx={{ padding: 2 }}>
-          <Grid container spacing={2} justifyContent="center">
-            <Grid item>
-              <Button
-                variant="contained"
-                startIcon={<DownloadIcon />}
-                onClick={downloadImage}
-              >
-                Download
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                startIcon={<EditIcon />}
-                onClick={toggleEdit}
-              >
-                Edit
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                startIcon={<DeleteForeverIcon />}
-                onClick={handleClickOpenDialog}
-              >
-                Remove
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
+        <Stack direction="row" spacing={3} justifyContent="center">
+          <IconButton
+            onClick={downloadImage}
+          >
+            <DownloadIcon />
+          </IconButton>
+          <IconButton
+            onClick={toggleEdit}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={handleClickOpenDialog}
+          >
+            <DeleteForeverIcon />
+          </IconButton>
+        </Stack>
       </Grid>
       <Grid item xs={12}>
         <Paper elevation={0} sx={{ padding: 2 }}>
+
           <Stack spacing="1" sx={{ width: "100%" }}>
             <Typography variant="h4">{submission.title}</Typography>
             <Typography variant="body1">{submission.description}</Typography>
