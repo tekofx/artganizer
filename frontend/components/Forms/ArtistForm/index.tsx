@@ -82,7 +82,7 @@ export default function ArtistForm({ open, setOpen }: Props) {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={isMobile ? true : false}>
+      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={isMobile ? true : false} sx={{ zIndex: 600 }}>
         <DialogTitle>Create Artist</DialogTitle>
         <DialogContent sx={{ p: 2 }}>
           <Grid container spacing={2} >

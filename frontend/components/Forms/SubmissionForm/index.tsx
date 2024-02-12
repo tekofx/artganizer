@@ -95,7 +95,7 @@ export default function SubmissionForm({ open, setOpen }: Props) {
   }
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth={"xl"} fullScreen={isMobile ? true : false}>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth={"xl"} fullScreen={isMobile ? true : false} sx={{ zIndex: 6000 }}>
         <DialogTitle>Create Submission</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>

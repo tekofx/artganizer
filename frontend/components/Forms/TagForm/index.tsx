@@ -94,7 +94,7 @@ export default function TagForm({ open, setOpen, tagToUpdate }: Props) {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={isMobile ? true : false}>
+      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={isMobile ? true : false} sx={{ zIndex: 600 }}>
         <DialogTitle>Create Tag</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} paddingTop={2}>
