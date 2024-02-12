@@ -16,7 +16,7 @@ import cookie from "cookie";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CharacterEdit from "../../components/Character/CharacterEdit";
 import CharacterInfo from "../../components/Character/CharacterInfo";
 import Gallery from "../../components/Gallery";
@@ -83,6 +83,11 @@ const Page: NextPage<PageProps> = ({ character }) => {
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
+
+  useEffect(() => {
+    setPageCharacter(character)
+  }
+    , [character]);
 
   async function onYesClick() {
     await removeCharacter(character);

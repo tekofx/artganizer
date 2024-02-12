@@ -17,7 +17,7 @@ import cookie from "cookie";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArtistEdit from "../../components/Artist/ArtistEdit";
 import ArtistInfo from "../../components/Artist/ArtistInfo";
 import Gallery from "../../components/Gallery";
@@ -50,6 +50,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const token = cookie.parse(cookies).TOKEN;
   if (slug) {
     var id = parseInt(slug.toString());
+    console.log(id)
     const res = await axios.get(`${baseUrl}/api/artists/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
@@ -90,6 +91,11 @@ const Page: NextPage<PageProps> = ({ artist }) => {
     handleCloseDialog();
     router.push("/");
   }
+
+  useEffect(() => {
+    setPageArtist(artist)
+  }
+    , [artist]);
 
   return (
     <Layout>
