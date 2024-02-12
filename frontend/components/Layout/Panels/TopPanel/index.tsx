@@ -25,7 +25,6 @@ export default function TopPanel() {
           p: 1,
           position: "sticky",
           top: 0,
-          zIndex: 4000,
           display: "block",
         }}
       >
