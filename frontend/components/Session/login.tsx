@@ -8,7 +8,7 @@ import axios from 'axios';
 import { AlertMessage } from 'interfaces';
 import { useRouter } from 'next/router';
 import { useAppContext } from 'pages/_app';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Cookies from "universal-cookie";
 
 interface RegisterProps {
@@ -17,10 +17,11 @@ interface RegisterProps {
 }
 
 export default function Login({ setAlertMessage, setShowAlert }: RegisterProps) {
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const router = useRouter();
     const { getAllAppData } = useAppContext();
+    var cookies = new Cookies();
 
 
     async function login() {
@@ -31,10 +32,9 @@ export default function Login({ setAlertMessage, setShowAlert }: RegisterProps) 
             .then(async (response) => {
 
                 setShowAlert(false);
-                var cookies = new Cookies();
                 cookies.set("TOKEN", response.data.token, { path: "/" })
                 await getAllAppData();
-                router.push('/');
+                router.reload();
             })
             .catch((error) => {
                 setAlertMessage({ severity: 'error', message: error.response.data });
@@ -42,6 +42,12 @@ export default function Login({ setAlertMessage, setShowAlert }: RegisterProps) 
             });
 
     };
+
+    useEffect(() => {
+        if (cookies.get("TOKEN")) {
+            router.push('/');
+        }
+    }, [cookies.get("TOKEN")]);
 
     return (
         <Box
