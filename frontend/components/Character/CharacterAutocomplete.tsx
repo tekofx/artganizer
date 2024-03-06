@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Button,
   Paper,
+  Popper,
   TextField,
   Typography,
 } from "@mui/material";
@@ -20,6 +21,24 @@ export default function CharacterAutocomplete({
 }: TagListProps) {
   const { characters, createCharacter } = useAppContext();
   const [inputValue, setInputValue] = useState("");
+  const CustomPopper = (props: any) => (
+    <Popper
+      {...props}
+      style={{ zIndex: 10000 }}
+      placement="bottom-start"
+      modifiers={[
+        {
+          name: "matchWidth",
+          enabled: true,
+          phase: "beforeWrite",
+          requires: ["computeStyles"],
+          fn: ({ state }) => {
+            state.styles.popper.width = `${state.rects.reference.width}px`;
+          },
+        },
+      ]}
+    />
+  );
 
   function handleDeleteCharacter(character: Character) {
     setSelectedCharacters(
@@ -48,6 +67,7 @@ export default function CharacterAutocomplete({
     <Autocomplete
       multiple
       sx={{ minWidth: "20rem" }}
+      PopperComponent={CustomPopper}
       options={characters}
       getOptionLabel={(character) => character.name}
       value={selectedCharacters}

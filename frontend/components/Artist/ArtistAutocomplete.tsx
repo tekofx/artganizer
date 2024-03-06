@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Button,
   Paper,
+  Popper,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,7 +22,24 @@ export default function ArtistAutocomplete({
 
   const [inputValue, setInputValue] = useState("");
   const [selectedArtists, setSelectedArtists] = useState<Artist[]>([]); // Needed to make autocomplete with multiple work
-
+  const CustomPopper = (props: any) => (
+    <Popper
+      {...props}
+      style={{ zIndex: 10000 }}
+      placement="bottom-start"
+      modifiers={[
+        {
+          name: "matchWidth",
+          enabled: true,
+          phase: "beforeWrite",
+          requires: ["computeStyles"],
+          fn: ({ state }) => {
+            state.styles.popper.width = `${state.rects.reference.width}px`;
+          },
+        },
+      ]}
+    />
+  );
   function handleDeleteArtist(artist: Artist) {
     setSelectedArtists([]);
     setSelectedArtist(artist);
@@ -54,6 +72,7 @@ export default function ArtistAutocomplete({
       multiple
       options={artists}
       getOptionLabel={(artist) => artist.name}
+      PopperComponent={CustomPopper}
       value={selectedArtists}
       inputValue={inputValue}
       onInputChange={(event, newInputValue) => {

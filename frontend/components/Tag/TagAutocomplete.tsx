@@ -1,4 +1,10 @@
-import { Autocomplete, Button, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Popper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Tag from "../../interfaces/Tag";
 import { useAppContext } from "../../pages/_app";
@@ -27,6 +33,24 @@ export default function TagAutocomplete({
 }: TagListProps) {
   const { createTag, tags } = useAppContext();
   const [inputValue, setInputValue] = useState("");
+  const CustomPopper = (props: any) => (
+    <Popper
+      {...props}
+      style={{ zIndex: 10000 }}
+      placement="bottom-start"
+      modifiers={[
+        {
+          name: "matchWidth",
+          enabled: true,
+          phase: "beforeWrite",
+          requires: ["computeStyles"],
+          fn: ({ state }) => {
+            state.styles.popper.width = `${state.rects.reference.width}px`;
+          },
+        },
+      ]}
+    />
+  );
 
   function handleDeleteTag(tag: Tag) {
     setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
@@ -58,6 +82,7 @@ export default function TagAutocomplete({
       getOptionLabel={(tag) => tag.name}
       value={selectedTags}
       inputValue={inputValue}
+      PopperComponent={CustomPopper}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
       }}
