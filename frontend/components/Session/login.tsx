@@ -36,7 +36,7 @@ export default function Login({
         setShowAlert(false);
         cookies.set("TOKEN", response.data.token, { path: "/" });
         await getAllAppData();
-        router.push("/");
+        await router.push("/");
       })
       .catch((error) => {
         setAlertMessage({ severity: "error", message: error.response.data });
