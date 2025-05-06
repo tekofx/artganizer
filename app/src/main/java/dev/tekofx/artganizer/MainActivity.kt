@@ -30,13 +30,11 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .navigationBarsPadding(),
                     bottomBar = {
-
                         BottomNavigationBar(
                             navHostController = navController,
                         )
-
-                    }) { padding ->
-
+                    }
+                ) { padding ->
                     Box(
                         modifier = Modifier.padding(padding)
                     ) {

@@ -4,11 +4,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -27,11 +24,12 @@ fun BottomNavigationBar(
     val items = listOf(
         BottomNavigationItems.Gallery,
         BottomNavigationItems.Artists,
+        BottomNavigationItems.Characters,
+        BottomNavigationItems.Tags
     )
 
     BottomAppBar(
-        contentPadding = PaddingValues(0.dp),
-        modifier = Modifier
+        contentPadding = PaddingValues(0.dp), modifier = Modifier
             .padding(0.dp)
             .height(60.dp)
     ) {
@@ -68,11 +66,12 @@ fun BottomNavigationBar(
                         }
                     },
                     label = {
-                        Text(
-                            text = item.title,
-                        )
-                    }
-                )
+                        if (selected) {
+                            Text(
+                                text = item.title,
+                            )
+                        }
+                    })
             }
         }
     }

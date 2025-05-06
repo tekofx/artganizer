@@ -5,14 +5,14 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import dev.tekofx.artganizer.ui.screens.ArtistScreen
+import dev.tekofx.artganizer.ui.screens.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.GalleryScreen
+import dev.tekofx.artganizer.ui.screens.TagsScreen
 
 
 @Composable
@@ -27,7 +27,7 @@ fun Navigation(
             route = NavigateDestinations.GALLERY_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-           GalleryScreen()
+            GalleryScreen()
         }
 
         composable(
@@ -35,6 +35,18 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) {
             ArtistScreen()
+        }
+        composable(
+            route = NavigateDestinations.CHARACTERS_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            CharactersScreen()
+        }
+        composable(
+            route = NavigateDestinations.TAGS_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            TagsScreen()
         }
     }
 }
