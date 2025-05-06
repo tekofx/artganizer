@@ -15,9 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview
 @Composable
-fun SearchBar() {
+fun SearchBar(
+    label: @Composable (() -> Unit) = { Text("Search") },
+) {
 
     val value = ""
 
@@ -35,8 +36,15 @@ fun SearchBar() {
         value = value,
         onValueChange = { },
         shape = RoundedCornerShape(40.dp),
-        label = { Text("Search") }
+        label = { label() },
     )
+
 
 }
 
+
+@Preview
+@Composable
+fun SearchBarPreview() {
+    SearchBar(label = { Icon(Icons.Filled.Search, contentDescription = "") })
+}
