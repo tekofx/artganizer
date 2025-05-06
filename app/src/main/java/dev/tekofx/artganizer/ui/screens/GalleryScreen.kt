@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GalleryScreen(){
+fun GalleryScreen() {
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -31,9 +31,5 @@ fun GalleryScreen(){
         Column {
             Text("Gallery Screen Content")
         }
-
-
-
     }
-
 }
