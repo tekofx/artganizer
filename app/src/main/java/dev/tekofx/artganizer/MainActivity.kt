@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.ui.BottomNavigationBar
-import dev.tekofx.artganizer.ui.theme.ArtganizerTheme
+import dev.tekofx.artganizer.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            ArtganizerTheme {
+            AppTheme {
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
@@ -58,7 +58,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    ArtganizerTheme {
+    AppTheme {
         Greeting("Android")
     }
 }
