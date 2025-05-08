@@ -2,6 +2,7 @@ package dev.tekofx.artganizer.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -9,8 +10,10 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionUiState
+import dev.tekofx.artganizer.ui.viewmodels.gallery.toSubmission
 
 @Composable
 fun SubmissionsForm(
@@ -19,9 +22,13 @@ fun SubmissionsForm(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     Column(
+        modifier = Modifier.padding(10.dp)
         // ...
     ) {
+        GalleryItem(submissionUiState.submissionDetails.toSubmission())
+
         SubmissionFormFields(
             submissionDetails = submissionUiState.submissionDetails,
             onValueChange = onItemValueChange,
@@ -74,23 +81,5 @@ fun SubmissionFormFields(
             enabled = enabled,
             singleLine = true
         )
-        OutlinedTextField(
-            value = submissionDetails.imagePath,
-            onValueChange = { onValueChange(submissionDetails.copy(imagePath = it)) },
-            label = { Text("ImagePath") },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-        if (enabled) {
-            Text(
-                text = "Image Path: ${submissionDetails.imagePath}",
-            )
-        }
     }
 }

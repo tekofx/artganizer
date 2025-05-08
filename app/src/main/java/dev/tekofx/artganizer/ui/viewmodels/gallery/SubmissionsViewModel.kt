@@ -71,7 +71,7 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
     private fun validateInput(uiState: SubmissionDetails = submissionUiState.submissionDetails): Boolean {
         return with(uiState) {
-            title.isNotBlank()
+            true
         }
     }
 
@@ -87,6 +87,13 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         if (validateInput()) {
             repository.insertSubmission(submissionUiState.submissionDetails.toSubmission())
         }
+    }
+
+    fun setNewSubmissionDetails(submissionDetails: SubmissionDetails) {
+        submissionUiState = submissionUiState.copy(
+            submissionDetails = submissionDetails,
+            isEntryValid = validateInput(submissionDetails)
+        )
     }
 
 
