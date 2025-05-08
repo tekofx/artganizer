@@ -13,20 +13,31 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
+import dev.tekofx.artganizer.database.GalleryDatabase
 import dev.tekofx.artganizer.navigation.Navigation
+import dev.tekofx.artganizer.repository.GalleryRepository
 import dev.tekofx.artganizer.ui.BottomNavigationBar
 import dev.tekofx.artganizer.ui.theme.AppTheme
+import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModel
+import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        /*val galleryViewModel = ViewModelProvider(
+
+        val galleryRepository by lazy {
+            GalleryRepository(GalleryDatabase.getDatabase(this).submissionDao())
+        }
+
+
+        val galleryViewModel = ViewModelProvider(
             this, GalleryViewModelFactory(
-                GalleryRepository()
+                galleryRepository
             )
-        )[GalleryViewModel::class.java]*/
+        )[GalleryViewModel::class.java]
 
 
 
@@ -46,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier.padding(padding)
                     ) {
-                        Navigation(navController)
+                        Navigation(navController, galleryViewModel)
                     }
 
                 }

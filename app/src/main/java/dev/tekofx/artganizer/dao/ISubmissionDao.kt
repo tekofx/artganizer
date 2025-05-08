@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -8,6 +9,7 @@ import androidx.room.Update
 import dev.tekofx.artganizer.entities.Submission
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface ISubmissionDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Submission)
