@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import dev.tekofx.artganizer.ui.screens.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.GalleryScreen
+import dev.tekofx.artganizer.ui.screens.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
 import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModel
 
@@ -29,7 +30,7 @@ fun Navigation(
             route = NavigateDestinations.GALLERY_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            GalleryScreen(galleryViewModel)
+            GalleryScreen(navHostController, galleryViewModel)
         }
 
         composable(
@@ -49,6 +50,13 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) {
             TagsScreen()
+        }
+
+        composable(
+            route = NavigateDestinations.SUBMISSION_CREATION_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            SubmissionCreationScreen()
         }
     }
 }

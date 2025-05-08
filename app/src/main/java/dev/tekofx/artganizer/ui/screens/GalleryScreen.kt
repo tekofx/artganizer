@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
+import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModel
@@ -40,7 +43,7 @@ import java.util.UUID
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GalleryScreen(galleryViewModel: GalleryViewModel) {
+fun GalleryScreen(navHostController: NavHostController, galleryViewModel: GalleryViewModel) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -56,17 +59,17 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel) {
         Scaffold(
             floatingActionButton = {
                 ExtendedFloatingActionButton(onClick = {
-                    scope.launch { scaffoldState.bottomSheetState.expand() }
+                    scope.launch { navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN) }
                 }) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            IconResource.fromDrawableResource(R.drawable.filter_outlined)
+                            IconResource.fromImageVector(Icons.Filled.Add)
                                 .asPainterResource(), contentDescription = ""
                         )
-                        Text("Filter")
+                        Text("Add")
                     }
                 }
             }) {
