@@ -1,24 +1,18 @@
 package dev.tekofx.artganizer.repository
 
-import android.util.Log
-import java.net.UnknownHostException
+import dev.tekofx.artganizer.dao.ISubmissionDao
+import dev.tekofx.artganizer.entities.Submission
+import kotlinx.coroutines.flow.Flow
 
-class GalleryRepository() {
-    fun getImages(): List<String> {
-        try {
-            val images = listOf(
-                "https://example.com/image1.jpg",
-                "https://example.com/image2.jpg",
-                "https://example.com/image3.jpg"
-            )
-            return images
-        } catch (e: UnknownHostException) {
-            Log.e("GalleryRepository", "Error getting images $e")
-            throw e
-        } catch (e: Exception) {
-            Log.e("GalleryRepository", "Error getting images $e")
-            throw e
-        }
-    }
+class GalleryRepository(private val submissionDao: ISubmissionDao) {
+    fun getAllSubmissions(): Flow<List<Submission>> = submissionDao.getAllSubmissions()
+
+    fun getSubmission(id: Int): Flow<Submission?> = submissionDao.getSubmission(id)
+
+    suspend fun insertSubmission(submission: Submission) = submissionDao.insert(submission)
+
+    suspend fun deleteSubmission(submission: Submission) = submissionDao.delete(submission)
+
+    suspend fun updateSubmission(submission: Submission) = submissionDao.update(submission)
 
 }
