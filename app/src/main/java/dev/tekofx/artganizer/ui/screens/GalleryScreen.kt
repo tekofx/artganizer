@@ -6,8 +6,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomSheetScaffold
@@ -21,8 +23,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -40,6 +45,9 @@ fun GalleryScreen(
     navHostController: NavHostController,
     submissionsViewModel: SubmissionsViewModel
 ) {
+
+    val submissions by submissionsViewModel.submissions.collectAsState()
+    val listState = rememberLazyListState()
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -69,10 +77,22 @@ fun GalleryScreen(
                     }
                 }
             }) {
-            Column {
-                Text("Gallery Screen Content")
-                ImageSelectionScreen()
+            LazyColumn(
+                state = listState
+            ) {
+                items(submissions, key = { it.id }) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(color = Color.White, text = it.title)
+                        Text(it.description)
+                        Text(it.imagePath)
+                    }
+                }
             }
+            /*Text("Gallery Screen Content")
+            ImageSelectionScreen()*/
         }
     }
 }

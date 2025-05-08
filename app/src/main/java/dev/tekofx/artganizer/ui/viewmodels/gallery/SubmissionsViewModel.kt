@@ -1,15 +1,18 @@
 package dev.tekofx.artganizer.ui.viewmodels.gallery
 
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 
 data class SubmissionUiState(
@@ -51,8 +54,7 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         private set
 
     // Data
-    private val _submissions = MutableStateFlow<List<String>>(emptyList())
-    val submissions = _submissions.asStateFlow()
+    val submissions = MutableStateFlow<List<Submission>>(emptyList())
 
     // Loaders
     val isLoading = MutableStateFlow(false)
@@ -84,6 +86,17 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     suspend fun saveSubmission() {
         if (validateInput()) {
             repository.insertSubmission(submissionUiState.submissionDetails.toSubmission())
+        }
+    }
+
+
+    init {
+        // Collect the flow and update _submissions
+        viewModelScope.launch {
+            Log.d("SubmissionsViewModel", "Initializing SubmissionsViewModel")
+            repository.getAllSubmissions().collect { submissionsList ->
+                submissions.value = submissionsList
+            }
         }
     }
 
