@@ -14,13 +14,13 @@ import dev.tekofx.artganizer.ui.screens.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.GalleryScreen
 import dev.tekofx.artganizer.ui.screens.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
-import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModel
+import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 
 
 @Composable
 fun Navigation(
     navHostController: NavHostController,
-    galleryViewModel: GalleryViewModel
+    submissionsViewModel: SubmissionsViewModel
 ) {
     NavHost(
         navController = navHostController,
@@ -30,7 +30,7 @@ fun Navigation(
             route = NavigateDestinations.GALLERY_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            GalleryScreen(navHostController, galleryViewModel)
+            GalleryScreen(navHostController, submissionsViewModel)
         }
 
         composable(
@@ -56,7 +56,7 @@ fun Navigation(
             route = NavigateDestinations.SUBMISSION_CREATION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            SubmissionCreationScreen()
+            SubmissionCreationScreen(submissionsViewModel)
         }
     }
 }

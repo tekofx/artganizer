@@ -20,7 +20,7 @@ import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.ui.BottomNavigationBar
 import dev.tekofx.artganizer.ui.theme.AppTheme
-import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModel
+import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModelFactory
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
             this, SubmissionsViewModelFactory(
                 submissionRepository
             )
-        )[GalleryViewModel::class.java]
+        )[SubmissionsViewModel::class.java]
 
 
 

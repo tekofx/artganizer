@@ -12,9 +12,9 @@ class SubmissionsViewModelFactory(
     ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        Log.d("GalleryViewModel", "create called")
-        return if (modelClass.isAssignableFrom(GalleryViewModel::class.java)) {
-            GalleryViewModel(this.repository) as T
+        Log.d("dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel", "create called")
+        return if (modelClass.isAssignableFrom(SubmissionsViewModel::class.java)) {
+            SubmissionsViewModel(this.repository) as T
         } else {
             throw IllegalArgumentException("ViewModel Not Found")
         }

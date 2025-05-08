@@ -45,7 +45,7 @@ fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
 )
 
 
-class GalleryViewModel(private val repository: SubmissionRepository) : ViewModel() {
+class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
     var submissionUiState by mutableStateOf(SubmissionUiState())
         private set
@@ -81,7 +81,7 @@ class GalleryViewModel(private val repository: SubmissionRepository) : ViewModel
             )
     }
 
-    suspend fun saveItem() {
+    suspend fun saveSubmission() {
         if (validateInput()) {
             repository.insertSubmission(submissionUiState.submissionDetails.toSubmission())
         }
