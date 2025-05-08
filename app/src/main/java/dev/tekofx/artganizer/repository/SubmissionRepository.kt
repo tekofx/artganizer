@@ -4,7 +4,7 @@ import dev.tekofx.artganizer.dao.ISubmissionDao
 import dev.tekofx.artganizer.entities.Submission
 import kotlinx.coroutines.flow.Flow
 
-class GalleryRepository(private val submissionDao: ISubmissionDao) {
+class SubmissionRepository(private val submissionDao: ISubmissionDao) {
     fun getAllSubmissions(): Flow<List<Submission>> = submissionDao.getAllSubmissions()
 
     fun getSubmission(id: Int): Flow<Submission?> = submissionDao.getSubmission(id)

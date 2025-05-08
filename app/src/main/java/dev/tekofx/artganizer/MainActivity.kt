@@ -15,27 +15,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
-import dev.tekofx.artganizer.database.GalleryDatabase
+import dev.tekofx.artganizer.database.SubmissionDatabase
 import dev.tekofx.artganizer.navigation.Navigation
-import dev.tekofx.artganizer.repository.GalleryRepository
+import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.ui.BottomNavigationBar
 import dev.tekofx.artganizer.ui.theme.AppTheme
 import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModel
-import dev.tekofx.artganizer.ui.viewmodels.gallery.GalleryViewModelFactory
+import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val galleryRepository by lazy {
-            GalleryRepository(GalleryDatabase.getDatabase(this).submissionDao())
+        val submissionRepository by lazy {
+            SubmissionRepository(SubmissionDatabase.getDatabase(this).submissionDao())
         }
 
 
         val galleryViewModel = ViewModelProvider(
-            this, GalleryViewModelFactory(
-                galleryRepository
+            this, SubmissionsViewModelFactory(
+                submissionRepository
             )
         )[GalleryViewModel::class.java]
 

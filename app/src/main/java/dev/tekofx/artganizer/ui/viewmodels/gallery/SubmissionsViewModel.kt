@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.tekofx.artganizer.entities.Submission
-import dev.tekofx.artganizer.repository.GalleryRepository
+import dev.tekofx.artganizer.repository.SubmissionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -45,7 +45,7 @@ fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
 )
 
 
-class GalleryViewModel(private val repository: GalleryRepository) : ViewModel() {
+class GalleryViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
     var submissionUiState by mutableStateOf(SubmissionUiState())
         private set
