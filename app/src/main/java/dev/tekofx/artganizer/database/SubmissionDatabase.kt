@@ -5,17 +5,20 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import dev.tekofx.artganizer.dao.IArtistDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
+import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Submission
 
 /**
  * Database class with a singleton Instance object.
  */
-@Database(entities = [Submission::class], version = 1, exportSchema = false)
+@Database(entities = [Submission::class, Artist::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class SubmissionDatabase : RoomDatabase() {
 
     abstract fun submissionDao(): ISubmissionDao
+    abstract fun artistDao(): IArtistDao
 
     companion object {
         @Volatile

@@ -148,7 +148,8 @@ fun ImageInfoPreview() {
         date = Date(),
         sizeInMb = 1.0,
         dimensions = "1920x1080",
-        extension = ".jpg"
+        extension = ".jpg",
+        artistId = 1,
     )
 
     ImageInfo(submission)

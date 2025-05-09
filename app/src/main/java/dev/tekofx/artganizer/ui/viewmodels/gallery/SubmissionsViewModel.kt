@@ -37,6 +37,7 @@ data class SubmissionDetails(
     val sizeInMb: Double = 0.0,
     val dimensions: String = "",
     val extension: String = "",
+    val artistId: Int = 0
 )
 
 fun SubmissionDetails.toSubmission(): Submission = Submission(
@@ -48,7 +49,8 @@ fun SubmissionDetails.toSubmission(): Submission = Submission(
     date = stringToDate(date) ?: Date(),
     sizeInMb = sizeInMb,
     dimensions = dimensions,
-    extension = extension
+    extension = extension,
+    artistId = artistId
 
 )
 
