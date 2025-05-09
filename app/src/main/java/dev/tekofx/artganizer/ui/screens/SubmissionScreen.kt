@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.R
@@ -29,7 +30,8 @@ import java.util.Date
 
 @Composable
 fun SubmissionScreen(
-    submission: Submission, submissionsViewModel: SubmissionsViewModel
+    submission: Submission, submissionsViewModel: SubmissionsViewModel,
+    navHostController: NavHostController
 ) {
     val context = LocalContext.current
     Scaffold { paddingValues ->
@@ -58,7 +60,10 @@ fun SubmissionScreen(
                 Rating(submission.rating)
             }
             ImageInfo(submission)
-            Button(onClick = { submissionsViewModel.deleteSubmission(context, submission) }) {
+            Button(onClick = {
+                submissionsViewModel.deleteSubmission(context, submission)
+                navHostController.popBackStack()
+            }) {
                 Text(text = "Delete")
             }
 

@@ -71,7 +71,7 @@ fun Navigation(
             // FIXME: Handle null submissionId
             val submission = submissionsViewModel.getSubmissionById(submissionId!!)
             if (submission != null) {
-                SubmissionScreen(submission, submissionsViewModel)
+                SubmissionScreen(submission, submissionsViewModel, navHostController)
             }
         }
     }
