@@ -58,7 +58,7 @@ fun ArtistScreen(
         ) {
             LazyColumn {
                 items(artists) { artist ->
-                    ArtistCard(artist)
+                    ArtistCard(artist, navHostController)
                 }
             }
 

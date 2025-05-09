@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.screens.submissions
+package dev.tekofx.artganizer.ui.screens.artists
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,24 +13,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
-import dev.tekofx.artganizer.ui.components.submission.Rating
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.components.EmptyAvatar
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import java.util.Date
 
 @Composable
-fun SubmissionDetailsScreen(
-    submission: Submission, submissionsViewModel: SubmissionsViewModel,
+fun ArtistDetailsScreen(
+    artist: Artist,
+    artistsViewModel: ArtistsViewModel,
     navHostController: NavHostController
 ) {
     val context = LocalContext.current
@@ -40,34 +39,20 @@ fun SubmissionDetailsScreen(
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(submission.imagePath)
-                    .build(),
-                contentDescription = "icon",
-                contentScale = ContentScale.Inside,
-            )
+            EmptyAvatar(artist.name, artist.name, modifier = Modifier.fillMaxWidth())
             Text(
-                text = submission.title,
+                text = artist.name,
                 style = MaterialTheme.typography.headlineLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
             )
-            Text(submission.description)
-            Row {
-                Text("Rating")
-                Rating(submission.rating)
-            }
-            ImageInfo(submission)
             Button(onClick = {
-                submissionsViewModel.deleteSubmission(context, submission)
+                artistsViewModel.deleteArtist(context, artist)
                 navHostController.popBackStack()
             }) {
                 Text(text = "Delete")
             }
-
-
         }
     }
 }

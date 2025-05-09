@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.navigation.NavigateDestinations
 
 @Composable
 fun Gallery(navHostController: NavHostController, submissions: List<Submission>) {
@@ -18,7 +19,7 @@ fun Gallery(navHostController: NavHostController, submissions: List<Submission>)
         content = {
             items(submissions) { submission ->
                 Card(
-                    onClick = { navHostController.navigate("SubmissionScreen/${submission.id}") }
+                    onClick = { navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${submission.id}") }
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)

@@ -14,9 +14,10 @@ import androidx.navigation.navArgument
 import dev.tekofx.artganizer.ui.screens.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
+import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
-import dev.tekofx.artganizer.ui.screens.submissions.SubmissionScreen
+import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
@@ -57,7 +58,7 @@ fun Navigation(
             // FIXME: Handle null submissionId
             val submission = submissionsViewModel.getSubmissionById(submissionId!!)
             if (submission != null) {
-                SubmissionScreen(submission, submissionsViewModel, navHostController)
+                SubmissionDetailsScreen(submission, submissionsViewModel, navHostController)
             }
         }
 
@@ -76,6 +77,17 @@ fun Navigation(
             ArtistCreationScreen(artistsViewModel)
         }
 
+        composable(
+            route = NavigateDestinations.ARTIST_DETAILS_SCREEN,
+            arguments = listOf(navArgument("artistId") { type = NavType.StringType }),
+            exitTransition = { fadeOut() }
+        ) { backStackEntry ->
+            val artistId = backStackEntry.arguments?.getString("artistId")
+            val artist = artistsViewModel.getArtistById(artistId!!)
+            if (artist != null) {
+                ArtistDetailsScreen(artist, artistsViewModel, navHostController)
+            }
+        }
 
         composable(
             route = NavigateDestinations.CHARACTERS_SCREEN,
