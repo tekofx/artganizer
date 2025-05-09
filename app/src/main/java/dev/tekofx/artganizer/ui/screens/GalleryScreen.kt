@@ -88,7 +88,7 @@ fun GalleryScreen(
                     }
                 }
             }) {
-            Gallery(submissions)
+            Gallery(navHostController, submissions)
         }
     }
 }

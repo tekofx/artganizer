@@ -20,7 +20,7 @@ fun SubmissionCreationScreen(submissionsViewModel: SubmissionsViewModel) {
         modifier = Modifier.fillMaxWidth()
     ) {
         SubmissionsForm(
-            submissionsViewModel.submissionUiState,
+            submissionsViewModel.newSubmissionUiState,
             onItemValueChange = { newValue -> submissionsViewModel.updateUiState(newValue) },
             onSaveClick = { scope.launch { submissionsViewModel.saveSubmission(context) } },
         )

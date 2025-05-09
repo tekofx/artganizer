@@ -7,12 +7,15 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import dev.tekofx.artganizer.ui.screens.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.GalleryScreen
 import dev.tekofx.artganizer.ui.screens.SubmissionCreationScreen
+import dev.tekofx.artganizer.ui.screens.SubmissionScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 
@@ -57,6 +60,19 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) {
             SubmissionCreationScreen(submissionsViewModel)
+        }
+
+        composable(
+            route = NavigateDestinations.SUBMISSION_SCREEN,
+            arguments = listOf(navArgument("submissionId") { type = NavType.StringType }),
+            exitTransition = { fadeOut() }
+        ) { backStackEntry ->
+            val submissionId = backStackEntry.arguments?.getString("submissionId")
+            // FIXME: Handle null submissionId
+            val submission = submissionsViewModel.getSubmissionById(submissionId!!)
+            if (submission != null) {
+                SubmissionScreen(submission)
+            }
         }
     }
 }

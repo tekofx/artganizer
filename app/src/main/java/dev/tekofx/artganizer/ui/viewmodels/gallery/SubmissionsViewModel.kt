@@ -53,7 +53,7 @@ fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
 
 class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
-    var submissionUiState by mutableStateOf(SubmissionUiState())
+    var newSubmissionUiState by mutableStateOf(SubmissionUiState())
         private set
 
     // Data
@@ -70,14 +70,18 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     var filtersApplied = _filtersApplied.asStateFlow()
 
 
-    private fun validateInput(uiState: SubmissionDetails = submissionUiState.submissionDetails): Boolean {
+    private fun validateInput(uiState: SubmissionDetails = newSubmissionUiState.submissionDetails): Boolean {
         return with(uiState) {
             true
         }
     }
 
+    fun getSubmissionById(id: String): Submission? {
+        return submissions.value.find { it.id == id.toInt() }
+    }
+
     fun updateUiState(submissionDetails: SubmissionDetails) {
-        submissionUiState =
+        newSubmissionUiState =
             SubmissionUiState(
                 submissionDetails = submissionDetails,
                 isEntryValid = validateInput(submissionDetails)
@@ -87,22 +91,22 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     suspend fun saveSubmission(context: Context) {
         // Save image to private storage
         val imagePath =
-            saveImageToInternalStorage(context, submissionUiState.submissionDetails.imagePath)
+            saveImageToInternalStorage(context, newSubmissionUiState.submissionDetails.imagePath)
 
         // Update the image path in the submission details
-        submissionUiState = submissionUiState.copy(
-            submissionDetails = submissionUiState.submissionDetails.copy(
+        newSubmissionUiState = newSubmissionUiState.copy(
+            submissionDetails = newSubmissionUiState.submissionDetails.copy(
                 imagePath = imagePath
             )
         )
 
         if (validateInput()) {
-            repository.insertSubmission(submissionUiState.submissionDetails.toSubmission())
+            repository.insertSubmission(newSubmissionUiState.submissionDetails.toSubmission())
         }
     }
 
     fun setNewSubmissionDetails(submissionDetails: SubmissionDetails) {
-        submissionUiState = submissionUiState.copy(
+        newSubmissionUiState = newSubmissionUiState.copy(
             submissionDetails = submissionDetails,
             isEntryValid = validateInput(submissionDetails)
         )
