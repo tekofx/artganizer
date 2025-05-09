@@ -10,10 +10,13 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionUiState
-import dev.tekofx.artganizer.ui.viewmodels.gallery.toSubmission
 
 @Composable
 fun SubmissionsForm(
@@ -27,7 +30,14 @@ fun SubmissionsForm(
         modifier = Modifier.padding(10.dp)
         // ...
     ) {
-        GalleryItem(submissionUiState.submissionDetails.toSubmission())
+
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(submissionUiState.submissionDetails.imagePath)
+                .build(),
+            contentDescription = "icon",
+            contentScale = ContentScale.Inside,
+        )
 
         SubmissionFormFields(
             submissionDetails = submissionUiState.submissionDetails,
