@@ -11,6 +11,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import dev.tekofx.artganizer.ui.components.SearchBar
+import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -33,6 +34,11 @@ fun ArtistScreen() {
         }
     ) {
         Scaffold(
+            floatingActionButton = {
+                CreateFab(
+                    onClick = { /*TODO*/ },
+                )
+            },
             bottomBar = {
                 SearchBar()
             }

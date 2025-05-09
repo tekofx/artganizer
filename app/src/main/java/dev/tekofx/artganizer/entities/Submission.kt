@@ -12,7 +12,7 @@ import java.util.Date
             entity = Artist::class,
             parentColumns = ["id"],
             childColumns = ["artistId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.SET_NULL
         )
     ],
     indices = [androidx.room.Index(value = ["artistId"])]
@@ -28,5 +28,5 @@ data class Submission(
     val sizeInMb: Double = 0.0,
     val dimensions: String = "",
     val extension: String = "",
-    val artistId: Int
+    val artistId: Int? = null
 )
