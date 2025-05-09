@@ -23,14 +23,11 @@ fun SubmissionsForm(
     submissionUiState: SubmissionUiState,
     onItemValueChange: (SubmissionDetails) -> Unit,
     onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
 
     Column(
         modifier = Modifier.padding(10.dp)
-        // ...
     ) {
-
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(submissionUiState.submissionDetails.imagePath)
@@ -38,7 +35,6 @@ fun SubmissionsForm(
             contentDescription = "icon",
             contentScale = ContentScale.Inside,
         )
-
         SubmissionFormFields(
             submissionDetails = submissionUiState.submissionDetails,
             onValueChange = onItemValueChange,

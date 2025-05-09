@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.repository.SubmissionRepository
+import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -85,15 +86,15 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
     suspend fun saveSubmission(context: Context) {
         // Save image to private storage
-        /*  val imagePath =
-              saveImageToInternalStorage(context, submissionUiState.submissionDetails.imagePath)
+        val imagePath =
+            saveImageToInternalStorage(context, submissionUiState.submissionDetails.imagePath)
 
-          // Update the image path in the submission details
-          submissionUiState = submissionUiState.copy(
-              submissionDetails = submissionUiState.submissionDetails.copy(
-                  imagePath = imagePath
-              )
-          )*/
+        // Update the image path in the submission details
+        submissionUiState = submissionUiState.copy(
+            submissionDetails = submissionUiState.submissionDetails.copy(
+                imagePath = imagePath
+            )
+        )
 
         if (validateInput()) {
             repository.insertSubmission(submissionUiState.submissionDetails.toSubmission())
