@@ -2,8 +2,10 @@ package dev.tekofx.artganizer.ui.viewmodels.gallery
 
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,8 +20,8 @@ import dev.tekofx.artganizer.utils.stringToDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.FileNotFoundException
 import java.util.Date
-
 
 data class SubmissionUiState(
     val submissionDetails: SubmissionDetails = SubmissionDetails(),
@@ -67,7 +69,6 @@ fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
     sizeInMb = sizeInMb,
     dimensions = dimensions,
     extension = extension
-
 )
 
 
@@ -113,10 +114,15 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         val imagePath =
             saveImageToInternalStorage(context, newSubmissionUiState.submissionDetails.imagePath)
 
+        val imageInfo = getImageInfo(context, imagePath)
+
         // Update the image path in the submission details
         newSubmissionUiState = newSubmissionUiState.copy(
             submissionDetails = newSubmissionUiState.submissionDetails.copy(
-                imagePath = imagePath
+                imagePath = imagePath,
+                sizeInMb = imageInfo?.sizeInMb ?: 0.0,
+                extension = imageInfo?.extension ?: "",
+                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
             )
         )
 
@@ -146,3 +152,36 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
 }
 
+
+data class ImageInfo(
+    val sizeInMb: Double,
+    val extension: String,
+    val dimensions: Pair<Int, Int>
+)
+
+fun getImageInfo(context: Context, uri: Uri): ImageInfo? {
+    val contentResolver = context.contentResolver
+
+    try {
+        // Get size in MB
+        val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return null
+        val fileSizeInBytes = fileDescriptor.statSize
+        val sizeInMb = String.format("%.2f", fileSizeInBytes / (1024.0 * 1024.0)).toDouble()
+
+        // Get extension
+        val mimeType = contentResolver.getType(uri)
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: "unknown"
+
+        // Get dimensions
+        val inputStream = contentResolver.openInputStream(uri) ?: return null
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeStream(inputStream, null, options)
+        val dimensions = Pair(options.outWidth, options.outHeight)
+        fileDescriptor.close()
+
+        return ImageInfo(sizeInMb, extension, dimensions)
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+        return null
+    }
+}

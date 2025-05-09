@@ -1,7 +1,7 @@
 package dev.tekofx.artganizer.ui.screens
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -12,11 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.ui.components.submission.Rating
 
 @Composable
 fun SubmissionScreen(
@@ -43,20 +42,29 @@ fun SubmissionScreen(
                     .fillMaxWidth()
             )
             Text(submission.description)
+            Row {
+                Text("Rating")
+                Rating(submission.rating)
+            }
+            ImageInfo(submission)
+
 
         }
     }
 }
 
-@Preview
+
 @Composable
-fun SubmissionScreenPreview() {
-    SubmissionScreen(
-        submission = Submission(
-            id = 1,
-            title = "Submission Title",
-            description = "This is a description of the submission.",
-            imagePath = "file:///data/user/0/dev.tekofx.artganizer/files/5e210f2b-7c2b-480c-a3b6-02b093ce3f76.jpg"
-        )
-    )
+fun ImageInfo(submission: Submission) {
+    Column {
+        Row {
+            Text(submission.date.toString())
+            Text(submission.sizeInMb.toString())
+        }
+        Row {
+            Text(submission.dimensions)
+            Text(submission.extension)
+        }
+    }
+
 }
