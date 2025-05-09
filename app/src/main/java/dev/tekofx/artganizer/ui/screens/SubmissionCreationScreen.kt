@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import dev.tekofx.artganizer.ui.components.SubmissionsForm
+import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import kotlinx.coroutines.launch
 

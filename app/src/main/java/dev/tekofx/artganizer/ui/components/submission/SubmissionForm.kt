@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.components
+package dev.tekofx.artganizer.ui.components.submission
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -65,11 +64,7 @@ fun SubmissionFormFields(
             value = submissionDetails.title,
             onValueChange = { onValueChange(submissionDetails.copy(title = it)) },
             label = { Text("Title") },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-            ),
+
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
@@ -78,14 +73,14 @@ fun SubmissionFormFields(
             value = submissionDetails.description,
             onValueChange = { onValueChange(submissionDetails.copy(description = it)) },
             label = { Text("Description") },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-            ),
+
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
+        )
+        RatingSelector(
+            rating = submissionDetails.rating,
+            onRatingChange = { onValueChange(submissionDetails.copy(rating = it)) },
         )
     }
 }

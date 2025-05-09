@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import dev.tekofx.artganizer.dao.ISubmissionDao
 import dev.tekofx.artganizer.entities.Submission
 
@@ -11,6 +12,7 @@ import dev.tekofx.artganizer.entities.Submission
  * Database class with a singleton Instance object.
  */
 @Database(entities = [Submission::class], version = 1, exportSchema = false)
+@TypeConverters(DateConverter::class)
 abstract class SubmissionDatabase : RoomDatabase() {
 
     abstract fun submissionDao(): ISubmissionDao

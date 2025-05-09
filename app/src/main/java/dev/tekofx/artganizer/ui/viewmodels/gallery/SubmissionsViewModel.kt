@@ -16,6 +16,7 @@ import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.sql.Date
 
 
 data class SubmissionUiState(
@@ -28,13 +29,24 @@ data class SubmissionDetails(
     val title: String = "",
     val description: String = "",
     val imagePath: Uri = Uri.EMPTY,
+    val rating: Int = 0,
+    val date: String = "",
+    val sizeInMb: Double = 0.0,
+    val dimensions: String = "",
+    val extension: String = "",
 )
 
 fun SubmissionDetails.toSubmission(): Submission = Submission(
     id = id,
     title = title,
     description = description,
-    imagePath = imagePath.toString()
+    imagePath = imagePath.toString(),
+    rating = rating,
+    date = Date.valueOf(date),
+    sizeInMb = sizeInMb,
+    dimensions = dimensions,
+    extension = extension
+
 )
 
 fun Submission.toSubmissionUiState(isEntryValid: Boolean = false): SubmissionUiState =
@@ -47,7 +59,13 @@ fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
     id = id,
     title = title,
     description = description,
-    imagePath = imagePath.toUri()
+    imagePath = imagePath.toUri(),
+    rating = rating,
+    date = date.toString(),
+    sizeInMb = sizeInMb,
+    dimensions = dimensions,
+    extension = extension
+
 )
 
 

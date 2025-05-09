@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui
+package dev.tekofx.artganizer.ui.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
