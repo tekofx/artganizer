@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import dev.tekofx.artganizer.database.SubmissionDatabase
+import dev.tekofx.artganizer.database.AppDatabase
 import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.navigation.showBottomAppBar
 import dev.tekofx.artganizer.repository.SubmissionRepository
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val submissionRepository by lazy {
-            SubmissionRepository(SubmissionDatabase.getDatabase(this).submissionDao())
+            SubmissionRepository(AppDatabase.getDatabase(this).submissionDao())
         }
 
 
