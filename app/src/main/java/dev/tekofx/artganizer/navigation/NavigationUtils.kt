@@ -15,7 +15,7 @@ fun showBottomAppBar(currentRoute: String?): Boolean {
     }
 
     return when (currentRoute) {
-        NavigateDestinations.GALLERY_SCREEN -> true
+        NavigateDestinations.SUBMISSION_SCREEN -> true
         NavigateDestinations.ARTISTS_SCREEN -> true
         else -> false
     }

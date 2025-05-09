@@ -13,10 +13,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import dev.tekofx.artganizer.ui.screens.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.CharactersScreen
-import dev.tekofx.artganizer.ui.screens.GalleryScreen
-import dev.tekofx.artganizer.ui.screens.SubmissionCreationScreen
-import dev.tekofx.artganizer.ui.screens.SubmissionScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
+import dev.tekofx.artganizer.ui.screens.submissions.GalleryScreen
+import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
+import dev.tekofx.artganizer.ui.screens.submissions.SubmissionScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 
@@ -29,10 +29,10 @@ fun Navigation(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = NavigateDestinations.GALLERY_SCREEN
+        startDestination = NavigateDestinations.SUBMISSION_SCREEN
     ) {
         composable(
-            route = NavigateDestinations.GALLERY_SCREEN,
+            route = NavigateDestinations.SUBMISSION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
             GalleryScreen(navHostController, submissionsViewModel)
@@ -65,7 +65,7 @@ fun Navigation(
         }
 
         composable(
-            route = NavigateDestinations.SUBMISSION_SCREEN,
+            route = NavigateDestinations.SUBMISSION_DETAILS_SCREEN,
             arguments = listOf(navArgument("submissionId") { type = NavType.StringType }),
             exitTransition = { fadeOut() }
         ) { backStackEntry ->

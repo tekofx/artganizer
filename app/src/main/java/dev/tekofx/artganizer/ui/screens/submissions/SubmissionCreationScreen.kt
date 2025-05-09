@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.screens
+package dev.tekofx.artganizer.ui.screens.submissions
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

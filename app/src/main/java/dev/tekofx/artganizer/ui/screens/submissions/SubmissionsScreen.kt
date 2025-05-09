@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.screens
+package dev.tekofx.artganizer.ui.screens.submissions
 
 import android.annotation.SuppressLint
 import android.net.Uri

@@ -13,7 +13,7 @@ sealed class BottomNavigationItems(
         title = "Gallery",
         selectedIcon = IconResource.fromDrawableResource(R.drawable.gallery_filled),
         unselectedIcon = IconResource.fromDrawableResource(R.drawable.gallery_outlined),
-        route = NavigateDestinations.GALLERY_SCREEN
+        route = NavigateDestinations.SUBMISSION_SCREEN
     )
 
     data object Artists : BottomNavigationItems(
