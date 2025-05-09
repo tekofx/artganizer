@@ -14,7 +14,7 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
 
 @Composable
-fun ArtistFrom(
+fun ArtistForm(
     artistUiState: ArtistUiState,
     onItemValueChange: (ArtistDetails) -> Unit,
     onSaveClick: () -> Unit,

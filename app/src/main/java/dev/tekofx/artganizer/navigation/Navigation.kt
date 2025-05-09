@@ -11,12 +11,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import dev.tekofx.artganizer.ui.screens.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
-import dev.tekofx.artganizer.ui.screens.submissions.GalleryScreen
+import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
+import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionScreen
+import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 
@@ -29,32 +30,15 @@ fun Navigation(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = NavigateDestinations.SUBMISSION_SCREEN
+        startDestination = NavigateDestinations.SUBMISSIONS_SCREEN
     ) {
-        composable(
-            route = NavigateDestinations.SUBMISSION_SCREEN,
-            exitTransition = { fadeOut() }
-        ) {
-            GalleryScreen(navHostController, submissionsViewModel)
-        }
 
+        // Submissions
         composable(
-            route = NavigateDestinations.ARTISTS_SCREEN,
+            route = NavigateDestinations.SUBMISSIONS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            ArtistScreen()
-        }
-        composable(
-            route = NavigateDestinations.CHARACTERS_SCREEN,
-            exitTransition = { fadeOut() }
-        ) {
-            CharactersScreen()
-        }
-        composable(
-            route = NavigateDestinations.TAGS_SCREEN,
-            exitTransition = { fadeOut() }
-        ) {
-            TagsScreen()
+            SubmissionsScreen(navHostController, submissionsViewModel)
         }
 
         composable(
@@ -76,6 +60,37 @@ fun Navigation(
                 SubmissionScreen(submission, submissionsViewModel, navHostController)
             }
         }
+
+        // Artists
+        composable(
+            route = NavigateDestinations.ARTISTS_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            ArtistScreen(navHostController, artistsViewModel)
+        }
+
+        composable(
+            route = NavigateDestinations.ARTIST_CREATION_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            ArtistCreationScreen(artistsViewModel)
+        }
+
+
+        composable(
+            route = NavigateDestinations.CHARACTERS_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            CharactersScreen()
+        }
+        composable(
+            route = NavigateDestinations.TAGS_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            TagsScreen()
+        }
+
+
     }
 }
 

@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.components
+package dev.tekofx.artganizer.ui.components.submission
 
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid

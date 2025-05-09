@@ -17,9 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.components.Gallery
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
+import dev.tekofx.artganizer.ui.components.submission.Gallery
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GalleryScreen(
+fun SubmissionsScreen(
     navHostController: NavHostController, submissionsViewModel: SubmissionsViewModel
 ) {
 
