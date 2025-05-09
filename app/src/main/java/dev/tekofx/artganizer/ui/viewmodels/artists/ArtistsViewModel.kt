@@ -1,0 +1,102 @@
+package dev.tekofx.artganizer.ui.viewmodels.artists
+
+
+import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.repository.ArtistsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+
+data class ArtistUiState(
+    val artistDetails: ArtistDetails = ArtistDetails(),
+    val isEntryValid: Boolean = false
+)
+
+data class ArtistDetails(
+    val id: Int = 0,
+    val name: String = "",
+)
+
+fun ArtistDetails.toArtist(): Artist = Artist(
+    id = id,
+    name = name,
+)
+
+fun Artist.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =
+    ArtistUiState(
+        artistDetails = this.toArtistDetails(),
+        isEntryValid = isEntryValid
+    )
+
+fun Artist.toArtistDetails(): ArtistDetails = ArtistDetails(
+    id = id,
+    name = name,
+)
+
+
+class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() {
+
+    var newArtistUiState by mutableStateOf(ArtistUiState())
+        private set
+
+    // Data
+    val artists = MutableStateFlow<List<Artist>>(emptyList())
+
+    private fun validateInput(uiState: ArtistDetails = newArtistUiState.artistDetails): Boolean {
+        return with(uiState) {
+            true
+        }
+    }
+
+    fun getArtistById(id: String): Artist? {
+        return artists.value.find { it.id == id.toInt() }
+    }
+
+    fun updateUiState(artistDetails: ArtistDetails) {
+        newArtistUiState =
+            ArtistUiState(
+                artistDetails = artistDetails,
+                isEntryValid = validateInput(artistDetails)
+            )
+    }
+
+    fun deleteArtist(context: Context, artist: Artist) {
+        viewModelScope.launch {
+            repository.deleteArtist(artist)
+        }
+    }
+
+    suspend fun saveArtist(context: Context) {
+
+
+        if (validateInput()) {
+            repository.insertArtist(newArtistUiState.artistDetails.toArtist())
+        }
+    }
+
+    fun setNewArtistDetails(artistDetails: ArtistDetails) {
+        newArtistUiState = newArtistUiState.copy(
+            artistDetails = artistDetails,
+            isEntryValid = validateInput(artistDetails)
+        )
+    }
+
+
+    init {
+        // Collect the flow and update _submissions
+        viewModelScope.launch {
+            repository.getAllArtists().collect { submissionsList ->
+                artists.value = submissionsList
+            }
+        }
+    }
+
+
+}
+
+

@@ -17,13 +17,15 @@ import dev.tekofx.artganizer.ui.screens.GalleryScreen
 import dev.tekofx.artganizer.ui.screens.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.SubmissionScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 
 
 @Composable
 fun Navigation(
     navHostController: NavHostController,
-    submissionsViewModel: SubmissionsViewModel
+    submissionsViewModel: SubmissionsViewModel,
+    artistsViewModel: ArtistsViewModel
 ) {
     NavHost(
         navController = navHostController,

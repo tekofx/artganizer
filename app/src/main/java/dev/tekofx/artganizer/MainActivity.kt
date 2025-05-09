@@ -23,9 +23,12 @@ import androidx.navigation.compose.rememberNavController
 import dev.tekofx.artganizer.database.AppDatabase
 import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.navigation.showBottomAppBar
+import dev.tekofx.artganizer.repository.ArtistsRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.ui.components.BottomNavigationBar
 import dev.tekofx.artganizer.ui.theme.AppTheme
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModelFactory
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModelFactory
 
@@ -38,14 +41,22 @@ class MainActivity : ComponentActivity() {
             SubmissionRepository(AppDatabase.getDatabase(this).submissionDao())
         }
 
+        val artistsRepository by lazy {
+            ArtistsRepository(AppDatabase.getDatabase(this).artistDao())
+        }
 
-        val galleryViewModel = ViewModelProvider(
+
+        val submissionsViewModel = ViewModelProvider(
             this, SubmissionsViewModelFactory(
                 submissionRepository
             )
         )[SubmissionsViewModel::class.java]
 
-
+        val artistsViewModel = ViewModelProvider(
+            this, ArtistsViewModelFactory(
+                artistsRepository
+            )
+        )[ArtistsViewModel::class.java]
 
         setContent {
             val navController = rememberNavController()
@@ -71,7 +82,7 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier.padding(padding)
                     ) {
-                        Navigation(navController, galleryViewModel)
+                        Navigation(navController, submissionsViewModel, artistsViewModel)
                     }
 
                 }
