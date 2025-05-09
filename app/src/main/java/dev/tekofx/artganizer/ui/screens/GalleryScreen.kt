@@ -6,8 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
+import dev.tekofx.artganizer.ui.components.Gallery
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
-import dev.tekofx.artganizer.ui.components.GalleryItem
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import kotlinx.coroutines.launch
@@ -90,14 +88,7 @@ fun GalleryScreen(
                     }
                 }
             }) {
-            LazyColumn(
-                state = listState
-            ) {
-                items(submissions, key = { it.id }) {
-                    GalleryItem(it)
-                }
-            }/*Text("Gallery Screen Content")
-            ImageSelectionScreen()*/
+            Gallery(submissions)
         }
     }
 }
