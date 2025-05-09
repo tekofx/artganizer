@@ -7,18 +7,18 @@ import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import java.util.UUID
 
-fun saveImageToInternalStorage(context: Context, uri: Uri): String {
+fun saveImageToInternalStorage(context: Context, uri: Uri): Uri {
     val mimeType = context.contentResolver.getType(uri)
     val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: "jpg"
     val uniqueFilename = "${UUID.randomUUID()}.$extension"
     val inputStream = context.contentResolver.openInputStream(uri)
-    val outputStream = context.openFileOutput(uniqueFilename, Context.MODE_PRIVATE)
+    val file = context.filesDir.resolve(uniqueFilename)
     inputStream?.use { input ->
-        outputStream.use { output ->
+        file.outputStream().use { output ->
             input.copyTo(output)
         }
     }
-    return context.filesDir.resolve(uniqueFilename).absolutePath
+    return Uri.fromFile(file)
 }
 
 
@@ -38,3 +38,5 @@ fun getPathFromUri(context: Context, uri: Uri): String? {
         file.absolutePath
     }
 }
+
+

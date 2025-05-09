@@ -1,11 +1,13 @@
 package dev.tekofx.artganizer.ui.viewmodels.gallery
 
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.MutableLiveData
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Submission
@@ -24,14 +26,14 @@ data class SubmissionDetails(
     val id: Int = 0,
     val title: String = "",
     val description: String = "",
-    val imagePath: String = "",
+    val imagePath: Uri = Uri.EMPTY,
 )
 
 fun SubmissionDetails.toSubmission(): Submission = Submission(
     id = id,
     title = title,
     description = description,
-    imagePath = imagePath
+    imagePath = imagePath.toString()
 )
 
 fun Submission.toSubmissionUiState(isEntryValid: Boolean = false): SubmissionUiState =
@@ -44,7 +46,7 @@ fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
     id = id,
     title = title,
     description = description,
-    imagePath = imagePath
+    imagePath = imagePath.toUri()
 )
 
 
@@ -66,8 +68,6 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     private val _filtersApplied = MutableStateFlow(false)
     var filtersApplied = _filtersApplied.asStateFlow()
 
-    // Error
-    val errorMessage = MutableLiveData<String>()
 
     private fun validateInput(uiState: SubmissionDetails = submissionUiState.submissionDetails): Boolean {
         return with(uiState) {
@@ -83,7 +83,18 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
             )
     }
 
-    suspend fun saveSubmission() {
+    suspend fun saveSubmission(context: Context) {
+        // Save image to private storage
+        /*  val imagePath =
+              saveImageToInternalStorage(context, submissionUiState.submissionDetails.imagePath)
+
+          // Update the image path in the submission details
+          submissionUiState = submissionUiState.copy(
+              submissionDetails = submissionUiState.submissionDetails.copy(
+                  imagePath = imagePath
+              )
+          )*/
+
         if (validateInput()) {
             repository.insertSubmission(submissionUiState.submissionDetails.toSubmission())
         }
