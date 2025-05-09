@@ -109,6 +109,12 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
             )
     }
 
+    fun deleteSubmission(submission: Submission) {
+        viewModelScope.launch {
+            repository.deleteSubmission(submission)
+        }
+    }
+
     suspend fun saveSubmission(context: Context) {
         // Save image to private storage
         val imagePath =

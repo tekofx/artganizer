@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,10 +17,11 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.components.submission.Rating
+import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 
 @Composable
 fun SubmissionScreen(
-    submission: Submission
+    submission: Submission, submissionsViewModel: SubmissionsViewModel
 ) {
     Scaffold { paddingValues ->
         Column(
@@ -47,6 +49,9 @@ fun SubmissionScreen(
                 Rating(submission.rating)
             }
             ImageInfo(submission)
+            Button(onClick = { submissionsViewModel.deleteSubmission(submission) }) {
+                Text(text = "Delete")
+            }
 
 
         }
