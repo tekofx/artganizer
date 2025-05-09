@@ -31,6 +31,7 @@ import java.util.Date
 fun SubmissionScreen(
     submission: Submission, submissionsViewModel: SubmissionsViewModel
 ) {
+    val context = LocalContext.current
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -57,7 +58,7 @@ fun SubmissionScreen(
                 Rating(submission.rating)
             }
             ImageInfo(submission)
-            Button(onClick = { submissionsViewModel.deleteSubmission(submission) }) {
+            Button(onClick = { submissionsViewModel.deleteSubmission(context, submission) }) {
                 Text(text = "Delete")
             }
 

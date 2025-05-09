@@ -14,6 +14,7 @@ import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.getImageInfo
+import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import dev.tekofx.artganizer.utils.stringToDate
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,9 +108,10 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
             )
     }
 
-    fun deleteSubmission(submission: Submission) {
+    fun deleteSubmission(context: Context, submission: Submission) {
         viewModelScope.launch {
             repository.deleteSubmission(submission)
+            removeImageFromInternalStorage(context, submission.imagePath)
         }
     }
 

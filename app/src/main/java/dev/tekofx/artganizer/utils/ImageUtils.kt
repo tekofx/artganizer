@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
+import androidx.core.net.toUri
 import java.io.FileNotFoundException
 import java.util.UUID
 
@@ -21,6 +22,14 @@ fun saveImageToInternalStorage(context: Context, uri: Uri): Uri {
         }
     }
     return Uri.fromFile(file)
+}
+
+fun removeImageFromInternalStorage(context: Context, uriString: String) {
+    val uri = uriString.toUri()
+    val file = context.filesDir.resolve(uri.lastPathSegment ?: return)
+    if (file.exists()) {
+        file.delete()
+    }
 }
 
 
