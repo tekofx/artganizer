@@ -12,11 +12,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.repository.SubmissionRepository
+import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
+import dev.tekofx.artganizer.utils.stringToDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.sql.Date
+import java.util.Date
 
 
 data class SubmissionUiState(
@@ -30,7 +32,7 @@ data class SubmissionDetails(
     val description: String = "",
     val imagePath: Uri = Uri.EMPTY,
     val rating: Int = 0,
-    val date: String = "",
+    val date: String = dateToString(Date()),
     val sizeInMb: Double = 0.0,
     val dimensions: String = "",
     val extension: String = "",
@@ -42,7 +44,7 @@ fun SubmissionDetails.toSubmission(): Submission = Submission(
     description = description,
     imagePath = imagePath.toString(),
     rating = rating,
-    date = Date.valueOf(date),
+    date = stringToDate(date) ?: Date(),
     sizeInMb = sizeInMb,
     dimensions = dimensions,
     extension = extension
