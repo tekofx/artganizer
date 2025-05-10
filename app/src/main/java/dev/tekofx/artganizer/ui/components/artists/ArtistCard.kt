@@ -2,28 +2,27 @@ package dev.tekofx.artganizer.ui.components.artists
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.components.EmptyAvatar
+import dev.tekofx.artganizer.ui.components.Avatar
+import dev.tekofx.artganizer.ui.theme.AppTheme
 
 @Composable
 fun ArtistCard(artist: Artist, navHostController: NavHostController) {
@@ -38,37 +37,46 @@ fun ArtistCard(artist: Artist, navHostController: NavHostController) {
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
-                .height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
-            if (artist.imagePath != null) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(artist.imagePath)
-                        .build(),
-                    contentDescription = "icon",
-                    contentScale = ContentScale.Inside,
-                    modifier = Modifier
-                        .height(50.dp)
-                )
-            } else {
-                EmptyAvatar(artist.name, artist.name, size = 50.dp)
-            }
+            Avatar(
+                artist.imagePath, artist.name, modifier = Modifier
+                    .size(50.dp)
+                    .weight(1f)
+            )
             Column(
+                modifier = Modifier
+                    .weight(3f),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = artist.name,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.displayMedium
                 )
                 Text(
                     text = "Artist description or details",
-                    fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
         }
+    }
+}
+
+@Composable
+@Preview
+fun ArtistCardPreview() {
+    val artist = Artist(
+        id = 1,
+        name = "John Doe",
+        imagePath = null,
+    )
+    val navHostController = NavHostController(LocalContext.current)
+    AppTheme {
+        ArtistCard(artist, navHostController)
     }
 }
