@@ -22,7 +22,7 @@ import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
-import dev.tekofx.artganizer.ui.components.EmptyAvatar
+import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import java.util.Date
 
@@ -39,7 +39,7 @@ fun ArtistDetailsScreen(
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
-            EmptyAvatar(artist.name, artist.name, modifier = Modifier.fillMaxWidth())
+            Avatar(artist.imagePath, artist.name)
             Text(
                 text = artist.name,
                 style = MaterialTheme.typography.headlineLarge,

@@ -4,6 +4,7 @@ import androidx.annotation.ColorInt
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
 import kotlin.math.absoluteValue
 
@@ -27,9 +30,9 @@ fun EmptyAvatar(
     id: String,
     firstName: String,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
+    size: Dp = 50.dp,
 ) {
-    Box(modifier, contentAlignment = Alignment.Center) {
+    Box(modifier.size(size), contentAlignment = Alignment.Center) {
         val color = remember(id, firstName) {
             val name = listOf(firstName)
                 .joinToString(separator = "")
@@ -40,6 +43,10 @@ fun EmptyAvatar(
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawCircle(SolidColor(color))
         }
-        Text(text = initials, style = textStyle, color = Color.White)
+        Text(
+            text = initials,
+            style = MaterialTheme.typography.headlineLarge.copy(fontSize = size.value.sp / 2),
+            color = Color.White
+        )
     }
 }

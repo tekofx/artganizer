@@ -5,10 +5,12 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.repository.ArtistsRepository
+import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -20,11 +22,13 @@ data class ArtistUiState(
 data class ArtistDetails(
     val id: Int = 0,
     val name: String = "",
+    val imagePath: String? = null
 )
 
 fun ArtistDetails.toArtist(): Artist = Artist(
     id = id,
     name = name,
+    imagePath = imagePath
 )
 
 fun Artist.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =
@@ -36,6 +40,7 @@ fun Artist.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =
 fun Artist.toArtistDetails(): ArtistDetails = ArtistDetails(
     id = id,
     name = name,
+    imagePath = imagePath
 )
 
 
@@ -72,8 +77,24 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     }
 
     suspend fun saveArtist(context: Context) {
+        val imagePath = newArtistUiState.artistDetails.imagePath
 
+        if (imagePath != null) {
 
+            // Save image to private storage
+            val newImagePath =
+                saveImageToInternalStorage(
+                    context,
+                    imagePath.toUri()
+                )
+
+            newArtistUiState = newArtistUiState.copy(
+                artistDetails = newArtistUiState.artistDetails.copy(
+                    imagePath = newImagePath.toString()
+                )
+            )
+
+        }
         if (validateInput()) {
             repository.insertArtist(newArtistUiState.artistDetails.toArtist())
         }

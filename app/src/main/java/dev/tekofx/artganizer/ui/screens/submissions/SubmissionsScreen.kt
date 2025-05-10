@@ -56,7 +56,8 @@ fun SubmissionsScreen(
                     navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)
                 }
             }
-        })
+        }
+    )
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState, sheetContent = {
@@ -66,8 +67,7 @@ fun SubmissionsScreen(
             floatingActionButton = {
 
                 CreateFab(
-                    onClick = { launcher.launch("image/*") }
-                )
+                    onClick = { launcher.launch("image/*") })
 
             }) {
             Gallery(navHostController, submissions)
