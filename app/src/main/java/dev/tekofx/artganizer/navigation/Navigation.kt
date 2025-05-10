@@ -46,7 +46,7 @@ fun Navigation(
             route = NavigateDestinations.SUBMISSION_CREATION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            SubmissionCreationScreen(submissionsViewModel)
+            SubmissionCreationScreen(submissionsViewModel, navHostController)
         }
 
         composable(

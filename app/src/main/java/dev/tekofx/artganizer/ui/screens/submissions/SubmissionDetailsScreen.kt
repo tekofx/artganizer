@@ -26,6 +26,7 @@ import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
+import dev.tekofx.artganizer.utils.dateToString
 import java.util.Date
 
 @Composable
@@ -80,6 +81,17 @@ fun ImageInfo(submission: Submission) {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                IconResource.fromDrawableResource(R.drawable.file_info).asPainterResource(),
+                contentDescription = "",
+            )
+            Text("File Info")
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
@@ -91,7 +103,7 @@ fun ImageInfo(submission: Submission) {
                         .asPainterResource(),
                     contentDescription = ""
                 )
-                Text(submission.date.toString())
+                Text(dateToString(submission.date))
             }
 
             Row(
@@ -148,7 +160,7 @@ fun ImageInfoPreview() {
         date = Date(),
         sizeInMb = 1.0,
         dimensions = "1920x1080",
-        extension = ".jpg",
+        extension = "JPEG",
         artistId = 1,
     )
 

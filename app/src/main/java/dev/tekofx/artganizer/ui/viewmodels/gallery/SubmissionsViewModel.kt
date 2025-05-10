@@ -18,7 +18,6 @@ import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import dev.tekofx.artganizer.utils.stringToDate
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -81,16 +80,6 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     // Data
     val submissions = MutableStateFlow<List<Submission>>(emptyList())
 
-    // Loaders
-    val isLoading = MutableStateFlow(false)
-
-
-    // Inputs
-    private val _queryText = MutableStateFlow("")
-    val queryText = _queryText.asStateFlow()
-    private val _filtersApplied = MutableStateFlow(false)
-    var filtersApplied = _filtersApplied.asStateFlow()
-
 
     private fun validateInput(uiState: SubmissionDetails = newSubmissionUiState.submissionDetails): Boolean {
         return with(uiState) {
@@ -124,18 +113,21 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
         val imageInfo = getImageInfo(context, imagePath)
 
-        // Update the image path in the submission details
-        newSubmissionUiState = newSubmissionUiState.copy(
-            submissionDetails = newSubmissionUiState.submissionDetails.copy(
-                imagePath = imagePath,
-                sizeInMb = imageInfo?.sizeInMb ?: 0.0,
-                extension = imageInfo?.extension ?: "",
-                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-            )
+        val newSubmission = Submission(
+            id = newSubmissionUiState.submissionDetails.id,
+            title = newSubmissionUiState.submissionDetails.title,
+            description = newSubmissionUiState.submissionDetails.description,
+            imagePath = imagePath.toString(),
+            rating = newSubmissionUiState.submissionDetails.rating,
+            date = stringToDate(newSubmissionUiState.submissionDetails.date) ?: Date(),
+            sizeInMb = imageInfo?.sizeInMb ?: 0.0,
+            dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+            extension = imageInfo?.extension ?: "",
+            artistId = newSubmissionUiState.submissionDetails.artistId
         )
 
         if (validateInput()) {
-            repository.insertSubmission(newSubmissionUiState.submissionDetails.toSubmission())
+            repository.insertSubmission(newSubmission)
         }
     }
 
