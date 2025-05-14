@@ -78,6 +78,7 @@ fun ArtistFormFields(
 ) {
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         OutlinedTextField(
             value = artistsDetails.name,
@@ -96,7 +97,14 @@ fun ArtistFormFields(
                         socialNetworks = artistsDetails.socialNetworks + it
                     )
                 )
-            }
+            },
+            onRemoveSocialNetwork = {
+                onValueChange(
+                    artistsDetails.copy(
+                        socialNetworks = artistsDetails.socialNetworks - it
+                    )
+                )
+            },
         )
 
     }
