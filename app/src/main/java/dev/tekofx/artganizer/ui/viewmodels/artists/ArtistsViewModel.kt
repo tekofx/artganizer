@@ -46,7 +46,8 @@ fun Artist.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =
 fun Artist.toArtistDetails(): ArtistDetails = ArtistDetails(
     id = id,
     name = name,
-    imagePath = imagePath
+    imagePath = imagePath,
+    socialNetworks = socialNetworks
 )
 
 fun ArtistUiState.toArtist(): Artist = Artist(
