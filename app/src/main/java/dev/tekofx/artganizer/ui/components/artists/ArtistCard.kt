@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.components.artists
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,11 +41,11 @@ fun ArtistCard(artist: Artist, navHostController: NavHostController) {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Avatar(
                 artist.imagePath,
                 artist.name,
                 modifier = Modifier
+                    .aspectRatio(1f)
                     .weight(1f),
                 size = 100.dp
             )
