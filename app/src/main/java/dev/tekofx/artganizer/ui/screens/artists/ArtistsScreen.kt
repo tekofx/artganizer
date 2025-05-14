@@ -16,9 +16,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.components.SearchBar
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
+import dev.tekofx.artganizer.ui.components.input.SearchBar
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 
 

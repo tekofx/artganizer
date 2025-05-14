@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.tekofx.artganizer.ui.components.input.SearchBar
 
 @Composable
 fun GalleryBottomSheet() {

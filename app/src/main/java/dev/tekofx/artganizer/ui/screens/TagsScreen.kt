@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import dev.tekofx.artganizer.ui.components.SearchBar
+import dev.tekofx.artganizer.ui.components.input.SearchBar
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
