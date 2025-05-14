@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,6 +27,7 @@ import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
+import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import dev.tekofx.artganizer.utils.dateToString
@@ -72,30 +72,49 @@ fun SubmissionDetailsScreen(
                 contentDescription = "icon",
                 contentScale = ContentScale.Inside,
             )
-            Text(
-                text = submission.title,
-                style = MaterialTheme.typography.headlineLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-            Text(submission.description)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            if (submission.title.isNotEmpty()) {
                 Text(
-                    "Rating",
-                    style = MaterialTheme.typography.headlineSmall,
+                    text = submission.title,
+                    style = MaterialTheme.typography.headlineLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
                 )
-                Rating(submission.rating)
+            }
+            if (submission.description.isNotEmpty()) {
+
+                Text(submission.description)
+            }
+            if (submission.rating > 0) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        "Rating",
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                    Rating(submission.rating)
+                }
             }
             ImageInfo(submission)
-            Button(onClick = {
-                submissionsViewModel.showPopup()
-            }) {
-                Text(text = "Delete")
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                ButtonWithIcon(
+                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                    onClick = {},
+                    text = "Edit"
+                )
+                ButtonWithIcon(
+                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                    onClick = {
+                        submissionsViewModel.showPopup()
+                    },
+                    text = "Delete",
+                    color = MaterialTheme.colorScheme.error
+                )
             }
         }
     }
