@@ -25,9 +25,13 @@ import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.theme.AppTheme
 
 @Composable
-fun ArtistCard(artist: Artist, navHostController: NavHostController) {
+fun ArtistCard(
+    artist: Artist,
+    navHostController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .fillMaxWidth()
             .height(150.dp),

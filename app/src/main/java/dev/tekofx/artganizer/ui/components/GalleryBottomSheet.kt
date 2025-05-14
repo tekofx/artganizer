@@ -19,7 +19,7 @@ fun GalleryBottomSheet() {
             .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        SearchBar(label = { Text("Search Anything") })
+        SearchBar(label = { Text("Search Anything") }, queryText = "")
         AutoCompleteComboBox(items = listOf("Hola", "Adios"), onItemSelected = {})
     }
 }

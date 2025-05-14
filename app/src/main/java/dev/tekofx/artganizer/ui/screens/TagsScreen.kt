@@ -34,7 +34,7 @@ fun TagsScreen() {
     ) {
         Scaffold(
             bottomBar = {
-                SearchBar()
+                SearchBar(queryText = "")
             }
         ) {
             Column {

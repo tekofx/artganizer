@@ -34,7 +34,7 @@ fun CharactersScreen() {
     ) {
         Scaffold(
             bottomBar = {
-                SearchBar()
+                SearchBar(queryText = "")
             }
         ) {
             Column {

@@ -12,6 +12,10 @@ import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.repository.ArtistsRepository
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class ArtistUiState(
@@ -54,8 +58,26 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
     val showPopup = MutableStateFlow(false)
 
+    private val _queryText = MutableStateFlow("")
+    val queryText = _queryText.asStateFlow()
+
     // Data
-    val artists = MutableStateFlow<List<Artist>>(emptyList())
+    private val _artists = MutableStateFlow<List<Artist>>(emptyList())
+
+    val artists = _artists.combine(_queryText) { artists, query ->
+        if (query.isBlank()) {
+            artists
+        } else {
+            artists.filter {
+                it.name.contains(query, ignoreCase = true)
+            }
+        }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        _artists.value
+    )
+
 
     private fun validateInput(uiState: ArtistDetails = newArtistUiState.artistDetails): Boolean {
         return with(uiState) {
@@ -72,7 +94,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     }
 
     fun getArtistById(id: String): Artist? {
-        return artists.value.find { it.id == id.toInt() }
+        return _artists.value.find { it.id == id.toInt() }
     }
 
     fun updateUiState(artistDetails: ArtistDetails) {
@@ -124,12 +146,19 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         )
     }
 
+    /**
+     * Callback of TextField
+     */
+    fun onSearchTextChanged(text: String) {
+        _queryText.value = text
+    }
+
 
     init {
         // Collect the flow and update _submissions
         viewModelScope.launch {
             repository.getAllArtists().collect { submissionsList ->
-                artists.value = submissionsList
+                _artists.value = submissionsList
             }
         }
     }

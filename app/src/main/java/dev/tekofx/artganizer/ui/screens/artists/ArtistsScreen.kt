@@ -14,6 +14,7 @@ import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
@@ -31,6 +32,7 @@ fun ArtistScreen(
 ) {
 
     val artists by artistsViewModel.artists.collectAsState()
+    val queryText by artistsViewModel.queryText.collectAsState()
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -53,18 +55,17 @@ fun ArtistScreen(
                 )
             },
             bottomBar = {
-                SearchBar()
+                SearchBar(
+                    queryText = queryText,
+                    onValueChange = { artistsViewModel.onSearchTextChanged(it) })
             }
         ) {
             LazyColumn {
                 items(artists) { artist ->
-                    ArtistCard(artist, navHostController)
+                    ArtistCard(artist, navHostController, modifier = Modifier.animateItem())
                 }
             }
-
         }
-
-
     }
 
 }
