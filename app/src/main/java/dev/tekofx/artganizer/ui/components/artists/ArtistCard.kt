@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,9 +42,11 @@ fun ArtistCard(artist: Artist, navHostController: NavHostController) {
         ) {
 
             Avatar(
-                artist.imagePath, artist.name, modifier = Modifier
-                    .size(50.dp)
-                    .weight(1f)
+                artist.imagePath,
+                artist.name,
+                modifier = Modifier
+                    .weight(1f),
+                size = 100.dp
             )
             Column(
                 modifier = Modifier

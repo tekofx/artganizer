@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,6 +48,7 @@ fun ArtistDetailsScreen(
                 artistsViewModel.showPopup()
                 artistsViewModel.deleteArtist(context, artist)
                 navHostController.popBackStack()
+                artistsViewModel.hidePopup()
             },
             onDismiss = {
                 artistsViewModel.hidePopup()
@@ -62,7 +62,7 @@ fun ArtistDetailsScreen(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(artist.imagePath, artist.name, modifier = Modifier.size(250.dp))
+            Avatar(artist.imagePath, artist.name, size = 250.dp)
             Text(
                 text = artist.name,
                 style = MaterialTheme.typography.headlineLarge,

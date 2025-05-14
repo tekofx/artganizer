@@ -1,13 +1,14 @@
 package dev.tekofx.artganizer.ui.components
 
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
@@ -15,7 +16,8 @@ import coil.request.ImageRequest
 fun Avatar(
     imagePath: String?,
     fallbackText: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Dp
 ) {
     if (imagePath != null) {
         AsyncImage(
@@ -26,9 +28,10 @@ fun Avatar(
             contentScale = ContentScale.Crop,
             modifier = modifier
                 .clip(CircleShape)
+                .size(size)
                 .aspectRatio(1f)
         )
     } else {
-        EmptyAvatar(fallbackText, fallbackText, size = 50.dp)
+        EmptyAvatar(fallbackText, fallbackText, size = size)
     }
 }

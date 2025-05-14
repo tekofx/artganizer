@@ -59,7 +59,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
     private fun validateInput(uiState: ArtistDetails = newArtistUiState.artistDetails): Boolean {
         return with(uiState) {
-            true
+            uiState.name.isNotEmpty()
         }
     }
 
@@ -110,6 +110,10 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         }
         if (validateInput()) {
             repository.insertArtist(newArtistUiState.artistDetails.toArtist())
+            newArtistUiState = newArtistUiState.copy(
+                artistDetails = ArtistDetails(),
+                isEntryValid = false
+            )
         }
     }
 

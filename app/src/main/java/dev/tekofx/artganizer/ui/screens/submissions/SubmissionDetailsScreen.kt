@@ -51,6 +51,7 @@ fun SubmissionDetailsScreen(
                 submissionsViewModel.showPopup()
                 submissionsViewModel.deleteSubmission(context, submission)
                 navHostController.popBackStack()
+                submissionsViewModel.hidePopup()
             },
             onDismiss = {
                 submissionsViewModel.hidePopup()
