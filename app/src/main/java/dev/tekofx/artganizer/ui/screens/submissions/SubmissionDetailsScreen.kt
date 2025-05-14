@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -24,6 +26,7 @@ import coil.request.ImageRequest
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
+import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import dev.tekofx.artganizer.utils.dateToString
@@ -31,10 +34,28 @@ import java.util.Date
 
 @Composable
 fun SubmissionDetailsScreen(
-    submission: Submission, submissionsViewModel: SubmissionsViewModel,
+    submission: Submission,
+    submissionsViewModel: SubmissionsViewModel,
     navHostController: NavHostController
 ) {
     val context = LocalContext.current
+    val showPopup by submissionsViewModel.showPopup.collectAsState()
+
+    if (showPopup) {
+        ConfirmationPopup(
+            title = "Confirm Action",
+            message = "Are you sure you want to proceed?",
+            onConfirm = {
+                submissionsViewModel.showPopup()
+                submissionsViewModel.deleteSubmission(context, submission)
+                navHostController.popBackStack()
+                // Handle confirmation action
+            },
+            onDismiss = {
+                submissionsViewModel.hidePopup()
+            }
+        )
+    }
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -62,13 +83,10 @@ fun SubmissionDetailsScreen(
             }
             ImageInfo(submission)
             Button(onClick = {
-                submissionsViewModel.deleteSubmission(context, submission)
-                navHostController.popBackStack()
+                submissionsViewModel.showPopup()
             }) {
                 Text(text = "Delete")
             }
-
-
         }
     }
 }

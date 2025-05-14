@@ -80,6 +80,8 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     // Data
     val submissions = MutableStateFlow<List<Submission>>(emptyList())
 
+    val showPopup = MutableStateFlow(false)
+
 
     private fun validateInput(uiState: SubmissionDetails = newSubmissionUiState.submissionDetails): Boolean {
         return with(uiState) {
@@ -104,6 +106,14 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
             repository.deleteSubmission(submission)
             removeImageFromInternalStorage(context, submission.imagePath)
         }
+    }
+
+    fun showPopup() {
+        showPopup.value = true
+    }
+
+    fun hidePopup() {
+        showPopup.value = false
     }
 
     suspend fun saveSubmission(context: Context) {
