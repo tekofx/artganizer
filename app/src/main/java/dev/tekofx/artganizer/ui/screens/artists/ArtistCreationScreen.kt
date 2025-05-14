@@ -22,7 +22,7 @@ fun ArtistCreationScreen(artistsViewModel: ArtistsViewModel, navHostController: 
     ) {
         ArtistForm(
             artistsViewModel.newArtistUiState,
-            onItemValueChange = { newValue -> artistsViewModel.updateUiState(newValue) },
+            onItemValueChange = { newValue -> artistsViewModel.updateNewUiState(newValue) },
             onSaveClick = {
                 navHostController.popBackStack()
                 scope.launch { artistsViewModel.saveArtist(context) }

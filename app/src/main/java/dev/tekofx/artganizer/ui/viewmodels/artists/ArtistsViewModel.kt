@@ -49,14 +49,24 @@ fun Artist.toArtistDetails(): ArtistDetails = ArtistDetails(
     imagePath = imagePath
 )
 
+fun ArtistUiState.toArtist(): Artist = Artist(
+    id = artistDetails.id,
+    name = artistDetails.name,
+    imagePath = artistDetails.imagePath,
+    socialNetworks = artistDetails.socialNetworks
+)
 
 class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() {
 
     var newArtistUiState by mutableStateOf(ArtistUiState())
         private set
 
+    var currentArtistUiState by mutableStateOf(ArtistUiState())
+        private set
 
     val showPopup = MutableStateFlow(false)
+
+    val showEditArtist = MutableStateFlow(false)
 
     private val _queryText = MutableStateFlow("")
     val queryText = _queryText.asStateFlow()
@@ -93,11 +103,21 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         showPopup.value = false
     }
 
-    fun getArtistById(id: String): Artist? {
-        return _artists.value.find { it.id == id.toInt() }
+    fun setShowEditArtist(show: Boolean) {
+        showEditArtist.value = show
     }
 
-    fun updateUiState(artistDetails: ArtistDetails) {
+    fun setCurrentUiState(artist: Artist) {
+        currentArtistUiState = artist.toArtisUiState()
+    }
+
+    fun getArtistById(id: String) {
+        currentArtistUiState =
+            _artists.value.find { it.id == id.toInt() }?.toArtisUiState()
+                ?: ArtistUiState()
+    }
+
+    fun updateNewUiState(artistDetails: ArtistDetails) {
         newArtistUiState =
             ArtistUiState(
                 artistDetails = artistDetails,
@@ -105,9 +125,17 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
             )
     }
 
-    fun deleteArtist(artist: Artist) {
+    fun updateCurrentUiState(artistDetails: ArtistDetails) {
+        currentArtistUiState =
+            ArtistUiState(
+                artistDetails = artistDetails,
+                isEntryValid = validateInput(artistDetails)
+            )
+    }
+
+    fun deleteArtist(artist: ArtistUiState) {
         viewModelScope.launch {
-            repository.deleteArtist(artist)
+            repository.deleteArtist(artist.toArtist())
         }
     }
 

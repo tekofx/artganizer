@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -13,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,24 +21,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
+import dev.tekofx.artganizer.ui.components.artists.ArtistForm
 import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
+import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.artists.toArtist
+import kotlinx.coroutines.launch
 import java.util.Date
 
 @Composable
 fun ArtistDetailsScreen(
-    artist: Artist,
     artistsViewModel: ArtistsViewModel,
     navHostController: NavHostController
 ) {
-    val context = LocalContext.current
     val showPopup by artistsViewModel.showPopup.collectAsState()
-
+    val showEditArtist by artistsViewModel.showEditArtist.collectAsState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     if (showPopup) {
         ConfirmationPopup(
@@ -46,7 +49,7 @@ fun ArtistDetailsScreen(
             message = "Are you sure you want to proceed?",
             onConfirm = {
                 artistsViewModel.showPopup()
-                artistsViewModel.deleteArtist(artist)
+                artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
                 navHostController.popBackStack()
                 artistsViewModel.hidePopup()
             },
@@ -56,25 +59,53 @@ fun ArtistDetailsScreen(
         )
     }
     Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Avatar(artist.imagePath, artist.name, size = 250.dp)
-            Text(
-                text = artist.name,
-                style = MaterialTheme.typography.headlineLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
+        if (showEditArtist) {
+            ArtistForm(
+                artistsViewModel.currentArtistUiState,
+                onItemValueChange = { newValue -> artistsViewModel.updateCurrentUiState(newValue) },
+                onSaveClick = {
+                    scope.launch { artistsViewModel.saveArtist(context) }
+                    artistsViewModel.setShowEditArtist(false)
+                },
             )
-            SocialNetworks(artist.socialNetworks)
-            Button(onClick = {
-                artistsViewModel.showPopup()
-            }) {
-                Text(text = "Delete")
+        } else {
+
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Avatar(
+                    artistsViewModel.currentArtistUiState.toArtist().imagePath,
+                    artistsViewModel.currentArtistUiState.toArtist().name,
+                    size = 250.dp
+                )
+                Text(
+                    text = artistsViewModel.currentArtistUiState.toArtist().name,
+                    style = MaterialTheme.typography.headlineLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                SocialNetworks(artistsViewModel.currentArtistUiState.toArtist().socialNetworks)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    ButtonWithIcon(
+                        onClick = { artistsViewModel.setShowEditArtist(true) },
+                        text = "Edit",
+                        iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                    )
+                    ButtonWithIcon(
+                        onClick = {
+                            artistsViewModel.showPopup()
+                        },
+                        text = "Delete",
+                        iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
             }
         }
     }

@@ -20,15 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.entities.Artist
-import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.theme.AppTheme
 
 @Composable
 fun ArtistCard(
     artist: Artist,
-    navHostController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     Surface(
         modifier = modifier
@@ -37,7 +36,7 @@ fun ArtistCard(
             .height(150.dp),
         color = Color.LightGray,
         shape = MaterialTheme.shapes.medium,
-        onClick = { navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.id}") }
+        onClick = { onClick() }
     ) {
         Row(
             modifier = Modifier
@@ -84,6 +83,6 @@ fun ArtistCardPreview() {
     )
     val navHostController = NavHostController(LocalContext.current)
     AppTheme {
-        ArtistCard(artist, navHostController)
+        ArtistCard(artist, onClick = {})
     }
 }

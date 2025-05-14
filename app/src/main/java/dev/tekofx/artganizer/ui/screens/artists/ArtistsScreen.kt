@@ -62,7 +62,14 @@ fun ArtistScreen(
         ) {
             LazyColumn {
                 items(artists) { artist ->
-                    ArtistCard(artist, navHostController, modifier = Modifier.animateItem())
+                    ArtistCard(
+                        artist,
+                        onClick = {
+                            navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.id}")
+                            artistsViewModel.setCurrentUiState(artist)
+                        },
+                        modifier = Modifier.animateItem(),
+                    )
                 }
             }
         }
