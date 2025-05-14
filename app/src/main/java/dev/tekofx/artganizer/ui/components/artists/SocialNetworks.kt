@@ -1,14 +1,18 @@
 package dev.tekofx.artganizer.ui.components.artists
 
+import android.content.Intent
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
+import androidx.core.net.toUri
 import dev.tekofx.artganizer.ui.IconResource
+import dev.tekofx.artganizer.ui.utils.getSocialNetworkIconRes
 
 @Composable
 fun SocialNetworks(
@@ -27,17 +31,22 @@ fun SocialNetworks(
 fun SocialNetworkItem(
     socialNetwork: String,
 ) {
-    val iconRes = when {
-        socialNetwork.contains("twitter", ignoreCase = true) -> R.drawable.brand_x
-        socialNetwork.contains("instagram", ignoreCase = true) -> R.drawable.brand_instagram
-        socialNetwork.contains("t.me", ignoreCase = true) -> R.drawable.brand_telegram
-        else -> R.drawable.world
-    }
+    val context = LocalContext.current
 
-    Icon(
-        painter = IconResource.fromDrawableResource(iconRes).asPainterResource(),
-        contentDescription = "Social Network Icon",
-        modifier = Modifier.size(50.dp)
-    )
+    IconButton(
+        onClick = {
+            val intent = Intent(Intent.ACTION_VIEW, socialNetwork.toUri())
+            context.startActivity(intent)
+        }) {
+
+
+        Icon(
+            painter = IconResource
+                .fromDrawableResource(getSocialNetworkIconRes(socialNetwork))
+                .asPainterResource(),
+            contentDescription = "Social Network Icon",
+            modifier = Modifier.size(50.dp)
+        )
+    }
 
 }
