@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.ui.components.input.FormAvatar
+import dev.tekofx.artganizer.ui.components.input.SocialNetworkInput
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
 import kotlinx.coroutines.launch
@@ -86,6 +87,16 @@ fun ArtistFormFields(
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
+        )
+        SocialNetworkInput(
+            socialNetworks = artistsDetails.socialNetworks,
+            onAddSocialNetwork = {
+                onValueChange(
+                    artistsDetails.copy(
+                        socialNetworks = artistsDetails.socialNetworks + it
+                    )
+                )
+            }
         )
 
     }

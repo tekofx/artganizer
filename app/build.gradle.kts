@@ -66,4 +66,7 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    // Gson
+    implementation(libs.gson)
 }

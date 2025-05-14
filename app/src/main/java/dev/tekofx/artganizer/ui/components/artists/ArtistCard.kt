@@ -74,6 +74,7 @@ fun ArtistCardPreview() {
         id = 1,
         name = "John Doe",
         imagePath = null,
+        socialNetworks = emptyList()
     )
     val navHostController = NavHostController(LocalContext.current)
     AppTheme {

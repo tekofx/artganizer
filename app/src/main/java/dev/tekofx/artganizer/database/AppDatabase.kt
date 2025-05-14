@@ -14,7 +14,7 @@ import dev.tekofx.artganizer.entities.Submission
  * Database class with a singleton Instance object.
  */
 @Database(entities = [Submission::class, Artist::class], version = 1, exportSchema = false)
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, StringListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun submissionDao(): ISubmissionDao

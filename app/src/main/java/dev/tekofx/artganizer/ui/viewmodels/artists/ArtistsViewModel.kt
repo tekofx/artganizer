@@ -22,13 +22,15 @@ data class ArtistUiState(
 data class ArtistDetails(
     val id: Int = 0,
     val name: String = "",
-    val imagePath: String? = null
+    val imagePath: String? = null,
+    val socialNetworks: List<String> = emptyList()
 )
 
 fun ArtistDetails.toArtist(): Artist = Artist(
     id = id,
     name = name,
-    imagePath = imagePath
+    imagePath = imagePath,
+    socialNetworks = socialNetworks
 )
 
 fun Artist.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =

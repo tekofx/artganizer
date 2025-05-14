@@ -27,6 +27,7 @@ import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
+import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import java.util.Date
 
@@ -69,6 +70,7 @@ fun ArtistDetailsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
             )
+            SocialNetworks(artist.socialNetworks)
             Button(onClick = {
                 artistsViewModel.showPopup()
             }) {

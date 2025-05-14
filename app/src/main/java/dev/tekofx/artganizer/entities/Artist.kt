@@ -8,5 +8,6 @@ data class Artist(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    val imagePath: String?
+    val imagePath: String?,
+    val socialNetworks: List<String>,
 )
