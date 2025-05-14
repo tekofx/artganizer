@@ -46,7 +46,7 @@ fun ArtistDetailsScreen(
             message = "Are you sure you want to proceed?",
             onConfirm = {
                 artistsViewModel.showPopup()
-                artistsViewModel.deleteArtist(context, artist)
+                artistsViewModel.deleteArtist(artist)
                 navHostController.popBackStack()
                 artistsViewModel.hidePopup()
             },

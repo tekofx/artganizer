@@ -105,7 +105,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
             )
     }
 
-    fun deleteArtist(context: Context, artist: Artist) {
+    fun deleteArtist(artist: Artist) {
         viewModelScope.launch {
             repository.deleteArtist(artist)
         }
@@ -139,12 +139,6 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         }
     }
 
-    fun setNewArtistDetails(artistDetails: ArtistDetails) {
-        newArtistUiState = newArtistUiState.copy(
-            artistDetails = artistDetails,
-            isEntryValid = validateInput(artistDetails)
-        )
-    }
 
     /**
      * Callback of TextField

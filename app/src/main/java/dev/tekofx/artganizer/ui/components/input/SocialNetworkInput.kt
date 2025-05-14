@@ -41,7 +41,6 @@ fun SocialNetworkInput(
                 // Handle removal of social network
                 onRemoveSocialNetwork(url)
             },
-            modifier = Modifier.padding(bottom = 8.dp)
         )
 
         // Input field to add a new social network
@@ -84,7 +83,6 @@ fun SocialNetworkInput(
 fun SocialNetworksList(
     socialNetworks: List<String>,
     onRemoveSocialNetwork: (String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     socialNetworks.forEach { url ->
 
