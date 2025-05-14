@@ -66,7 +66,6 @@ fun ArtistScreen(
                         artist,
                         onClick = {
                             navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.id}")
-                            artistsViewModel.setCurrentUiState(artist)
                         },
                         modifier = Modifier.animateItem(),
                     )

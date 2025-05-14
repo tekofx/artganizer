@@ -28,6 +28,7 @@ import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.artists.ArtistForm
 import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
+import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.toArtist
 import kotlinx.coroutines.launch
@@ -48,13 +49,13 @@ fun ArtistDetailsScreen(
             title = "Confirm Action",
             message = "Are you sure you want to proceed?",
             onConfirm = {
-                artistsViewModel.showPopup()
+                artistsViewModel.setShowPopup(true)
                 artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
                 navHostController.popBackStack()
-                artistsViewModel.hidePopup()
+                artistsViewModel.setShowPopup(false)
             },
             onDismiss = {
-                artistsViewModel.hidePopup()
+                artistsViewModel.setShowPopup(false)
             }
         )
     }
@@ -64,12 +65,11 @@ fun ArtistDetailsScreen(
                 artistsViewModel.currentArtistUiState,
                 onItemValueChange = { newValue -> artistsViewModel.updateCurrentUiState(newValue) },
                 onSaveClick = {
-                    scope.launch { artistsViewModel.saveArtist(context) }
+                    scope.launch { artistsViewModel.editArtist(context) }
                     artistsViewModel.setShowEditArtist(false)
                 },
             )
         } else {
-
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
@@ -79,7 +79,7 @@ fun ArtistDetailsScreen(
                 Avatar(
                     artistsViewModel.currentArtistUiState.toArtist().imagePath,
                     artistsViewModel.currentArtistUiState.toArtist().name,
-                    size = 250.dp
+                    size = AVATAR_SIZE
                 )
                 Text(
                     text = artistsViewModel.currentArtistUiState.toArtist().name,
@@ -99,7 +99,7 @@ fun ArtistDetailsScreen(
                     )
                     ButtonWithIcon(
                         onClick = {
-                            artistsViewModel.showPopup()
+                            artistsViewModel.setShowPopup(true)
                         },
                         text = "Delete",
                         iconResource = IconResource.fromDrawableResource(R.drawable.trash),

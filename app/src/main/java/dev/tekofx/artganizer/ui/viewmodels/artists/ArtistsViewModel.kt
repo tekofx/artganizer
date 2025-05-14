@@ -59,22 +59,22 @@ fun ArtistUiState.toArtist(): Artist = Artist(
 
 class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() {
 
+    // Data states
     var newArtistUiState by mutableStateOf(ArtistUiState())
         private set
-
     var currentArtistUiState by mutableStateOf(ArtistUiState())
         private set
 
+    // UI State
     val showPopup = MutableStateFlow(false)
-
     val showEditArtist = MutableStateFlow(false)
 
+    // Inputs
     private val _queryText = MutableStateFlow("")
     val queryText = _queryText.asStateFlow()
 
     // Data
     private val _artists = MutableStateFlow<List<Artist>>(emptyList())
-
     val artists = _artists.combine(_queryText) { artists, query ->
         if (query.isBlank()) {
             artists
@@ -89,27 +89,18 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         _artists.value
     )
 
-
     private fun validateInput(uiState: ArtistDetails = newArtistUiState.artistDetails): Boolean {
         return with(uiState) {
             uiState.name.isNotEmpty()
         }
     }
 
-    fun showPopup() {
-        showPopup.value = true
-    }
-
-    fun hidePopup() {
-        showPopup.value = false
+    fun setShowPopup(show: Boolean) {
+        showPopup.value = show
     }
 
     fun setShowEditArtist(show: Boolean) {
         showEditArtist.value = show
-    }
-
-    fun setCurrentUiState(artist: Artist) {
-        currentArtistUiState = artist.toArtisUiState()
     }
 
     fun getArtistById(id: String) {
@@ -144,7 +135,6 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         val imagePath = newArtistUiState.artistDetails.imagePath
 
         if (imagePath != null) {
-
             // Save image to private storage
             val newImagePath =
                 saveImageToInternalStorage(
@@ -163,6 +153,33 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
             repository.insertArtist(newArtistUiState.artistDetails.toArtist())
             newArtistUiState = newArtistUiState.copy(
                 artistDetails = ArtistDetails(),
+                isEntryValid = false
+            )
+        }
+    }
+
+    suspend fun editArtist(context: Context) {
+        val imagePath = currentArtistUiState.artistDetails.imagePath
+
+        if (imagePath != null) {
+            // Save image to private storage
+            val newImagePath =
+                saveImageToInternalStorage(
+                    context,
+                    imagePath.toUri()
+                )
+
+            currentArtistUiState = currentArtistUiState.copy(
+                artistDetails = currentArtistUiState.artistDetails.copy(
+                    imagePath = newImagePath.toString()
+                )
+            )
+
+        }
+        if (validateInput(currentArtistUiState.artistDetails)) {
+            repository.updateArtist(currentArtistUiState.artistDetails.toArtist())
+            currentArtistUiState = currentArtistUiState.copy(
+                artistDetails = currentArtistUiState.artistDetails,
                 isEntryValid = false
             )
         }
