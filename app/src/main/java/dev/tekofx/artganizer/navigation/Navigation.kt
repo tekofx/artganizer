@@ -74,7 +74,7 @@ fun Navigation(
             route = NavigateDestinations.ARTIST_CREATION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            ArtistCreationScreen(artistsViewModel)
+            ArtistCreationScreen(artistsViewModel, navHostController)
         }
 
         composable(
