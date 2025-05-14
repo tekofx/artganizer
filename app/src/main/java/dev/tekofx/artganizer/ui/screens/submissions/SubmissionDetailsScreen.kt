@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
 import dev.tekofx.artganizer.utils.dateToString
 import java.util.Date
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SubmissionDetailsScreen(
     submission: Submission,
@@ -55,11 +57,12 @@ fun SubmissionDetailsScreen(
             }
         )
     }
-    Scaffold { paddingValues ->
+    Scaffold {
         Column(
             modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxWidth()
+                .padding(10.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -76,8 +79,15 @@ fun SubmissionDetailsScreen(
                     .fillMaxWidth()
             )
             Text(submission.description)
-            Row {
-                Text("Rating")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Rating",
+                    style = MaterialTheme.typography.headlineSmall,
+                )
                 Rating(submission.rating)
             }
             ImageInfo(submission)

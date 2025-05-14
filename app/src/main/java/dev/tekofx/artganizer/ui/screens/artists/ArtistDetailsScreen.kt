@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,9 +58,10 @@ fun ArtistDetailsScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(artist.imagePath, artist.name)
+            Avatar(artist.imagePath, artist.name, modifier = Modifier.size(250.dp))
             Text(
                 text = artist.name,
                 style = MaterialTheme.typography.headlineLarge,
