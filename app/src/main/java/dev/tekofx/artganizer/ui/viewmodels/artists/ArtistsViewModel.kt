@@ -49,6 +49,9 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     var newArtistUiState by mutableStateOf(ArtistUiState())
         private set
 
+
+    val showPopup = MutableStateFlow(false)
+
     // Data
     val artists = MutableStateFlow<List<Artist>>(emptyList())
 
@@ -56,6 +59,14 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         return with(uiState) {
             true
         }
+    }
+
+    fun showPopup() {
+        showPopup.value = true
+    }
+
+    fun hidePopup() {
+        showPopup.value = false
     }
 
     fun getArtistById(id: String): Artist? {

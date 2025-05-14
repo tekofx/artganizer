@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +25,7 @@ import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
+import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import java.util.Date
 
@@ -33,6 +36,23 @@ fun ArtistDetailsScreen(
     navHostController: NavHostController
 ) {
     val context = LocalContext.current
+    val showPopup by artistsViewModel.showPopup.collectAsState()
+
+
+    if (showPopup) {
+        ConfirmationPopup(
+            title = "Confirm Action",
+            message = "Are you sure you want to proceed?",
+            onConfirm = {
+                artistsViewModel.showPopup()
+                artistsViewModel.deleteArtist(context, artist)
+                navHostController.popBackStack()
+            },
+            onDismiss = {
+                artistsViewModel.hidePopup()
+            }
+        )
+    }
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -48,8 +68,7 @@ fun ArtistDetailsScreen(
                     .fillMaxWidth()
             )
             Button(onClick = {
-                artistsViewModel.deleteArtist(context, artist)
-                navHostController.popBackStack()
+                artistsViewModel.showPopup()
             }) {
                 Text(text = "Delete")
             }
