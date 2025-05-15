@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -29,97 +30,136 @@ import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.Rating
+import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.gallery.toSubmission
 import dev.tekofx.artganizer.utils.dateToString
+import kotlinx.coroutines.launch
 import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SubmissionDetailsScreen(
-    submission: Submission,
     submissionsViewModel: SubmissionsViewModel,
     navHostController: NavHostController
 ) {
     val context = LocalContext.current
     val showPopup by submissionsViewModel.showPopup.collectAsState()
+    val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
+    val submission = submissionsViewModel.currentSubmissionUiState.toSubmission()
+    val scope = rememberCoroutineScope()
 
     if (showPopup) {
         ConfirmationPopup(
             title = "Confirm Action",
             message = "Are you sure you want to proceed?",
             onConfirm = {
-                submissionsViewModel.showPopup()
-                submissionsViewModel.deleteSubmission(context, submission)
+                submissionsViewModel.setShowPopup(true)
+                submissionsViewModel.deleteSubmission(
+                    context,
+                    submission
+                )
                 navHostController.popBackStack()
-                submissionsViewModel.hidePopup()
+                submissionsViewModel.setShowPopup(false)
             },
             onDismiss = {
-                submissionsViewModel.hidePopup()
+                submissionsViewModel.setShowPopup(false)
             }
         )
     }
     Scaffold {
-        Column(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(submission.imagePath)
-                    .build(),
-                contentDescription = "icon",
-                contentScale = ContentScale.Inside,
-            )
-            if (submission.title.isNotEmpty()) {
-                Text(
-                    text = submission.title,
-                    style = MaterialTheme.typography.headlineLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
-            if (submission.description.isNotEmpty()) {
-
-                Text(submission.description)
-            }
-            if (submission.rating > 0) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        "Rating",
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                    Rating(submission.rating)
+        if (showEdit) {
+            SubmissionsForm(
+                submissionsViewModel.currentSubmissionUiState,
+                onItemValueChange = {
+                    submissionsViewModel.updateCurrentUiState(it)
+                },
+                onSaveClick = {
+                    scope.launch { submissionsViewModel.editSubmission() }
+                    submissionsViewModel.setShowEditSubmission(false)
                 }
-            }
-            ImageInfo(submission)
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                ButtonWithIcon(
-                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
-                    onClick = {},
-                    text = "Edit"
-                )
-                ButtonWithIcon(
-                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
-                    onClick = {
-                        submissionsViewModel.showPopup()
-                    },
-                    text = "Delete",
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+            )
+
+        } else {
+            SubmissionInfo(
+                submission,
+                onDelete = {
+                    submissionsViewModel.setShowPopup(true)
+                },
+                onEdit = {
+                    submissionsViewModel.setShowEditSubmission(true)
+                }
+            )
         }
     }
 }
 
+
+@Composable
+fun SubmissionInfo(
+    submission: Submission,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(submission.imagePath)
+                .build(),
+            contentDescription = "icon",
+            contentScale = ContentScale.Inside,
+        )
+        if (submission.title.isNotEmpty()) {
+            Text(
+                text = submission.title,
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+        if (submission.description.isNotEmpty()) {
+
+            Text(submission.description)
+        }
+        if (submission.rating > 0) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Rating",
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                Rating(submission.rating)
+            }
+        }
+        ImageInfo(submission)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            ButtonWithIcon(
+                iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                onClick = { onEdit() },
+                text = "Edit"
+            )
+            ButtonWithIcon(
+                iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                onClick = {
+                    onDelete()
+                },
+                text = "Delete",
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+    }
+}
 
 @Composable
 fun ImageInfo(submission: Submission) {

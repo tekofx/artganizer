@@ -71,16 +71,34 @@ fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
     extension = extension
 )
 
+fun SubmissionUiState.toSubmission(): Submission = Submission(
+    id = submissionDetails.id,
+    title = submissionDetails.title,
+    description = submissionDetails.description,
+    imagePath = submissionDetails.imagePath.toString(),
+    rating = submissionDetails.rating,
+    date = stringToDate(submissionDetails.date) ?: Date(),
+    sizeInMb = submissionDetails.sizeInMb,
+    dimensions = submissionDetails.dimensions,
+    extension = submissionDetails.extension,
+    artistId = submissionDetails.artistId
+)
+
 
 class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
     var newSubmissionUiState by mutableStateOf(SubmissionUiState())
         private set
 
+    var currentSubmissionUiState by mutableStateOf(SubmissionUiState())
+        private set
+
     // Data
     val submissions = MutableStateFlow<List<Submission>>(emptyList())
 
+    // Ui State
     val showPopup = MutableStateFlow(false)
+    val showEditSubmission = MutableStateFlow(false)
 
 
     private fun validateInput(uiState: SubmissionDetails = newSubmissionUiState.submissionDetails): Boolean {
@@ -89,11 +107,20 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         }
     }
 
-    fun getSubmissionById(id: String): Submission? {
-        return submissions.value.find { it.id == id.toInt() }
+    fun getSubmissionById(id: String) {
+        viewModelScope.launch {
+            val submission = submissions.value.find { it.id == id.toInt() }
+            if (submission != null) {
+                currentSubmissionUiState =
+                    SubmissionUiState(
+                        submissionDetails = submission.toSubmissionDetails(),
+                        isEntryValid = validateInput(submission.toSubmissionDetails())
+                    )
+            }
+        }
     }
 
-    fun updateUiState(submissionDetails: SubmissionDetails) {
+    fun updateNewUiState(submissionDetails: SubmissionDetails) {
         newSubmissionUiState =
             SubmissionUiState(
                 submissionDetails = submissionDetails,
@@ -101,19 +128,27 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
             )
     }
 
+    fun updateCurrentUiState(submissionDetails: SubmissionDetails) {
+        currentSubmissionUiState =
+            SubmissionUiState(
+                submissionDetails = submissionDetails,
+                isEntryValid = validateInput(submissionDetails)
+            )
+    }
+
+    fun setShowEditSubmission(show: Boolean) {
+        showEditSubmission.value = show
+    }
+
+    fun setShowPopup(show: Boolean) {
+        showPopup.value = show
+    }
+
     fun deleteSubmission(context: Context, submission: Submission) {
         viewModelScope.launch {
             repository.deleteSubmission(submission)
             removeImageFromInternalStorage(context, submission.imagePath)
         }
-    }
-
-    fun showPopup() {
-        showPopup.value = true
-    }
-
-    fun hidePopup() {
-        showPopup.value = false
     }
 
     suspend fun saveSubmission(context: Context) {
@@ -138,6 +173,13 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
         if (validateInput()) {
             repository.insertSubmission(newSubmission)
+        }
+    }
+
+    suspend fun editSubmission() {
+        val submission = currentSubmissionUiState.submissionDetails.toSubmission()
+        if (validateInput()) {
+            repository.updateSubmission(submission)
         }
     }
 

@@ -55,11 +55,8 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) { backStackEntry ->
             val submissionId = backStackEntry.arguments?.getString("submissionId")
-            // FIXME: Handle null submissionId
-            val submission = submissionsViewModel.getSubmissionById(submissionId!!)
-            if (submission != null) {
-                SubmissionDetailsScreen(submission, submissionsViewModel, navHostController)
-            }
+            submissionsViewModel.getSubmissionById(submissionId!!)
+            SubmissionDetailsScreen(submissionsViewModel, navHostController)
         }
 
         // Artists
