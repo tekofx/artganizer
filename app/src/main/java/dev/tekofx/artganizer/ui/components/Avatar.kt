@@ -32,6 +32,6 @@ fun Avatar(
                 .aspectRatio(1f)
         )
     } else {
-        EmptyAvatar(fallbackText, fallbackText, size = size)
+        EmptyAvatar(fallbackText, size = size)
     }
 }

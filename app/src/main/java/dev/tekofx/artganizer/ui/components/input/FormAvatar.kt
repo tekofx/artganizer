@@ -17,6 +17,7 @@ import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 
 @Composable
 fun FormAvatar(
+    fallbackText: String,
     imagePath: String?,
     onImageSelect: () -> Unit
 ) {
@@ -30,7 +31,7 @@ fun FormAvatar(
         ) {
             Avatar(
                 imagePath = imagePath,
-                fallbackText = "No Image",
+                fallbackText = fallbackText,
                 size = AVATAR_SIZE
             )
         }

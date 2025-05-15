@@ -50,6 +50,7 @@ fun ArtistForm(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         FormAvatar(
+            fallbackText = artistUiState.artistDetails.name,
             artistUiState.artistDetails.imagePath,
             onImageSelect = { launcher.launch("image/*") })
 

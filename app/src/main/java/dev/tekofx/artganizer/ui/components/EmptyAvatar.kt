@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.components
 
-import androidx.annotation.ColorInt
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,30 +15,27 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.ColorUtils
-import kotlin.math.absoluteValue
 
-@ColorInt
-fun String.toHslColor(saturation: Float = 0.5f, lightness: Float = 0.4f): Int {
-    val hue = fold(0) { acc, char -> char.code + acc * 37 } % 360
-    return ColorUtils.HSLToColor(floatArrayOf(hue.absoluteValue.toFloat(), saturation, lightness))
-}
 
 @Composable
 fun EmptyAvatar(
-    id: String,
-    firstName: String,
+    name: String,
     modifier: Modifier = Modifier,
     size: Dp = 50.dp,
 ) {
     Box(modifier.size(size), contentAlignment = Alignment.Center) {
-        val color = remember(id, firstName) {
-            val name = listOf(firstName)
-                .joinToString(separator = "")
-                .uppercase()
-            Color("$id / $name".toHslColor())
+        val color = remember {
+            Color(
+                android.graphics.Color.HSVToColor(
+                    floatArrayOf(
+                        (0..360).random().toFloat(), // Random hue
+                        0.5f, // Saturation
+                        0.4f  // Lightness
+                    )
+                )
+            )
         }
-        val initials = (firstName.take(1)).uppercase()
+        val initials = (name.take(1)).uppercase()
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawCircle(SolidColor(color))
         }
