@@ -20,8 +20,8 @@ import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.submission.Gallery
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionDetails
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

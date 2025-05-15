@@ -29,8 +29,8 @@ import dev.tekofx.artganizer.ui.components.BottomNavigationBar
 import dev.tekofx.artganizer.ui.theme.AppTheme
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModelFactory
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModelFactory
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

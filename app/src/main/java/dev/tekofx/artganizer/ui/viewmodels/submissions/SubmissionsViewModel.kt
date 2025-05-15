@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.viewmodels.gallery
+package dev.tekofx.artganizer.ui.viewmodels.submissions
 
 
 import android.content.Context

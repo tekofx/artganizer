@@ -31,8 +31,8 @@ import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.gallery.toSubmission
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
 import dev.tekofx.artganizer.utils.dateToString
 import kotlinx.coroutines.launch
 import java.util.Date

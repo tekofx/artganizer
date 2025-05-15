@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionDetails
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionUiState
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
 
 @Composable
 fun SubmissionsForm(

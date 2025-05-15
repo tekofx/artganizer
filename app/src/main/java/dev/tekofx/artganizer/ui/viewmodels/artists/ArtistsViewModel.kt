@@ -75,19 +75,21 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
     // Data
     private val _artists = MutableStateFlow<List<Artist>>(emptyList())
-    val artists = _artists.combine(_queryText) { artists, query ->
-        if (query.isBlank()) {
-            artists
-        } else {
-            artists.filter {
-                it.name.contains(query, ignoreCase = true)
+    val artists = _artists
+        .combine(_queryText) { artists, query ->
+            if (query.isBlank()) {
+                artists
+            } else {
+                artists.filter {
+                    it.name.contains(query, ignoreCase = true)
+                }
             }
         }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        _artists.value
-    )
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            _artists.value
+        )
 
     private fun validateInput(uiState: ArtistDetails = newArtistUiState.artistDetails): Boolean {
         return with(uiState) {

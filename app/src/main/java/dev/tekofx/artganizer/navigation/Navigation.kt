@@ -20,7 +20,7 @@ import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 
 
 @Composable

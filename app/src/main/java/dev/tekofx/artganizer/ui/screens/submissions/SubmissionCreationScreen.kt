@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
-import dev.tekofx.artganizer.ui.viewmodels.gallery.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.launch
 
 
