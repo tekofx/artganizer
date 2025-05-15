@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components.input
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,35 +47,42 @@ fun SocialNetworkInput(
         // Input field to add a new social network
         var newSocialNetwork by remember { mutableStateOf("") }
 
-        OutlinedTextField(
-            value = newSocialNetwork,
-            onValueChange = { newSocialNetwork = it },
-            label = { Text("Add Social Network") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    painter = IconResource.fromDrawableResource(
-                        getSocialNetworkIconRes(
-                            newSocialNetwork
-                        )
-                    )
-                        .asPainterResource(),
-                    contentDescription = "Social Network Icon",
-                    modifier = Modifier.size(40.dp)
-                )
-            }
-        )
-        Button(
-            onClick = {
-                if (newSocialNetwork.isNotBlank()) {
-                    onAddSocialNetwork(newSocialNetwork)
-                    newSocialNetwork = ""
-                }
-            },
-            modifier = Modifier.padding(top = 8.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Add")
+            OutlinedTextField(
+                modifier = Modifier
+                    .weight(1f),
+                value = newSocialNetwork,
+                onValueChange = { newSocialNetwork = it },
+                label = { Text("Add Social Network") },
+                singleLine = true,
+                leadingIcon = {
+                    Icon(
+                        painter = IconResource.fromDrawableResource(
+                            getSocialNetworkIconRes(
+                                newSocialNetwork
+                            )
+                        )
+                            .asPainterResource(),
+                        contentDescription = "Social Network Icon",
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+            )
+            Button(
+                onClick = {
+                    if (newSocialNetwork.isNotBlank()) {
+                        onAddSocialNetwork(newSocialNetwork)
+                        newSocialNetwork = ""
+                    }
+                },
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Add")
+            }
         }
     }
 }
