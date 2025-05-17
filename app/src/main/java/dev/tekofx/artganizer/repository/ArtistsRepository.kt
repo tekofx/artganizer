@@ -13,7 +13,7 @@ class ArtistsRepository(private val artistsDao: IArtistDao) {
 
     fun getAllArtists() = artistsDao.getAllArtists()
 
-    fun getArtistWithSubmissions(artistId: Int) =
+    suspend fun getArtistWithSubmissions(artistId: Int) =
         artistsDao.getArtistWithSubmissions(artistId)
 
 }

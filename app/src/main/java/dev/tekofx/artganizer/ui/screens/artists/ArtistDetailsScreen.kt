@@ -28,9 +28,10 @@ import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.artists.ArtistForm
 import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
+import dev.tekofx.artganizer.ui.components.submission.Gallery
 import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.artists.toArtist
+import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistWithSubmissions
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -73,22 +74,24 @@ fun ArtistDetailsScreen(
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
+                    .padding(10.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Avatar(
-                    artistsViewModel.currentArtistUiState.toArtist().imagePath,
-                    artistsViewModel.currentArtistUiState.toArtist().name,
+                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.imagePath,
+                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
                     size = AVATAR_SIZE
                 )
                 Text(
-                    text = artistsViewModel.currentArtistUiState.toArtist().name,
+                    text = artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-                SocialNetworks(artistsViewModel.currentArtistUiState.toArtist().socialNetworks)
+                SocialNetworks(artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.socialNetworks)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
@@ -106,6 +109,10 @@ fun ArtistDetailsScreen(
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
+                Gallery(
+                    navHostController,
+                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().submissions
+                )
             }
         }
     }

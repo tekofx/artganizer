@@ -92,7 +92,11 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) { backStackEntry ->
             val artistId = backStackEntry.arguments?.getString("artistId")
-            artistsViewModel.getArtistById(artistId!!)
+            if (artistId == null) {
+                navHostController.popBackStack()
+                return@composable
+            }
+            artistsViewModel.getArtistWithSubmissions(artistId.toInt())
             ArtistDetailsScreen(artistsViewModel, navHostController)
         }
 

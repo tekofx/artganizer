@@ -9,6 +9,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
+import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.repository.ArtistsRepository
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,34 +29,49 @@ data class ArtistDetails(
     val id: Int = 0,
     val name: String = "",
     val imagePath: String? = null,
-    val socialNetworks: List<String> = emptyList()
+    val socialNetworks: List<String> = emptyList(),
+    val submissions: List<Submission> = emptyList()
+)
+
+fun ArtistDetails.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithSubmissions(
+    Artist(
+        id = id,
+        name = name,
+        imagePath = imagePath,
+        socialNetworks = socialNetworks
+    ),
+    submissions = submissions
 )
 
 fun ArtistDetails.toArtist(): Artist = Artist(
     id = id,
     name = name,
     imagePath = imagePath,
-    socialNetworks = socialNetworks
+    socialNetworks = socialNetworks,
 )
 
-fun Artist.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =
+fun ArtistWithSubmissions.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =
     ArtistUiState(
         artistDetails = this.toArtistDetails(),
         isEntryValid = isEntryValid
     )
 
-fun Artist.toArtistDetails(): ArtistDetails = ArtistDetails(
-    id = id,
-    name = name,
-    imagePath = imagePath,
-    socialNetworks = socialNetworks
+fun ArtistWithSubmissions.toArtistDetails(): ArtistDetails = ArtistDetails(
+    id = artist.id,
+    name = artist.name,
+    imagePath = artist.imagePath,
+    socialNetworks = artist.socialNetworks,
+    submissions = submissions
 )
 
-fun ArtistUiState.toArtist(): Artist = Artist(
-    id = artistDetails.id,
-    name = artistDetails.name,
-    imagePath = artistDetails.imagePath,
-    socialNetworks = artistDetails.socialNetworks
+fun ArtistUiState.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithSubmissions(
+    Artist(
+        id = artistDetails.id,
+        name = artistDetails.name,
+        imagePath = artistDetails.imagePath,
+        socialNetworks = artistDetails.socialNetworks
+    ),
+    submissions = artistDetails.submissions
 )
 
 class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() {
@@ -105,11 +122,17 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         showEditArtist.value = show
     }
 
-    fun getArtistById(id: String) {
-        currentArtistUiState =
-            _artists.value.find { it.id == id.toInt() }?.toArtisUiState()
-                ?: ArtistUiState()
+    fun getArtistWithSubmissions(id: Int) {
+        viewModelScope.launch {
+            val artist = repository.getArtistWithSubmissions(id)
+            currentArtistUiState =
+                ArtistUiState(
+                    artistDetails = artist.toArtistDetails(),
+                    isEntryValid = validateInput(artist.toArtistDetails())
+                )
+        }
     }
+
 
     fun updateNewUiState(artistDetails: ArtistDetails) {
         newArtistUiState =
@@ -129,7 +152,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
     fun deleteArtist(artist: ArtistUiState) {
         viewModelScope.launch {
-            repository.deleteArtist(artist.toArtist())
+            repository.deleteArtist(artist.toArtistWithSubmissions().artist)
         }
     }
 
@@ -152,7 +175,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
         }
         if (validateInput()) {
-            repository.insertArtist(newArtistUiState.artistDetails.toArtist())
+            repository.insertArtist(newArtistUiState.artistDetails.toArtistWithSubmissions().artist)
             newArtistUiState = newArtistUiState.copy(
                 artistDetails = ArtistDetails(),
                 isEntryValid = false
@@ -179,7 +202,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
         }
         if (validateInput(currentArtistUiState.artistDetails)) {
-            repository.updateArtist(currentArtistUiState.artistDetails.toArtist())
+            repository.updateArtist(currentArtistUiState.artistDetails.toArtistWithSubmissions().artist)
             currentArtistUiState = currentArtistUiState.copy(
                 artistDetails = currentArtistUiState.artistDetails,
                 isEntryValid = false
