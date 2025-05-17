@@ -16,11 +16,13 @@ import androidx.compose.ui.unit.dp
 fun SmallCard(
     title: String,
     imagePath: String?,
+    onClick: () -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
-        tonalElevation = 150.dp
+        tonalElevation = 150.dp,
+        onClick = { onClick() }
     ) {
         Row(
             modifier = Modifier.padding(10.dp),

@@ -126,7 +126,6 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     fun getSubmissionWithArtist(id: Int) {
         viewModelScope.launch {
             val submission = repository.getSubmissionWithArtist(id)
-            Log.d("SubmissionsViewModel", "Submission: $submission")
             currentSubmissionUiState =
                 SubmissionUiState(
                     submissionDetails = submission.toSubmissionDetails(),

@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import coil.request.ImageRequest
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
+import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.SmallCard
@@ -88,6 +90,10 @@ fun SubmissionDetailsScreen(
         } else {
             SubmissionInfo(
                 submission,
+                onArtistCardClick = { artistId ->
+                    Log.d("SubmissionDetailsScreen", "Artist ID: $artistId")
+                    navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/$artistId")
+                },
                 onDelete = {
                     submissionsViewModel.setShowPopup(true)
                 },
@@ -103,6 +109,7 @@ fun SubmissionDetailsScreen(
 @Composable
 fun SubmissionInfo(
     submission: SubmissionWithArtist,
+    onArtistCardClick: (Int) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -157,6 +164,9 @@ fun SubmissionInfo(
                 SmallCard(
                     title = submission.artist.name,
                     imagePath = submission.artist.imagePath,
+                    onClick = {
+                        onArtistCardClick(submission.artist.id)
+                    }
                 )
             }
         }

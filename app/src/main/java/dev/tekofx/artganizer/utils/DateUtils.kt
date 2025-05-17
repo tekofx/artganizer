@@ -13,7 +13,6 @@ fun stringToDate(dateString: String, format: String = "dd/MM/yyyy"): Date? {
         val formatter = SimpleDateFormat(format, Locale.getDefault())
         formatter.parse(dateString)
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
 }
