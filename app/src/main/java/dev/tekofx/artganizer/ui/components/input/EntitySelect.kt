@@ -1,13 +1,14 @@
 package dev.tekofx.artganizer.ui.components.input
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,6 +26,7 @@ import dev.tekofx.artganizer.ui.components.SmallCard
 @Composable
 fun <T> EntitySelect(
     selectedItem: T?,
+    title: String,
     items: List<T>,
     labelMapper: (T) -> String,
     imageMapper: (T) -> String?,
@@ -38,7 +40,6 @@ fun <T> EntitySelect(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize()
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -54,7 +55,7 @@ fun <T> EntitySelect(
                 )
             } else {
                 SmallCard(
-                    title = "Select an item",
+                    title = title,
                     imagePath = null,
                     onClick = { expanded = !expanded }
                 )
@@ -70,22 +71,32 @@ fun <T> EntitySelect(
                                 .padding(10.dp)
                                 .fillMaxWidth()
                         ) {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.headlineSmall,
+                                modifier = Modifier.padding(bottom = 10.dp)
+                            )
                             LazyColumn(
                                 modifier = Modifier
-                                    .height(100.dp)
-                                    .fillMaxWidth()
+                                    .heightIn(min = 100.dp, max = 300.dp)
+                                    .fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
                                 items(items.size) { index ->
                                     val item = items[index]
                                     if (labelMapper(item).contains(query, ignoreCase = true)) {
-                                        Text(
-                                            text = labelMapper(item),
-                                            modifier = Modifier
-                                                .clickable {
-                                                    onQueryChange("") // Clear the search query when an item is selected
-                                                    expanded = false // Close the dropdown
-                                                    onItemSelected(item) // Notify the selection
-                                                }
+                                        SmallCard(
+                                            title = labelMapper(item),
+                                            imagePath = imageMapper(item),
+                                            onClick = {
+                                                onQueryChange("") // Clear the search query when an item is selected
+                                                expanded = false // Close the dropdown
+                                                onItemSelected(item) // Notify the selection
+                                            },
+                                            elevation = CardDefaults.cardElevation(
+                                                defaultElevation = 4.dp,
+                                                pressedElevation = 8.dp
+                                            ),
                                         )
                                     }
                                 }

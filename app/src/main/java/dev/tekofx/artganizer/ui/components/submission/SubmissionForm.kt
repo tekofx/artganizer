@@ -1,8 +1,11 @@
 package dev.tekofx.artganizer.ui.components.submission
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -45,9 +48,13 @@ fun SubmissionsForm(
     val queryText by artistsViewModel.queryText.collectAsState()
     val artists by artistsViewModel.artists.collectAsState()
 
+    val scrollState = rememberScrollState()
+
 
     Column(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
+            .verticalScroll(scrollState)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -61,9 +68,12 @@ fun SubmissionsForm(
             onValueChange = onItemValueChange,
             modifier = Modifier.fillMaxWidth()
         )
-        Column {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
             Text("Artist", style = MaterialTheme.typography.headlineSmall)
             EntitySelect(
+                title = "Artist",
                 selectedItem = submissionUiState.submissionDetails.artist,
                 query = queryText,
                 onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
@@ -88,6 +98,8 @@ fun SubmissionsForm(
         ) {
             Text(text = "Save")
         }
+
+       
     }
 }
 
