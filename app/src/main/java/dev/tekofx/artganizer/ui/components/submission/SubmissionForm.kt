@@ -14,11 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import dev.tekofx.artganizer.ui.components.input.EntitySelect
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -56,13 +52,11 @@ fun SubmissionsForm(
             .padding(10.dp)
             .verticalScroll(scrollState)
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(submissionUiState.submissionDetails.imagePath)
-                .build(),
-            contentDescription = "icon",
-            contentScale = ContentScale.Inside,
+        SubmissionImage(
+            submissionUiState.submissionDetails.title,
+            submissionUiState.submissionDetails.imagePath,
         )
+
         SubmissionFormFields(
             submissionDetails = submissionUiState.submissionDetails,
             onValueChange = onItemValueChange,
@@ -99,7 +93,7 @@ fun SubmissionsForm(
             Text(text = "Save")
         }
 
-       
+
     }
 }
 
