@@ -117,14 +117,16 @@ fun SubmissionInfo(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(submission.submission.imagePath)
                 .build(),
-            contentDescription = "icon",
-            contentScale = ContentScale.Inside,
+            contentDescription = submission.submission.title,
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillWidth
         )
         if (submission.submission.title.isNotEmpty()) {
             Text(
