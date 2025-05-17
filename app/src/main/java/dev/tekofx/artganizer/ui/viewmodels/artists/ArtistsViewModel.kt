@@ -125,6 +125,9 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     fun getArtistWithSubmissions(id: Int) {
         viewModelScope.launch {
             val artist = repository.getArtistWithSubmissions(id)
+            if (artist == null) {
+                return@launch
+            }
             currentArtistUiState =
                 ArtistUiState(
                     artistDetails = artist.toArtistDetails(),

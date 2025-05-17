@@ -119,6 +119,10 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     fun getSubmissionWithArtist(id: Int) {
         viewModelScope.launch {
             val submission = repository.getSubmissionWithArtist(id)
+            if (submission == null) {
+                Log.d("SubmissionsViewModel", "Submission with id $id not found")
+                return@launch
+            }
             currentSubmissionUiState =
                 SubmissionUiState(
                     submissionDetails = submission.toSubmissionDetails(),

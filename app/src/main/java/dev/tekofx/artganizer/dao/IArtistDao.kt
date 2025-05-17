@@ -30,7 +30,7 @@ interface IArtistDao {
 
     @Transaction
     @Query("SELECT * FROM artists WHERE id = :artistId")
-    suspend fun getArtistWithSubmissions(artistId: Int): ArtistWithSubmissions
+    suspend fun getArtistWithSubmissions(artistId: Int): ArtistWithSubmissions?
 
 
 }

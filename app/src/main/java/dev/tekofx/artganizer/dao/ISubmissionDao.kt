@@ -27,7 +27,7 @@ interface ISubmissionDao {
 
     @Transaction
     @Query("SELECT * FROM submissions WHERE id = :submissionId")
-    suspend fun getSubmissionWithArtist(submissionId: Int): SubmissionWithArtist
+    suspend fun getSubmissionWithArtist(submissionId: Int): SubmissionWithArtist?
 
     @Transaction
     suspend fun updateSubmissionWithArtist(submission: Submission) {
