@@ -35,6 +35,9 @@ fun SubmissionCreationScreen(
                     submissionsViewModel.saveSubmission(context)
                 }
             },
+            onCancelClick = {
+                navHostController.popBackStack()
+            }
         )
 
     }

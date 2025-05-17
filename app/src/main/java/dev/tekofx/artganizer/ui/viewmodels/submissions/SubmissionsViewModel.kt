@@ -102,6 +102,9 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     var currentSubmissionUiState by mutableStateOf(SubmissionUiState())
         private set
 
+    var currentEditingSubmissionUiState by mutableStateOf(SubmissionUiState())
+        private set
+
     // Data
     val submissions = MutableStateFlow<List<Submission>>(emptyList())
 
@@ -141,7 +144,7 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     }
 
     fun updateCurrentUiState(submissionDetails: SubmissionDetails) {
-        currentSubmissionUiState =
+        currentEditingSubmissionUiState =
             SubmissionUiState(
                 submissionDetails = submissionDetails,
                 isEntryValid = validateInput(submissionDetails)
@@ -150,6 +153,11 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
     fun setShowEditSubmission(show: Boolean) {
         showEditSubmission.value = show
+        currentEditingSubmissionUiState = if (show) {
+            currentSubmissionUiState
+        } else {
+            SubmissionUiState()
+        }
     }
 
     fun setShowPopup(show: Boolean) {
@@ -188,10 +196,12 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         if (validateInput()) {
             repository.insertSubmission(newSubmission)
         }
+        currentSubmissionUiState = currentEditingSubmissionUiState
+        currentEditingSubmissionUiState = SubmissionUiState()
     }
 
     suspend fun editSubmission() {
-        val submission = currentSubmissionUiState.submissionDetails.toSubmissionWithArtist()
+        val submission = currentEditingSubmissionUiState.submissionDetails.toSubmissionWithArtist()
         if (validateInput()) {
             repository.updateSubmissionWithArtist(submission.submission)
         }

@@ -77,16 +77,18 @@ fun SubmissionDetailsScreen(
         if (showEdit) {
             SubmissionsForm(
                 artistsViewModel,
-                submissionsViewModel.currentSubmissionUiState,
+                submissionsViewModel.currentEditingSubmissionUiState,
                 onItemValueChange = {
                     submissionsViewModel.updateCurrentUiState(it)
                 },
                 onSaveClick = {
                     scope.launch { submissionsViewModel.editSubmission() }
                     submissionsViewModel.setShowEditSubmission(false)
+                },
+                onCancelClick = {
+                    submissionsViewModel.setShowEditSubmission(false)
                 }
             )
-
         } else {
             SubmissionInfo(
                 submission,
