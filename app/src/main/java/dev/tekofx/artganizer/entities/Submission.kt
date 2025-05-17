@@ -28,5 +28,7 @@ data class Submission(
     val sizeInMb: Double = 0.0,
     val dimensions: String = "",
     val extension: String = "",
+    val palette: List<Int> = emptyList(),
+    // Foreign keys
     val artistId: Int? = null
 )

@@ -31,6 +31,7 @@ import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
+import dev.tekofx.artganizer.ui.components.PaletteColorList
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.Rating
@@ -172,6 +173,8 @@ fun SubmissionInfo(
                 )
             }
         }
+
+        PaletteColorList(submission.submission.palette)
 
         ImageInfo(submission.submission)
         Row(

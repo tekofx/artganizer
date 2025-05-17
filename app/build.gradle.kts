@@ -69,4 +69,7 @@ dependencies {
 
     // Gson
     implementation(libs.gson)
+
+    // Palette
+    implementation("androidx.palette:palette-ktx:1.0.0")
 }

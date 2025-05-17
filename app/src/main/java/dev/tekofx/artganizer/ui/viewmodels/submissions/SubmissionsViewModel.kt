@@ -16,6 +16,7 @@ import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.getImageInfo
+import dev.tekofx.artganizer.utils.getPaletteFromUri
 import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import dev.tekofx.artganizer.utils.stringToDate
@@ -38,6 +39,7 @@ data class SubmissionDetails(
     val sizeInMb: Double = 0.0,
     val dimensions: String = "",
     val extension: String = "",
+    val palette: List<Int> = emptyList(),
     val artistId: Int? = null,
     val artist: Artist? = null
 )
@@ -53,6 +55,7 @@ fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
         sizeInMb = sizeInMb,
         dimensions = dimensions,
         extension = extension,
+        palette = palette,
         artistId = artistId
     ),
     artist = artist
@@ -69,6 +72,7 @@ fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDe
     sizeInMb = submission.sizeInMb,
     dimensions = submission.dimensions,
     extension = submission.extension,
+    palette = submission.palette,
     artist = artist
 )
 
@@ -83,23 +87,12 @@ fun SubmissionUiState.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
         sizeInMb = submissionDetails.sizeInMb,
         dimensions = submissionDetails.dimensions,
         extension = submissionDetails.extension,
+        palette = submissionDetails.palette,
         artistId = submissionDetails.artistId
     ),
     artist = submissionDetails.artist
 )
 
-fun Submission.emptySubmission(): Submission = Submission(
-    id = 0,
-    title = "",
-    description = "",
-    imagePath = "",
-    rating = 0,
-    date = Date(),
-    sizeInMb = 0.0,
-    dimensions = "",
-    extension = "",
-    artistId = null
-)
 
 class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
@@ -172,6 +165,7 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
             saveImageToInternalStorage(context, newSubmissionUiState.submissionDetails.imagePath)
 
         val imageInfo = getImageInfo(context, imagePath)
+        val palette = getPaletteFromUri(context, imagePath)
 
         val newSubmission = Submission(
             id = newSubmissionUiState.submissionDetails.id,
@@ -183,6 +177,7 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
             sizeInMb = imageInfo?.sizeInMb ?: 0.0,
             dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
             extension = imageInfo?.extension ?: "",
+            palette = palette,
             artistId = newSubmissionUiState.submissionDetails.artistId
         )
 

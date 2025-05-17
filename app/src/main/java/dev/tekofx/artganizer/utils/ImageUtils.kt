@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
+import androidx.palette.graphics.Palette
 import java.io.FileNotFoundException
 import java.util.UUID
 
@@ -22,6 +23,25 @@ fun saveImageToInternalStorage(context: Context, uri: Uri): Uri {
         }
     }
     return Uri.fromFile(file)
+}
+
+fun getPaletteFromUri(context: Context, uri: Uri): List<Int> {
+    val inputStream = context.contentResolver.openInputStream(uri) ?: return emptyList()
+    val bitmap = BitmapFactory.decodeStream(inputStream)
+    inputStream.close()
+
+    val palette = Palette.from(bitmap).generate()
+    val colors = mutableListOf<Int>()
+
+    palette.vibrantSwatch?.rgb?.let { colors.add(it) }
+    palette.mutedSwatch?.rgb?.let { colors.add(it) }
+    palette.dominantSwatch?.rgb?.let { colors.add(it) }
+    palette.lightVibrantSwatch?.rgb?.let { colors.add(it) }
+    palette.lightMutedSwatch?.rgb?.let { colors.add(it) }
+    palette.darkVibrantSwatch?.rgb?.let { colors.add(it) }
+    palette.darkMutedSwatch?.rgb?.let { colors.add(it) }
+
+    return colors
 }
 
 fun removeImageFromInternalStorage(context: Context, uriString: String) {
