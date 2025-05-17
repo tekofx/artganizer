@@ -5,7 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -16,8 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import dev.tekofx.artganizer.ui.components.SmallCard
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> EntitySelect(
     selectedItem: T?,
@@ -29,6 +33,7 @@ fun <T> EntitySelect(
     query: String,
 ) {
     var expanded by remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier
@@ -56,32 +61,44 @@ fun <T> EntitySelect(
             }
         }
         if (expanded) {
-            LazyColumn(
-                modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth()
-            ) {
-                items(items.size) { index ->
-                    val item = items[index]
-                    if (labelMapper(item).contains(query, ignoreCase = true)) {
-                        Text(
-                            text = labelMapper(item),
+            Dialog(
+                onDismissRequest = { expanded = false },
+                content = {
+                    Surface {
+                        Column(
                             modifier = Modifier
-                                .clickable {
-                                    onQueryChange("") // Clear the search query when an item is selected
-                                    expanded = false // Close the dropdown
-                                    onItemSelected(item) // Notify the selection
+                                .padding(10.dp)
+                                .fillMaxWidth()
+                        ) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .height(100.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                items(items.size) { index ->
+                                    val item = items[index]
+                                    if (labelMapper(item).contains(query, ignoreCase = true)) {
+                                        Text(
+                                            text = labelMapper(item),
+                                            modifier = Modifier
+                                                .clickable {
+                                                    onQueryChange("") // Clear the search query when an item is selected
+                                                    expanded = false // Close the dropdown
+                                                    onItemSelected(item) // Notify the selection
+                                                }
+                                        )
+                                    }
                                 }
-                        )
+                            }
+                            TextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = query,
+                                onValueChange = { onQueryChange(it) },
+                                label = { Text("Search") }
+                            )
+                        }
                     }
                 }
-            }
-
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = query,
-                onValueChange = { onQueryChange(it) },
-                label = { Text("Search") }
             )
         }
     }

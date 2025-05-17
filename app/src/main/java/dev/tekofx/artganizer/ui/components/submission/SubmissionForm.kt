@@ -61,22 +61,25 @@ fun SubmissionsForm(
             onValueChange = onItemValueChange,
             modifier = Modifier.fillMaxWidth()
         )
-        EntitySelect(
-            selectedItem = submissionUiState.submissionDetails.artist,
-            query = queryText,
-            onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
-            items = artists,
-            labelMapper = { it.name },
-            imageMapper = { it.imagePath },
-            onItemSelected = { selectedItem ->
-                onItemValueChange(
-                    submissionUiState.submissionDetails.copy(
-                        artistId = selectedItem.id,
-                        artist = selectedItem
+        Column {
+            Text("Artist", style = MaterialTheme.typography.headlineSmall)
+            EntitySelect(
+                selectedItem = submissionUiState.submissionDetails.artist,
+                query = queryText,
+                onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
+                items = artists,
+                labelMapper = { it.name },
+                imageMapper = { it.imagePath },
+                onItemSelected = { selectedItem ->
+                    onItemValueChange(
+                        submissionUiState.submissionDetails.copy(
+                            artistId = selectedItem.id,
+                            artist = selectedItem
+                        )
                     )
-                )
-            },
-        )
+                },
+            )
+        }
         Button(
             onClick = onSaveClick,
             enabled = submissionUiState.isEntryValid,
