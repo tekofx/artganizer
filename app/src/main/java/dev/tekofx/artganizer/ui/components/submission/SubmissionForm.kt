@@ -14,8 +14,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import dev.tekofx.artganizer.ui.components.input.EntitySelect
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
+
+val items =
+    listOf(
+        "Item 1",
+        "Item 2",
+        "Item 3",
+        "Item 4",
+        "Item 5",
+        "Item 6",
+        "Item 7",
+        "Item 8",
+        "Item 9",
+        "Item 10"
+    )
 
 @Composable
 fun SubmissionsForm(
@@ -38,6 +53,9 @@ fun SubmissionsForm(
             submissionDetails = submissionUiState.submissionDetails,
             onValueChange = onItemValueChange,
             modifier = Modifier.fillMaxWidth()
+        )
+        EntitySelect(
+            items = items,
         )
         Button(
             onClick = onSaveClick,

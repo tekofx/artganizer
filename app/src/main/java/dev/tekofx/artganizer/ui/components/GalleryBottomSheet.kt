@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.components
 
-import AutoCompleteComboBox
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -20,6 +19,5 @@ fun GalleryBottomSheet() {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         SearchBar(label = { Text("Search Anything") }, queryText = "")
-        AutoCompleteComboBox(items = listOf("Hola", "Adios"), onItemSelected = {})
     }
 }
