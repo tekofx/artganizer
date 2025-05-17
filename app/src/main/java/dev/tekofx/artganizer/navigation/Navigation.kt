@@ -46,7 +46,11 @@ fun Navigation(
             route = NavigateDestinations.SUBMISSION_CREATION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            SubmissionCreationScreen(submissionsViewModel, navHostController)
+            SubmissionCreationScreen(
+                submissionsViewModel,
+                artistsViewModel,
+                navHostController
+            )
         }
 
         composable(
@@ -55,8 +59,16 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) { backStackEntry ->
             val submissionId = backStackEntry.arguments?.getString("submissionId")
-            submissionsViewModel.getSubmissionById(submissionId!!)
-            SubmissionDetailsScreen(submissionsViewModel, navHostController)
+            if (submissionId == null) {
+                navHostController.popBackStack()
+                return@composable
+            }
+            submissionsViewModel.getSubmissionWithArtist(submissionId.toInt())
+            SubmissionDetailsScreen(
+                submissionsViewModel,
+                artistsViewModel,
+                navHostController
+            )
         }
 
         // Artists

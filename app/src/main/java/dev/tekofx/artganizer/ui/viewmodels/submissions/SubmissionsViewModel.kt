@@ -10,7 +10,9 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.getImageInfo
@@ -36,54 +38,68 @@ data class SubmissionDetails(
     val sizeInMb: Double = 0.0,
     val dimensions: String = "",
     val extension: String = "",
-    val artistId: Int? = null
+    val artistId: Int? = null,
+    val artist: Artist? = null
 )
 
-fun SubmissionDetails.toSubmission(): Submission = Submission(
-    id = id,
-    title = title,
-    description = description,
-    imagePath = imagePath.toString(),
-    rating = rating,
-    date = stringToDate(date) ?: Date(),
-    sizeInMb = sizeInMb,
-    dimensions = dimensions,
-    extension = extension,
-    artistId = artistId
-
+fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = SubmissionWithArtist(
+    submission = Submission(
+        id = id,
+        title = title,
+        description = description,
+        imagePath = imagePath.toString(),
+        rating = rating,
+        date = stringToDate(date) ?: Date(),
+        sizeInMb = sizeInMb,
+        dimensions = dimensions,
+        extension = extension,
+        artistId = artistId
+    ),
+    artist = artist
 )
 
-fun Submission.toSubmissionUiState(isEntryValid: Boolean = false): SubmissionUiState =
-    SubmissionUiState(
-        submissionDetails = this.toSubmissionDetails(),
-        isEntryValid = isEntryValid
-    )
 
-fun Submission.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
-    id = id,
-    title = title,
-    description = description,
-    imagePath = imagePath.toUri(),
-    rating = rating,
-    date = date.toString(),
-    sizeInMb = sizeInMb,
-    dimensions = dimensions,
-    extension = extension
+fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
+    id = submission.id,
+    title = submission.title,
+    description = submission.description,
+    imagePath = submission.imagePath.toUri(),
+    rating = submission.rating,
+    date = submission.date.toString(),
+    sizeInMb = submission.sizeInMb,
+    dimensions = submission.dimensions,
+    extension = submission.extension,
+    artist = artist
 )
 
-fun SubmissionUiState.toSubmission(): Submission = Submission(
-    id = submissionDetails.id,
-    title = submissionDetails.title,
-    description = submissionDetails.description,
-    imagePath = submissionDetails.imagePath.toString(),
-    rating = submissionDetails.rating,
-    date = stringToDate(submissionDetails.date) ?: Date(),
-    sizeInMb = submissionDetails.sizeInMb,
-    dimensions = submissionDetails.dimensions,
-    extension = submissionDetails.extension,
-    artistId = submissionDetails.artistId
+fun SubmissionUiState.toSubmissionWithArtist(): SubmissionWithArtist = SubmissionWithArtist(
+    Submission(
+        id = submissionDetails.id,
+        title = submissionDetails.title,
+        description = submissionDetails.description,
+        imagePath = submissionDetails.imagePath.toString(),
+        rating = submissionDetails.rating,
+        date = stringToDate(submissionDetails.date) ?: Date(),
+        sizeInMb = submissionDetails.sizeInMb,
+        dimensions = submissionDetails.dimensions,
+        extension = submissionDetails.extension,
+        artistId = submissionDetails.artistId
+    ),
+    artist = submissionDetails.artist
 )
 
+fun Submission.emptySubmission(): Submission = Submission(
+    id = 0,
+    title = "",
+    description = "",
+    imagePath = "",
+    rating = 0,
+    date = Date(),
+    sizeInMb = 0.0,
+    dimensions = "",
+    extension = "",
+    artistId = null
+)
 
 class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
@@ -107,18 +123,18 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         }
     }
 
-    fun getSubmissionById(id: String) {
+    fun getSubmissionWithArtist(id: Int) {
         viewModelScope.launch {
-            val submission = submissions.value.find { it.id == id.toInt() }
-            if (submission != null) {
-                currentSubmissionUiState =
-                    SubmissionUiState(
-                        submissionDetails = submission.toSubmissionDetails(),
-                        isEntryValid = validateInput(submission.toSubmissionDetails())
-                    )
-            }
+            val submission = repository.getSubmissionWithArtist(id)
+            Log.d("SubmissionsViewModel", "Submission: $submission")
+            currentSubmissionUiState =
+                SubmissionUiState(
+                    submissionDetails = submission.toSubmissionDetails(),
+                    isEntryValid = validateInput(submission.toSubmissionDetails())
+                )
         }
     }
+
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
         newSubmissionUiState =
@@ -177,9 +193,9 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     }
 
     suspend fun editSubmission() {
-        val submission = currentSubmissionUiState.submissionDetails.toSubmission()
+        val submission = currentSubmissionUiState.submissionDetails.toSubmissionWithArtist()
         if (validateInput()) {
-            repository.updateSubmission(submission)
+            repository.updateSubmissionWithArtist(submission.submission)
         }
     }
 

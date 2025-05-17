@@ -8,13 +8,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun SubmissionCreationScreen(
-    submissionsViewModel: SubmissionsViewModel, navHostController: NavHostController
+    submissionsViewModel: SubmissionsViewModel,
+    artistsViewModel: ArtistsViewModel,
+    navHostController: NavHostController
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -23,6 +26,7 @@ fun SubmissionCreationScreen(
         modifier = Modifier.fillMaxWidth()
     ) {
         SubmissionsForm(
+            artistsViewModel,
             submissionsViewModel.newSubmissionUiState,
             onItemValueChange = { newValue -> submissionsViewModel.updateNewUiState(newValue) },
             onSaveClick = {

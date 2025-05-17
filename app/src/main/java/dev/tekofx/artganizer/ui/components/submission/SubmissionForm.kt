@@ -8,6 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -15,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.ui.components.input.EntitySelect
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
 
@@ -34,10 +37,14 @@ val items =
 
 @Composable
 fun SubmissionsForm(
+    artistsViewModel: ArtistsViewModel,
     submissionUiState: SubmissionUiState,
     onItemValueChange: (SubmissionDetails) -> Unit,
     onSaveClick: () -> Unit,
 ) {
+    val queryText by artistsViewModel.queryText.collectAsState()
+    val artists by artistsViewModel.artists.collectAsState()
+
 
     Column(
         modifier = Modifier.padding(10.dp)
@@ -55,7 +62,18 @@ fun SubmissionsForm(
             modifier = Modifier.fillMaxWidth()
         )
         EntitySelect(
-            items = items,
+            query = queryText,
+            onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
+            items = artists,
+            labelMapper = { it.name },
+            onItemSelected = { selectedItem ->
+                onItemValueChange(
+                    submissionUiState.submissionDetails.copy(
+                        artistId = selectedItem.id,
+                        artist = selectedItem
+                    )
+                )
+            },
         )
         Button(
             onClick = onSaveClick,

@@ -17,29 +17,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-
-val items =
-    listOf(
-        "Item 1",
-        "Item 2",
-        "Item 3",
-        "Item 4",
-        "Item 5",
-        "Item 6",
-        "Item 7",
-        "Item 8",
-        "Item 9",
-        "Item 10"
-    )
-
 @Composable
-fun EntitySelect(
-    items: List<String>,
-) {
-    var selectedItem: String? by remember { mutableStateOf(null) }
-    var query by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
+fun <T> EntitySelect(
+    items: List<T>,
+    labelMapper: (T) -> String,
+    onItemSelected: (T) -> Unit,
+    onQueryChange: (String) -> Unit,
+    query: String,
 
+    ) {
+    var selectedItem: T? by remember { mutableStateOf(null) }
+    var expanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -53,7 +41,7 @@ fun EntitySelect(
             },
         ) {
             if (selectedItem != null) {
-                Text(text = "Selected item: $selectedItem")
+                Text(text = "Selected item: ${labelMapper(selectedItem!!)}")
             } else {
                 Text(text = "No item selected")
             }
@@ -66,16 +54,16 @@ fun EntitySelect(
             ) {
                 items(items.size) { index ->
                     val item = items[index]
-                    if (item.contains(query)) {
+                    if (labelMapper(item).contains(query, ignoreCase = true)) {
                         Text(
-                            text = item,
+                            text = labelMapper(item),
                             modifier = Modifier
                                 .clickable {
                                     selectedItem = item
-                                    query = "" // Clear the search query when an item is selected
+                                    onQueryChange("") // Clear the search query when an item is selected
                                     expanded = false // Close the dropdown
+                                    onItemSelected(item) // Notify the selection
                                 }
-                                .animateItem()
                         )
                     }
                 }
@@ -84,7 +72,7 @@ fun EntitySelect(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = query,
-                onValueChange = { query = it },
+                onValueChange = { onQueryChange(it) },
                 label = { Text("Search") }
             )
         }

@@ -26,13 +26,16 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
+import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
+import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmissionWithArtist
 import dev.tekofx.artganizer.utils.dateToString
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -41,12 +44,13 @@ import java.util.Date
 @Composable
 fun SubmissionDetailsScreen(
     submissionsViewModel: SubmissionsViewModel,
+    artistsViewModel: ArtistsViewModel,
     navHostController: NavHostController
 ) {
     val context = LocalContext.current
     val showPopup by submissionsViewModel.showPopup.collectAsState()
     val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
-    val submission = submissionsViewModel.currentSubmissionUiState.toSubmission()
+    val submission = submissionsViewModel.currentSubmissionUiState.toSubmissionWithArtist()
     val scope = rememberCoroutineScope()
 
     if (showPopup) {
@@ -57,7 +61,7 @@ fun SubmissionDetailsScreen(
                 submissionsViewModel.setShowPopup(true)
                 submissionsViewModel.deleteSubmission(
                     context,
-                    submission
+                    submission.submission
                 )
                 navHostController.popBackStack()
                 submissionsViewModel.setShowPopup(false)
@@ -70,6 +74,7 @@ fun SubmissionDetailsScreen(
     Scaffold {
         if (showEdit) {
             SubmissionsForm(
+                artistsViewModel,
                 submissionsViewModel.currentSubmissionUiState,
                 onItemValueChange = {
                     submissionsViewModel.updateCurrentUiState(it)
@@ -97,7 +102,7 @@ fun SubmissionDetailsScreen(
 
 @Composable
 fun SubmissionInfo(
-    submission: Submission,
+    submission: SubmissionWithArtist,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -109,25 +114,25 @@ fun SubmissionInfo(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(submission.imagePath)
+                .data(submission.submission.imagePath)
                 .build(),
             contentDescription = "icon",
             contentScale = ContentScale.Inside,
         )
-        if (submission.title.isNotEmpty()) {
+        if (submission.submission.title.isNotEmpty()) {
             Text(
-                text = submission.title,
+                text = submission.submission.title,
                 style = MaterialTheme.typography.headlineLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
             )
         }
-        if (submission.description.isNotEmpty()) {
+        if (submission.submission.description.isNotEmpty()) {
 
-            Text(submission.description)
+            Text(submission.submission.description)
         }
-        if (submission.rating > 0) {
+        if (submission.submission.rating > 0) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -137,10 +142,26 @@ fun SubmissionInfo(
                     "Rating",
                     style = MaterialTheme.typography.headlineSmall,
                 )
-                Rating(submission.rating)
+                Rating(submission.submission.rating)
             }
         }
-        ImageInfo(submission)
+
+        if (submission.artist != null) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Text(
+                    "Artist",
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                SmallCard(
+                    title = submission.artist.name,
+                    imagePath = submission.artist.imagePath,
+                )
+            }
+        }
+
+        ImageInfo(submission.submission)
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
