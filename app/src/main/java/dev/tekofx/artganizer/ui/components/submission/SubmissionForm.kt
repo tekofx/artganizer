@@ -125,7 +125,7 @@ fun SubmissionFormFields(
             enabled = enabled,
             singleLine = true
         )
-        RatingSelector(
+        Rating(
             rating = submissionDetails.rating,
             onRatingChange = { onValueChange(submissionDetails.copy(rating = it)) },
         )

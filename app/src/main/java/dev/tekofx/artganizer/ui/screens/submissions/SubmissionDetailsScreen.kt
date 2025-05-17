@@ -117,7 +117,7 @@ fun SubmissionInfo(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SubmissionImage(
@@ -138,25 +138,18 @@ fun SubmissionInfo(
             Text(submission.submission.description)
         }
         if (submission.submission.rating > 0) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    "Rating",
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-                Rating(submission.submission.rating)
-            }
+            Rating(submission.submission.rating)
         }
 
         if (submission.artist != null) {
             Column(
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 Text(
-                    "Artist",
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Artist",
+                    textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 SmallCard(
