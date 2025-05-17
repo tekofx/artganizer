@@ -16,6 +16,9 @@ interface ISubmissionDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Submission)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSubmissions(items: List<Submission>)
+
     @Update
     suspend fun update(item: Submission)
 

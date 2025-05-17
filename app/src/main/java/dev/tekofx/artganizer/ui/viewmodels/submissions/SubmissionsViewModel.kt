@@ -26,6 +26,7 @@ import java.util.Date
 
 data class SubmissionUiState(
     val submissionDetails: SubmissionDetails = SubmissionDetails(),
+    val imagePaths: List<Uri> = listOf<Uri>(),
     val isEntryValid: Boolean = false
 )
 
@@ -99,6 +100,7 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     var newSubmissionUiState by mutableStateOf(SubmissionUiState())
         private set
 
+
     var currentSubmissionUiState by mutableStateOf(SubmissionUiState())
         private set
 
@@ -136,11 +138,11 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
-        newSubmissionUiState =
-            SubmissionUiState(
-                submissionDetails = submissionDetails,
-                isEntryValid = validateInput(submissionDetails)
-            )
+        Log.d("UpdateNewuistate", submissionDetails.toString())
+        newSubmissionUiState = SubmissionUiState(
+            submissionDetails,
+            newSubmissionUiState.imagePaths
+        )
     }
 
     fun updateCurrentUiState(submissionDetails: SubmissionDetails) {
@@ -172,30 +174,35 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     }
 
     suspend fun saveSubmission(context: Context) {
-        // Save image to private storage
-        val imagePath =
-            saveImageToInternalStorage(context, newSubmissionUiState.submissionDetails.imagePath)
+        val newSubmissions = mutableListOf<Submission>()
+        newSubmissionUiState.imagePaths.forEach { imagePath ->
+            val imagePath =
+                saveImageToInternalStorage(
+                    context,
+                    imagePath
+                )
 
-        val imageInfo = getImageInfo(context, imagePath)
-        val palette = getPaletteFromUri(context, imagePath)
+            val imageInfo = getImageInfo(context, imagePath)
+            val palette = getPaletteFromUri(context, imagePath)
 
-        val newSubmission = Submission(
-            id = newSubmissionUiState.submissionDetails.id,
-            title = newSubmissionUiState.submissionDetails.title,
-            description = newSubmissionUiState.submissionDetails.description,
-            imagePath = imagePath.toString(),
-            rating = newSubmissionUiState.submissionDetails.rating,
-            date = stringToDate(newSubmissionUiState.submissionDetails.date) ?: Date(),
-            sizeInMb = imageInfo?.sizeInMb ?: 0.0,
-            dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-            extension = imageInfo?.extension ?: "",
-            palette = palette,
-            artistId = newSubmissionUiState.submissionDetails.artistId
-        )
-
-        if (validateInput()) {
-            repository.insertSubmission(newSubmission)
+            newSubmissions.add(
+                Submission(
+                    id = newSubmissionUiState.submissionDetails.id,
+                    title = newSubmissionUiState.submissionDetails.title,
+                    description = newSubmissionUiState.submissionDetails.description,
+                    imagePath = imagePath.toString(),
+                    rating = newSubmissionUiState.submissionDetails.rating,
+                    date = stringToDate(newSubmissionUiState.submissionDetails.date) ?: Date(),
+                    sizeInMb = imageInfo?.sizeInMb ?: 0.0,
+                    dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                    extension = imageInfo?.extension ?: "",
+                    palette = palette,
+                    artistId = newSubmissionUiState.submissionDetails.artistId
+                )
+            )
         }
+
+        repository.insertSubmissions(newSubmissions)
         currentSubmissionUiState = currentEditingSubmissionUiState
         currentEditingSubmissionUiState = SubmissionUiState()
     }
@@ -207,11 +214,10 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         }
     }
 
-    fun setNewSubmissionDetails(submissionDetails: SubmissionDetails) {
-        newSubmissionUiState = newSubmissionUiState.copy(
-            submissionDetails = submissionDetails,
-            isEntryValid = validateInput(submissionDetails)
-        )
+
+    fun updateNewSubmissionsUiState(submissions: SubmissionUiState) {
+        newSubmissionUiState = submissions
+        Log.d("UpdateNewSubmissionsUiState", submissions.toString())
     }
 
 

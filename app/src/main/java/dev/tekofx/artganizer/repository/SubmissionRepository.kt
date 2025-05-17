@@ -14,6 +14,9 @@ class SubmissionRepository(private val submissionDao: ISubmissionDao) {
 
     suspend fun insertSubmission(submission: Submission) = submissionDao.insert(submission)
 
+    suspend fun insertSubmissions(submissions: List<Submission>) =
+        submissionDao.insertSubmissions(submissions)
+
     suspend fun deleteSubmission(submission: Submission) = submissionDao.delete(submission)
 
     suspend fun updateSubmission(submission: Submission) = submissionDao.update(submission)

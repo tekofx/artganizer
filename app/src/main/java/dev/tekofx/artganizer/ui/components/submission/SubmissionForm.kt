@@ -24,20 +24,6 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
 
-val items =
-    listOf(
-        "Item 1",
-        "Item 2",
-        "Item 3",
-        "Item 4",
-        "Item 5",
-        "Item 6",
-        "Item 7",
-        "Item 8",
-        "Item 9",
-        "Item 10"
-    )
-
 @Composable
 fun SubmissionsForm(
     artistsViewModel: ArtistsViewModel,
@@ -57,10 +43,14 @@ fun SubmissionsForm(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SubmissionImage(
-            submissionUiState.submissionDetails.title,
-            submissionUiState.submissionDetails.imagePath,
-        )
+        if (submissionUiState.imagePaths.size > 1) {
+            Text("Adding multiple images")
+        } else {
+            SubmissionImage(
+                submissionUiState.submissionDetails.title,
+                submissionUiState.imagePaths[0],
+            )
+        }
 
         SubmissionFormFields(
             submissionDetails = submissionUiState.submissionDetails,

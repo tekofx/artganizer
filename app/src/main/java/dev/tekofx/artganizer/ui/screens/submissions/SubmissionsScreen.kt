@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -20,7 +19,7 @@ import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.submission.Gallery
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.launch
 
@@ -34,7 +33,6 @@ fun SubmissionsScreen(
     // Data
     val submissions by submissionsViewModel.submissions.collectAsState()
     // States
-    val listState = rememberLazyListState()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
             initialValue = SheetValue.Hidden,
@@ -44,15 +42,12 @@ fun SubmissionsScreen(
     val scope = rememberCoroutineScope()
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(), onResult = { uri: Uri? ->
-            uri?.let {
-                // Save the image and navigate to the next screen
+        contract = ActivityResultContracts.GetMultipleContents(),
+        onResult = { uris: List<Uri>? ->
+            uris?.let {
+                // Process each selected image
                 scope.launch {
-                    submissionsViewModel.setNewSubmissionDetails(
-                        SubmissionDetails(
-                            title = "", description = "", imagePath = uri
-                        )
-                    )
+                    submissionsViewModel.updateNewSubmissionsUiState(SubmissionUiState(imagePaths = uris))
                     navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)
                 }
             }
@@ -65,10 +60,8 @@ fun SubmissionsScreen(
         }) {
         Scaffold(
             floatingActionButton = {
-
                 CreateFab(
                     onClick = { launcher.launch("image/*") })
-
             }) {
             Gallery(navHostController, submissions)
         }
