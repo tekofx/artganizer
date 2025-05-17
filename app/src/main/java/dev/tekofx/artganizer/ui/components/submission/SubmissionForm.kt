@@ -62,10 +62,12 @@ fun SubmissionsForm(
             modifier = Modifier.fillMaxWidth()
         )
         EntitySelect(
+            selectedItem = submissionUiState.submissionDetails.artist,
             query = queryText,
             onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
             items = artists,
             labelMapper = { it.name },
+            imageMapper = { it.imagePath },
             onItemSelected = { selectedItem ->
                 onItemValueChange(
                     submissionUiState.submissionDetails.copy(

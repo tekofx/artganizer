@@ -16,17 +16,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.tekofx.artganizer.ui.components.SmallCard
 
 @Composable
 fun <T> EntitySelect(
+    selectedItem: T?,
     items: List<T>,
     labelMapper: (T) -> String,
+    imageMapper: (T) -> String?,
     onItemSelected: (T) -> Unit,
     onQueryChange: (String) -> Unit,
     query: String,
-
-    ) {
-    var selectedItem: T? by remember { mutableStateOf(null) }
+) {
     var expanded by remember { mutableStateOf(false) }
 
     Column(
@@ -41,9 +42,17 @@ fun <T> EntitySelect(
             },
         ) {
             if (selectedItem != null) {
-                Text(text = "Selected item: ${labelMapper(selectedItem!!)}")
+                SmallCard(
+                    title = labelMapper(selectedItem),
+                    imagePath = imageMapper(selectedItem),
+                    onClick = { expanded = !expanded }
+                )
             } else {
-                Text(text = "No item selected")
+                SmallCard(
+                    title = "Select an item",
+                    imagePath = null,
+                    onClick = { expanded = !expanded }
+                )
             }
         }
         if (expanded) {
@@ -59,7 +68,6 @@ fun <T> EntitySelect(
                             text = labelMapper(item),
                             modifier = Modifier
                                 .clickable {
-                                    selectedItem = item
                                     onQueryChange("") // Clear the search query when an item is selected
                                     expanded = false // Close the dropdown
                                     onItemSelected(item) // Notify the selection
