@@ -45,10 +45,15 @@ fun SubmissionsScreen(
         contract = ActivityResultContracts.GetMultipleContents(),
         onResult = { uris: List<Uri>? ->
             uris?.let {
-                // Process each selected image
-                scope.launch {
-                    submissionsViewModel.updateNewSubmissionsUiState(SubmissionUiState(imagePaths = uris))
-                    navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)
+                if (uris.isNotEmpty()) {
+                    scope.launch {
+                        submissionsViewModel.updateNewSubmissionsUiState(
+                            SubmissionUiState(
+                                imagePaths = uris
+                            )
+                        )
+                        navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)
+                    }
                 }
             }
         }
