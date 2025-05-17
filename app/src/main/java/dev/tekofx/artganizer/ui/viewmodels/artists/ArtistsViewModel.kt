@@ -36,6 +36,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     val queryText = _queryText.asStateFlow()
 
     // Data
+    val areThereArtists = mutableStateOf(false)
     private val _artists = MutableStateFlow<List<Artist>>(emptyList())
     val artists = _artists
         .combine(_queryText) { artists, query ->
@@ -172,6 +173,9 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         viewModelScope.launch {
             repository.getAllArtists().collect { submissionsList ->
                 _artists.value = submissionsList
+                if (submissionsList.isNotEmpty()) {
+                    areThereArtists.value = true
+                }
             }
         }
     }

@@ -3,7 +3,6 @@ package dev.tekofx.artganizer.ui.components.input
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CardDefaults
@@ -11,7 +10,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,43 +67,50 @@ fun <T> EntitySelect(
                         Column(
                             modifier = Modifier
                                 .padding(10.dp)
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Text(
                                 text = title,
                                 style = MaterialTheme.typography.headlineSmall,
                                 modifier = Modifier.padding(bottom = 10.dp)
                             )
-                            LazyColumn(
-                                modifier = Modifier
-                                    .heightIn(min = 100.dp, max = 300.dp)
-                                    .fillMaxWidth(),
-                                verticalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                items(items.size) { index ->
-                                    val item = items[index]
-                                    if (labelMapper(item).contains(query, ignoreCase = true)) {
-                                        SmallCard(
-                                            title = labelMapper(item),
-                                            imagePath = imageMapper(item),
-                                            onClick = {
-                                                onQueryChange("") // Clear the search query when an item is selected
-                                                expanded = false // Close the dropdown
-                                                onItemSelected(item) // Notify the selection
-                                            },
-                                            elevation = CardDefaults.cardElevation(
-                                                defaultElevation = 4.dp,
-                                                pressedElevation = 8.dp
-                                            ),
-                                        )
+
+                            if (items.isEmpty()) {
+                                Text(
+                                    text = "No artists with current search",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            } else {
+
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    items(items.size) { index ->
+                                        val item = items[index]
+                                        if (labelMapper(item).contains(query, ignoreCase = true)) {
+                                            SmallCard(
+                                                title = labelMapper(item),
+                                                imagePath = imageMapper(item),
+                                                onClick = {
+                                                    onQueryChange("") // Clear the search query when an item is selected
+                                                    expanded = false // Close the dropdown
+                                                    onItemSelected(item) // Notify the selection
+                                                },
+                                                elevation = CardDefaults.cardElevation(
+                                                    defaultElevation = 4.dp,
+                                                    pressedElevation = 8.dp
+                                                ),
+                                            )
+                                        }
                                     }
                                 }
                             }
-                            TextField(
-                                modifier = Modifier.fillMaxWidth(),
-                                value = query,
-                                onValueChange = { onQueryChange(it) },
-                                label = { Text("Search") }
+                            SearchBar(
+                                queryText = query,
+                                onValueChange = { onQueryChange(it) }
                             )
                         }
                     }

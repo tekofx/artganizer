@@ -34,6 +34,7 @@ fun SubmissionsForm(
 ) {
     val queryText by artistsViewModel.queryText.collectAsState()
     val artists by artistsViewModel.artists.collectAsState()
+    val areThereArtists by artistsViewModel.areThereArtists
 
     val scrollState = rememberScrollState()
 
@@ -57,27 +58,29 @@ fun SubmissionsForm(
             onValueChange = onItemValueChange,
             modifier = Modifier.fillMaxWidth()
         )
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text("Artist", style = MaterialTheme.typography.headlineSmall)
-            EntitySelect(
-                title = "Artist",
-                selectedItem = submissionUiState.submissionDetails.artist,
-                query = queryText,
-                onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
-                items = artists,
-                labelMapper = { it.name },
-                imageMapper = { it.imagePath },
-                onItemSelected = { selectedItem ->
-                    onItemValueChange(
-                        submissionUiState.submissionDetails.copy(
-                            artistId = selectedItem.id,
-                            artist = selectedItem
+        if (areThereArtists) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text("Artist", style = MaterialTheme.typography.headlineSmall)
+                EntitySelect(
+                    title = "Select an Artist",
+                    selectedItem = submissionUiState.submissionDetails.artist,
+                    query = queryText,
+                    onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
+                    items = artists,
+                    labelMapper = { it.name },
+                    imageMapper = { it.imagePath },
+                    onItemSelected = { selectedItem ->
+                        onItemValueChange(
+                            submissionUiState.submissionDetails.copy(
+                                artistId = selectedItem.id,
+                                artist = selectedItem
+                            )
                         )
-                    )
-                },
-            )
+                    },
+                )
+            }
         }
 
         Row(
