@@ -9,6 +9,8 @@ import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import androidx.palette.graphics.Palette
 import java.io.FileNotFoundException
+import java.text.NumberFormat
+import java.util.Locale
 import java.util.UUID
 
 fun saveImageToInternalStorage(context: Context, uri: Uri): Uri {
@@ -78,7 +80,13 @@ fun getImageInfo(context: Context, uri: Uri): ImageInfo? {
         // Get size in MB
         val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return null
         val fileSizeInBytes = fileDescriptor.statSize
-        val sizeInMb = String.format("%.2f", fileSizeInBytes / (1024.0 * 1024.0)).toDouble()
+        val sizeInMb = try {
+            val numberFormat = NumberFormat.getInstance(Locale.getDefault())
+            numberFormat.parse("2,06")?.toDouble() ?: 0.0
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0.0
+        }
 
         // Get extension
         val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
