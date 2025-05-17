@@ -9,8 +9,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Artist
-import dev.tekofx.artganizer.entities.ArtistWithSubmissions
-import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.repository.ArtistsRepository
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,59 +18,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-data class ArtistUiState(
-    val artistDetails: ArtistDetails = ArtistDetails(),
-    val isEntryValid: Boolean = false
-)
-
-data class ArtistDetails(
-    val id: Int = 0,
-    val name: String = "",
-    val imagePath: String? = null,
-    val socialNetworks: List<String> = emptyList(),
-    val submissions: List<Submission> = emptyList()
-)
-
-fun ArtistDetails.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithSubmissions(
-    Artist(
-        id = id,
-        name = name,
-        imagePath = imagePath,
-        socialNetworks = socialNetworks
-    ),
-    submissions = submissions
-)
-
-fun ArtistDetails.toArtist(): Artist = Artist(
-    id = id,
-    name = name,
-    imagePath = imagePath,
-    socialNetworks = socialNetworks,
-)
-
-fun ArtistWithSubmissions.toArtisUiState(isEntryValid: Boolean = false): ArtistUiState =
-    ArtistUiState(
-        artistDetails = this.toArtistDetails(),
-        isEntryValid = isEntryValid
-    )
-
-fun ArtistWithSubmissions.toArtistDetails(): ArtistDetails = ArtistDetails(
-    id = artist.id,
-    name = artist.name,
-    imagePath = artist.imagePath,
-    socialNetworks = artist.socialNetworks,
-    submissions = submissions
-)
-
-fun ArtistUiState.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithSubmissions(
-    Artist(
-        id = artistDetails.id,
-        name = artistDetails.name,
-        imagePath = artistDetails.imagePath,
-        socialNetworks = artistDetails.socialNetworks
-    ),
-    submissions = artistDetails.submissions
-)
 
 class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() {
 
