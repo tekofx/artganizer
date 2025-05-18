@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Submission
@@ -22,7 +23,7 @@ import java.util.Date
 
 class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
-    var newSubmissionDetails by mutableStateOf(SubmissionDetails())
+    var newSubmissionsDetails = mutableListOf<SubmissionDetails>()
         private set
 
     var currentSubmissionDetails by mutableStateOf(SubmissionDetails())
@@ -52,8 +53,7 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
-        Log.d("UpdateNewuistate", submissionDetails.toString())
-        newSubmissionDetails = submissionDetails
+        newSubmissionsDetails[0] = submissionDetails
     }
 
     fun updateCurrentUiState(submissionDetails: SubmissionDetails) {
@@ -83,32 +83,35 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     suspend fun saveSubmission(context: Context) {
         val newSubmissions = mutableListOf<Submission>()
 
+        newSubmissionsDetails.forEach { newSubmissionDetails ->
 
-        val imagePath =
-            saveImageToInternalStorage(
-                context,
-                newSubmissionDetails.imagePath
+
+            val imagePath =
+                saveImageToInternalStorage(
+                    context,
+                    newSubmissionDetails.imagePath
+                )
+
+            val imageInfo = getImageInfo(context, imagePath)
+            val palette = getPaletteFromUri(context, imagePath)
+
+            newSubmissions.add(
+                Submission(
+                    id = newSubmissionsDetails[0].id,
+                    title = newSubmissionsDetails[0].title,
+                    description = newSubmissionsDetails[0].description,
+                    imagePath = imagePath.toString(),
+                    rating = newSubmissionsDetails[0].rating,
+                    date = stringToDate(newSubmissionsDetails[0].date) ?: Date(),
+                    sizeInMb = imageInfo?.sizeInMb ?: 0.0,
+                    dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                    extension = imageInfo?.extension ?: "",
+                    palette = palette,
+                    artistId = newSubmissionsDetails[0].artistId
+                )
             )
 
-        val imageInfo = getImageInfo(context, imagePath)
-        val palette = getPaletteFromUri(context, imagePath)
-
-        newSubmissions.add(
-            Submission(
-                id = newSubmissionDetails.id,
-                title = newSubmissionDetails.title,
-                description = newSubmissionDetails.description,
-                imagePath = imagePath.toString(),
-                rating = newSubmissionDetails.rating,
-                date = stringToDate(newSubmissionDetails.date) ?: Date(),
-                sizeInMb = imageInfo?.sizeInMb ?: 0.0,
-                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                extension = imageInfo?.extension ?: "",
-                palette = palette,
-                artistId = newSubmissionDetails.artistId
-            )
-        )
-
+        }
         repository.insertSubmissions(newSubmissions)
         currentSubmissionDetails = currentEditingSubmissionUiState
         currentEditingSubmissionUiState = SubmissionDetails()
@@ -120,9 +123,8 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     }
 
 
-    fun updateNewSubmissionsUiState(submissions: SubmissionDetails) {
-        newSubmissionDetails = submissions
-        Log.d("UpdateNewSubmissionsUiState", submissions.toString())
+    fun updateNewSubmissionsUiState(submissions: List<SubmissionDetails>) {
+        newSubmissionsDetails = submissions.toMutableStateList()
     }
 
 
