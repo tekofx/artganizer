@@ -27,7 +27,7 @@ fun SubmissionCreationScreen(
     ) {
         SubmissionsForm(
             artistsViewModel,
-            submissionsViewModel.newSubmissionUiState,
+            submissionsViewModel.newSubmissionDetails,
             onItemValueChange = { newValue -> submissionsViewModel.updateNewUiState(newValue) },
             onSaveClick = {
                 navHostController.popBackStack()

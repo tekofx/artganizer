@@ -19,7 +19,7 @@ import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.submission.Gallery
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.launch
 
@@ -48,8 +48,8 @@ fun SubmissionsScreen(
                 if (uris.isNotEmpty()) {
                     scope.launch {
                         submissionsViewModel.updateNewSubmissionsUiState(
-                            SubmissionUiState(
-                                imagePaths = uris
+                            SubmissionDetails(
+                                imagePath = uris[0]
                             )
                         )
                         navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)

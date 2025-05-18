@@ -22,12 +22,11 @@ import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.EntitySelect
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
 
 @Composable
 fun SubmissionsForm(
     artistsViewModel: ArtistsViewModel,
-    submissionUiState: SubmissionUiState,
+    submissionDetails: SubmissionDetails,
     onItemValueChange: (SubmissionDetails) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit = {},
@@ -44,17 +43,13 @@ fun SubmissionsForm(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (submissionUiState.imagePaths.size > 1) {
-            Text("Adding multiple images")
-        } else {
-            SubmissionImage(
-                submissionUiState.submissionDetails.title,
-                submissionUiState.imagePaths[0],
-            )
-        }
+        SubmissionImage(
+            submissionDetails.title,
+            submissionDetails.imagePath,
+        )
 
         SubmissionFormFields(
-            submissionDetails = submissionUiState.submissionDetails,
+            submissionDetails = submissionDetails,
             onValueChange = onItemValueChange,
             modifier = Modifier.fillMaxWidth()
         )
@@ -65,7 +60,7 @@ fun SubmissionsForm(
                 Text("Artist", style = MaterialTheme.typography.headlineSmall)
                 EntitySelect(
                     title = "Select an Artist",
-                    selectedItem = submissionUiState.submissionDetails.artist,
+                    selectedItem = submissionDetails.artist,
                     query = queryText,
                     onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
                     items = artists,
@@ -73,7 +68,7 @@ fun SubmissionsForm(
                     imageMapper = { it.imagePath },
                     onItemSelected = { selectedItem ->
                         onItemValueChange(
-                            submissionUiState.submissionDetails.copy(
+                            submissionDetails.copy(
                                 artistId = selectedItem.id,
                                 artist = selectedItem
                             )

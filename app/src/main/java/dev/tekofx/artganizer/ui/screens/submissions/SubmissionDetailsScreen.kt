@@ -54,7 +54,7 @@ fun SubmissionDetailsScreen(
     val context = LocalContext.current
     val showPopup by submissionsViewModel.showPopup.collectAsState()
     val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
-    val submission = submissionsViewModel.currentSubmissionUiState.toSubmissionWithArtist()
+    val submission = submissionsViewModel.currentSubmissionDetails.toSubmissionWithArtist()
     val scope = rememberCoroutineScope()
 
     if (showPopup) {
