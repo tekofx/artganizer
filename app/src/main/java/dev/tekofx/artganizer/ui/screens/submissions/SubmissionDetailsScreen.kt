@@ -55,7 +55,7 @@ fun SubmissionDetailsScreen(
     val submission = submissionsViewModel.currentSubmissionDetails.toSubmissionWithArtist()
     val scope = rememberCoroutineScope()
 
-    val currentImage by submissionsViewModel.currentImage.collectAsState()
+    val currentImage by submissionsViewModel.currentImageIndex.collectAsState()
 
 
     if (showPopup) {

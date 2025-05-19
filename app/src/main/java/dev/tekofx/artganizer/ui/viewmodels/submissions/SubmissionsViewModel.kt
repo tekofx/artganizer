@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
 
-
 enum class SaveImagesOptions {
     EMPTY,
     SINGLE_SUBMISSION,
@@ -34,20 +33,31 @@ class SubmissionsViewModel(
     private val imageRepository: ImageRepository
 ) : ViewModel() {
 
+    // New submission data used for creating a submission
     var newSubmissionDetails by mutableStateOf(SubmissionDetails())
         private set
 
+    // Current submission data
     var currentSubmissionDetails by mutableStateOf(SubmissionDetails())
         private set
 
-    val currentImage = MutableStateFlow(0)
+    // Index of images in current submission
+    val currentImageIndex = MutableStateFlow(0)
 
+    // Data of submission to edit
     var editingSubmissionDetails by mutableStateOf(SubmissionDetails())
         private set
 
+    /**
+     * What to do when selecting multiple images.
+     *
+     * [SaveImagesOptions.SINGLE_SUBMISSION] -> Create new submission with selected images
+     * [SaveImagesOptions.MULTIPLE_SUBMISSIONS] -> Create a submission with each image
+     */
     var saveImagesOption by mutableStateOf(SaveImagesOptions.EMPTY)
         private set
 
+    // Uris of selected images
     var uris = listOf<Uri>()
         private set
 
@@ -58,19 +68,23 @@ class SubmissionsViewModel(
     val showPopup = MutableStateFlow(false)
     val showEditSubmission = MutableStateFlow(false)
 
-    fun setUris(uris: List<Uri>) {
-        this.uris = uris
+
+    init {
+        viewModelScope.launch {
+            submissionRepo.getAllSubmissions().collect { submissionsList ->
+                Log.d("SubmissionsViewModel", submissionsList.toString())
+                submissions.value = submissionsList
+            }
+        }
     }
 
-    fun setCurrentImage(value: Int) {
-        Log.d("setCurrentImage", value.toString())
-        currentImage.value = value
-    }
 
-
+    /**
+     * Gets the submission of the id.
+     */
     fun getSubmissionWithArtist(id: Int) {
         viewModelScope.launch {
-            currentImage.value = 0
+            currentImageIndex.value = 0
             val submission = submissionRepo.getSubmissionWithArtist(id)
             if (submission == null) {
                 Log.d("SubmissionsViewModel", "Submission with id $id not found")
@@ -82,6 +96,17 @@ class SubmissionsViewModel(
         }
     }
 
+
+    //////////////////////// Setters ////////////////////////
+
+    fun setUris(uris: List<Uri>) {
+        this.uris = uris
+    }
+
+    fun setCurrentImage(value: Int) {
+        Log.d("setCurrentImage", value.toString())
+        currentImageIndex.value = value
+    }
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
         newSubmissionDetails = submissionDetails
@@ -109,15 +134,23 @@ class SubmissionsViewModel(
 
     }
 
-    fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
-        viewModelScope.launch {
-            submissionRepo.deleteSubmission(submission.submission)
-            removeImagesFromInternalStorage(context, submission.images.map { it.uri })
-        }
+
+    //////////////////////// Database Operations ////////////////////////
+
+    /**
+     * Updates the data of current submission
+     */
+    suspend fun editSubmission() {
+        val submission = editingSubmissionDetails.toSubmissionWithArtist()
+        submissionRepo.updateSubmissionWithArtist(submission.submission)
+        editingSubmissionDetails = SubmissionDetails()
+        currentSubmissionDetails = submission.toSubmissionDetails()
     }
 
+    /**
+     * Saves a new submission
+     */
     suspend fun saveSubmission(context: Context) {
-
         if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
             var imagePaths = mutableListOf<Uri>()
             uris.forEach { uri ->
@@ -178,8 +211,6 @@ class SubmissionsViewModel(
                         artistId = newSubmissionDetails.artistId
                     )
                 )
-                Log.d("saveSubmission", submission.toString())
-
                 imageRepository.insert(
                     Image(
                         id = 0,
@@ -201,23 +232,10 @@ class SubmissionsViewModel(
         saveImagesOption = SaveImagesOptions.EMPTY
     }
 
-    suspend fun editSubmission() {
-        Log.d("editSubmission", editingSubmissionDetails.toString())
-        val submission = editingSubmissionDetails.toSubmissionWithArtist()
-        Log.d("editSumission2", submission.toString())
-        submissionRepo.updateSubmissionWithArtist(submission.submission)
-        editingSubmissionDetails = SubmissionDetails()
-        currentSubmissionDetails = submission.toSubmissionDetails()
-    }
-
-
-    init {
-        // Collect the flow and update _submissions
+    fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
         viewModelScope.launch {
-            submissionRepo.getAllSubmissions().collect { submissionsList ->
-                Log.d("SubmissionsViewModel", submissionsList.toString())
-                submissions.value = submissionsList
-            }
+            submissionRepo.deleteSubmission(submission.submission)
+            removeImagesFromInternalStorage(context, submission.images.map { it.uri })
         }
     }
 
