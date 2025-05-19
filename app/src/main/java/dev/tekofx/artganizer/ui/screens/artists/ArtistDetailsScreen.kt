@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,11 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
@@ -34,7 +32,6 @@ import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistWithSubmissions
 import kotlinx.coroutines.launch
-import java.util.Date
 
 @Composable
 fun ArtistDetailsScreen(
@@ -121,7 +118,7 @@ fun ArtistDetailsScreen(
 
 
 @Composable
-fun ImageInfo(submission: Submission) {
+fun ImageInfo(image: Image) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -138,14 +135,14 @@ fun ImageInfo(submission: Submission) {
                         .asPainterResource(),
                     contentDescription = ""
                 )
-                Text(submission.date.toString())
+                Text(image.date.toString())
             }
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(submission.dimensions)
+                Text(image.dimensions)
                 Icon(
                     IconResource.fromDrawableResource(R.drawable.maximize_outlined)
                         .asPainterResource(),
@@ -166,13 +163,13 @@ fun ImageInfo(submission: Submission) {
                         .asPainterResource(),
                     contentDescription = ""
                 )
-                Text("${submission.size} MB")
+                Text("${image.size} MB")
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(submission.extension)
+                Text(image.extension)
                 Icon(
                     IconResource.fromDrawableResource(R.drawable.file_outlined)
                         .asPainterResource(),
@@ -183,21 +180,3 @@ fun ImageInfo(submission: Submission) {
     }
 }
 
-@Composable
-@Preview
-fun ImageInfoPreview() {
-    val submission = Submission(
-        id = 1,
-        title = "Test",
-        description = "Test",
-        imagesPath = listOf<Uri>(Uri.EMPTY),
-        rating = 5,
-        date = Date(),
-        size = 1L,
-        dimensions = "1920x1080",
-        extension = ".jpg",
-        artistId = 1,
-    )
-
-    ImageInfo(submission)
-}

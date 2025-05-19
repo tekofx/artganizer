@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -22,13 +23,17 @@ import coil.request.ImageRequest
 @Composable
 fun SubmissionViewer(
     title: String,
-    imagePaths: List<Uri>
+    imagePaths: List<Uri>,
+    currentImage: Int,
+    onImageChange: (Int) -> Unit
 ) {
 
     if (imagePaths.size > 1) {
         SubmissionPager(
             imagePaths,
-            title
+            title,
+            currentImage = currentImage,
+            onImageChange = { onImageChange(it) }
         )
     } else {
         SubmissionImage(
@@ -57,7 +62,10 @@ fun SubmissionImage(
 @Composable
 fun SubmissionPager(
     imagePaths: List<Uri>,
-    title: String
+    title: String,
+    currentImage: Int,
+    onImageChange: (Int) -> Unit
+
 ) {
     Box(
         modifier = Modifier
@@ -68,6 +76,12 @@ fun SubmissionPager(
         val pagerState = rememberPagerState(
             pageCount = { imagePaths.size }
         )
+
+        // Observe the current page and update currentImage
+        LaunchedEffect(pagerState.currentPage) {
+            onImageChange(pagerState.currentPage)
+        }
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth()

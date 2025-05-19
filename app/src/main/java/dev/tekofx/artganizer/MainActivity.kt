@@ -24,6 +24,7 @@ import dev.tekofx.artganizer.database.AppDatabase
 import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.navigation.showBottomAppBar
 import dev.tekofx.artganizer.repository.ArtistsRepository
+import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.ui.components.BottomNavigationBar
 import dev.tekofx.artganizer.ui.theme.AppTheme
@@ -45,10 +46,15 @@ class MainActivity : ComponentActivity() {
             ArtistsRepository(AppDatabase.getDatabase(this).artistDao())
         }
 
+        val imageRepository by lazy {
+            ImageRepository(AppDatabase.getDatabase(this).imageDao())
+        }
+
 
         val submissionsViewModel = ViewModelProvider(
             this, SubmissionsViewModelFactory(
-                submissionRepository
+                submissionRepository,
+                imageRepository
             )
         )[SubmissionsViewModel::class.java]
 

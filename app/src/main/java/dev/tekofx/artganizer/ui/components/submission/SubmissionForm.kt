@@ -49,6 +49,8 @@ fun SubmissionsForm(
             SubmissionViewer(
                 submissionDetails.title,
                 uris,
+                currentImage = 0,
+                onImageChange = {}
             )
         }
 

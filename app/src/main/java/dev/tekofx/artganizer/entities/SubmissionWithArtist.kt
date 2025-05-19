@@ -9,5 +9,10 @@ data class SubmissionWithArtist(
         parentColumn = "artistId",
         entityColumn = "id"
     )
-    val artist: Artist?
+    val artist: Artist?,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "submissionId"
+    )
+    val images: List<Image>
 )

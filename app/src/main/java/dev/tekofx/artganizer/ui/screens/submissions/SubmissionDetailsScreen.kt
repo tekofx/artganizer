@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
@@ -55,6 +55,9 @@ fun SubmissionDetailsScreen(
     val submission = submissionsViewModel.currentSubmissionDetails.toSubmissionWithArtist()
     val scope = rememberCoroutineScope()
 
+    val currentImage by submissionsViewModel.currentImage.collectAsState()
+
+
     if (showPopup) {
         ConfirmationPopup(
             title = "Confirm Action",
@@ -63,7 +66,7 @@ fun SubmissionDetailsScreen(
                 submissionsViewModel.setShowPopup(true)
                 submissionsViewModel.deleteSubmission(
                     context,
-                    submission.submission
+                    submission
                 )
                 navHostController.popBackStack()
                 submissionsViewModel.setShowPopup(false)
@@ -104,7 +107,11 @@ fun SubmissionDetailsScreen(
                 },
                 onEdit = {
                     submissionsViewModel.setShowEditSubmission(true)
-                }
+                },
+                onImageChange = {
+                    submissionsViewModel.setCurrentImage(it)
+                },
+                currentImage = currentImage
             )
         }
     }
@@ -117,8 +124,11 @@ fun SubmissionInfo(
     onArtistCardClick: (Int) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
+    currentImage: Int,
+    onImageChange: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -127,10 +137,12 @@ fun SubmissionInfo(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (submission.submission.imagesPath.isNotEmpty()) {
+        if (submission.images.isNotEmpty()) {
             SubmissionViewer(
                 submission.submission.title,
-                submission.submission.imagesPath,
+                submission.images.map { it.uri },
+                currentImage,
+                onImageChange = { onImageChange(it) }
             )
         }
         if (submission.submission.title.isNotEmpty()) {
@@ -171,9 +183,10 @@ fun SubmissionInfo(
             }
         }
 
-        PaletteColorList(submission.submission.palette)
+        if (submission.images.isNotEmpty()) {
 
-        ImageInfo(submission.submission)
+            ImageInfo(submission.images[currentImage])
+        }
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -195,10 +208,12 @@ fun SubmissionInfo(
 }
 
 @Composable
-fun ImageInfo(submission: Submission) {
+fun ImageInfo(image: Image) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
+        PaletteColorList(image.palette)
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
@@ -223,14 +238,14 @@ fun ImageInfo(submission: Submission) {
                         .asPainterResource(),
                     contentDescription = ""
                 )
-                Text(dateToString(submission.date))
+                Text(dateToString(image.date))
             }
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(submission.dimensions)
+                Text(image.dimensions)
                 Icon(
                     IconResource.fromDrawableResource(R.drawable.maximize_outlined)
                         .asPainterResource(),
@@ -251,13 +266,13 @@ fun ImageInfo(submission: Submission) {
                         .asPainterResource(),
                     contentDescription = ""
                 )
-                Text(formatFileSize(submission.size))
+                Text(formatFileSize(image.size))
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(submission.extension)
+                Text(image.extension)
                 Icon(
                     IconResource.fromDrawableResource(R.drawable.file_outlined)
                         .asPainterResource(),

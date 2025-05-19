@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ISubmissionDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(item: Submission)
+    suspend fun insert(item: Submission): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSubmissions(items: List<Submission>)
@@ -39,6 +39,6 @@ interface ISubmissionDao {
     }
 
     @Query("SELECT * from submissions ORDER BY title ASC")
-    fun getAllSubmissions(): Flow<List<Submission>>
+    fun getAllSubmissions(): Flow<List<SubmissionWithArtist>>
 
 }

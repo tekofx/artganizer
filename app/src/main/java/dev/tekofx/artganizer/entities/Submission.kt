@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity(
     tableName = "submissions",
@@ -23,13 +22,8 @@ data class Submission(
     val id: Int = 0,
     val title: String,
     val description: String,
-    val imagesPath: List<Uri>,
     val rating: Int = 0,
-    val date: Date = Date(),
-    val size: Long = 0L,
-    val dimensions: String = "",
-    val extension: String = "",
-    val palette: List<Int> = emptyList(),
+    val imagePath: Uri = Uri.EMPTY,
     // Foreign keys
     val artistId: Int? = null
 )
