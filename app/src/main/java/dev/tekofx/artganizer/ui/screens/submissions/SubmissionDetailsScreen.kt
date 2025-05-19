@@ -78,6 +78,7 @@ fun SubmissionDetailsScreen(
     Scaffold {
         if (showEdit) {
             SubmissionsForm(
+                submissionsViewModel.uris,
                 artistsViewModel,
                 submissionsViewModel.currentEditingSubmissionUiState,
                 onItemValueChange = {

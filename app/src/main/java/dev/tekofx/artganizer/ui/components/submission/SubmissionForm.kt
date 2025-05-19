@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components.submission
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 
 @Composable
 fun SubmissionsForm(
+    uris: List<Uri>,
     artistsViewModel: ArtistsViewModel,
     submissionDetails: SubmissionDetails,
     onItemValueChange: (SubmissionDetails) -> Unit,
@@ -43,10 +45,17 @@ fun SubmissionsForm(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SubmissionImage(
-            submissionDetails.title,
-            submissionDetails.imagePath,
-        )
+        if (uris.size == 1) {
+            SubmissionImage(
+                submissionDetails.title,
+                uris[0],
+            )
+        }
+
+        if (uris.size > 1) {
+            Text("Multiple images")
+        }
+
 
         SubmissionFormFields(
             submissionDetails = submissionDetails,

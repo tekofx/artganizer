@@ -47,12 +47,8 @@ fun SubmissionsScreen(
             uris?.let {
                 if (uris.isNotEmpty()) {
                     scope.launch {
-                        val submissionsDetails: List<SubmissionDetails> = uris.map {
-                            SubmissionDetails(imagePath = it)
-                        }
-                        submissionsViewModel.updateNewSubmissionsUiState(
-                            submissionsDetails
-                        )
+                        submissionsViewModel.setUris(uris)
+                        submissionsViewModel.updateNewUiState(SubmissionDetails())
                         navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)
                     }
                 }

@@ -26,8 +26,9 @@ fun SubmissionCreationScreen(
         modifier = Modifier.fillMaxWidth()
     ) {
         SubmissionsForm(
+            submissionsViewModel.uris,
             artistsViewModel,
-            submissionsViewModel.newSubmissionsDetails[0],
+            submissionsViewModel.newSubmissionDetails,
             onItemValueChange = { newValue -> submissionsViewModel.updateNewUiState(newValue) },
             onSaveClick = {
                 navHostController.popBackStack()

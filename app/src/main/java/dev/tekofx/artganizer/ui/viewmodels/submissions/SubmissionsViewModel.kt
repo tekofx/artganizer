@@ -2,11 +2,12 @@ package dev.tekofx.artganizer.ui.viewmodels.submissions
 
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Submission
@@ -23,7 +24,7 @@ import java.util.Date
 
 class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
-    var newSubmissionsDetails = mutableListOf<SubmissionDetails>()
+    var newSubmissionDetails by mutableStateOf(SubmissionDetails())
         private set
 
     var currentSubmissionDetails by mutableStateOf(SubmissionDetails())
@@ -32,12 +33,19 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     var currentEditingSubmissionUiState by mutableStateOf(SubmissionDetails())
         private set
 
+    var uris = listOf<Uri>()
+        private set
+
     // Data
     val submissions = MutableStateFlow<List<Submission>>(emptyList())
 
     // Ui State
     val showPopup = MutableStateFlow(false)
     val showEditSubmission = MutableStateFlow(false)
+
+    fun setUris(uris: List<Uri>) {
+        this.uris = uris
+    }
 
 
     fun getSubmissionWithArtist(id: Int) {
@@ -48,12 +56,13 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
                 return@launch
             }
             currentSubmissionDetails = submission.toSubmissionDetails()
+            uris = listOf(submission.submission.imagePath.toUri())
         }
     }
 
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
-        newSubmissionsDetails[0] = submissionDetails
+        newSubmissionDetails = submissionDetails
     }
 
     fun updateCurrentUiState(submissionDetails: SubmissionDetails) {
@@ -83,13 +92,11 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     suspend fun saveSubmission(context: Context) {
         val newSubmissions = mutableListOf<Submission>()
 
-        newSubmissionsDetails.forEach { newSubmissionDetails ->
-
-
+        uris.forEach { uri ->
             val imagePath =
                 saveImageToInternalStorage(
                     context,
-                    newSubmissionDetails.imagePath
+                    uri
                 )
 
             val imageInfo = getImageInfo(context, imagePath)
@@ -97,17 +104,17 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
 
             newSubmissions.add(
                 Submission(
-                    id = newSubmissionsDetails[0].id,
-                    title = newSubmissionsDetails[0].title,
-                    description = newSubmissionsDetails[0].description,
+                    id = newSubmissionDetails.id,
+                    title = newSubmissionDetails.title,
+                    description = newSubmissionDetails.description,
                     imagePath = imagePath.toString(),
-                    rating = newSubmissionsDetails[0].rating,
-                    date = stringToDate(newSubmissionsDetails[0].date) ?: Date(),
+                    rating = newSubmissionDetails.rating,
+                    date = stringToDate(newSubmissionDetails.date) ?: Date(),
                     sizeInMb = imageInfo?.sizeInMb ?: 0.0,
                     dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
                     extension = imageInfo?.extension ?: "",
                     palette = palette,
-                    artistId = newSubmissionsDetails[0].artistId
+                    artistId = newSubmissionDetails.artistId
                 )
             )
 
@@ -115,16 +122,12 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         repository.insertSubmissions(newSubmissions)
         currentSubmissionDetails = currentEditingSubmissionUiState
         currentEditingSubmissionUiState = SubmissionDetails()
+        uris = emptyList()
     }
 
     suspend fun editSubmission() {
         val submission = currentEditingSubmissionUiState.toSubmissionWithArtist()
         repository.updateSubmissionWithArtist(submission.submission)
-    }
-
-
-    fun updateNewSubmissionsUiState(submissions: List<SubmissionDetails>) {
-        newSubmissionsDetails = submissions.toMutableStateList()
     }
 
 
