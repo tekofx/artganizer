@@ -20,28 +20,61 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun SubmissionImage(
+fun SubmissionViewer(
     title: String,
     imagePaths: List<Uri>
 ) {
-    val pagerState = rememberPagerState(
-        pageCount = { imagePaths.size }
-    )
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .animateContentSize()) {
+    if (imagePaths.size > 1) {
+        SubmissionPager(
+            imagePaths,
+            title
+        )
+    } else {
+        SubmissionImage(
+            imagePaths[0],
+            title
+        )
+    }
+}
+
+
+@Composable
+fun SubmissionImage(
+    imagePath: Uri,
+    title: String
+) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(imagePath)
+            .build(),
+        contentDescription = title,
+        modifier = Modifier.fillMaxWidth(),
+        contentScale = ContentScale.FillWidth
+    )
+}
+
+@Composable
+fun SubmissionPager(
+    imagePaths: List<Uri>,
+    title: String
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
+
+        val pagerState = rememberPagerState(
+            pageCount = { imagePaths.size }
+        )
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth()
         ) { page ->
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(imagePaths[page])
-                    .build(),
-                contentDescription = "$title - Image ${page + 1}",
-                modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth
+            SubmissionImage(
+                title = title,
+                imagePath = imagePaths[page]
             )
         }
 

@@ -46,7 +46,7 @@ fun SubmissionsForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (uris.size == 1) {
-            SubmissionImage(
+            SubmissionViewer(
                 submissionDetails.title,
                 uris,
             )

@@ -33,7 +33,7 @@ import dev.tekofx.artganizer.ui.components.PaletteColorList
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.Rating
-import dev.tekofx.artganizer.ui.components.submission.SubmissionImage
+import dev.tekofx.artganizer.ui.components.submission.SubmissionViewer
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
@@ -128,7 +128,7 @@ fun SubmissionInfo(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (submission.submission.imagesPath.isNotEmpty()) {
-            SubmissionImage(
+            SubmissionViewer(
                 submission.submission.title,
                 submission.submission.imagesPath,
             )
