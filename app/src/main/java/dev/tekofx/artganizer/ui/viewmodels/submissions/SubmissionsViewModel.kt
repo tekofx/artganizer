@@ -70,6 +70,7 @@ class SubmissionsViewModel(
 
     fun getSubmissionWithArtist(id: Int) {
         viewModelScope.launch {
+            currentImage.value = 0
             val submission = submissionRepo.getSubmissionWithArtist(id)
             if (submission == null) {
                 Log.d("SubmissionsViewModel", "Submission with id $id not found")
