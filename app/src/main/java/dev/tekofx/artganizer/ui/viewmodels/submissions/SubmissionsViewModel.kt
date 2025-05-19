@@ -65,21 +65,22 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
         newSubmissionDetails = submissionDetails
     }
 
-    fun updateCurrentUiState(submissionDetails: SubmissionDetails) {
+    fun updateEditingUiState(submissionDetails: SubmissionDetails) {
+        Log.d("updateEditingUiState", currentEditingSubmissionUiState.toString())
         currentEditingSubmissionUiState = submissionDetails
     }
 
+
     fun setShowEditSubmission(show: Boolean) {
         showEditSubmission.value = show
-        currentEditingSubmissionUiState = if (show) {
-            currentSubmissionDetails
-        } else {
-            SubmissionDetails()
+        if (show) {
+            currentEditingSubmissionUiState = currentSubmissionDetails
         }
     }
 
     fun setShowPopup(show: Boolean) {
         showPopup.value = show
+
     }
 
     fun deleteSubmission(context: Context, submission: Submission) {
@@ -126,8 +127,12 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     }
 
     suspend fun editSubmission() {
+        Log.d("editSubmission", currentEditingSubmissionUiState.toString())
         val submission = currentEditingSubmissionUiState.toSubmissionWithArtist()
+        Log.d("editSumission2", submission.toString())
         repository.updateSubmissionWithArtist(submission.submission)
+        currentEditingSubmissionUiState = SubmissionDetails()
+        currentSubmissionDetails = submission.toSubmissionDetails()
     }
 
 

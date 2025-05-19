@@ -2,6 +2,7 @@ package dev.tekofx.artganizer.ui.viewmodels.artists
 
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -133,6 +134,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     }
 
     suspend fun editArtist(context: Context) {
+        Log.d("editARtist", currentArtistUiState.artistDetails.toString())
         val imagePath = currentArtistUiState.artistDetails.imagePath
 
         if (imagePath != null) {

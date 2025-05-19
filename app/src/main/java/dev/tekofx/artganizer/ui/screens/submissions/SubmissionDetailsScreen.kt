@@ -82,7 +82,7 @@ fun SubmissionDetailsScreen(
                 artistsViewModel,
                 submissionsViewModel.currentEditingSubmissionUiState,
                 onItemValueChange = {
-                    submissionsViewModel.updateCurrentUiState(it)
+                    submissionsViewModel.updateEditingUiState(it)
                 },
                 onSaveClick = {
                     scope.launch { submissionsViewModel.editSubmission() }
