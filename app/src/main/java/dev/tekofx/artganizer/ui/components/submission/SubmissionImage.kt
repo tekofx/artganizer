@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.components.submission
 
 import android.net.Uri
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,7 +28,9 @@ fun SubmissionImage(
         pageCount = { imagePaths.size }
     )
 
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .animateContentSize()) {
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth()
