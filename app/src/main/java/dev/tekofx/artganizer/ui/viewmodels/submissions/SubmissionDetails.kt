@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.ui.viewmodels.submissions
 
 import android.net.Uri
-import androidx.core.net.toUri
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
@@ -13,7 +12,7 @@ data class SubmissionDetails(
     val id: Int = 0,
     val title: String = "",
     val description: String = "",
-    val imagePath: Uri = Uri.EMPTY,
+    val imagesPath: List<Uri> = emptyList<Uri>(),
     val rating: Int = 0,
     val date: String = dateToString(Date()),
     val sizeInMb: Double = 0.0,
@@ -29,7 +28,7 @@ fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
         id = id,
         title = title,
         description = description,
-        imagePath = imagePath.toString(),
+        imagesPath = imagesPath,
         rating = rating,
         date = stringToDate(date) ?: Date(),
         sizeInMb = sizeInMb,
@@ -45,7 +44,7 @@ fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDe
     id = submission.id,
     title = submission.title,
     description = submission.description,
-    imagePath = submission.imagePath.toUri(),
+    imagesPath = submission.imagesPath,
     rating = submission.rating,
     date = submission.date.toString(),
     sizeInMb = submission.sizeInMb,

@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.entities
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -22,7 +23,7 @@ data class Submission(
     val id: Int = 0,
     val title: String,
     val description: String,
-    val imagePath: String,
+    val imagesPath: List<Uri>,
     val rating: Int = 0,
     val date: Date = Date(),
     val sizeInMb: Double = 0.0,

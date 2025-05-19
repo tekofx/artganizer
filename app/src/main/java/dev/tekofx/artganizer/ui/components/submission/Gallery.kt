@@ -28,7 +28,7 @@ fun Gallery(navHostController: NavHostController, submissions: List<Submission>)
             items(submissions) { submission ->
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(submission.imagePath)
+                        .data(submission.imagesPath[0])
                         .build(),
                     contentDescription = submission.title,
                     contentScale = ContentScale.Crop,

@@ -48,7 +48,7 @@ fun SubmissionsForm(
         if (uris.size == 1) {
             SubmissionImage(
                 submissionDetails.title,
-                uris[0],
+                uris,
             )
         }
 

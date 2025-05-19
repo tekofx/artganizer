@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -189,7 +190,7 @@ fun ImageInfoPreview() {
         id = 1,
         title = "Test",
         description = "Test",
-        imagePath = "Test",
+        imagesPath = listOf<Uri>(Uri.EMPTY),
         rating = 5,
         date = Date(),
         sizeInMb = 1.0,

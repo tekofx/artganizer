@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
-import androidx.core.net.toUri
 import androidx.palette.graphics.Palette
 import java.io.FileNotFoundException
 import java.text.NumberFormat
@@ -46,11 +45,12 @@ fun getPaletteFromUri(context: Context, uri: Uri): List<Int> {
     return colors
 }
 
-fun removeImageFromInternalStorage(context: Context, uriString: String) {
-    val uri = uriString.toUri()
-    val file = context.filesDir.resolve(uri.lastPathSegment ?: return)
-    if (file.exists()) {
-        file.delete()
+fun removeImagesFromInternalStorage(context: Context, uriStrings: List<Uri>) {
+    uriStrings.forEach { uri ->
+        val file = context.filesDir.resolve(uri.lastPathSegment ?: return@forEach)
+        if (file.exists()) {
+            file.delete()
+        }
     }
 }
 

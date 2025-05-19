@@ -21,9 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Submission
@@ -42,7 +40,6 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmissionWithArtist
 import dev.tekofx.artganizer.utils.dateToString
 import kotlinx.coroutines.launch
-import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -75,12 +72,14 @@ fun SubmissionDetailsScreen(
             }
         )
     }
+
+
     Scaffold {
         if (showEdit) {
             SubmissionsForm(
                 submissionsViewModel.uris,
                 artistsViewModel,
-                submissionsViewModel.currentEditingSubmissionUiState,
+                submissionsViewModel.editingSubmissionDetails,
                 onItemValueChange = {
                     submissionsViewModel.updateEditingUiState(it)
                 },
@@ -118,7 +117,6 @@ fun SubmissionInfo(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
 ) {
-
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -128,10 +126,12 @@ fun SubmissionInfo(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SubmissionImage(
-            submission.submission.title,
-            submission.submission.imagePath.toUri(),
-        )
+        if (submission.submission.imagesPath.isNotEmpty()) {
+            SubmissionImage(
+                submission.submission.title,
+                submission.submission.imagesPath,
+            )
+        }
         if (submission.submission.title.isNotEmpty()) {
             Text(
                 text = submission.submission.title,
@@ -267,21 +267,3 @@ fun ImageInfo(submission: Submission) {
     }
 }
 
-@Composable
-@Preview
-fun ImageInfoPreview() {
-    val submission = Submission(
-        id = 1,
-        title = "Test",
-        description = "Test",
-        imagePath = "Test",
-        rating = 5,
-        date = Date(),
-        sizeInMb = 1.0,
-        dimensions = "1920x1080",
-        extension = "JPEG",
-        artistId = 1,
-    )
-
-    ImageInfo(submission)
-}

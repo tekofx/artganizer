@@ -7,20 +7,25 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.getImageInfo
 import dev.tekofx.artganizer.utils.getPaletteFromUri
-import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
+import dev.tekofx.artganizer.utils.removeImagesFromInternalStorage
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import dev.tekofx.artganizer.utils.stringToDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
 
+
+enum class SaveImagesOptions {
+    EMPTY,
+    SINGLE_SUBMISSION,
+    MULTIPLE_SUBMISSIONS
+}
 
 class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewModel() {
 
@@ -30,7 +35,10 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     var currentSubmissionDetails by mutableStateOf(SubmissionDetails())
         private set
 
-    var currentEditingSubmissionUiState by mutableStateOf(SubmissionDetails())
+    var editingSubmissionDetails by mutableStateOf(SubmissionDetails())
+        private set
+
+    var saveImagesOption by mutableStateOf(SaveImagesOptions.EMPTY)
         private set
 
     var uris = listOf<Uri>()
@@ -55,8 +63,9 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
                 Log.d("SubmissionsViewModel", "Submission with id $id not found")
                 return@launch
             }
+            Log.d("GetSubmissionWithArtist", submission.toString())
             currentSubmissionDetails = submission.toSubmissionDetails()
-            uris = listOf(submission.submission.imagePath.toUri())
+            uris = submission.submission.imagesPath
         }
     }
 
@@ -66,15 +75,19 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     }
 
     fun updateEditingUiState(submissionDetails: SubmissionDetails) {
-        Log.d("updateEditingUiState", currentEditingSubmissionUiState.toString())
-        currentEditingSubmissionUiState = submissionDetails
+        Log.d("updateEditingUiState", editingSubmissionDetails.toString())
+        editingSubmissionDetails = submissionDetails
+    }
+
+    fun updateSaveImagesOption(imagesOption: SaveImagesOptions) {
+        saveImagesOption = imagesOption
     }
 
 
     fun setShowEditSubmission(show: Boolean) {
         showEditSubmission.value = show
         if (show) {
-            currentEditingSubmissionUiState = currentSubmissionDetails
+            editingSubmissionDetails = currentSubmissionDetails
         }
     }
 
@@ -86,52 +99,83 @@ class SubmissionsViewModel(private val repository: SubmissionRepository) : ViewM
     fun deleteSubmission(context: Context, submission: Submission) {
         viewModelScope.launch {
             repository.deleteSubmission(submission)
-            removeImageFromInternalStorage(context, submission.imagePath)
+            removeImagesFromInternalStorage(context, submission.imagesPath)
         }
     }
 
     suspend fun saveSubmission(context: Context) {
         val newSubmissions = mutableListOf<Submission>()
 
-        uris.forEach { uri ->
-            val imagePath =
-                saveImageToInternalStorage(
-                    context,
-                    uri
-                )
+        if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
+            val submissionUris = mutableListOf<Uri>()
 
-            val imageInfo = getImageInfo(context, imagePath)
-            val palette = getPaletteFromUri(context, imagePath)
+            uris.forEach { uri ->
+                val imagePath =
+                    saveImageToInternalStorage(
+                        context,
+                        uri
+                    )
+                submissionUris.add(imagePath)
 
-            newSubmissions.add(
-                Submission(
-                    id = newSubmissionDetails.id,
-                    title = newSubmissionDetails.title,
-                    description = newSubmissionDetails.description,
-                    imagePath = imagePath.toString(),
-                    rating = newSubmissionDetails.rating,
-                    date = stringToDate(newSubmissionDetails.date) ?: Date(),
-                    sizeInMb = imageInfo?.sizeInMb ?: 0.0,
-                    dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                    extension = imageInfo?.extension ?: "",
-                    palette = palette,
-                    artistId = newSubmissionDetails.artistId
-                )
+            }
+            val imageInfo = getImageInfo(context, submissionUris[0])
+            val palette = getPaletteFromUri(context, submissionUris[0])
+            val submission = Submission(
+                id = newSubmissionDetails.id,
+                title = newSubmissionDetails.title,
+                description = newSubmissionDetails.description,
+                imagesPath = submissionUris,
+                rating = newSubmissionDetails.rating,
+                date = stringToDate(newSubmissionDetails.date) ?: Date(),
+                sizeInMb = imageInfo?.sizeInMb ?: 0.0,
+                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                extension = imageInfo?.extension ?: "",
+                palette = palette,
+                artistId = newSubmissionDetails.artistId
             )
+            repository.insertSubmission(submission)
+        } else {
+            uris.forEach { uri ->
+                val imagePath =
+                    saveImageToInternalStorage(
+                        context,
+                        uri
+                    )
 
+                val imageInfo = getImageInfo(context, imagePath)
+                val palette = getPaletteFromUri(context, imagePath)
+
+                newSubmissions.add(
+                    Submission(
+                        id = newSubmissionDetails.id,
+                        title = newSubmissionDetails.title,
+                        description = newSubmissionDetails.description,
+                        imagesPath = listOf(imagePath),
+                        rating = newSubmissionDetails.rating,
+                        date = stringToDate(newSubmissionDetails.date) ?: Date(),
+                        sizeInMb = imageInfo?.sizeInMb ?: 0.0,
+                        dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                        extension = imageInfo?.extension ?: "",
+                        palette = palette,
+                        artistId = newSubmissionDetails.artistId
+                    )
+                )
+            }
+            repository.insertSubmissions(newSubmissions)
         }
-        repository.insertSubmissions(newSubmissions)
-        currentSubmissionDetails = currentEditingSubmissionUiState
-        currentEditingSubmissionUiState = SubmissionDetails()
+
+        currentSubmissionDetails = editingSubmissionDetails
+        editingSubmissionDetails = SubmissionDetails()
         uris = emptyList()
+        saveImagesOption = SaveImagesOptions.EMPTY
     }
 
     suspend fun editSubmission() {
-        Log.d("editSubmission", currentEditingSubmissionUiState.toString())
-        val submission = currentEditingSubmissionUiState.toSubmissionWithArtist()
+        Log.d("editSubmission", editingSubmissionDetails.toString())
+        val submission = editingSubmissionDetails.toSubmissionWithArtist()
         Log.d("editSumission2", submission.toString())
         repository.updateSubmissionWithArtist(submission.submission)
-        currentEditingSubmissionUiState = SubmissionDetails()
+        editingSubmissionDetails = SubmissionDetails()
         currentSubmissionDetails = submission.toSubmissionDetails()
     }
 
