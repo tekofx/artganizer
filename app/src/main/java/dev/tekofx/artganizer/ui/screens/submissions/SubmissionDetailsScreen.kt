@@ -39,6 +39,7 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmissionWithArtist
 import dev.tekofx.artganizer.utils.dateToString
+import dev.tekofx.artganizer.utils.formatFileSize
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -250,7 +251,7 @@ fun ImageInfo(submission: Submission) {
                         .asPainterResource(),
                     contentDescription = ""
                 )
-                Text("${submission.sizeInMb} MB")
+                Text(formatFileSize(submission.size))
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),

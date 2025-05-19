@@ -166,7 +166,7 @@ fun ImageInfo(submission: Submission) {
                         .asPainterResource(),
                     contentDescription = ""
                 )
-                Text("${submission.sizeInMb} MB")
+                Text("${submission.size} MB")
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -193,7 +193,7 @@ fun ImageInfoPreview() {
         imagesPath = listOf<Uri>(Uri.EMPTY),
         rating = 5,
         date = Date(),
-        sizeInMb = 1.0,
+        size = 1L,
         dimensions = "1920x1080",
         extension = ".jpg",
         artistId = 1,

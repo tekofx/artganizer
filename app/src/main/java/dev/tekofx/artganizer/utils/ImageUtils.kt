@@ -8,7 +8,6 @@ import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.palette.graphics.Palette
 import java.io.FileNotFoundException
-import java.text.NumberFormat
 import java.util.Locale
 import java.util.UUID
 
@@ -72,6 +71,21 @@ fun getPathFromUri(context: Context, uri: Uri): String? {
     }
 }
 
+fun formatFileSize(sizeInBytes: Long): String {
+    return when {
+        sizeInBytes >= 1024 * 1024 -> {
+            val sizeInMb = sizeInBytes.toDouble() / (1024 * 1024)
+            String.format(Locale.getDefault(), "%.2f MB", sizeInMb)
+        }
+
+        sizeInBytes >= 1024 -> {
+            val sizeInKb = sizeInBytes.toDouble() / 1024
+            String.format(Locale.getDefault(), "%.2f KB", sizeInKb)
+        }
+
+        else -> "$sizeInBytes Bytes"
+    }
+}
 
 fun getImageInfo(context: Context, uri: Uri): ImageInfo? {
     val contentResolver = context.contentResolver
@@ -80,13 +94,6 @@ fun getImageInfo(context: Context, uri: Uri): ImageInfo? {
         // Get size in MB
         val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return null
         val fileSizeInBytes = fileDescriptor.statSize
-        val sizeInMb = try {
-            val numberFormat = NumberFormat.getInstance(Locale.getDefault())
-            numberFormat.parse("2,06")?.toDouble() ?: 0.0
-        } catch (e: Exception) {
-            e.printStackTrace()
-            0.0
-        }
 
         // Get extension
         val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
@@ -100,7 +107,7 @@ fun getImageInfo(context: Context, uri: Uri): ImageInfo? {
         val dimensions = Pair(options.outWidth, options.outHeight)
         fileDescriptor.close()
 
-        return ImageInfo(sizeInMb, fileType, dimensions)
+        return ImageInfo(fileSizeInBytes, fileType, dimensions)
     } catch (e: FileNotFoundException) {
         e.printStackTrace()
         return null
@@ -108,7 +115,7 @@ fun getImageInfo(context: Context, uri: Uri): ImageInfo? {
 }
 
 data class ImageInfo(
-    val sizeInMb: Double,
+    val sizeInBytes: Long,
     val extension: String,
     val dimensions: Pair<Int, Int>
 )

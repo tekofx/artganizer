@@ -26,7 +26,7 @@ data class Submission(
     val imagesPath: List<Uri>,
     val rating: Int = 0,
     val date: Date = Date(),
-    val sizeInMb: Double = 0.0,
+    val size: Long = 0L,
     val dimensions: String = "",
     val extension: String = "",
     val palette: List<Int> = emptyList(),
