@@ -74,7 +74,7 @@ fun ArtistCard(
 @Preview
 fun ArtistCardPreview() {
     val artist = Artist(
-        id = 1,
+        artistId = 1,
         name = "John Doe",
         imagePath = null,
         socialNetworks = emptyList()

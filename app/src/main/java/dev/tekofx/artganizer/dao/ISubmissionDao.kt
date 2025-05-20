@@ -25,17 +25,17 @@ interface ISubmissionDao {
     @Delete
     suspend fun delete(item: Submission)
 
-    @Query("SELECT * from submissions WHERE id = :id")
+    @Query("SELECT * from submissions WHERE submissionId = :id")
     fun getSubmission(id: Long): Flow<Submission>
 
     @Transaction
-    @Query("SELECT * FROM submissions WHERE id = :submissionId")
+    @Query("SELECT * FROM submissions WHERE submissionId = :submissionId")
     suspend fun getSubmissionWithArtist(submissionId: Long): SubmissionWithArtist?
 
     @Transaction
     suspend fun updateSubmissionWithArtist(submission: Submission) {
         update(submission)
-        getSubmissionWithArtist(submission.id)
+        getSubmissionWithArtist(submission.submissionId)
     }
 
     @Transaction

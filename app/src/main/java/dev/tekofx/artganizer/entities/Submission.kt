@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
     foreignKeys = [
         ForeignKey(
             entity = Artist::class,
-            parentColumns = ["id"],
+            parentColumns = ["artistId"],
             childColumns = ["artistId"],
             onDelete = ForeignKey.SET_NULL
         )
@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 )
 data class Submission(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val submissionId: Long = 0,
     val title: String,
     val description: String,
     val rating: Int = 0,

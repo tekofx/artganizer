@@ -84,7 +84,7 @@ fun SubmissionsForm(
                     onItemSelected = { selectedItem ->
                         onItemValueChange(
                             submissionDetails.copy(
-                                artistId = selectedItem.id,
+                                artistId = selectedItem.artistId,
                                 artist = selectedItem
                             )
                         )

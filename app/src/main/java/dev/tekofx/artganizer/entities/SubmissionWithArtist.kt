@@ -7,11 +7,11 @@ data class SubmissionWithArtist(
     @Embedded val submission: Submission,
     @Relation(
         parentColumn = "artistId",
-        entityColumn = "id"
+        entityColumn = "artistId"
     )
     val artist: Artist?,
     @Relation(
-        parentColumn = "id",
+        parentColumn = "submissionId",
         entityColumn = "submissionId"
     )
     val images: List<Image>

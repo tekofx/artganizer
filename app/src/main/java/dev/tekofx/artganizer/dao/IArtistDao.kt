@@ -22,14 +22,14 @@ interface IArtistDao {
     @Delete
     suspend fun delete(artist: Artist)
 
-    @Query("SELECT * from artists WHERE id = :id")
+    @Query("SELECT * from artists WHERE artistId = :id")
     fun getArtists(id: Int): Flow<Artist>
 
     @Query("SELECT * from artists ORDER BY name ASC")
     fun getAllArtists(): Flow<List<Artist>>
 
     @Transaction
-    @Query("SELECT * FROM artists WHERE id = :artistId")
+    @Query("SELECT * FROM artists WHERE artistId = :artistId")
     suspend fun getArtistWithSubmissions(artistId: Int): ArtistWithSubmissions?
 
 

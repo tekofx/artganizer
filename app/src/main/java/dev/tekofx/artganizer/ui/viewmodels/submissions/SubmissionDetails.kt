@@ -19,7 +19,7 @@ data class SubmissionDetails(
 
 fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = SubmissionWithArtist(
     submission = Submission(
-        id = id,
+        submissionId = id,
         title = title,
         description = description,
         imagePath = imagePath,
@@ -31,7 +31,7 @@ fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
 )
 
 fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
-    id = submission.id,
+    id = submission.submissionId,
     title = submission.title,
     description = submission.description,
     imagePath = submission.imagePath,

@@ -37,7 +37,7 @@ fun Gallery(
                         .padding(2.dp)
                         .clip(MaterialTheme.shapes.small)
                         .clickable {
-                            onImageClick(submission.id)
+                            onImageClick(submission.submissionId)
                         }
                 )
             }

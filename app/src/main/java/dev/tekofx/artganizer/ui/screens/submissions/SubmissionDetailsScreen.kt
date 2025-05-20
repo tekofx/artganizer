@@ -183,7 +183,7 @@ fun SubmissionInfo(
                     title = submission.artist.name,
                     imagePath = submission.artist.imagePath,
                     onClick = {
-                        onArtistCardClick(submission.artist.id)
+                        onArtistCardClick(submission.artist.artistId)
                     }
                 )
             }

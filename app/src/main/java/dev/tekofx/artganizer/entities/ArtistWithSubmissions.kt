@@ -6,7 +6,7 @@ import androidx.room.Relation
 data class ArtistWithSubmissions(
     @Embedded val artist: Artist,
     @Relation(
-        parentColumn = "id",
+        parentColumn = "artistId",
         entityColumn = "artistId"
     )
     val submissions: List<Submission>

@@ -11,7 +11,7 @@ data class ArtistUiState(
 
 fun ArtistUiState.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithSubmissions(
     Artist(
-        id = artistDetails.id,
+        artistId = artistDetails.id,
         name = artistDetails.name,
         imagePath = artistDetails.imagePath,
         socialNetworks = artistDetails.socialNetworks

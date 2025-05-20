@@ -11,7 +11,7 @@ import java.util.Date
     foreignKeys = [
         ForeignKey(
             entity = Submission::class,
-            parentColumns = ["id"],
+            parentColumns = ["submissionId"],
             childColumns = ["submissionId"],
             onDelete = ForeignKey.CASCADE
         )
@@ -20,7 +20,7 @@ import java.util.Date
 )
 data class Image(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val imageId: Long = 0,
     val date: Date = Date(),
     val uri: Uri = Uri.EMPTY,
     val size: Long = 0L,

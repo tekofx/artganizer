@@ -166,7 +166,7 @@ class SubmissionsViewModel(
 
             val submission = submissionRepo.insertSubmission(
                 Submission(
-                    id = newSubmissionDetails.id,
+                    submissionId = newSubmissionDetails.id,
                     title = newSubmissionDetails.title,
                     description = newSubmissionDetails.description,
                     imagePath = imagePaths[0],
@@ -204,7 +204,7 @@ class SubmissionsViewModel(
                 val submission = submissionRepo.insertSubmission(
 
                     Submission(
-                        id = newSubmissionDetails.id,
+                        submissionId = newSubmissionDetails.id,
                         title = newSubmissionDetails.title,
                         description = newSubmissionDetails.description,
                         imagePath = imagePath,
@@ -214,7 +214,7 @@ class SubmissionsViewModel(
                 )
                 imageRepository.insert(
                     Image(
-                        id = 0,
+                        imageId = 0,
                         date = Date(),
                         uri = imagePath,
                         size = imageInfo?.sizeInBytes ?: 0L,

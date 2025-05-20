@@ -14,7 +14,7 @@ data class ArtistDetails(
 
 fun ArtistDetails.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithSubmissions(
     Artist(
-        id = id,
+        artistId = id,
         name = name,
         imagePath = imagePath,
         socialNetworks = socialNetworks
@@ -23,7 +23,7 @@ fun ArtistDetails.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithS
 )
 
 fun ArtistWithSubmissions.toArtistDetails(): ArtistDetails = ArtistDetails(
-    id = artist.id,
+    id = artist.artistId,
     name = artist.name,
     imagePath = artist.imagePath,
     socialNetworks = artist.socialNetworks,
