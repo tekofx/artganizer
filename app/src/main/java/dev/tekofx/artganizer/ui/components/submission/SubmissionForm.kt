@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -42,7 +46,8 @@ fun SubmissionsForm(
         modifier = Modifier
             .padding(10.dp)
             .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         SubmissionViewer(
             submissionDetails.title,
@@ -57,11 +62,17 @@ fun SubmissionsForm(
             onValueChange = onItemValueChange,
             modifier = Modifier.fillMaxWidth()
         )
-        if (areThereArtists) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text("Artist", style = MaterialTheme.typography.headlineSmall)
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp)
+        )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text("Artist", style = MaterialTheme.typography.headlineSmall)
+            if (areThereArtists) {
                 EntitySelect(
                     title = "Select an Artist",
                     selectedItem = submissionDetails.artist,
@@ -79,6 +90,29 @@ fun SubmissionsForm(
                         )
                     },
                 )
+            } else {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(40.dp),
+                            painter = IconResource.fromDrawableResource(R.drawable.cancel)
+                                .asPainterResource(),
+                            contentDescription = ""
+                        )
+                        Text(
+                            text = "No artists",
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                    }
+                }
             }
         }
 
@@ -109,6 +143,7 @@ fun SubmissionFormFields(
 ) {
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         OutlinedTextField(
             value = submissionDetails.title,
