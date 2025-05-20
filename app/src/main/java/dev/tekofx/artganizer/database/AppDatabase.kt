@@ -8,6 +8,11 @@ import androidx.room.TypeConverters
 import dev.tekofx.artganizer.dao.IArtistDao
 import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
+import dev.tekofx.artganizer.database.converters.DateConverter
+import dev.tekofx.artganizer.database.converters.IntListConverter
+import dev.tekofx.artganizer.database.converters.StringListConverter
+import dev.tekofx.artganizer.database.converters.UriListConverter
+import dev.tekofx.artganizer.database.converters.UriStringConverter
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.Submission

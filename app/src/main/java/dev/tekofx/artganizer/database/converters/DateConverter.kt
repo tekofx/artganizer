@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.database
+package dev.tekofx.artganizer.database.converters
 
 import androidx.room.TypeConverter
 import java.util.Date

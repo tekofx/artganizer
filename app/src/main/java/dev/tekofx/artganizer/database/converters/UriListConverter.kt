@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.database
+package dev.tekofx.artganizer.database.converters
 
 import android.net.Uri
 import android.util.Log
