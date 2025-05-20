@@ -16,12 +16,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchBar(
+    modifier: Modifier = Modifier,
     label: @Composable (() -> Unit) = { Text("Search") },
     queryText: String,
     onValueChange: (String) -> Unit = { },
 ) {
     TextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
