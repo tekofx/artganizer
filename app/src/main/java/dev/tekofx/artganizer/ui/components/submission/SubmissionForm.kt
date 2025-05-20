@@ -36,7 +36,6 @@ fun SubmissionsForm(
     val queryText by artistsViewModel.queryText.collectAsState()
     val artists by artistsViewModel.artists.collectAsState()
     val areThereArtists by artistsViewModel.areThereArtists
-
     val scrollState = rememberScrollState()
 
     Column(

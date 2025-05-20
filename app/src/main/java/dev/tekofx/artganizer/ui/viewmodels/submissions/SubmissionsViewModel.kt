@@ -101,6 +101,7 @@ class SubmissionsViewModel(
 
     fun setUris(uris: List<Uri>) {
         this.uris = uris
+        saveImagesOption = SaveImagesOptions.EMPTY
     }
 
     fun setCurrentImage(value: Int) {
