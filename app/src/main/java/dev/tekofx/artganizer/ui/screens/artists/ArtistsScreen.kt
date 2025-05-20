@@ -28,7 +28,6 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 @Composable
 fun ArtistScreen(
     navHostController: NavHostController, artistsViewModel: ArtistsViewModel
-
 ) {
 
     val artists by artistsViewModel.artists.collectAsState()

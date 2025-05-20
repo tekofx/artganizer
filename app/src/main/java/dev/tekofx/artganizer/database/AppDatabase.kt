@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.tekofx.artganizer.dao.IArtistDao
+import dev.tekofx.artganizer.dao.ICharacterDao
 import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
 import dev.tekofx.artganizer.database.converters.DateConverter
@@ -42,6 +43,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun submissionDao(): ISubmissionDao
     abstract fun artistDao(): IArtistDao
     abstract fun imageDao(): IImageDao
+    abstract fun characterDao(): ICharacterDao
 
     companion object {
         @Volatile

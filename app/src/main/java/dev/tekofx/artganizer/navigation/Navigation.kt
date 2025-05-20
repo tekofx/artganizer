@@ -11,15 +11,17 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import dev.tekofx.artganizer.ui.screens.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.TagsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharacterCreationScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 
 
@@ -27,7 +29,8 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 fun Navigation(
     navHostController: NavHostController,
     submissionsViewModel: SubmissionsViewModel,
-    artistsViewModel: ArtistsViewModel
+    artistsViewModel: ArtistsViewModel,
+    charactersViewModel: CharactersViewModel
 ) {
     NavHost(
         navController = navHostController,
@@ -100,11 +103,20 @@ fun Navigation(
             ArtistDetailsScreen(artistsViewModel, navHostController)
         }
 
+
+        // Characters
         composable(
             route = NavigateDestinations.CHARACTERS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            CharactersScreen()
+            CharactersScreen(charactersViewModel, navHostController)
+        }
+
+        composable(
+            route = NavigateDestinations.CHARACTER_CREATION_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            CharacterCreationScreen(charactersViewModel, navHostController)
         }
         composable(
             route = NavigateDestinations.TAGS_SCREEN,

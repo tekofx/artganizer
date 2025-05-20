@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -17,6 +18,7 @@ fun Avatar(
     imagePath: String?,
     fallbackText: String,
     modifier: Modifier = Modifier,
+    shape: Shape = CircleShape,
     size: Dp
 ) {
     if (imagePath != null) {
@@ -27,11 +29,11 @@ fun Avatar(
             contentDescription = "icon",
             contentScale = ContentScale.Crop,
             modifier = modifier
-                .clip(CircleShape)
+                .clip(shape)
                 .size(size)
                 .aspectRatio(1f)
         )
     } else {
-        EmptyAvatar(fallbackText, size = size)
+        EmptyAvatar(fallbackText, size = size, shape = shape)
     }
 }

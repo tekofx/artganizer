@@ -24,12 +24,15 @@ import dev.tekofx.artganizer.database.AppDatabase
 import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.navigation.showBottomAppBar
 import dev.tekofx.artganizer.repository.ArtistsRepository
+import dev.tekofx.artganizer.repository.CharactersRepository
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.ui.components.BottomNavigationBar
 import dev.tekofx.artganizer.ui.theme.AppTheme
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModelFactory
+import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
+import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModelFactory
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModelFactory
 
@@ -50,6 +53,10 @@ class MainActivity : ComponentActivity() {
             ImageRepository(AppDatabase.getDatabase(this).imageDao())
         }
 
+        val charactersRepository by lazy {
+            CharactersRepository(AppDatabase.getDatabase(this).characterDao())
+        }
+
 
         val submissionsViewModel = ViewModelProvider(
             this, SubmissionsViewModelFactory(
@@ -63,6 +70,12 @@ class MainActivity : ComponentActivity() {
                 artistsRepository
             )
         )[ArtistsViewModel::class.java]
+
+        val charactersViewModel = ViewModelProvider(
+            this, CharactersViewModelFactory(
+                charactersRepository
+            )
+        )[CharactersViewModel::class.java]
 
         setContent {
             val navController = rememberNavController()
@@ -88,9 +101,13 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier.padding(padding)
                     ) {
-                        Navigation(navController, submissionsViewModel, artistsViewModel)
+                        Navigation(
+                            navController,
+                            submissionsViewModel,
+                            artistsViewModel,
+                            charactersViewModel
+                        )
                     }
-
                 }
             }
         }

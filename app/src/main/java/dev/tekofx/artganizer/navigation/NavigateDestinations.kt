@@ -12,6 +12,10 @@ object NavigateDestinations {
     const val ARTIST_CREATION_SCREEN = "ArtistCreationScreen"
     const val ARTIST_DETAILS_SCREEN = "ArtistsScreen/{artistId}"
 
+    // Characters
     const val CHARACTERS_SCREEN = "CharactersScreen"
+    const val CHARACTER_CREATION_SCREEN = "CharacterCreationScreen"
+
+
     const val TAGS_SCREEN = "TagsScreen"
 }
