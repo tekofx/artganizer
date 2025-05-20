@@ -158,10 +158,8 @@ fun SubmissionFormFields(
             value = submissionDetails.description,
             onValueChange = { onValueChange(submissionDetails.copy(description = it)) },
             label = { Text("Description") },
-
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
-            singleLine = true
         )
         Rating(
             rating = submissionDetails.rating,

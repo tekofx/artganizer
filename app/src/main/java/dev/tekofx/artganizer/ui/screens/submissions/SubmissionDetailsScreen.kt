@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -156,7 +157,12 @@ fun SubmissionInfo(
         }
         if (submission.submission.description.isNotEmpty()) {
 
-            Text(submission.submission.description)
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally),
+                text = submission.submission.description,
+                textAlign = TextAlign.Justify
+            )
         }
         if (submission.submission.rating > 0) {
             Rating(submission.submission.rating)
@@ -182,6 +188,11 @@ fun SubmissionInfo(
                 )
             }
         }
+
+        HorizontalDivider(
+            thickness = 3.dp,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         if (submission.images.isNotEmpty()) {
 
@@ -210,7 +221,8 @@ fun SubmissionInfo(
 @Composable
 fun ImageInfo(image: Image) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         PaletteColorList(image.palette)
 
