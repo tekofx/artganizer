@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Image
+import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.ConfirmationPopup
@@ -108,8 +109,10 @@ fun ArtistDetailsScreen(
                     )
                 }
                 Gallery(
-                    navHostController,
-                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().submissions
+                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().submissions,
+                    onImageClick = {
+                        navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
+                    }
                 )
             }
         }

@@ -45,18 +45,12 @@ fun SubmissionsForm(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (uris.size == 1) {
-            SubmissionViewer(
-                submissionDetails.title,
-                uris,
-                currentImage = 0,
-                onImageChange = {}
-            )
-        }
-
-        if (uris.size > 1) {
-            Text("Multiple images")
-        }
+        SubmissionViewer(
+            submissionDetails.title,
+            uris,
+            currentImage = 0,
+            onImageChange = {}
+        )
 
 
         SubmissionFormFields(

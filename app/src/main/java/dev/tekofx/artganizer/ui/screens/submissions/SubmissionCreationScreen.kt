@@ -42,6 +42,7 @@ fun SubmissionCreationScreen(
                 submissionsViewModel.updateSaveImagesOption(SaveImagesOptions.MULTIPLE_SUBMISSIONS)
             }) {
                 Text("Multiple Submissions")
+
             }
         }
     } else {

@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.components.submission
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
@@ -14,22 +13,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.entities.Submission
-import dev.tekofx.artganizer.navigation.NavigateDestinations
 
 @Composable
 fun Gallery(
-    navHostController: NavHostController,
-    submissions: List<Submission>
+    submissions: List<Submission>,
+    onImageClick: (Int) -> Unit = {}
 ) {
-
-    Log.d("Gallery", submissions.toString())
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
-
         content = {
             items(submissions) { submission ->
                 AsyncImage(
@@ -43,9 +37,8 @@ fun Gallery(
                         .padding(2.dp)
                         .clip(MaterialTheme.shapes.small)
                         .clickable {
-                            navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${submission.id}")
+                            onImageClick(submission.id)
                         }
-
                 )
             }
         }

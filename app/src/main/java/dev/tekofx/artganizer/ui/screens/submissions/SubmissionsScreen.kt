@@ -76,7 +76,12 @@ fun SubmissionsScreen(
                 CreateFab(
                     onClick = { launcher.launch("image/*") })
             }) {
-            Gallery(navHostController, submissions.toSubmissions())
+            Gallery(
+                submissions.toSubmissions(),
+                onImageClick = {
+                    navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
+                }
+            )
         }
     }
 }
