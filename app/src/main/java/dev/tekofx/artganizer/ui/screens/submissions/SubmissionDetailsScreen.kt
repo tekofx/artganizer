@@ -122,7 +122,7 @@ fun SubmissionDetailsScreen(
 @Composable
 fun SubmissionInfo(
     submission: SubmissionWithArtist,
-    onArtistCardClick: (Int) -> Unit,
+    onArtistCardClick: (Long) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     currentImage: Int,

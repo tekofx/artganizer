@@ -20,12 +20,12 @@ import java.util.Date
 )
 data class Image(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val date: Date = Date(),
     val uri: Uri = Uri.EMPTY,
     val size: Long = 0L,
     val dimensions: String = "",
     val extension: String = "",
     val palette: List<Int> = emptyList(),
-    val submissionId: Int,
+    val submissionId: Long,
 )

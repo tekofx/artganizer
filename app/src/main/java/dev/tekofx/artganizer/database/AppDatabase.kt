@@ -14,6 +14,7 @@ import dev.tekofx.artganizer.database.converters.StringListConverter
 import dev.tekofx.artganizer.database.converters.UriListConverter
 import dev.tekofx.artganizer.database.converters.UriStringConverter
 import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.Submission
 
@@ -21,7 +22,7 @@ import dev.tekofx.artganizer.entities.Submission
  * Database class with a singleton Instance object.
  */
 @Database(
-    entities = [Submission::class, Artist::class, Image::class],
+    entities = [Submission::class, Artist::class, Image::class, Character::class],
     version = 1,
     exportSchema = false
 )

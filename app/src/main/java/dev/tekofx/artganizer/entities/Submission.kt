@@ -19,11 +19,11 @@ import androidx.room.PrimaryKey
 )
 data class Submission(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val title: String,
     val description: String,
     val rating: Int = 0,
     val imagePath: Uri = Uri.EMPTY,
     // Foreign keys
-    val artistId: Int? = null
+    val artistId: Long? = null
 )

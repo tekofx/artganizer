@@ -7,12 +7,12 @@ import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 
 data class SubmissionDetails(
-    val id: Int = 0,
+    val id: Long = 0,
     val title: String = "",
     val description: String = "",
     val imagePath: Uri = Uri.EMPTY,
     val rating: Int = 0,
-    val artistId: Int? = null,
+    val artistId: Long? = null,
     val artist: Artist? = null,
     val images: List<Image> = emptyList<Image>()
 )

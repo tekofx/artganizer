@@ -5,7 +5,7 @@ import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.entities.Submission
 
 data class ArtistDetails(
-    val id: Int = 0,
+    val id: Long = 0,
     val name: String = "",
     val imagePath: String? = null,
     val socialNetworks: List<String> = emptyList(),

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 class SubmissionRepository(private val submissionDao: ISubmissionDao) {
     fun getAllSubmissions(): Flow<List<SubmissionWithArtist>> = submissionDao.getAllSubmissions()
 
-    fun getSubmission(id: Int): Flow<Submission?> = submissionDao.getSubmission(id)
+    fun getSubmission(id: Long): Flow<Submission?> = submissionDao.getSubmission(id)
 
-    suspend fun getSubmissionWithArtist(submissionId: Int) =
+    suspend fun getSubmissionWithArtist(submissionId: Long) =
         submissionDao.getSubmissionWithArtist(submissionId)
 
     suspend fun insertSubmission(submission: Submission): Long = submissionDao.insert(submission)

@@ -63,7 +63,7 @@ fun Navigation(
                 navHostController.popBackStack()
                 return@composable
             }
-            submissionsViewModel.getSubmissionWithArtist(submissionId.toInt())
+            submissionsViewModel.getSubmissionWithArtist(submissionId.toLong())
             SubmissionDetailsScreen(
                 submissionsViewModel,
                 artistsViewModel,

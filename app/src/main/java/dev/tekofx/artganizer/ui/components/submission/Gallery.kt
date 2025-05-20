@@ -20,7 +20,7 @@ import dev.tekofx.artganizer.entities.Submission
 @Composable
 fun Gallery(
     submissions: List<Submission>,
-    onImageClick: (Int) -> Unit = {}
+    onImageClick: (Long) -> Unit = {}
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),

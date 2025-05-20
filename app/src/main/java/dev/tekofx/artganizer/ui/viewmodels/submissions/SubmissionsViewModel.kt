@@ -82,7 +82,7 @@ class SubmissionsViewModel(
     /**
      * Gets the submission of the id.
      */
-    fun getSubmissionWithArtist(id: Int) {
+    fun getSubmissionWithArtist(id: Long) {
         viewModelScope.launch {
             currentImageIndex.value = 0
             val submission = submissionRepo.getSubmissionWithArtist(id)
@@ -187,7 +187,7 @@ class SubmissionsViewModel(
                         dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
                         extension = imageInfo?.extension ?: "",
                         palette = palette,
-                        submissionId = submission.toInt()
+                        submissionId = submission
                     )
                 )
             }
@@ -221,7 +221,7 @@ class SubmissionsViewModel(
                         dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
                         extension = imageInfo?.extension ?: "",
                         palette = palette,
-                        submissionId = submission.toInt()
+                        submissionId = submission
                     )
                 )
             }
