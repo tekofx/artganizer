@@ -89,5 +89,14 @@ fun CharacterFormFields(
             enabled = enabled,
             singleLine = true
         )
+        OutlinedTextField(
+            value = characterDetails.species ?: "",
+            onValueChange = { onValueChange(characterDetails.copy(species = it)) },
+            label = { Text("Species") },
+
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
     }
 }

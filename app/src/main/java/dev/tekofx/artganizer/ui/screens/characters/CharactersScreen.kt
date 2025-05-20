@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.characters
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -64,7 +65,9 @@ fun CharactersScreen(
                     .padding(10.dp)
             ) {
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(2)
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(characters.value) { character ->
                         CharacterCard(

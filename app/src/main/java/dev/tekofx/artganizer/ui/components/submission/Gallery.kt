@@ -1,8 +1,8 @@
 package dev.tekofx.artganizer.ui.components.submission
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -24,6 +24,8 @@ fun Gallery(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
         content = {
             items(submissions) { submission ->
                 AsyncImage(
@@ -34,7 +36,6 @@ fun Gallery(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .padding(2.dp)
                         .clip(MaterialTheme.shapes.small)
                         .clickable {
                             onImageClick(submission.submissionId)

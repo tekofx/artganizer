@@ -15,6 +15,7 @@ fun CharacterUiState.toCharacterWithSubmissions(): CharacterWithSubmissions =
             characterId = characterDetails.id,
             name = characterDetails.name,
             imagePath = characterDetails.imagePath,
+            species = characterDetails.species
         ),
         submissions = characterDetails.submissions
     )

@@ -7,6 +7,7 @@ import dev.tekofx.artganizer.entities.Submission
 data class CharacterDetails(
     val id: Long = 0,
     val name: String = "",
+    val species: String? = null,
     val imagePath: String? = null,
     val submissions: List<Submission> = emptyList()
 )
@@ -17,6 +18,7 @@ fun CharacterDetails.toCharacterWithSubmissions(): CharacterWithSubmissions =
             characterId = id,
             name = name,
             imagePath = imagePath,
+            species = species
         ),
         submissions = submissions
     )
@@ -24,6 +26,7 @@ fun CharacterDetails.toCharacterWithSubmissions(): CharacterWithSubmissions =
 fun CharacterWithSubmissions.toCharacterDetails(): CharacterDetails = CharacterDetails(
     id = character.characterId,
     name = character.name,
+    species = character.species,
     imagePath = character.imagePath,
-    submissions = submissions
+    submissions = submissions,
 )

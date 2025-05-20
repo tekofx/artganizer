@@ -30,7 +30,7 @@ fun CharacterCard(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Avatar(
@@ -39,9 +39,13 @@ fun CharacterCard(
                 shape = MaterialTheme.shapes.large,
             )
             Text(character.character.name, style = MaterialTheme.typography.headlineLarge)
-            Text("Arctic Fox", style = MaterialTheme.typography.headlineSmall)
+
+            character.character.species?.let {
+                Text(character.character.species, style = MaterialTheme.typography.headlineSmall)
+            }
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Icon(
                     IconResource.fromDrawableResource(R.drawable.gallery_outlined)

@@ -8,5 +8,6 @@ data class Character(
     @PrimaryKey(autoGenerate = true)
     val characterId: Long = 0,
     val name: String,
+    val species: String?,
     val imagePath: String?,
 )
