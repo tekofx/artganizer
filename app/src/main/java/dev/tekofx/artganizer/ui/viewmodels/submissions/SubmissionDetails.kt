@@ -2,6 +2,7 @@ package dev.tekofx.artganizer.ui.viewmodels.submissions
 
 import android.net.Uri
 import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
@@ -14,7 +15,8 @@ data class SubmissionDetails(
     val rating: Int = 0,
     val artistId: Long? = null,
     val artist: Artist? = null,
-    val images: List<Image> = emptyList<Image>()
+    val images: List<Image> = emptyList<Image>(),
+    val characters: List<Character> = emptyList<Character>()
 )
 
 fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = SubmissionWithArtist(
@@ -27,7 +29,8 @@ fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
         artistId = artistId
     ),
     artist = artist,
-    images = images
+    images = images,
+    characters = characters
 )
 
 fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(

@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.entities
 
 import androidx.room.Embedded
+import androidx.room.Junction
 import androidx.room.Relation
 
 data class SubmissionWithArtist(
@@ -14,5 +15,12 @@ data class SubmissionWithArtist(
         parentColumn = "submissionId",
         entityColumn = "submissionId"
     )
-    val images: List<Image>
+    val images: List<Image>,
+
+    @Relation(
+        parentColumn = "submissionId",
+        entityColumn = "characterId",
+        associateBy = Junction(CharacterSubmissionCrossRef::class)
+    )
+    val characters: List<Character>
 )
