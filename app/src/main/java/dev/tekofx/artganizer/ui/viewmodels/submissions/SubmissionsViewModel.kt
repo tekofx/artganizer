@@ -229,7 +229,6 @@ class SubmissionsViewModel(
 
         currentSubmissionDetails = editingSubmissionDetails
         editingSubmissionDetails = SubmissionDetails()
-        uris = emptyList()
         saveImagesOption = SaveImagesOptions.EMPTY
     }
 

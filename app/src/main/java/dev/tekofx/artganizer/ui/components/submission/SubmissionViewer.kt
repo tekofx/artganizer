@@ -35,7 +35,7 @@ fun SubmissionViewer(
             currentImage = currentImage,
             onImageChange = { onImageChange(it) }
         )
-    } else {
+    } else if (imagePaths.size == 1) {
         SubmissionImage(
             imagePaths[0],
             title
