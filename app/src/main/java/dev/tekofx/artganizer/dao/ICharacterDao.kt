@@ -26,6 +26,10 @@ interface ICharacterDao {
     fun getAllCharacters(): Flow<List<Character>>
 
     @Transaction
+    @Query("SELECT * FROM characters")
+    fun getAllCharactersWithSubmissions(): Flow<List<CharacterWithSubmissions>>
+
+    @Transaction
     @Query("SELECT * FROM characters WHERE characterId = :characterId")
     suspend fun getCharacterWithSubmissions(characterId: Long): CharacterWithSubmissions?
 

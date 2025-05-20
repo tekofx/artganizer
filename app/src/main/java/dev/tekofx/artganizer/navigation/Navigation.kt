@@ -16,6 +16,7 @@ import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.characters.CharacterCreationScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharacterDetailsScreen
 import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
@@ -118,6 +119,22 @@ fun Navigation(
         ) {
             CharacterCreationScreen(charactersViewModel, navHostController)
         }
+
+        composable(
+            route = NavigateDestinations.CHARACTER_DETAILS_SCREEN,
+            arguments = listOf(navArgument("characterId") { type = NavType.StringType }),
+            exitTransition = { fadeOut() }
+        ) { backStackEntry ->
+            val characterId = backStackEntry.arguments?.getString("characterId")
+            if (characterId == null) {
+                navHostController.popBackStack()
+                return@composable
+            }
+            charactersViewModel.getCharacterWithSubmission(characterId.toLong())
+            CharacterDetailsScreen(charactersViewModel, navHostController)
+        }
+
+        // Tags
         composable(
             route = NavigateDestinations.TAGS_SCREEN,
             exitTransition = { fadeOut() }

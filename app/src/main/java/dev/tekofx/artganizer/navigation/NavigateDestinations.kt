@@ -15,6 +15,7 @@ object NavigateDestinations {
     // Characters
     const val CHARACTERS_SCREEN = "CharactersScreen"
     const val CHARACTER_CREATION_SCREEN = "CharacterCreationScreen"
+    const val CHARACTER_DETAILS_SCREEN = "CharactersScreen/{characterId}"
 
 
     const val TAGS_SCREEN = "TagsScreen"

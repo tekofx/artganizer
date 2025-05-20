@@ -13,6 +13,8 @@ class CharactersRepository(private val characterDao: ICharacterDao) {
 
     fun getAllCharacters() = characterDao.getAllCharacters()
 
+    suspend fun getAllCharactersWithSubmissions() = characterDao.getAllCharactersWithSubmissions()
+
     suspend fun getCharacterWithSubmissions(artistId: Long) =
         characterDao.getCharacterWithSubmissions(artistId)
 

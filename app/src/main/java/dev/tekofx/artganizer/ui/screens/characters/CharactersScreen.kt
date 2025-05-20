@@ -67,8 +67,14 @@ fun CharactersScreen(
                     columns = GridCells.Fixed(2)
                 ) {
                     items(characters.value) { character ->
-                        CharacterCard(character)
+                        CharacterCard(
+                            character,
+                            onClick = {
+                                navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/${character.character.characterId}")
+                            },
+                        )
                     }
+
                 }
             }
         }

@@ -14,15 +14,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.entities.Character
+import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
 
 @Composable
 fun CharacterCard(
-    character: Character,
+    character: CharacterWithSubmissions,
+    onClick: (Long) -> Unit
 ) {
-    Card {
+    Card(
+        onClick = { onClick(character.character.characterId) }
+    ) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
@@ -31,11 +34,11 @@ fun CharacterCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Avatar(
-                character.imagePath,
-                fallbackText = character.name,
-                shape = MaterialTheme.shapes.medium,
+                character.character.imagePath,
+                fallbackText = character.character.name,
+                shape = MaterialTheme.shapes.large,
             )
-            Text(character.name, style = MaterialTheme.typography.headlineLarge)
+            Text(character.character.name, style = MaterialTheme.typography.headlineLarge)
             Text("Arctic Fox", style = MaterialTheme.typography.headlineSmall)
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -44,7 +47,10 @@ fun CharacterCard(
                     IconResource.fromDrawableResource(R.drawable.gallery_outlined)
                         .asPainterResource(), contentDescription = ""
                 )
-                Text("11", style = MaterialTheme.typography.headlineSmall)
+                Text(
+                    character.submissions.size.toString(),
+                    style = MaterialTheme.typography.headlineSmall
+                )
             }
         }
     }

@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.tekofx.artganizer.entities.Character
+import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.repository.CharactersRepository
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,14 +38,14 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
 
     // Data
     val areThereCharacters = mutableStateOf(false)
-    private val _characters = MutableStateFlow<List<Character>>(emptyList())
+    private val _characters = MutableStateFlow<List<CharacterWithSubmissions>>(emptyList())
     val characters = _characters
         .combine(_queryText) { characters, query ->
             if (query.isBlank()) {
                 characters
             } else {
                 characters.filter {
-                    it.name.contains(query, ignoreCase = true)
+                    it.character.name.contains(query, ignoreCase = true)
                 }
             }
         }
@@ -100,7 +100,7 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
             )
     }
 
-    fun deleteArtist(character: CharacterUiState) {
+    fun deleteCharacter(character: CharacterUiState) {
         viewModelScope.launch {
             repository.deleteCharacter(character.toCharacterWithSubmissions().character)
         }
@@ -173,7 +173,7 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     init {
         // Collect the flow and update _submissions
         viewModelScope.launch {
-            repository.getAllCharacters().collect { charactersList ->
+            repository.getAllCharactersWithSubmissions().collect { charactersList ->
                 _characters.value = charactersList
                 if (charactersList.isNotEmpty()) {
                     areThereCharacters.value = true
