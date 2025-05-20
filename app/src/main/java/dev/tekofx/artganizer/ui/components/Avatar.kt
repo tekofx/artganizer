@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.components
 
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -19,8 +20,21 @@ fun Avatar(
     fallbackText: String,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
-    size: Dp
+    size: Dp? = null
 ) {
+
+    val finalModifer = if (size == null) {
+        modifier
+            .clip(shape)
+            .fillMaxWidth()
+            .aspectRatio(1f)
+    } else {
+        modifier
+            .clip(shape)
+            .size(size)
+            .aspectRatio(1f)
+    }
+
     if (imagePath != null) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -28,10 +42,7 @@ fun Avatar(
                 .build(),
             contentDescription = "icon",
             contentScale = ContentScale.Crop,
-            modifier = modifier
-                .clip(shape)
-                .size(size)
-                .aspectRatio(1f)
+            modifier = finalModifer
         )
     } else {
         EmptyAvatar(fallbackText, size = size, shape = shape)
