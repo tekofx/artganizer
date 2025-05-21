@@ -2,13 +2,11 @@ package dev.tekofx.artganizer.ui.screens.artists
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.entities.Image
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
@@ -73,137 +71,92 @@ fun ArtistDetailsScreen(
                 },
             )
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(10.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                item {
-
-
-                    Avatar(
-                        artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.imagePath,
-                        artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
-                        size = AVATAR_SIZE
+            ArtistInfo(
+                artistWithSubmissions = artistsViewModel.currentArtistUiState.toArtistWithSubmissions(),
+                onEditClick = {
+                    artistsViewModel.setShowEditArtist(true)
+                },
+                onDeleteClick = {
+                    artistsViewModel.setShowPopup(true)
+                },
+                onImageClick = { submissionId ->
+                    navHostController.navigate(
+                        "${NavigateDestinations.SUBMISSION_DETAILS_SCREEN}/$submissionId"
                     )
-                }
-                item {
-
-                    Text(
-                        text = artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
-                        style = MaterialTheme.typography.headlineLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
-                item {
-
-                    SocialNetworks(artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.socialNetworks)
-                }
-                item {
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        ButtonWithIcon(
-                            onClick = { artistsViewModel.setShowEditArtist(true) },
-                            text = "Edit",
-                            iconResource = IconResource.fromDrawableResource(R.drawable.edit),
-                        )
-                        ButtonWithIcon(
-                            onClick = {
-                                artistsViewModel.setShowPopup(true)
-                            },
-                            text = "Delete",
-                            iconResource = IconResource.fromDrawableResource(R.drawable.trash),
-                            color = MaterialTheme.colorScheme.error,
-                        )
-                    }
-                }
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp) // Set a fixed height for the grid
-                    ) {
-                        Gallery(
-                            artistsViewModel.currentArtistUiState.toArtistWithSubmissions().submissions,
-                            onImageClick = {
-                                navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
-                            }
-                        )
-                    }
-                }
-            }
+                },
+            )
         }
     }
 }
-
 
 @Composable
-fun ImageInfo(image: Image) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
+fun ArtistInfo(
+    artistWithSubmissions: ArtistWithSubmissions,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onImageClick: (Long) -> Unit,
+) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    IconResource.fromDrawableResource(R.drawable.calendar_outlined)
-                        .asPainterResource(),
-                    contentDescription = ""
-                )
-                Text(image.date.toString())
-            }
+        item {
+
+
+            Avatar(
+                artistWithSubmissions.artist.imagePath,
+                artistWithSubmissions.artist.name,
+                size = AVATAR_SIZE
+            )
+        }
+        item {
+
+            Text(
+                text = artistWithSubmissions.artist.name,
+                style = MaterialTheme.typography.displayMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+        item {
+
+            SocialNetworks(artistWithSubmissions.artist.socialNetworks)
+        }
+        item {
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text(image.dimensions)
-                Icon(
-                    IconResource.fromDrawableResource(R.drawable.maximize_outlined)
-                        .asPainterResource(),
-                    contentDescription = ""
+                ButtonWithIcon(
+                    onClick = onEditClick,
+                    text = "Edit",
+                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                )
+                ButtonWithIcon(
+                    onClick = onDeleteClick,
+                    text = "Delete",
+                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                    color = MaterialTheme.colorScheme.error,
                 )
             }
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp) // Set a fixed height for the grid
             ) {
-                Icon(
-                    IconResource.fromDrawableResource(R.drawable.device_sd_card_outlined)
-                        .asPainterResource(),
-                    contentDescription = ""
-                )
-                Text("${image.size} MB")
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(image.extension)
-                Icon(
-                    IconResource.fromDrawableResource(R.drawable.file_outlined)
-                        .asPainterResource(),
-                    contentDescription = ""
+                Gallery(
+                    artistWithSubmissions.submissions,
+                    onImageClick = {
+                        onImageClick(it)
+                    }
                 )
             }
         }
     }
 }
-

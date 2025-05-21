@@ -1,6 +1,9 @@
 package dev.tekofx.artganizer.ui.components.artists
 
 import android.content.Intent
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -37,15 +40,18 @@ fun SocialNetworkItem(
         onClick = {
             val intent = Intent(Intent.ACTION_VIEW, socialNetwork.toUri())
             context.startActivity(intent)
-        }) {
-
-
+        },
+        modifier = Modifier.size(50.dp)
+    ) {
         Icon(
             painter = IconResource
                 .fromDrawableResource(getSocialNetworkIconRes(socialNetwork))
                 .asPainterResource(),
             contentDescription = "Social Network Icon",
-            modifier = Modifier.size(50.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(5.dp)
         )
     }
 
