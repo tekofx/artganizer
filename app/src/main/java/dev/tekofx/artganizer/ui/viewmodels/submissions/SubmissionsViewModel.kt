@@ -80,24 +80,6 @@ class SubmissionsViewModel(
     }
 
 
-    /**
-     * Gets the submission of the id.
-     */
-    fun getSubmissionWithArtist(id: Long) {
-        viewModelScope.launch {
-            currentImageIndex.value = 0
-            val submission = submissionRepo.getSubmissionWithArtist(id)
-            if (submission == null) {
-                Log.d("SubmissionsViewModel", "Submission with id $id not found")
-                return@launch
-            }
-            Log.d("GetSubmissionWithArtist", submission.characters.toString())
-            currentSubmissionDetails = submission.toSubmissionDetails()
-            uris = submission.images.map { it.uri }
-        }
-    }
-
-
     //////////////////////// Setters ////////////////////////
 
     fun setUris(uris: List<Uri>) {
@@ -139,6 +121,21 @@ class SubmissionsViewModel(
 
 
     //////////////////////// Database Operations ////////////////////////
+    /**
+     * Gets the submission of the id.
+     */
+    fun getSubmissionWithArtist(id: Long) {
+        viewModelScope.launch {
+            currentImageIndex.value = 0
+            val submission = submissionRepo.getSubmissionWithArtist(id)
+            if (submission == null) {
+                Log.d("SubmissionsViewModel", "Submission with id $id not found")
+                return@launch
+            }
+            currentSubmissionDetails = submission.toSubmissionDetails()
+            uris = submission.images.map { it.uri }
+        }
+    }
 
     /**
      * Updates the data of current submission

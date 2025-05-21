@@ -2,7 +2,6 @@ package dev.tekofx.artganizer.ui.viewmodels.artists
 
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -55,12 +54,35 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
             _artists.value
         )
 
+
+    init {
+        // Collect the flow and update _submissions
+        viewModelScope.launch {
+            repository.getAllArtistsWithSubmissions().collect { submissionsList ->
+                _artists.value = submissionsList
+                if (submissionsList.isNotEmpty()) {
+                    areThereArtists.value = true
+                }
+            }
+        }
+    }
+
+
+    //////////////////////// UI ////////////////////////
     private fun validateInput(uiState: ArtistDetails = newArtistUiState.artistDetails): Boolean {
         return with(uiState) {
             uiState.name.isNotEmpty()
         }
     }
 
+    /**
+     * Callback of TextField
+     */
+    fun onSearchTextChanged(text: String) {
+        _queryText.value = text
+    }
+
+    //////////////////////// Setters ////////////////////////
     fun setShowPopup(show: Boolean) {
         showPopup.value = show
     }
@@ -68,21 +90,6 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     fun setShowEditArtist(show: Boolean) {
         showEditArtist.value = show
     }
-
-    fun getArtistWithSubmissions(id: Int) {
-        viewModelScope.launch {
-            val artist = repository.getArtistWithSubmissions(id)
-            if (artist == null) {
-                return@launch
-            }
-            currentArtistUiState =
-                ArtistUiState(
-                    artistDetails = artist.toArtistDetails(),
-                    isEntryValid = validateInput(artist.toArtistDetails())
-                )
-        }
-    }
-
 
     fun updateNewUiState(artistDetails: ArtistDetails) {
         newArtistUiState =
@@ -100,12 +107,18 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
             )
     }
 
-    fun deleteArtist(context: Context, artist: ArtistUiState) {
+    //////////////////////// Database Operations ////////////////////////
+    fun getArtistWithSubmissions(id: Int) {
         viewModelScope.launch {
-            repository.deleteArtist(artist.toArtistWithSubmissions().artist)
-            artist.artistDetails.imagePath?.let {
-                removeImageFromInternalStorage(context, artist.artistDetails.imagePath)
+            val artist = repository.getArtistWithSubmissions(id)
+            if (artist == null) {
+                return@launch
             }
+            currentArtistUiState =
+                ArtistUiState(
+                    artistDetails = artist.toArtistDetails(),
+                    isEntryValid = validateInput(artist.toArtistDetails())
+                )
         }
     }
 
@@ -137,7 +150,6 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     }
 
     suspend fun editArtist(context: Context) {
-        Log.d("editARtist", currentArtistUiState.artistDetails.toString())
         val imagePath = currentArtistUiState.artistDetails.imagePath
 
         if (imagePath != null) {
@@ -164,23 +176,11 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         }
     }
 
-
-    /**
-     * Callback of TextField
-     */
-    fun onSearchTextChanged(text: String) {
-        _queryText.value = text
-    }
-
-
-    init {
-        // Collect the flow and update _submissions
+    fun deleteArtist(context: Context, artist: ArtistUiState) {
         viewModelScope.launch {
-            repository.getAllArtistsWithSubmissions().collect { submissionsList ->
-                _artists.value = submissionsList
-                if (submissionsList.isNotEmpty()) {
-                    areThereArtists.value = true
-                }
+            repository.deleteArtist(artist.toArtistWithSubmissions().artist)
+            artist.artistDetails.imagePath?.let {
+                removeImageFromInternalStorage(context, artist.artistDetails.imagePath)
             }
         }
     }

@@ -54,12 +54,34 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
             _characters.value
         )
 
+
+    init {
+        // Collect the flow and update _submissions
+        viewModelScope.launch {
+            repository.getAllCharactersWithSubmissions().collect { charactersList ->
+                _characters.value = charactersList
+                if (charactersList.isNotEmpty()) {
+                    areThereCharacters.value = true
+                }
+            }
+        }
+    }
+
+    //////////////////////// UI ////////////////////////
     private fun validateInput(uiState: CharacterDetails = newCharacterUiState.characterDetails): Boolean {
         return with(uiState) {
             uiState.name.isNotEmpty()
         }
     }
 
+    /**
+     * Callback of TextField
+     */
+    fun onSearchTextChanged(text: String) {
+        _queryText.value = text
+    }
+
+    //////////////////////// Setters ////////////////////////
     fun setShowPopup(show: Boolean) {
         showPopup.value = show
     }
@@ -67,21 +89,6 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     fun setShowEditArtist(show: Boolean) {
         showCharacterEdit.value = show
     }
-
-    fun getCharacterWithSubmission(id: Long) {
-        viewModelScope.launch {
-            val character = repository.getCharacterWithSubmissions(id)
-            if (character == null) {
-                return@launch
-            }
-            currentCharacterUiState =
-                CharacterUiState(
-                    characterDetails = character.toCharacterDetails(),
-                    isEntryValid = validateInput(character.toCharacterDetails())
-                )
-        }
-    }
-
 
     fun updateNewUiState(characterDetails: CharacterDetails) {
         newCharacterUiState =
@@ -99,36 +106,18 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
             )
     }
 
-    fun deleteCharacter(character: CharacterUiState) {
+    //////////////////////// Database Operations ////////////////////////
+    fun getCharacterWithSubmission(id: Long) {
         viewModelScope.launch {
-            repository.deleteCharacter(character.toCharacterWithSubmissions().character)
-        }
-    }
-
-    suspend fun saveCharacter(context: Context) {
-        val imagePath = newCharacterUiState.characterDetails.imagePath
-
-        if (imagePath != null) {
-            // Save image to private storage
-            val newImagePath =
-                saveThumbnail(
-                    context,
-                    imagePath
+            val character = repository.getCharacterWithSubmissions(id)
+            if (character == null) {
+                return@launch
+            }
+            currentCharacterUiState =
+                CharacterUiState(
+                    characterDetails = character.toCharacterDetails(),
+                    isEntryValid = validateInput(character.toCharacterDetails())
                 )
-
-            newCharacterUiState = newCharacterUiState.copy(
-                characterDetails = newCharacterUiState.characterDetails.copy(
-                    imagePath = newImagePath
-                )
-            )
-
-        }
-        if (validateInput()) {
-            repository.insertCharacter(newCharacterUiState.characterDetails.toCharacterWithSubmissions().character)
-            newCharacterUiState = newCharacterUiState.copy(
-                characterDetails = CharacterDetails(),
-                isEntryValid = false
-            )
         }
     }
 
@@ -161,23 +150,36 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     }
 
 
-    /**
-     * Callback of TextField
-     */
-    fun onSearchTextChanged(text: String) {
-        _queryText.value = text
+    suspend fun saveCharacter(context: Context) {
+        val imagePath = newCharacterUiState.characterDetails.imagePath
+
+        if (imagePath != null) {
+            // Save image to private storage
+            val newImagePath =
+                saveThumbnail(
+                    context,
+                    imagePath
+                )
+
+            newCharacterUiState = newCharacterUiState.copy(
+                characterDetails = newCharacterUiState.characterDetails.copy(
+                    imagePath = newImagePath
+                )
+            )
+
+        }
+        if (validateInput()) {
+            repository.insertCharacter(newCharacterUiState.characterDetails.toCharacterWithSubmissions().character)
+            newCharacterUiState = newCharacterUiState.copy(
+                characterDetails = CharacterDetails(),
+                isEntryValid = false
+            )
+        }
     }
 
-
-    init {
-        // Collect the flow and update _submissions
+    fun deleteCharacter(character: CharacterUiState) {
         viewModelScope.launch {
-            repository.getAllCharactersWithSubmissions().collect { charactersList ->
-                _characters.value = charactersList
-                if (charactersList.isNotEmpty()) {
-                    areThereCharacters.value = true
-                }
-            }
+            repository.deleteCharacter(character.toCharacterWithSubmissions().character)
         }
     }
 
