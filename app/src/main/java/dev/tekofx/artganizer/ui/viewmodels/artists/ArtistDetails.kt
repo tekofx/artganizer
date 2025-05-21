@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.viewmodels.artists
 
+import android.net.Uri
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.entities.Submission
@@ -7,7 +8,7 @@ import dev.tekofx.artganizer.entities.Submission
 data class ArtistDetails(
     val id: Long = 0,
     val name: String = "",
-    val imagePath: String? = null,
+    val imagePath: Uri? = null,
     val socialNetworks: List<String> = emptyList(),
     val submissions: List<Submission> = emptyList()
 )

@@ -35,7 +35,7 @@ fun CharacterForm(
                 scope.launch {
                     onItemValueChange(
                         characterUiState.characterDetails.copy(
-                            imagePath = uri.toString()
+                            imagePath = uri
                         )
                     )
                 }

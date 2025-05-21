@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components
 
+import android.net.Uri
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SmallCard(
     title: String,
-    imagePath: String?,
+    imagePath: Uri?,
     selected: Boolean = false,
     onClick: () -> Unit,
 ) {

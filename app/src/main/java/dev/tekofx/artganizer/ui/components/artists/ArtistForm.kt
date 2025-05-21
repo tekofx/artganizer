@@ -37,7 +37,7 @@ fun ArtistForm(
                 scope.launch {
                     onItemValueChange(
                         artistUiState.artistDetails.copy(
-                            imagePath = uri.toString()
+                            imagePath = uri
                         )
                     )
                 }

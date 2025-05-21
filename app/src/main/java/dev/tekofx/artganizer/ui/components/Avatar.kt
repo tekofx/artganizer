@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components
 
+import android.net.Uri
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -16,7 +17,7 @@ import coil.request.ImageRequest
 
 @Composable
 fun Avatar(
-    imagePath: String?,
+    imagePath: Uri?,
     fallbackText: String,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,

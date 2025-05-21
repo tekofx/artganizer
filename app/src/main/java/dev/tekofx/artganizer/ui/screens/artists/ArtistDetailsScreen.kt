@@ -53,7 +53,7 @@ fun ArtistDetailsScreen(
             message = "Are you sure you want to proceed?",
             onConfirm = {
                 artistsViewModel.setShowPopup(true)
-                artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
+                artistsViewModel.deleteArtist(context, artistsViewModel.currentArtistUiState)
                 navHostController.popBackStack()
                 artistsViewModel.setShowPopup(false)
             },
@@ -83,7 +83,7 @@ fun ArtistDetailsScreen(
                 },
                 onImageClick = { submissionId ->
                     navHostController.navigate(
-                        "${NavigateDestinations.SUBMISSION_DETAILS_SCREEN}/$submissionId"
+                        "${NavigateDestinations.SUBMISSIONS_SCREEN}/$submissionId"
                     )
                 },
             )

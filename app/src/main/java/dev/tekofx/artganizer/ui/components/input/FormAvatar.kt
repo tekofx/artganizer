@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components.input
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
@@ -18,7 +19,7 @@ import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 @Composable
 fun FormAvatar(
     fallbackText: String,
-    imagePath: String?,
+    imagePath: Uri?,
     onImageSelect: () -> Unit
 ) {
     Box(

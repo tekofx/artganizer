@@ -18,6 +18,7 @@ import dev.tekofx.artganizer.utils.getImageInfo
 import dev.tekofx.artganizer.utils.getPaletteFromUri
 import dev.tekofx.artganizer.utils.removeImagesFromInternalStorage
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
+import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -152,7 +153,7 @@ class SubmissionsViewModel(
     /**
      * Saves a new submission
      */
-    suspend fun saveSubmission(context: Context) {
+    fun saveSubmission(context: Context) {
         viewModelScope.launch {
 
             if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
@@ -166,10 +167,11 @@ class SubmissionsViewModel(
                     imagePaths.add(imagePath)
                 }
 
+                val thumbnail = saveThumbnail(context, imagePaths[0])
+
                 val newSub = newSubmissionDetails.copy(
-                    imagePath = imagePaths[0]
+                    imagePath = thumbnail
                 )
-                Log.d("saveSubmission", newSub.toString())
                 val submission = submissionRepo.insertSubmission(
                     newSub.toSubmission()
                 )
@@ -209,10 +211,12 @@ class SubmissionsViewModel(
                             uri
                         )
 
+                    val thumbnailPath = saveThumbnail(context, uri)
+
                     val imageInfo = getImageInfo(context, imagePath)
                     val palette = getPaletteFromUri(context, imagePath)
                     val newSub = newSubmissionDetails.copy(
-                        imagePath = imagePath
+                        imagePath = thumbnailPath
                     )
                     Log.d("saveSubmission", newSub.toString())
                     val submission = submissionRepo.insertSubmission(
@@ -252,7 +256,9 @@ class SubmissionsViewModel(
     fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
         viewModelScope.launch {
             submissionRepo.deleteSubmission(submission.submission)
-            removeImagesFromInternalStorage(context, submission.images.map { it.uri })
+            val imagesToRemove = submission.images.map { it.uri }
+            imagesToRemove.plus(submission.submission.imagePath)
+            removeImagesFromInternalStorage(context, imagesToRemove)
         }
     }
 

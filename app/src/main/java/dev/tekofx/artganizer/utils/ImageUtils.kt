@@ -2,12 +2,16 @@ package dev.tekofx.artganizer.utils
 
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
+import androidx.core.graphics.scale
 import androidx.palette.graphics.Palette
+import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.util.Locale
 import java.util.UUID
 
@@ -22,6 +26,41 @@ fun saveImageToInternalStorage(context: Context, uri: Uri): Uri {
             input.copyTo(output)
         }
     }
+    return Uri.fromFile(file)
+}
+
+fun saveThumbnail(context: Context, uri: Uri): Uri {
+    val inputStream = context.contentResolver.openInputStream(uri)
+    val originalBitmap = BitmapFactory.decodeStream(inputStream)
+    inputStream?.close()
+
+    // Calculate the new dimensions while maintaining the aspect ratio
+    val aspectRatio = originalBitmap.width.toFloat() / originalBitmap.height.toFloat()
+    val newWidth: Int
+    val newHeight: Int
+
+    if (originalBitmap.width > originalBitmap.height) {
+        newWidth = THUMBNAIL_SIZE
+        newHeight = (THUMBNAIL_SIZE / aspectRatio).toInt()
+    } else {
+        newHeight = THUMBNAIL_SIZE
+        newWidth = (THUMBNAIL_SIZE * aspectRatio).toInt()
+    }
+
+    // Resize the bitmap
+    val resizedBitmap = originalBitmap.scale(newWidth, newHeight)
+
+    // Save the resized bitmap to internal storage
+    val uniqueFilename = "${UUID.randomUUID()}_thumbnail.jpg"
+    val file = File(context.filesDir, uniqueFilename)
+    FileOutputStream(file).use { outputStream ->
+        resizedBitmap.compress(
+            Bitmap.CompressFormat.JPEG,
+            85,
+            outputStream
+        ) // Adjust quality as needed
+    }
+
     return Uri.fromFile(file)
 }
 
@@ -44,12 +83,16 @@ fun getPaletteFromUri(context: Context, uri: Uri): List<Int> {
     return colors
 }
 
+fun removeImageFromInternalStorage(context: Context, uri: Uri) {
+    val file = context.filesDir.resolve(uri.lastPathSegment ?: return)
+    if (file.exists()) {
+        file.delete()
+    }
+}
+
 fun removeImagesFromInternalStorage(context: Context, uriStrings: List<Uri>) {
     uriStrings.forEach { uri ->
-        val file = context.filesDir.resolve(uri.lastPathSegment ?: return@forEach)
-        if (file.exists()) {
-            file.delete()
-        }
+        removeImageFromInternalStorage(context, uri)
     }
 }
 
