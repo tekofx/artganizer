@@ -25,6 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
@@ -175,47 +177,18 @@ fun SubmissionInfo(
             Rating(submission.submission.rating)
         }
 
-        if (submission.artist != null) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Artist",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-                SmallCard(
-                    title = submission.artist.name,
-                    imagePath = submission.artist.imagePath,
-                    onClick = {
-                        onArtistCardClick(submission.artist.artistId)
-                    }
-                )
-            }
+        submission.artist?.let {
+            ArtistSection(
+                artist = submission.artist,
+                onArtistCardClick = { onArtistCardClick(submission.artist.artistId) }
+            )
         }
 
-        if (submission.characters.isNotEmpty()) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Characters",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-                submission.characters.forEach { character ->
-                    SmallCard(
-                        title = character.name,
-                        imagePath = character.imagePath,
-                        onClick = {
-                            onCharacterCardClick(character.characterId)
-                        }
-                    )
-                }
-            }
+        submission.characters.isNotEmpty().let {
+            CharactersSection(
+                characters = submission.characters,
+                onCharacterCardClick = { onCharacterCardClick(it) }
+            )
         }
 
         HorizontalDivider(
@@ -224,7 +197,6 @@ fun SubmissionInfo(
         )
 
         if (submission.images.isNotEmpty()) {
-
             ImageInfo(submission.images[currentImage])
         }
         Row(
@@ -244,6 +216,57 @@ fun SubmissionInfo(
                 color = MaterialTheme.colorScheme.error
             )
         }
+    }
+}
+
+@Composable
+fun CharactersSection(
+    characters: List<Character>,
+    onCharacterCardClick: (Long) -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Characters",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        characters.forEach { character ->
+            SmallCard(
+                title = character.name,
+                imagePath = character.imagePath,
+                onClick = {
+                    onCharacterCardClick(character.characterId)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun ArtistSection(
+    artist: Artist,
+    onArtistCardClick: (Long) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Artist",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        SmallCard(
+            title = artist.name,
+            imagePath = artist.imagePath,
+            onClick = {
+                onArtistCardClick(artist.artistId)
+            }
+        )
     }
 }
 

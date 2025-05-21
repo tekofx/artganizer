@@ -1,10 +1,13 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -70,7 +73,7 @@ fun ArtistDetailsScreen(
                 },
             )
         } else {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .padding(paddingValues)
                     .padding(10.dp)
@@ -78,42 +81,63 @@ fun ArtistDetailsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Avatar(
-                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.imagePath,
-                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
-                    size = AVATAR_SIZE
-                )
-                Text(
-                    text = artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
-                    style = MaterialTheme.typography.headlineLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                SocialNetworks(artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.socialNetworks)
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    ButtonWithIcon(
-                        onClick = { artistsViewModel.setShowEditArtist(true) },
-                        text = "Edit",
-                        iconResource = IconResource.fromDrawableResource(R.drawable.edit),
-                    )
-                    ButtonWithIcon(
-                        onClick = {
-                            artistsViewModel.setShowPopup(true)
-                        },
-                        text = "Delete",
-                        iconResource = IconResource.fromDrawableResource(R.drawable.trash),
-                        color = MaterialTheme.colorScheme.error,
+                item {
+
+
+                    Avatar(
+                        artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.imagePath,
+                        artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
+                        size = AVATAR_SIZE
                     )
                 }
-                Gallery(
-                    artistsViewModel.currentArtistUiState.toArtistWithSubmissions().submissions,
-                    onImageClick = {
-                        navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
+                item {
+
+                    Text(
+                        text = artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.name,
+                        style = MaterialTheme.typography.headlineLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+                item {
+
+                    SocialNetworks(artistsViewModel.currentArtistUiState.toArtistWithSubmissions().artist.socialNetworks)
+                }
+                item {
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        ButtonWithIcon(
+                            onClick = { artistsViewModel.setShowEditArtist(true) },
+                            text = "Edit",
+                            iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                        )
+                        ButtonWithIcon(
+                            onClick = {
+                                artistsViewModel.setShowPopup(true)
+                            },
+                            text = "Delete",
+                            iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                            color = MaterialTheme.colorScheme.error,
+                        )
                     }
-                )
+                }
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp) // Set a fixed height for the grid
+                    ) {
+                        Gallery(
+                            artistsViewModel.currentArtistUiState.toArtistWithSubmissions().submissions,
+                            onImageClick = {
+                                navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
+                            }
+                        )
+                    }
+                }
             }
         }
     }

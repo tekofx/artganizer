@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -44,28 +45,38 @@ fun ArtistForm(
         }
     )
 
-    Column(
+    LazyColumn(
         modifier = Modifier.padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        FormAvatar(
-            fallbackText = artistUiState.artistDetails.name,
-            artistUiState.artistDetails.imagePath,
-            onImageSelect = { launcher.launch("image/*") })
+    )
 
-        ArtistFormFields(
-            artistsDetails = artistUiState.artistDetails,
-            onValueChange = onItemValueChange,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Button(
-            onClick = onSaveClick,
-            enabled = artistUiState.isEntryValid,
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Save")
+
+    {
+        item {
+            FormAvatar(
+                fallbackText = artistUiState.artistDetails.name,
+                artistUiState.artistDetails.imagePath,
+                onImageSelect = { launcher.launch("image/*") })
+        }
+
+        item {
+            ArtistFormFields(
+                artistsDetails = artistUiState.artistDetails,
+                onValueChange = onItemValueChange,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        item {
+            Button(
+                onClick = onSaveClick,
+                enabled = artistUiState.isEntryValid,
+                shape = MaterialTheme.shapes.small,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Save")
+            }
         }
     }
 }
