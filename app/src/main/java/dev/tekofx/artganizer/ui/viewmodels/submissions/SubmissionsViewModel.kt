@@ -90,7 +90,7 @@ class SubmissionsViewModel(
                 Log.d("SubmissionsViewModel", "Submission with id $id not found")
                 return@launch
             }
-            Log.d("GetSubmissionWithArtist", submission.toString())
+            Log.d("GetSubmissionWithArtist", submission.characters.toString())
             currentSubmissionDetails = submission.toSubmissionDetails()
             uris = submission.images.map { it.uri }
         }

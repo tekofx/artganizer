@@ -62,5 +62,6 @@ fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDe
     imagePath = submission.imagePath,
     rating = submission.rating,
     artist = artist,
-    images = images
+    images = images,
+    characters = characters
 )

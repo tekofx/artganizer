@@ -106,6 +106,9 @@ fun SubmissionDetailsScreen(
                     Log.d("SubmissionDetailsScreen", "Artist ID: $artistId")
                     navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/$artistId")
                 },
+                onCharacterCardClick = { characterId ->
+                    navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/$characterId")
+                },
                 onDelete = {
                     submissionsViewModel.setShowPopup(true)
                 },
@@ -126,6 +129,7 @@ fun SubmissionDetailsScreen(
 fun SubmissionInfo(
     submission: SubmissionWithArtist,
     onArtistCardClick: (Long) -> Unit,
+    onCharacterCardClick: (Long) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     currentImage: Int,
@@ -189,6 +193,28 @@ fun SubmissionInfo(
                         onArtistCardClick(submission.artist.artistId)
                     }
                 )
+            }
+        }
+
+        if (submission.characters.isNotEmpty()) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Characters",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                submission.characters.forEach { character ->
+                    SmallCard(
+                        title = character.name,
+                        imagePath = character.imagePath,
+                        onClick = {
+                            onCharacterCardClick(character.characterId)
+                        }
+                    )
+                }
             }
         }
 
