@@ -7,12 +7,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.ui.IconResource
 
 @Composable
 fun SmallCard(
@@ -20,8 +25,9 @@ fun SmallCard(
     imagePath: Uri?,
     selected: Boolean = false,
     onClick: () -> Unit,
+    deletable: Boolean = false,
+    onClear: () -> Unit = {},
 ) {
-
     val modifier = if (selected) {
         Modifier
             .border(3.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.large)
@@ -35,19 +41,48 @@ fun SmallCard(
         onClick = { onClick() },
     ) {
         Row(
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Avatar(
-                imagePath,
-                fallbackText = title,
-                size = 50.dp,
-            )
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineSmall
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Avatar(
+                    imagePath,
+                    fallbackText = title,
+                    size = 50.dp,
+                )
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+
+            if (deletable) {
+                IconButton(
+                    onClick = onClear
+                ) {
+                    Icon(
+                        IconResource.fromDrawableResource(R.drawable.x).asPainterResource(),
+                        contentDescription = ""
+                    )
+                }
+            }
         }
     }
+}
+
+@Composable
+@Preview
+fun SmallCardPreview() {
+    SmallCard(
+        title = "Test",
+        imagePath = null,
+        onClick = {},
+        onClear = { print(1) }
+    )
 }

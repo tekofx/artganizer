@@ -55,7 +55,12 @@ fun CharactersSelect(
                         SmallCard(
                             title = item.name,
                             imagePath = item.imagePath,
-                            onClick = { expanded = !expanded }
+                            onClick = { expanded = !expanded },
+                            deletable = true,
+                            onClear = {
+                                val newSelection = selectedItems - item
+                                onItemsSelected(newSelection)
+                            }
                         )
                     }
                 }

@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.tekofx.artganizer.entities.CharacterSubmissionCrossRef
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.repository.ImageRepository
@@ -147,15 +146,7 @@ class SubmissionsViewModel(
     suspend fun editSubmission() {
         val submission = editingSubmissionDetails.toSubmissionWithArtist()
         Log.d("editSubmission", submission.toString())
-        submissionRepo.updateSubmission(submission.submission)
-        submission.characters.forEach {
-            submissionRepo.insertCharacterSubmissionCrossRef(
-                CharacterSubmissionCrossRef(
-                    characterId = it.characterId,
-                    submissionId = submission.submission.submissionId
-                )
-            )
-        }
+        submissionRepo.updateSubmissionWithArtist(submission)
         editingSubmissionDetails = SubmissionDetails()
         currentSubmissionDetails = submission.toSubmissionDetails()
     }
@@ -179,23 +170,11 @@ class SubmissionsViewModel(
 
                 val thumbnail = saveThumbnail(context, imagePaths[0])
 
-                val newSub = newSubmissionDetails.copy(
-                    imagePath = thumbnail
-                )
-                val submission = submissionRepo.insertSubmission(
-                    newSub.toSubmission()
-                )
-
-
-                // Insert characters
-                newSubmissionDetails.characters.forEach { character ->
-                    submissionRepo.insertCharacterSubmissionCrossRef(
-                        CharacterSubmissionCrossRef(
-                            characterId = character.characterId,
-                            submissionId = submission
-                        )
+                val submissionId = submissionRepo.insertSubmissionDetails(
+                    newSubmissionDetails.copy(
+                        imagePath = thumbnail
                     )
-                }
+                )
 
                 imagePaths.forEach { imagePath ->
                     val imageInfo = getImageInfo(context, imagePath)
@@ -209,7 +188,7 @@ class SubmissionsViewModel(
                             dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
                             extension = imageInfo?.extension ?: "",
                             palette = palette,
-                            submissionId = submission
+                            submissionId = submissionId
                         )
                     )
                 }
@@ -228,20 +207,9 @@ class SubmissionsViewModel(
                     val newSub = newSubmissionDetails.copy(
                         imagePath = thumbnailPath
                     )
+                    val submissionId = submissionRepo.insertSubmissionDetails(newSub)
                     Log.d("saveSubmission", newSub.toString())
-                    val submission = submissionRepo.insertSubmission(
-                        newSub.toSubmission()
-                    )
 
-                    // Insert characters
-                    newSubmissionDetails.characters.forEach { character ->
-                        submissionRepo.insertCharacterSubmissionCrossRef(
-                            CharacterSubmissionCrossRef(
-                                characterId = character.characterId,
-                                submissionId = submission
-                            )
-                        )
-                    }
                     imageRepository.insert(
                         Image(
                             imageId = 0,
@@ -251,7 +219,7 @@ class SubmissionsViewModel(
                             dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
                             extension = imageInfo?.extension ?: "",
                             palette = palette,
-                            submissionId = submission
+                            submissionId = submissionId
                         )
                     )
                 }
