@@ -20,17 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.ui.components.SmallCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> EntitySelect(
-    selectedItem: T?,
+fun ArtistSelect(
+    selectedItem: Artist?,
     title: String,
-    items: List<T>,
-    labelMapper: (T) -> String,
-    imageMapper: (T) -> String?,
-    onItemSelected: (T) -> Unit,
+    items: List<ArtistWithSubmissions>,
+    onItemSelected: (Artist) -> Unit,
     onQueryChange: (String) -> Unit,
     query: String,
 ) {
@@ -48,8 +48,8 @@ fun <T> EntitySelect(
         ) {
             if (selectedItem != null) {
                 SmallCard(
-                    title = labelMapper(selectedItem),
-                    imagePath = imageMapper(selectedItem),
+                    title = selectedItem.name,
+                    imagePath = selectedItem.imagePath,
                     onClick = { expanded = !expanded }
                 )
             } else {
@@ -99,14 +99,14 @@ fun <T> EntitySelect(
                                 ) {
                                     items(items.size) { index ->
                                         val item = items[index]
-                                        if (labelMapper(item).contains(query, ignoreCase = true)) {
+                                        if (item.artist.name.contains(query, ignoreCase = true)) {
                                             SmallCard(
-                                                title = labelMapper(item),
-                                                imagePath = imageMapper(item),
+                                                title = item.artist.name,
+                                                imagePath = item.artist.imagePath,
                                                 onClick = {
                                                     onQueryChange("") // Clear the search query when an item is selected
                                                     expanded = false // Close the dropdown
-                                                    onItemSelected(item) // Notify the selection
+                                                    onItemSelected(item.artist) // Notify the selection
                                                 },
                                             )
                                         }

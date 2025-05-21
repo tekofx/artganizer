@@ -32,5 +32,7 @@ interface IArtistDao {
     @Query("SELECT * FROM artists WHERE artistId = :artistId")
     suspend fun getArtistWithSubmissions(artistId: Int): ArtistWithSubmissions?
 
-
+    @Transaction
+    @Query("SELECT * from artists ORDER BY name ASC")
+    fun getAllArtistsWithSubmissions(): Flow<List<ArtistWithSubmissions>>
 }

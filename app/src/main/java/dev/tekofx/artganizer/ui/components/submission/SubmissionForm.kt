@@ -23,9 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.ui.IconResource
+import dev.tekofx.artganizer.ui.components.input.ArtistSelect
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.CharactersSelect
-import dev.tekofx.artganizer.ui.components.input.EntitySelect
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -79,14 +79,12 @@ fun SubmissionsForm(
         ) {
             Text("Artist", style = MaterialTheme.typography.headlineSmall)
             if (areThereArtists) {
-                EntitySelect(
+                ArtistSelect(
                     title = "Select an Artist",
                     selectedItem = submissionDetails.artist,
                     query = queryText,
                     onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
                     items = artists,
-                    labelMapper = { it.name },
-                    imageMapper = { it.imagePath },
                     onItemSelected = { selectedItem ->
                         onItemValueChange(
                             submissionDetails.copy(

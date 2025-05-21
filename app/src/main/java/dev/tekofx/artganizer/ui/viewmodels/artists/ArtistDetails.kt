@@ -22,6 +22,7 @@ fun ArtistDetails.toArtistWithSubmissions(): ArtistWithSubmissions = ArtistWithS
     submissions = submissions
 )
 
+
 fun ArtistWithSubmissions.toArtistDetails(): ArtistDetails = ArtistDetails(
     id = artist.artistId,
     name = artist.name,

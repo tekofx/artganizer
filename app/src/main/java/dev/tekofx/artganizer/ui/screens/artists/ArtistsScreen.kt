@@ -64,7 +64,7 @@ fun ArtistScreen(
                     ArtistCard(
                         artist,
                         onClick = {
-                            navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.artistId}")
+                            navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.artist.artistId}")
                         },
                         modifier = Modifier.animateItem(),
                     )

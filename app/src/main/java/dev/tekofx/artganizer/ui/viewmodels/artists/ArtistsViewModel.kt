@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.repository.ArtistsRepository
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,14 +38,14 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
     // Data
     val areThereArtists = mutableStateOf(false)
-    private val _artists = MutableStateFlow<List<Artist>>(emptyList())
+    private val _artists = MutableStateFlow<List<ArtistWithSubmissions>>(emptyList())
     val artists = _artists
         .combine(_queryText) { artists, query ->
             if (query.isBlank()) {
                 artists
             } else {
                 artists.filter {
-                    it.name.contains(query, ignoreCase = true)
+                    it.artist.name.contains(query, ignoreCase = true)
                 }
             }
         }
@@ -173,7 +173,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     init {
         // Collect the flow and update _submissions
         viewModelScope.launch {
-            repository.getAllArtists().collect { submissionsList ->
+            repository.getAllArtistsWithSubmissions().collect { submissionsList ->
                 _artists.value = submissionsList
                 if (submissionsList.isNotEmpty()) {
                     areThereArtists.value = true

@@ -14,17 +14,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.ui.components.Avatar
+import dev.tekofx.artganizer.ui.components.SubmissionCount
 import dev.tekofx.artganizer.ui.theme.AppTheme
 
 @Composable
 fun ArtistCard(
-    artist: Artist,
+    artist: ArtistWithSubmissions,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -43,8 +44,8 @@ fun ArtistCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Avatar(
-                artist.imagePath,
-                artist.name,
+                artist.artist.imagePath,
+                artist.artist.name,
                 modifier = Modifier
                     .aspectRatio(1f)
                     .weight(1f),
@@ -56,15 +57,11 @@ fun ArtistCard(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = artist.name,
+                    text = artist.artist.name,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.displayMedium
                 )
-                Text(
-                    text = "Artist description or details",
-                    color = Color.Gray,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                SubmissionCount(artist.submissions.size)
             }
         }
     }
@@ -73,11 +70,15 @@ fun ArtistCard(
 @Composable
 @Preview
 fun ArtistCardPreview() {
-    val artist = Artist(
-        artistId = 1,
-        name = "John Doe",
-        imagePath = null,
-        socialNetworks = emptyList()
+    val artist = ArtistWithSubmissions(
+        artist = Artist(
+
+            artistId = 1,
+            name = "John Doe",
+            imagePath = null,
+            socialNetworks = emptyList()
+        ),
+        submissions = emptyList()
     )
     AppTheme {
         ArtistCard(artist, onClick = {})
