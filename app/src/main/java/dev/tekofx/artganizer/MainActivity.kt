@@ -42,7 +42,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val submissionRepository by lazy {
-            SubmissionRepository(AppDatabase.getDatabase(this).submissionDao())
+            SubmissionRepository(
+                AppDatabase.getDatabase(this).submissionDao(),
+                AppDatabase.getDatabase(this).characterSubmissionCrossRefDao()
+            )
         }
 
         val artistsRepository by lazy {

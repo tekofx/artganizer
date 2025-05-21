@@ -9,8 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.tekofx.artganizer.entities.CharacterSubmissionCrossRef
 import dev.tekofx.artganizer.entities.Image
-import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
@@ -110,6 +110,7 @@ class SubmissionsViewModel(
     }
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
+        Log.d("updateNewUiState", submissionDetails.characters.toString())
         newSubmissionDetails = submissionDetails
     }
 
@@ -152,78 +153,94 @@ class SubmissionsViewModel(
      * Saves a new submission
      */
     suspend fun saveSubmission(context: Context) {
-        if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
-            var imagePaths = mutableListOf<Uri>()
-            uris.forEach { uri ->
-                val imagePath =
-                    saveImageToInternalStorage(
-                        context,
-                        uri
-                    )
-                imagePaths.add(imagePath)
-            }
+        viewModelScope.launch {
 
+            if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
+                var imagePaths = mutableListOf<Uri>()
+                uris.forEach { uri ->
+                    val imagePath =
+                        saveImageToInternalStorage(
+                            context,
+                            uri
+                        )
+                    imagePaths.add(imagePath)
+                }
 
-            val submission = submissionRepo.insertSubmission(
-                Submission(
-                    submissionId = newSubmissionDetails.id,
-                    title = newSubmissionDetails.title,
-                    description = newSubmissionDetails.description,
-                    imagePath = imagePaths[0],
-                    rating = newSubmissionDetails.rating,
-                    artistId = newSubmissionDetails.artistId
+                val newSub = newSubmissionDetails.copy(
+                    imagePath = imagePaths[0]
                 )
-            )
-
-            imagePaths.forEach { imagePath ->
-                val imageInfo = getImageInfo(context, imagePath)
-                val palette = getPaletteFromUri(context, imagePath)
-
-                imageRepository.insert(
-                    Image(
-                        date = Date(),
-                        size = imageInfo?.sizeInBytes ?: 0L,
-                        uri = imagePath,
-                        dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                        extension = imageInfo?.extension ?: "",
-                        palette = palette,
-                        submissionId = submission
-                    )
-                )
-            }
-        } else {
-            uris.forEach { uri ->
-                val imagePath =
-                    saveImageToInternalStorage(
-                        context,
-                        uri
-                    )
-
-                val imageInfo = getImageInfo(context, imagePath)
-                val palette = getPaletteFromUri(context, imagePath)
+                Log.d("saveSubmission", newSub.toString())
                 val submission = submissionRepo.insertSubmission(
+                    newSub.toSubmission()
+                )
 
-                    Submission(
-                        submissionId = newSubmissionDetails.id,
-                        title = newSubmissionDetails.title,
-                        description = newSubmissionDetails.description,
-                        imagePath = imagePath,
-                        rating = newSubmissionDetails.rating,
-                        artistId = newSubmissionDetails.artistId
+
+                // Insert characters
+                newSubmissionDetails.characters.forEach { character ->
+                    submissionRepo.insertCharacterSubmissionCrossRef(
+                        CharacterSubmissionCrossRef(
+                            characterId = character.characterId,
+                            submissionId = submission
+                        )
                     )
-                )
-                imageRepository.insert(
-                    Image(
-                        imageId = 0,
-                        date = Date(),
-                        uri = imagePath,
-                        size = imageInfo?.sizeInBytes ?: 0L,
-                        dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                        extension = imageInfo?.extension ?: "",
-                        palette = palette,
-                        submissionId = submission
+                }
+
+                imagePaths.forEach { imagePath ->
+                    val imageInfo = getImageInfo(context, imagePath)
+                    val palette = getPaletteFromUri(context, imagePath)
+
+                    imageRepository.insert(
+                        Image(
+                            date = Date(),
+                            size = imageInfo?.sizeInBytes ?: 0L,
+                            uri = imagePath,
+                            dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                            extension = imageInfo?.extension ?: "",
+                            palette = palette,
+                            submissionId = submission
+                        )
                     )
-                )
+                }
+            } else {
+                uris.forEach { uri ->
+                    val imagePath =
+                        saveImageToInternalStorage(
+                            context,
+                            uri
+                        )
+
+                    val imageInfo = getImageInfo(context, imagePath)
+                    val palette = getPaletteFromUri(context, imagePath)
+                    val newSub = newSubmissionDetails.copy(
+                        imagePath = imagePath
+                    )
+                    Log.d("saveSubmission", newSub.toString())
+                    val submission = submissionRepo.insertSubmission(
+                        newSub.toSubmission()
+                    )
+
+                    // Insert characters
+                    newSubmissionDetails.characters.forEach { character ->
+                        submissionRepo.insertCharacterSubmissionCrossRef(
+                            CharacterSubmissionCrossRef(
+                                characterId = character.characterId,
+                                submissionId = submission
+                            )
+                        )
+                    }
+                    imageRepository.insert(
+                        Image(
+                            imageId = 0,
+                            date = Date(),
+                            uri = imagePath,
+                            size = imageInfo?.sizeInBytes ?: 0L,
+                            dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                            extension = imageInfo?.extension ?: "",
+                            palette = palette,
+                            submissionId = submission
+                        )
+                    )
+                }
             }
         }
 

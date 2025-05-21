@@ -34,6 +34,16 @@ fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
     characters = characters
 )
 
+fun SubmissionDetails.toSubmission(): Submission = Submission(
+    submissionId = id,
+    title = title,
+    description = description,
+    imagePath = imagePath,
+    rating = rating,
+    artistId = artistId,
+)
+
+
 fun List<CharacterWithSubmissions>.toListOfCharacters(): List<Character> {
     return this.map { characterWithSubmissions ->
         Character(
