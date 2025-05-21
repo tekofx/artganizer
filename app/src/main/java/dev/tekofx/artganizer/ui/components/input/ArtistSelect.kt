@@ -30,7 +30,7 @@ fun ArtistSelect(
     selectedItem: Artist?,
     title: String,
     items: List<ArtistWithSubmissions>,
-    onItemSelected: (Artist) -> Unit,
+    onItemSelected: (Artist?) -> Unit,
     onQueryChange: (String) -> Unit,
     query: String,
 ) {
@@ -50,7 +50,12 @@ fun ArtistSelect(
                 SmallCard(
                     title = selectedItem.name,
                     imagePath = selectedItem.imagePath,
-                    onClick = { expanded = !expanded }
+                    onClick = { expanded = !expanded },
+                    deletable = true,
+                    onClear = {
+                        onItemSelected(null) // Clear the selection
+                        expanded = false // Close the dropdown
+                    }
                 )
             } else {
                 SmallCard(
