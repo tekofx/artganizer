@@ -6,12 +6,11 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.repository.CharactersRepository
-import dev.tekofx.artganizer.utils.saveImageToInternalStorage
+import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -112,14 +111,14 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         if (imagePath != null) {
             // Save image to private storage
             val newImagePath =
-                saveImageToInternalStorage(
+                saveThumbnail(
                     context,
-                    imagePath.toUri()
+                    imagePath
                 )
 
             newCharacterUiState = newCharacterUiState.copy(
                 characterDetails = newCharacterUiState.characterDetails.copy(
-                    imagePath = newImagePath.toString()
+                    imagePath = newImagePath
                 )
             )
 
@@ -140,14 +139,14 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         if (imagePath != null) {
             // Save image to private storage
             val newImagePath =
-                saveImageToInternalStorage(
+                saveThumbnail(
                     context,
-                    imagePath.toUri()
+                    imagePath
                 )
 
             currentCharacterUiState = currentCharacterUiState.copy(
                 characterDetails = currentCharacterUiState.characterDetails.copy(
-                    imagePath = newImagePath.toString()
+                    imagePath = newImagePath
                 )
             )
 
