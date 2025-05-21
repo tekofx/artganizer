@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistWithSubmissions
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ArtistDetailsScreen(
     artistsViewModel: ArtistsViewModel,
@@ -60,7 +62,7 @@ fun ArtistDetailsScreen(
             }
         )
     }
-    Scaffold { paddingValues ->
+    Scaffold {
         if (showEditArtist) {
             ArtistForm(
                 artistsViewModel.currentArtistUiState,
@@ -104,8 +106,6 @@ fun ArtistInfo(
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         item {
-
-
             Avatar(
                 artistWithSubmissions.artist.imagePath,
                 artistWithSubmissions.artist.name,
@@ -113,7 +113,6 @@ fun ArtistInfo(
             )
         }
         item {
-
             Text(
                 text = artistWithSubmissions.artist.name,
                 style = MaterialTheme.typography.displayMedium,
@@ -123,11 +122,9 @@ fun ArtistInfo(
             )
         }
         item {
-
             SocialNetworks(artistWithSubmissions.artist.socialNetworks)
         }
         item {
-
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {

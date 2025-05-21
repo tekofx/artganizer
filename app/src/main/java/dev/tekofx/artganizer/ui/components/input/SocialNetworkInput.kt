@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.R
@@ -93,27 +94,36 @@ fun SocialNetworksList(
     onRemoveSocialNetwork: (String) -> Unit,
 ) {
     socialNetworks.forEach { url ->
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 4.dp)
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(vertical = 4.dp)
+                .fillMaxWidth()
         ) {
-            Icon(
-                painter = IconResource.fromDrawableResource(getSocialNetworkIconRes(url))
-                    .asPainterResource(),
-                contentDescription = "Social Network Icon",
-                modifier = Modifier.size(35.dp)
-            )
-            Text(
-                text = url,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 8.dp)
-            )
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = IconResource.fromDrawableResource(getSocialNetworkIconRes(url))
+                        .asPainterResource(),
+                    contentDescription = "Social Network Icon",
+                    modifier = Modifier.size(35.dp)
+                )
+                Text(
+                    text = url,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 8.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
             IconButton(onClick = { onRemoveSocialNetwork(url) }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.x), // Replace with your drawable resource
-                    contentDescription = "Example Icon",
-                    modifier = Modifier.size(20.dp) // Optional: Adjust size
+                    painter = painterResource(id = R.drawable.x),
+                    contentDescription = "Remove Icon",
+                    modifier = Modifier.size(30.dp)
                 )
             }
         }
@@ -126,7 +136,8 @@ fun SocialNetworkInputPreview() {
     val socialNetworks = listOf(
         "https://twitter.com/username",
         "https://instagram.com/username",
-        "https://t.me/username"
+        "https://t.me/username",
+        "https://bsky.app/profile/lissetvaras.bsky.social"
     )
     SocialNetworkInput(
         socialNetworks = socialNetworks,
