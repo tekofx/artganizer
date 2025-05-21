@@ -3,10 +3,12 @@ package dev.tekofx.artganizer.ui.components.input
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,17 +22,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.ui.components.SmallCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> EntitySelect(
-    selectedItem: T?,
+fun CharactersSelect(
+    selectedItems: List<Character>,
     title: String,
-    items: List<T>,
-    labelMapper: (T) -> String,
-    imageMapper: (T) -> String?,
-    onItemSelected: (T) -> Unit,
+    items: List<Character>,
+    onItemsSelected: (List<Character>) -> Unit,
     onQueryChange: (String) -> Unit,
     query: String,
 ) {
@@ -46,12 +47,18 @@ fun <T> EntitySelect(
                 expanded = !expanded
             },
         ) {
-            if (selectedItem != null) {
-                SmallCard(
-                    title = labelMapper(selectedItem),
-                    imagePath = imageMapper(selectedItem),
-                    onClick = { expanded = !expanded }
-                )
+            if (selectedItems.isNotEmpty()) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    selectedItems.forEach { item ->
+                        SmallCard(
+                            title = item.name,
+                            imagePath = item.imagePath,
+                            onClick = { expanded = !expanded }
+                        )
+                    }
+                }
             } else {
                 SmallCard(
                     title = title,
@@ -79,7 +86,7 @@ fun <T> EntitySelect(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 60.dp) // Reserve space for the SearchBar
+                                .padding(bottom = 60.dp)
                         ) {
                             Text(
                                 text = title,
@@ -88,7 +95,7 @@ fun <T> EntitySelect(
                             )
                             if (items.isEmpty()) {
                                 Text(
-                                    text = "No artists with current search",
+                                    text = "No items with current search",
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
                             } else {
@@ -99,14 +106,19 @@ fun <T> EntitySelect(
                                 ) {
                                     items(items.size) { index ->
                                         val item = items[index]
-                                        if (labelMapper(item).contains(query, ignoreCase = true)) {
+                                        if (item.name.contains(query, ignoreCase = true)) {
                                             SmallCard(
-                                                title = labelMapper(item),
-                                                imagePath = imageMapper(item),
+                                                title = item.name,
+                                                imagePath = item.imagePath,
+                                                selected = selectedItems.contains(item),
                                                 onClick = {
-                                                    onQueryChange("") // Clear the search query when an item is selected
-                                                    expanded = false // Close the dropdown
-                                                    onItemSelected(item) // Notify the selection
+                                                    val newSelection =
+                                                        if (selectedItems.contains(item)) {
+                                                            selectedItems - item
+                                                        } else {
+                                                            selectedItems + item
+                                                        }
+                                                    onItemsSelected(newSelection)
                                                 },
                                             )
                                         }
@@ -114,19 +126,24 @@ fun <T> EntitySelect(
                                 }
                             }
                         }
-
-                        // SearchBar at the bottom
-                        SearchBar(
-                            queryText = query,
-                            onValueChange = { onQueryChange(it) },
+                        Row(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .fillMaxWidth()
-                        )
+                        ) {
+                            SearchBar(
+                                queryText = query,
+                                onValueChange = { onQueryChange(it) },
+                            )
+                            Button(onClick = {
+                                expanded = false
+                            }) {
+                                Text("Ok")
+                            }
+                        }
                     }
                 }
             }
         )
     }
 }
-

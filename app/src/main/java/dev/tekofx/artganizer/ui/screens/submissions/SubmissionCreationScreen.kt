@@ -18,6 +18,7 @@ import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.launch
@@ -25,9 +26,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SubmissionCreationScreen(
+    navHostController: NavHostController,
     submissionsViewModel: SubmissionsViewModel,
     artistsViewModel: ArtistsViewModel,
-    navHostController: NavHostController
+    charactersViewModel: CharactersViewModel
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -63,9 +65,10 @@ fun SubmissionCreationScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             SubmissionsForm(
-                submissionsViewModel.uris,
-                artistsViewModel,
-                submissionsViewModel.newSubmissionDetails,
+                uris = submissionsViewModel.uris,
+                artistsViewModel = artistsViewModel,
+                charactersViewModel = charactersViewModel,
+                submissionDetails = submissionsViewModel.newSubmissionDetails,
                 onItemValueChange = { newValue -> submissionsViewModel.updateNewUiState(newValue) },
                 onSaveClick = {
                     navHostController.popBackStack()

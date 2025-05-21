@@ -51,9 +51,10 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) {
             SubmissionCreationScreen(
+                navHostController,
                 submissionsViewModel,
                 artistsViewModel,
-                navHostController
+                charactersViewModel
             )
         }
 
@@ -69,9 +70,10 @@ fun Navigation(
             }
             submissionsViewModel.getSubmissionWithArtist(submissionId.toLong())
             SubmissionDetailsScreen(
+                navHostController,
                 submissionsViewModel,
                 artistsViewModel,
-                navHostController
+                charactersViewModel
             )
         }
 

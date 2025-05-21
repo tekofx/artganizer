@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.viewmodels.submissions
 import android.net.Uri
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Character
+import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
@@ -32,6 +33,17 @@ fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
     images = images,
     characters = characters
 )
+
+fun List<CharacterWithSubmissions>.toListOfCharacters(): List<Character> {
+    return this.map { characterWithSubmissions ->
+        Character(
+            characterId = characterWithSubmissions.character.characterId,
+            name = characterWithSubmissions.character.name,
+            species = characterWithSubmissions.character.species,
+            imagePath = characterWithSubmissions.character.imagePath,
+        )
+    }
+}
 
 fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDetails(
     id = submission.submissionId,

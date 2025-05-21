@@ -1,12 +1,11 @@
 package dev.tekofx.artganizer.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,14 +17,21 @@ import androidx.compose.ui.unit.dp
 fun SmallCard(
     title: String,
     imagePath: String?,
+    selected: Boolean = false,
     onClick: () -> Unit,
-    elevation: CardElevation = CardDefaults.cardElevation()
 ) {
+
+    val modifier = if (selected) {
+        Modifier
+            .border(3.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.large)
+            .fillMaxWidth()
+    } else {
+        Modifier.fillMaxWidth()
+    }
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         shape = MaterialTheme.shapes.large,
         onClick = { onClick() },
-        elevation = elevation,
     ) {
         Row(
             modifier = Modifier.padding(10.dp),

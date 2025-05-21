@@ -24,22 +24,28 @@ import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
+import dev.tekofx.artganizer.ui.components.input.CharactersSelect
 import dev.tekofx.artganizer.ui.components.input.EntitySelect
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
+import dev.tekofx.artganizer.ui.viewmodels.submissions.toListOfCharacters
 
 @Composable
 fun SubmissionsForm(
     uris: List<Uri>,
     artistsViewModel: ArtistsViewModel,
     submissionDetails: SubmissionDetails,
+    charactersViewModel: CharactersViewModel,
     onItemValueChange: (SubmissionDetails) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit = {},
 ) {
     val queryText by artistsViewModel.queryText.collectAsState()
     val artists by artistsViewModel.artists.collectAsState()
+    val characters by charactersViewModel.characters.collectAsState()
     val areThereArtists by artistsViewModel.areThereArtists
+    val areThereCharacters by charactersViewModel.areThereCharacters
     val scrollState = rememberScrollState()
 
     Column(
@@ -112,6 +118,29 @@ fun SubmissionsForm(
                             style = MaterialTheme.typography.headlineSmall
                         )
                     }
+                }
+            }
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text("Artist", style = MaterialTheme.typography.headlineSmall)
+
+                if (areThereCharacters) {
+                    CharactersSelect(
+                        title = "Select a Character",
+                        selectedItems = submissionDetails.characters,
+                        query = queryText,
+                        onQueryChange = { charactersViewModel.onSearchTextChanged(it) },
+                        items = characters.toListOfCharacters(),
+                        onItemsSelected = { selectedItems ->
+                            onItemValueChange(
+                                submissionDetails.copy(
+                                    characters = selectedItems // Update the list of selected characters
+                                )
+                            )
+                        },
+                    )
                 }
             }
         }

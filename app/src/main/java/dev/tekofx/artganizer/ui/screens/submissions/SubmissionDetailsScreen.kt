@@ -37,6 +37,7 @@ import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.components.submission.SubmissionViewer
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmissionWithArtist
 import dev.tekofx.artganizer.utils.dateToString
@@ -46,9 +47,10 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SubmissionDetailsScreen(
+    navHostController: NavHostController,
     submissionsViewModel: SubmissionsViewModel,
     artistsViewModel: ArtistsViewModel,
-    navHostController: NavHostController
+    charactersViewModel: CharactersViewModel,
 ) {
     val context = LocalContext.current
     val showPopup by submissionsViewModel.showPopup.collectAsState()
@@ -82,9 +84,10 @@ fun SubmissionDetailsScreen(
     Scaffold {
         if (showEdit) {
             SubmissionsForm(
-                submissionsViewModel.uris,
-                artistsViewModel,
-                submissionsViewModel.editingSubmissionDetails,
+                uris = submissionsViewModel.uris,
+                artistsViewModel = artistsViewModel,
+                charactersViewModel = charactersViewModel,
+                submissionDetails = submissionsViewModel.editingSubmissionDetails,
                 onItemValueChange = {
                     submissionsViewModel.updateEditingUiState(it)
                 },
