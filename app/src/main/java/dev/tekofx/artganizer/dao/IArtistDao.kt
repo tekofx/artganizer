@@ -13,15 +13,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IArtistDao {
+
+    // INSERT
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(artist: Artist)
 
-    @Update
-    suspend fun update(artist: Artist)
-
-    @Delete
-    suspend fun delete(artist: Artist)
-
+    // GET
     @Query("SELECT * from artists WHERE artistId = :id")
     fun getArtists(id: Int): Flow<Artist>
 
@@ -35,4 +32,14 @@ interface IArtistDao {
     @Transaction
     @Query("SELECT * from artists ORDER BY name ASC")
     fun getAllArtistsWithSubmissions(): Flow<List<ArtistWithSubmissions>>
+
+    // UPDATE
+    @Update
+    suspend fun update(artist: Artist)
+
+    // DELETE
+    @Delete
+    suspend fun delete(artist: Artist)
+
+
 }

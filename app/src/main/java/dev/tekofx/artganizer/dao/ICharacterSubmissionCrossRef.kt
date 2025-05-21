@@ -9,4 +9,5 @@ import dev.tekofx.artganizer.entities.CharacterSubmissionCrossRef
 interface ICharacterSubmissionCrossRef {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: CharacterSubmissionCrossRef)
+
 }

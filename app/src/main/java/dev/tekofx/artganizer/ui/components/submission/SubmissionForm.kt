@@ -3,15 +3,10 @@ package dev.tekofx.artganizer.ui.components.submission
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -21,11 +16,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
+import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.ui.components.input.ArtistSelect
-import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.CharactersSelect
+import dev.tekofx.artganizer.ui.components.input.FormButtons
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -46,116 +41,49 @@ fun SubmissionsForm(
     val characters by charactersViewModel.characters.collectAsState()
     val areThereArtists by artistsViewModel.areThereArtists
     val areThereCharacters by charactersViewModel.areThereCharacters
-    val scrollState = rememberScrollState()
 
-    Column(
+    LazyColumn(
         modifier = Modifier
-            .padding(10.dp)
-            .verticalScroll(scrollState),
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        SubmissionViewer(
-            submissionDetails.title,
-            uris,
-            currentImage = 0,
-            onImageChange = {}
-        )
-
-
-        SubmissionFormFields(
-            submissionDetails = submissionDetails,
-            onValueChange = onItemValueChange,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp)
-        )
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text("Artist", style = MaterialTheme.typography.headlineSmall)
-            if (areThereArtists) {
-                ArtistSelect(
-                    title = "Select an Artist",
-                    selectedItem = submissionDetails.artist,
-                    query = queryText,
-                    onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
-                    items = artists,
-                    onItemSelected = { selectedItem ->
-                        onItemValueChange(
-                            submissionDetails.copy(
-                                artistId = selectedItem.artistId,
-                                artist = selectedItem
-                            )
-                        )
-                    },
-                )
-            } else {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(40.dp),
-                            painter = IconResource.fromDrawableResource(R.drawable.cancel)
-                                .asPainterResource(),
-                            contentDescription = ""
-                        )
-                        Text(
-                            text = "No artists",
-                            style = MaterialTheme.typography.headlineSmall
-                        )
-                    }
-                }
-            }
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text("Artist", style = MaterialTheme.typography.headlineSmall)
-
-                if (areThereCharacters) {
-                    CharactersSelect(
-                        title = "Select a Character",
-                        selectedItems = submissionDetails.characters,
-                        query = queryText,
-                        onQueryChange = { charactersViewModel.onSearchTextChanged(it) },
-                        items = characters.toListOfCharacters(),
-                        onItemsSelected = { selectedItems ->
-                            onItemValueChange(
-                                submissionDetails.copy(
-                                    characters = selectedItems // Update the list of selected characters
-                                )
-                            )
-                        },
-                    )
-                }
-            }
+        item {
+            SubmissionViewer(
+                submissionDetails.title,
+                uris,
+                currentImage = 0,
+                onImageChange = {}
+            )
         }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            ButtonWithIcon(
-                onClick = onSaveClick,
-                text = "Save",
-                iconResource = IconResource.fromDrawableResource(R.drawable.device_floppy),
+        item {
+            SubmissionFormFields(
+                submissionDetails = submissionDetails,
+                onValueChange = onItemValueChange,
+                modifier = Modifier.fillMaxWidth(),
+                queryText = queryText,
+                artists = artists,
+                areThereArtists = areThereArtists,
+                onArtistSearchTextChange = { artistsViewModel.onSearchTextChanged(it) },
+                characters = characters,
+                areThereCharacters = areThereCharacters,
+                onCharacterSearchTextChange = { charactersViewModel.onSearchTextChanged(it) }
             )
-            ButtonWithIcon(
-                onClick = onCancelClick,
-                text = "Cancel",
-                iconResource = IconResource.fromDrawableResource(R.drawable.cancel),
-                color = MaterialTheme.colorScheme.error
+        }
+
+        item {
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+            )
+        }
+
+        item {
+            FormButtons(
+                onSaveClick = onSaveClick,
+                onCancelClick = onCancelClick,
             )
         }
     }
@@ -165,8 +93,14 @@ fun SubmissionsForm(
 fun SubmissionFormFields(
     submissionDetails: SubmissionDetails,
     modifier: Modifier = Modifier,
+    queryText: String,
     onValueChange: (SubmissionDetails) -> Unit = {},
-    enabled: Boolean = true
+    artists: List<ArtistWithSubmissions>,
+    areThereArtists: Boolean,
+    onArtistSearchTextChange: (String) -> Unit,
+    characters: List<CharacterWithSubmissions>,
+    areThereCharacters: Boolean,
+    onCharacterSearchTextChange: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier,
@@ -178,7 +112,6 @@ fun SubmissionFormFields(
             label = { Text("Title") },
 
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true
         )
         OutlinedTextField(
@@ -186,11 +119,54 @@ fun SubmissionFormFields(
             onValueChange = { onValueChange(submissionDetails.copy(description = it)) },
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
         )
         Rating(
             rating = submissionDetails.rating,
             onRatingChange = { onValueChange(submissionDetails.copy(rating = it)) },
         )
+        if (areThereArtists) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text("Artist", style = MaterialTheme.typography.headlineSmall)
+                ArtistSelect(
+                    title = "Select an Artist",
+                    selectedItem = submissionDetails.artist,
+                    query = queryText,
+                    onQueryChange = onArtistSearchTextChange,
+                    items = artists,
+                    onItemSelected = { selectedItem ->
+                        onValueChange(
+                            submissionDetails.copy(
+                                artistId = selectedItem.artistId,
+                                artist = selectedItem
+                            )
+                        )
+                    },
+                )
+            }
+        }
+        if (areThereCharacters) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text("Artist", style = MaterialTheme.typography.headlineSmall)
+
+                CharactersSelect(
+                    title = "Select a Character",
+                    selectedItems = submissionDetails.characters,
+                    query = queryText,
+                    onQueryChange = { onCharacterSearchTextChange },
+                    items = characters.toListOfCharacters(),
+                    onItemsSelected = { selectedItems ->
+                        onValueChange(
+                            submissionDetails.copy(
+                                characters = selectedItems // Update the list of selected characters
+                            )
+                        )
+                    },
+                )
+            }
+        }
     }
 }

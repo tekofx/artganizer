@@ -5,18 +5,21 @@ import dev.tekofx.artganizer.entities.Artist
 
 class ArtistsRepository(private val artistsDao: IArtistDao) {
 
+    // INSERT
     suspend fun insertArtist(artist: Artist) = artistsDao.insert(artist)
 
-    suspend fun deleteArtist(artist: Artist) = artistsDao.delete(artist)
-
-    suspend fun updateArtist(artist: Artist) = artistsDao.update(artist)
-
-    fun getAllArtists() = artistsDao.getAllArtists()
-
+    // GET
     fun getAllArtistsWithSubmissions() =
         artistsDao.getAllArtistsWithSubmissions()
 
     suspend fun getArtistWithSubmissions(artistId: Int) =
         artistsDao.getArtistWithSubmissions(artistId)
+
+    // UPDATE
+    suspend fun updateArtist(artist: Artist) = artistsDao.update(artist)
+
+    // DELETE
+    suspend fun deleteArtist(artist: Artist) = artistsDao.delete(artist)
+
 
 }

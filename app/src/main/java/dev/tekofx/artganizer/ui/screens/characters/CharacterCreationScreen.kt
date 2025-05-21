@@ -30,6 +30,10 @@ fun CharacterCreationScreen(
                 navHostController.popBackStack()
                 scope.launch { charactersViewModel.saveCharacter(context) }
             },
+            onCancelClick = {
+                charactersViewModel.clearNewUiState()
+                navHostController.popBackStack()
+            }
         )
 
     }

@@ -69,6 +69,9 @@ fun CharacterDetailsScreen(
                     scope.launch { charactersViewModel.editCharacter(context) }
                     charactersViewModel.setShowEditArtist(false)
                 },
+                onCancelClick = {
+                    charactersViewModel.setShowEditArtist(false)
+                }
             )
         } else {
             CharacterInfo(

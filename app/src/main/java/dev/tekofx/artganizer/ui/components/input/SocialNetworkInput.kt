@@ -36,16 +36,13 @@ fun SocialNetworkInput(
 ) {
     Column(modifier = modifier) {
         Text("Social Networks", style = MaterialTheme.typography.titleLarge)
-        // Display existing social networks
         SocialNetworksList(
             socialNetworks = socialNetworks,
             onRemoveSocialNetwork = { url ->
-                // Handle removal of social network
                 onRemoveSocialNetwork(url)
             },
         )
 
-        // Input field to add a new social network
         var newSocialNetwork by remember { mutableStateOf("") }
 
         Row(
@@ -74,6 +71,7 @@ fun SocialNetworkInput(
                 }
             )
             Button(
+                enabled = newSocialNetwork.isNotBlank(),
                 onClick = {
                     if (newSocialNetwork.isNotBlank()) {
                         onAddSocialNetwork(newSocialNetwork)

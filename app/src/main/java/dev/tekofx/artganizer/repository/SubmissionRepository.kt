@@ -11,26 +11,22 @@ class SubmissionRepository(
     private val submissionDao: ISubmissionDao,
     private val characterSubmissionCrossRef: ICharacterSubmissionCrossRef
 ) {
+
+    // GET
     fun getAllSubmissions(): Flow<List<SubmissionWithArtist>> = submissionDao.getAllSubmissions()
-
-    fun getSubmission(id: Long): Flow<Submission?> = submissionDao.getSubmission(id)
-
     suspend fun getSubmissionWithArtist(submissionId: Long) =
         submissionDao.getSubmissionWithArtist(submissionId)
 
+    // INSERT
     suspend fun insertSubmission(submission: Submission): Long = submissionDao.insert(submission)
-
     suspend fun insertCharacterSubmissionCrossRef(submission: CharacterSubmissionCrossRef) =
         characterSubmissionCrossRef.insert(submission)
 
-    suspend fun insertSubmissions(submissions: List<Submission>) =
-        submissionDao.insertSubmissions(submissions)
+    // UPDATE
+    suspend fun updateSubmission(submission: Submission) =
+        submissionDao.update(submission)
 
+
+    // DELETE
     suspend fun deleteSubmission(submission: Submission) = submissionDao.delete(submission)
-
-    suspend fun updateSubmission(submission: Submission) = submissionDao.update(submission)
-
-    suspend fun updateSubmissionWithArtist(submission: Submission) =
-        submissionDao.updateSubmissionWithArtist(submission)
-
 }

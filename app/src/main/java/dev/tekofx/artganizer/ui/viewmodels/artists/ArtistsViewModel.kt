@@ -99,6 +99,10 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
             )
     }
 
+    fun clearNewUiState() {
+        newArtistUiState = ArtistUiState()
+    }
+
     fun updateCurrentUiState(artistDetails: ArtistDetails) {
         currentArtistUiState =
             ArtistUiState(

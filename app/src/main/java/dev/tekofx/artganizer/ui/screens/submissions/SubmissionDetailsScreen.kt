@@ -199,6 +199,7 @@ fun SubmissionInfo(
         if (submission.images.isNotEmpty()) {
             ImageInfo(submission.images[currentImage])
         }
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {

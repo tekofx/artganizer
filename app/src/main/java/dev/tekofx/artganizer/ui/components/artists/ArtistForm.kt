@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.ui.components.input.FormAvatar
+import dev.tekofx.artganizer.ui.components.input.FormButtons
 import dev.tekofx.artganizer.ui.components.input.SocialNetworkInput
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
@@ -28,6 +27,7 @@ fun ArtistForm(
     artistUiState: ArtistUiState,
     onItemValueChange: (ArtistDetails) -> Unit,
     onSaveClick: () -> Unit,
+    onCancelClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val launcher = rememberLauncherForActivityResult(
@@ -49,17 +49,13 @@ fun ArtistForm(
         modifier = Modifier.padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
-    )
-
-
-    {
+    ) {
         item {
             FormAvatar(
                 fallbackText = artistUiState.artistDetails.name,
                 artistUiState.artistDetails.imagePath,
                 onImageSelect = { launcher.launch("image/*") })
         }
-
         item {
             ArtistFormFields(
                 artistsDetails = artistUiState.artistDetails,
@@ -67,16 +63,11 @@ fun ArtistForm(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-
         item {
-            Button(
-                onClick = onSaveClick,
-                enabled = artistUiState.isEntryValid,
-                shape = MaterialTheme.shapes.small,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Save")
-            }
+            FormButtons(
+                onSaveClick = onSaveClick,
+                onCancelClick = onCancelClick,
+            )
         }
     }
 }

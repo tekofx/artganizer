@@ -27,6 +27,10 @@ fun ArtistCreationScreen(artistsViewModel: ArtistsViewModel, navHostController: 
                 navHostController.popBackStack()
                 scope.launch { artistsViewModel.saveArtist(context) }
             },
+            onCancelClick = {
+                artistsViewModel.clearNewUiState()
+                navHostController.popBackStack()
+            }
         )
 
     }

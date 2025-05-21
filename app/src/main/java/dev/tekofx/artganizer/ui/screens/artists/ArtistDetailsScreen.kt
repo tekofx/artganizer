@@ -71,6 +71,9 @@ fun ArtistDetailsScreen(
                     scope.launch { artistsViewModel.editArtist(context) }
                     artistsViewModel.setShowEditArtist(false)
                 },
+                onCancelClick = {
+                    artistsViewModel.setShowEditArtist(false)
+                },
             )
         } else {
             ArtistInfo(

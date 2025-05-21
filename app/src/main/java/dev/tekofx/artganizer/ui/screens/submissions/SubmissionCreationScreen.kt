@@ -77,6 +77,7 @@ fun SubmissionCreationScreen(
                     }
                 },
                 onCancelClick = {
+                    submissionsViewModel.clearNewUiState()
                     navHostController.popBackStack()
                 }
             )

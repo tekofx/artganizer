@@ -13,15 +13,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ICharacterDao {
+
+    // INSERT
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(character: Character)
 
-    @Update
-    suspend fun update(character: Character)
-
-    @Delete
-    suspend fun delete(character: Character)
-
+    // GET
     @Query("SELECT * from characters ORDER BY name ASC")
     fun getAllCharacters(): Flow<List<Character>>
 
@@ -32,6 +29,14 @@ interface ICharacterDao {
     @Transaction
     @Query("SELECT * FROM characters WHERE characterId = :characterId")
     suspend fun getCharacterWithSubmissions(characterId: Long): CharacterWithSubmissions?
+
+    // UPDATE
+    @Update
+    suspend fun update(character: Character)
+
+    // DELETE
+    @Delete
+    suspend fun delete(character: Character)
 
 
 }

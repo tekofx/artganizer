@@ -98,6 +98,10 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
             )
     }
 
+    fun clearNewUiState() {
+        newCharacterUiState = CharacterUiState()
+    }
+
     fun updateCurrentUiState(characterDetails: CharacterDetails) {
         currentCharacterUiState =
             CharacterUiState(

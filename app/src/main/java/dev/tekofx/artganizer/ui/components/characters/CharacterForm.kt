@@ -7,8 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.ui.components.input.FormAvatar
+import dev.tekofx.artganizer.ui.components.input.FormButtons
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharacterDetails
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharacterUiState
 import kotlinx.coroutines.launch
@@ -26,6 +26,7 @@ fun CharacterForm(
     characterUiState: CharacterUiState,
     onItemValueChange: (CharacterDetails) -> Unit,
     onSaveClick: () -> Unit,
+    onCancelClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val launcher = rememberLauncherForActivityResult(
@@ -43,28 +44,31 @@ fun CharacterForm(
         }
     )
 
-    Column(
+    LazyColumn(
         modifier = Modifier.padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        FormAvatar(
-            fallbackText = characterUiState.characterDetails.name,
-            characterUiState.characterDetails.imagePath,
-            onImageSelect = { launcher.launch("image/*") })
+        item {
+            FormAvatar(
+                fallbackText = characterUiState.characterDetails.name,
+                characterUiState.characterDetails.imagePath,
+                onImageSelect = { launcher.launch("image/*") }
+            )
+        }
 
-        CharacterFormFields(
-            characterDetails = characterUiState.characterDetails,
-            onValueChange = onItemValueChange,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Button(
-            onClick = onSaveClick,
-            enabled = characterUiState.isEntryValid,
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Save")
+        item {
+            CharacterFormFields(
+                characterDetails = characterUiState.characterDetails,
+                onValueChange = onItemValueChange,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            FormButtons(
+                onSaveClick = onSaveClick,
+                onCancelClick = onCancelClick,
+            )
         }
     }
 }

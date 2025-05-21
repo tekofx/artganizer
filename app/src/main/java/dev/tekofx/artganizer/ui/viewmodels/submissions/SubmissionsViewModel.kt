@@ -97,6 +97,10 @@ class SubmissionsViewModel(
         newSubmissionDetails = submissionDetails
     }
 
+    fun clearNewUiState() {
+        newSubmissionDetails = SubmissionDetails()
+    }
+
     fun updateEditingUiState(submissionDetails: SubmissionDetails) {
         Log.d("updateEditingUiState", editingSubmissionDetails.toString())
         editingSubmissionDetails = submissionDetails
@@ -142,7 +146,16 @@ class SubmissionsViewModel(
      */
     suspend fun editSubmission() {
         val submission = editingSubmissionDetails.toSubmissionWithArtist()
-        submissionRepo.updateSubmissionWithArtist(submission.submission)
+        Log.d("editSubmission", submission.toString())
+        submissionRepo.updateSubmission(submission.submission)
+        submission.characters.forEach {
+            submissionRepo.insertCharacterSubmissionCrossRef(
+                CharacterSubmissionCrossRef(
+                    characterId = it.characterId,
+                    submissionId = submission.submission.submissionId
+                )
+            )
+        }
         editingSubmissionDetails = SubmissionDetails()
         currentSubmissionDetails = submission.toSubmissionDetails()
     }
