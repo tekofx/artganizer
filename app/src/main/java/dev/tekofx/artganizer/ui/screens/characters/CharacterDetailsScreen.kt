@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.screens.characters
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,10 +16,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
@@ -31,6 +34,7 @@ import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.toCharacterWithSubmissions
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CharacterDetailsScreen(
     charactersViewModel: CharactersViewModel,
@@ -56,7 +60,7 @@ fun CharacterDetailsScreen(
             }
         )
     }
-    Scaffold { paddingValues ->
+    Scaffold {
         if (showCharacterEdit) {
             CharacterForm(
                 charactersViewModel.currentCharacterUiState,
@@ -67,53 +71,79 @@ fun CharacterDetailsScreen(
                 },
             )
         } else {
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(10.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Avatar(
-                    charactersViewModel.currentCharacterUiState.characterDetails.imagePath,
-                    charactersViewModel.currentCharacterUiState.characterDetails.name,
-                    size = AVATAR_SIZE
-                )
-                Text(
-                    text = charactersViewModel.currentCharacterUiState.characterDetails.name,
-                    style = MaterialTheme.typography.headlineLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    ButtonWithIcon(
-                        onClick = { charactersViewModel.setShowEditArtist(true) },
-                        text = "Edit",
-                        iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+            CharacterInfo(
+                characterWithSubmissions = charactersViewModel.currentCharacterUiState.toCharacterWithSubmissions(),
+                onEditClick = {
+                    charactersViewModel.setShowEditArtist(true)
+                },
+                onDeleteClick = {
+                    charactersViewModel.setShowPopup(true)
+                },
+                onImageClick = { imageId ->
+                    navHostController.navigate(
+                        "${NavigateDestinations.SUBMISSION_DETAILS_SCREEN}/$imageId"
                     )
-                    ButtonWithIcon(
-                        onClick = {
-                            charactersViewModel.setShowPopup(true)
-                        },
-                        text = "Delete",
-                        iconResource = IconResource.fromDrawableResource(R.drawable.trash),
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
-                Gallery(
-                    charactersViewModel.currentCharacterUiState.toCharacterWithSubmissions().submissions,
-                    onImageClick = {
-                        navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
-                    }
-                )
-            }
+                },
+            )
         }
     }
 }
 
-
+@Composable
+fun CharacterInfo(
+    characterWithSubmissions: CharacterWithSubmissions,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onImageClick: (Long) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Avatar(
+            characterWithSubmissions.character.imagePath,
+            characterWithSubmissions.character.name,
+            size = AVATAR_SIZE
+        )
+        Text(
+            text = characterWithSubmissions.character.name,
+            style = MaterialTheme.typography.headlineLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        characterWithSubmissions.character.species?.let { species ->
+            Text(
+                text = species,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            ButtonWithIcon(
+                onClick = onEditClick,
+                text = "Edit",
+                iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+            )
+            ButtonWithIcon(
+                onClick = onDeleteClick,
+                text = "Delete",
+                iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
+        Gallery(
+            characterWithSubmissions.submissions,
+            onImageClick = onImageClick
+        )
+    }
+}
 
