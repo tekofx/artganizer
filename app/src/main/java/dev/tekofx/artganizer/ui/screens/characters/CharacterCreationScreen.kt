@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.screens.characters
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +21,10 @@ fun CharacterCreationScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        charactersViewModel.clearNewUiState()
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -35,6 +40,5 @@ fun CharacterCreationScreen(
                 navHostController.popBackStack()
             }
         )
-
     }
 }

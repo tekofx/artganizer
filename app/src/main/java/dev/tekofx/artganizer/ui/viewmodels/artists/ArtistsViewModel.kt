@@ -146,10 +146,6 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
         }
         if (validateInput()) {
             repository.insertArtist(newArtistUiState.artistDetails.toArtistWithSubmissions().artist)
-            newArtistUiState = newArtistUiState.copy(
-                artistDetails = ArtistDetails(),
-                isEntryValid = false
-            )
         }
     }
 

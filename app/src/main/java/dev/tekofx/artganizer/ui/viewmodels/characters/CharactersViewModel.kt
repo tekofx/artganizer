@@ -153,7 +153,6 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         }
     }
 
-
     suspend fun saveCharacter(context: Context) {
         val imagePath = newCharacterUiState.characterDetails.imagePath
 
@@ -174,10 +173,6 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         }
         if (validateInput()) {
             repository.insertCharacter(newCharacterUiState.characterDetails.toCharacterWithSubmissions().character)
-            newCharacterUiState = newCharacterUiState.copy(
-                characterDetails = CharacterDetails(),
-                isEntryValid = false
-            )
         }
     }
 
