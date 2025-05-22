@@ -18,8 +18,10 @@ import dev.tekofx.artganizer.utils.getPaletteFromUri
 import dev.tekofx.artganizer.utils.removeImagesFromInternalStorage
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import dev.tekofx.artganizer.utils.saveThumbnail
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 
 enum class SaveImagesOptions {
@@ -67,6 +69,7 @@ class SubmissionsViewModel(
     val showEditSubmission = MutableStateFlow(false)
     val showFullscreen = MutableStateFlow(false)
     val currentImageIndex = MutableStateFlow(0) // Index of images in current submission
+    val isLoading = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {
@@ -159,81 +162,67 @@ class SubmissionsViewModel(
     /**
      * Saves a new submission
      */
-    fun saveSubmission(context: Context) {
-        viewModelScope.launch {
+    suspend fun saveSubmission(context: Context) {
+        Log.d("saveSubmission", "Started saving submission")
+        isLoading.value = true
+        try {
+            withContext(Dispatchers.IO) {
+                if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
+                    val imagePaths = uris.map { uri ->
+                        saveImageToInternalStorage(context, uri)
+                    }
 
-            if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
-                var imagePaths = mutableListOf<Uri>()
-                uris.forEach { uri ->
-                    val imagePath =
-                        saveImageToInternalStorage(
-                            context,
-                            uri
-                        )
-                    imagePaths.add(imagePath)
-                }
+                    val thumbnail = saveThumbnail(context, imagePaths[0])
 
-                val thumbnail = saveThumbnail(context, imagePaths[0])
-
-                val submissionId = submissionRepo.insertSubmissionDetails(
-                    newSubmissionDetails.copy(
-                        thumbnail = thumbnail
+                    val submissionId = submissionRepo.insertSubmissionDetails(
+                        newSubmissionDetails.copy(thumbnail = thumbnail)
                     )
-                )
 
-                imagePaths.forEach { imagePath ->
-                    val imageInfo = getImageInfo(context, imagePath)
-                    val palette = getPaletteFromUri(context, imagePath)
+                    imagePaths.forEach { imagePath ->
+                        val imageInfo = getImageInfo(context, imagePath)
+                        val palette = getPaletteFromUri(context, imagePath)
 
-                    imageRepository.insert(
-                        Image(
-                            date = Date(),
-                            size = imageInfo?.sizeInBytes ?: 0L,
-                            uri = imagePath,
-                            dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                            extension = imageInfo?.extension ?: "",
-                            palette = palette,
-                            submissionId = submissionId
+                        imageRepository.insert(
+                            Image(
+                                date = Date(),
+                                size = imageInfo?.sizeInBytes ?: 0L,
+                                uri = imagePath,
+                                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                                extension = imageInfo?.extension ?: "",
+                                palette = palette,
+                                submissionId = submissionId
+                            )
                         )
-                    )
-                }
-            } else {
-                uris.forEach { uri ->
-                    val imagePath =
-                        saveImageToInternalStorage(
-                            context,
-                            uri
+                    }
+                } else {
+                    uris.forEach { uri ->
+                        val imagePath = saveImageToInternalStorage(context, uri)
+                        val thumbnailPath = saveThumbnail(context, uri)
+
+                        val imageInfo = getImageInfo(context, imagePath)
+                        val palette = getPaletteFromUri(context, imagePath)
+                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath)
+                        val submissionId = submissionRepo.insertSubmissionDetails(newSub)
+
+                        imageRepository.insert(
+                            Image(
+                                imageId = 0,
+                                date = Date(),
+                                uri = imagePath,
+                                size = imageInfo?.sizeInBytes ?: 0L,
+                                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
+                                extension = imageInfo?.extension ?: "",
+                                palette = palette,
+                                submissionId = submissionId
+                            )
                         )
-
-                    val thumbnailPath = saveThumbnail(context, uri)
-
-                    val imageInfo = getImageInfo(context, imagePath)
-                    val palette = getPaletteFromUri(context, imagePath)
-                    val newSub = newSubmissionDetails.copy(
-                        thumbnail = thumbnailPath
-                    )
-                    val submissionId = submissionRepo.insertSubmissionDetails(newSub)
-                    Log.d("saveSubmission", newSub.toString())
-
-                    imageRepository.insert(
-                        Image(
-                            imageId = 0,
-                            date = Date(),
-                            uri = imagePath,
-                            size = imageInfo?.sizeInBytes ?: 0L,
-                            dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                            extension = imageInfo?.extension ?: "",
-                            palette = palette,
-                            submissionId = submissionId
-                        )
-                    )
+                    }
                 }
             }
+        } finally {
+            Log.d("saveSubmission", "Finished saving submission")
+            isLoading.value = false
         }
-
-        currentSubmissionDetails = editingSubmissionDetails
-        editingSubmissionDetails = SubmissionDetails()
-        saveImagesOption = SaveImagesOptions.EMPTY
     }
 
     fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {

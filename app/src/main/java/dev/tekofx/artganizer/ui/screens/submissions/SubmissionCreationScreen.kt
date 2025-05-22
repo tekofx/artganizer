@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.ui.IconResource
@@ -36,6 +40,9 @@ fun SubmissionCreationScreen(
     val context = LocalContext.current
     val saveImagesOption = submissionsViewModel.saveImagesOption
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
+    val isLoading by submissionsViewModel.isLoading.collectAsState()
+
+    DialogLoader(isLoading = isLoading)
 
     if (submissionsViewModel.uris.size > 1 && saveImagesOption == SaveImagesOptions.EMPTY) {
         Column(
@@ -73,9 +80,9 @@ fun SubmissionCreationScreen(
                 submissionDetails = submissionsViewModel.newSubmissionDetails,
                 onItemValueChange = { newValue -> submissionsViewModel.updateNewUiState(newValue) },
                 onSaveClick = {
-                    navHostController.popBackStack()
                     scope.launch {
                         submissionsViewModel.saveSubmission(context)
+                        navHostController.popBackStack()
                     }
                 },
                 onCancelClick = {
@@ -84,6 +91,30 @@ fun SubmissionCreationScreen(
                 },
                 currentImageIndex = currentImageIndex
             )
+        }
+    }
+}
+
+@Composable
+fun DialogLoader(
+    isLoading: Boolean,
+) {
+    if (isLoading) {
+        Dialog(
+            onDismissRequest = {},
+        ) {
+            Card {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text("Saving Submission")
+                    CircularProgressIndicator()
+                }
+            }
         }
     }
 }
