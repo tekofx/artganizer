@@ -69,7 +69,10 @@ fun FullscreenImageViewer(
             }
     ) {
         AsyncImage(
-            model = imageUri,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUri)
+                .size(coil.size.Size.ORIGINAL)
+                .build(),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
