@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.components
+package dev.tekofx.artganizer.ui.components.submission
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

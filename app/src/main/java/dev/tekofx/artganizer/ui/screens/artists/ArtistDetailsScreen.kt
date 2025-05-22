@@ -26,10 +26,10 @@ import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
-import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.artists.ArtistForm
 import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
+import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.Gallery
 import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel

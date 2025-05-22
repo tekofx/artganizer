@@ -31,11 +31,11 @@ import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
-import dev.tekofx.artganizer.ui.components.ConfirmationPopup
-import dev.tekofx.artganizer.ui.components.PaletteColorList
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
+import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.FullscreenImageViewer
+import dev.tekofx.artganizer.ui.components.submission.PaletteColorList
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.components.submission.SubmissionViewer
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm

@@ -25,9 +25,9 @@ import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
-import dev.tekofx.artganizer.ui.components.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.characters.CharacterForm
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
+import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.Gallery
 import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
