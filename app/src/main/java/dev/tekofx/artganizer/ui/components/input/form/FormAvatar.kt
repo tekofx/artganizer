@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.components.input
+package dev.tekofx.artganizer.ui.components.input.form
 
 import android.net.Uri
 import androidx.compose.foundation.clickable

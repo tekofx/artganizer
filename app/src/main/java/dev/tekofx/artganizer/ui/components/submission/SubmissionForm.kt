@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,7 +19,8 @@ import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.ui.components.input.ArtistSelect
 import dev.tekofx.artganizer.ui.components.input.CharactersSelect
-import dev.tekofx.artganizer.ui.components.input.FormButtons
+import dev.tekofx.artganizer.ui.components.input.form.FormButtons
+import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -108,19 +108,16 @@ fun SubmissionFormFields(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        OutlinedTextField(
+        FormTextfield(
             value = submissionDetails.title,
             onValueChange = { onValueChange(submissionDetails.copy(title = it)) },
-            label = { Text("Title") },
-
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            label = "Title",
         )
-        OutlinedTextField(
+        FormTextfield(
             value = submissionDetails.description,
             onValueChange = { onValueChange(submissionDetails.copy(description = it)) },
-            label = { Text("Description") },
-            modifier = Modifier.fillMaxWidth(),
+            label = "Description",
+            singleLine = false
         )
         Rating(
             rating = submissionDetails.rating,
@@ -153,7 +150,6 @@ fun SubmissionFormFields(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text("Artist", style = MaterialTheme.typography.headlineSmall)
-
                 CharactersSelect(
                     title = "Select a Character",
                     selectedItems = submissionDetails.characters,

@@ -8,16 +8,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.ui.components.input.FormAvatar
-import dev.tekofx.artganizer.ui.components.input.FormButtons
 import dev.tekofx.artganizer.ui.components.input.SocialNetworkInput
+import dev.tekofx.artganizer.ui.components.input.form.FormAvatar
+import dev.tekofx.artganizer.ui.components.input.form.FormButtons
+import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
 import kotlinx.coroutines.launch
@@ -83,14 +82,12 @@ fun ArtistFormFields(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        OutlinedTextField(
+
+        FormTextfield(
             value = artistsDetails.name,
             onValueChange = { onValueChange(artistsDetails.copy(name = it)) },
-            label = { Text("Name") },
-
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
+            label = "Name",
+            enabled = enabled
         )
         SocialNetworkInput(
             socialNetworks = artistsDetails.socialNetworks,

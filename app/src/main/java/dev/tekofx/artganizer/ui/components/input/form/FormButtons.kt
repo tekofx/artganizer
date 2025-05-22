@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.components.input
+package dev.tekofx.artganizer.ui.components.input.form
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.ui.IconResource
+import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 
 @Composable
 fun FormButtons(

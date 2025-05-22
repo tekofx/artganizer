@@ -8,15 +8,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.ui.components.input.FormAvatar
-import dev.tekofx.artganizer.ui.components.input.FormButtons
+import dev.tekofx.artganizer.ui.components.input.form.FormAvatar
+import dev.tekofx.artganizer.ui.components.input.form.FormButtons
+import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharacterDetails
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharacterUiState
 import kotlinx.coroutines.launch
@@ -84,23 +83,17 @@ fun CharacterFormFields(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        OutlinedTextField(
+        FormTextfield(
             value = characterDetails.name,
             onValueChange = { onValueChange(characterDetails.copy(name = it)) },
-            label = { Text("Name") },
-
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
+            label = "Name",
+            enabled = enabled
         )
-        OutlinedTextField(
+        FormTextfield(
             value = characterDetails.species ?: "",
             onValueChange = { onValueChange(characterDetails.copy(species = it)) },
-            label = { Text("Species") },
-
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
+            label = "Species",
+            enabled = enabled
         )
     }
 }
