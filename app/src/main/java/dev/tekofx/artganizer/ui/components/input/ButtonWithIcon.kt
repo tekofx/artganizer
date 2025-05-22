@@ -21,6 +21,7 @@ fun ButtonWithIcon(
     iconResource: IconResource,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
+    enabled: Boolean = true,
 ) {
     Button(
         modifier = modifier,
@@ -29,6 +30,7 @@ fun ButtonWithIcon(
             containerColor = color,
             contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
+        enabled = enabled
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),

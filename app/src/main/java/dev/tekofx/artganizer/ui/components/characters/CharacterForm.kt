@@ -67,6 +67,7 @@ fun CharacterForm(
             FormButtons(
                 onSaveClick = onSaveClick,
                 onCancelClick = onCancelClick,
+                enabledSave = characterUiState.isEntryValid
             )
         }
     }

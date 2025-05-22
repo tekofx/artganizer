@@ -13,6 +13,7 @@ import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 fun FormButtons(
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit = {},
+    enabledSave: Boolean = true,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -21,6 +22,7 @@ fun FormButtons(
             onClick = onSaveClick,
             text = "Save",
             iconResource = IconResource.fromDrawableResource(R.drawable.device_floppy),
+            enabled = enabledSave
         )
         ButtonWithIcon(
             onClick = onCancelClick,

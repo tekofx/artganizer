@@ -66,6 +66,7 @@ fun ArtistForm(
             FormButtons(
                 onSaveClick = onSaveClick,
                 onCancelClick = onCancelClick,
+                enabledSave = artistUiState.isEntryValid
             )
         }
     }
