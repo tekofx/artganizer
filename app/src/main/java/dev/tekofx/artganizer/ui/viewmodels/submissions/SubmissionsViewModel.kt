@@ -106,7 +106,8 @@ class SubmissionsViewModel(
         showFullscreen.value = show
     }
 
-    // Updates and clears
+
+    //////////////////////// Updates and clears ////////////////////////
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
         Log.d("updateNewUiState", submissionDetails.characters.toString())

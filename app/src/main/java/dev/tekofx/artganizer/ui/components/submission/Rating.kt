@@ -23,6 +23,7 @@ fun Rating(
     rating: Int,
     onRatingChange: (Int) -> Unit = {},
 ) {
+    if (rating == 0) return
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

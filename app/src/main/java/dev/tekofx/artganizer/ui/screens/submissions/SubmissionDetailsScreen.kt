@@ -187,23 +187,17 @@ fun SubmissionInfo(
                 textAlign = TextAlign.Justify
             )
         }
-        if (submission.submission.rating > 0) {
-            Rating(submission.submission.rating)
-        }
+        Rating(submission.submission.rating)
 
-        submission.artist?.let {
-            ArtistSection(
-                artist = submission.artist,
-                onArtistCardClick = { onArtistCardClick(submission.artist.artistId) }
-            )
-        }
+        ArtistSection(
+            artist = submission.artist,
+            onArtistCardClick = { onArtistCardClick(submission.artist?.artistId ?: -1) }
+        )
 
-        submission.characters.isNotEmpty().let {
-            CharactersSection(
-                characters = submission.characters,
-                onCharacterCardClick = { onCharacterCardClick(it) }
-            )
-        }
+        CharactersSection(
+            characters = submission.characters,
+            onCharacterCardClick = { onCharacterCardClick(it) }
+        )
 
         HorizontalDivider(
             thickness = 3.dp,
@@ -239,6 +233,7 @@ fun CharactersSection(
     characters: List<Character>,
     onCharacterCardClick: (Long) -> Unit
 ) {
+    if (characters.isEmpty()) return
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -262,9 +257,10 @@ fun CharactersSection(
 
 @Composable
 fun ArtistSection(
-    artist: Artist,
+    artist: Artist?,
     onArtistCardClick: (Long) -> Unit
 ) {
+    if (artist == null) return
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(5.dp)
