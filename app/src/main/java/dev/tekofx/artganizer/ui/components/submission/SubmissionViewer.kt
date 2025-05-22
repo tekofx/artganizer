@@ -14,6 +14,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -140,19 +141,32 @@ fun SubmissionImage(
     title: String,
     onClick: () -> Unit
 ) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(imagePath)
-            .placeholderMemoryCacheKey(thumbnail.toString())
-            .build(),
-        contentDescription = title,
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            },
-        contentScale = ContentScale.FillWidth,
-    )
+            .clickable { onClick() }
+    ) {
+        var isLoading by remember { mutableStateOf(true) }
+
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imagePath)
+                .placeholderMemoryCacheKey(thumbnail.toString())
+                .build(),
+            contentDescription = title,
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillWidth,
+            onLoading = { isLoading = true },
+            onSuccess = { isLoading = false },
+            onError = { isLoading = false }
+        )
+
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+    }
 }
 
 @Composable
