@@ -14,11 +14,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.ui.IconResource
 
 @Composable
 fun Avatar(
     imagePath: Uri?,
-    fallbackText: String,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
     size: Dp? = null
@@ -46,6 +47,10 @@ fun Avatar(
             modifier = finalModifier
         )
     } else {
-        EmptyAvatar(fallbackText, size = size, shape = shape)
+        EmptyAvatar(
+            iconResource = IconResource.fromDrawableResource(R.drawable.user_filled),
+            size = size,
+            shape = shape
+        )
     }
 }

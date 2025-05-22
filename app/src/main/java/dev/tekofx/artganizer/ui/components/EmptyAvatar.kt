@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -22,18 +22,21 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import dev.tekofx.artganizer.ui.IconResource
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmptyAvatar(
-    name: String,
     modifier: Modifier = Modifier,
     size: Dp?,
+    iconResource: IconResource,
     shape: Shape = RoundedCornerShape(50.dp)
 ) {
 
     var boxWidth by remember { mutableIntStateOf(0) }
+
+    val newSize = size ?: boxWidth.dp
 
     val finalModifier = if (size == null) {
         modifier
@@ -43,9 +46,8 @@ fun EmptyAvatar(
     } else {
         modifier
             .clip(shape)
-            .size(size)
+            .size(newSize)
             .aspectRatio(1f)
-
     }
     val color = remember {
         Color(
@@ -65,11 +67,11 @@ fun EmptyAvatar(
                 boxWidth = size.width
             }, contentAlignment = Alignment.Center
     ) {
-        val initials = if (name.isNotEmpty()) name.take(1).uppercase() else "A"
-        Text(
-            text = initials,
-            style = MaterialTheme.typography.headlineLarge.copy(fontSize = boxWidth.sp / 3),
-            color = Color.White
+        Icon(
+            modifier = Modifier.size(newSize - newSize / 3),
+            painter = iconResource
+                .asPainterResource(),
+            contentDescription = "icon",
         )
     }
 }

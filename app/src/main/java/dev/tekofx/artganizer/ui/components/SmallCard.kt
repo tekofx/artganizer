@@ -52,8 +52,7 @@ fun SmallCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Avatar(
-                    imagePath,
-                    fallbackText = title,
+                    imagePath = imagePath,
                     size = 50.dp,
                 )
                 Text(

@@ -32,7 +32,6 @@ fun FormAvatar(
         ) {
             Avatar(
                 imagePath = imagePath,
-                fallbackText = fallbackText,
                 size = AVATAR_SIZE
             )
         }

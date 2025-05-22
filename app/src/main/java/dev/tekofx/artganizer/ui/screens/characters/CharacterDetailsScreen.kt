@@ -108,7 +108,6 @@ fun CharacterInfo(
     ) {
         Avatar(
             characterWithSubmissions.character.imagePath,
-            characterWithSubmissions.character.name,
             size = AVATAR_SIZE
         )
         Text(

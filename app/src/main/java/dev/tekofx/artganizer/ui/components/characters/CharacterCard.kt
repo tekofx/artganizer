@@ -33,7 +33,6 @@ fun CharacterCard(
         ) {
             Avatar(
                 character.character.imagePath,
-                fallbackText = character.character.name,
                 shape = MaterialTheme.shapes.large,
             )
             Text(character.character.name, style = MaterialTheme.typography.headlineLarge)

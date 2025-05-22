@@ -45,7 +45,6 @@ fun ArtistCard(
         ) {
             Avatar(
                 artist.artist.imagePath,
-                artist.artist.name,
                 modifier = Modifier
                     .aspectRatio(1f)
                     .weight(1f),

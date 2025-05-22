@@ -111,7 +111,6 @@ fun ArtistInfo(
         item {
             Avatar(
                 artistWithSubmissions.artist.imagePath,
-                artistWithSubmissions.artist.name,
                 size = AVATAR_SIZE
             )
         }
