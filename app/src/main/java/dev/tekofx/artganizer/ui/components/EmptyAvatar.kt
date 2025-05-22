@@ -65,7 +65,7 @@ fun EmptyAvatar(
                 boxWidth = size.width
             }, contentAlignment = Alignment.Center
     ) {
-        val initials = (name.take(1)).uppercase()
+        val initials = if (name.isNotEmpty()) name.take(1).uppercase() else "A"
         Text(
             text = initials,
             style = MaterialTheme.typography.headlineLarge.copy(fontSize = boxWidth.sp / 3),

@@ -24,7 +24,7 @@ fun Avatar(
     size: Dp? = null
 ) {
 
-    val finalModifer = if (size == null) {
+    val finalModifier = if (size == null) {
         modifier
             .clip(shape)
             .fillMaxWidth()
@@ -43,7 +43,7 @@ fun Avatar(
                 .build(),
             contentDescription = "icon",
             contentScale = ContentScale.Crop,
-            modifier = finalModifer
+            modifier = finalModifier
         )
     } else {
         EmptyAvatar(fallbackText, size = size, shape = shape)
