@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components.submission
 
+
 import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -31,11 +32,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-
 
 @Composable
 fun FullscreenImageViewer(
@@ -44,6 +46,7 @@ fun FullscreenImageViewer(
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
+    var imageSize by remember { mutableStateOf(IntSize.Zero) }
 
     Box(
         modifier = Modifier
@@ -53,8 +56,14 @@ fun FullscreenImageViewer(
                 detectTransformGestures { _, pan, zoom, _ ->
                     scale = (scale * zoom).coerceIn(1f, 5f) // Limit zoom level
                     offset = Offset(
-                        x = (offset.x + pan.x).coerceIn(-500f, 500f), // Adjust bounds as needed
-                        y = (offset.y + pan.y).coerceIn(-500f, 500f)
+                        x = (offset.x + pan.x).coerceIn(
+                            -imageSize.width * (scale - 1) / 2,
+                            imageSize.width * (scale - 1) / 2
+                        ),
+                        y = (offset.y + pan.y).coerceIn(
+                            -imageSize.height * (scale - 1) / 2,
+                            imageSize.height * (scale - 1) / 2
+                        )
                     )
                 }
             }
@@ -64,6 +73,9 @@ fun FullscreenImageViewer(
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
+                .onGloballyPositioned { coordinates ->
+                    imageSize = coordinates.size // Capture the image size
+                }
                 .graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,
