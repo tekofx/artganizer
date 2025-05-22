@@ -16,10 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -62,11 +59,12 @@ fun SubmissionDetailsScreen(
 
     // Data
     val submission = submissionsViewModel.currentSubmissionDetails.toSubmissionWithArtist()
-    val currentImage by submissionsViewModel.currentImageIndex.collectAsState()
+    val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
 
     // UI states
     val showPopup by submissionsViewModel.showPopup.collectAsState()
     val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
+    val showFullScreen by submissionsViewModel.showFullscreen.collectAsState()
 
     if (showPopup) {
         ConfirmationPopup(
@@ -86,48 +84,59 @@ fun SubmissionDetailsScreen(
             }
         )
     }
-    Scaffold {
-        if (showEdit) {
-            SubmissionsForm(
-                uris = submissionsViewModel.uris,
-                artistsViewModel = artistsViewModel,
-                charactersViewModel = charactersViewModel,
-                submissionDetails = submissionsViewModel.editingSubmissionDetails,
-                onItemValueChange = {
-                    submissionsViewModel.updateEditingUiState(it)
-                },
-                onSaveClick = {
-                    scope.launch { submissionsViewModel.editSubmission() }
-                    submissionsViewModel.setShowEditSubmission(false)
-                },
-                onCancelClick = {
-                    submissionsViewModel.setShowEditSubmission(false)
-                }
+
+    if (showFullScreen) {
+        if (submission.images.isNotEmpty()) {
+            FullscreenImageViewer(
+                submission.images[currentImageIndex].uri,
+                onClose = { submissionsViewModel.setShowFullscreen(false) }
             )
-        } else {
-            SubmissionInfo(
-                submission,
-                onArtistCardClick = { artistId ->
-                    navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/$artistId")
-                },
-                onCharacterCardClick = { characterId ->
-                    navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/$characterId")
-                },
-                onDelete = {
-                    submissionsViewModel.setShowPopup(true)
-                },
-                onEdit = {
-                    submissionsViewModel.setShowEditSubmission(true)
-                },
-                onImageChange = {
-                    submissionsViewModel.setCurrentImage(it)
-                },
-                currentImage = currentImage
-            )
+        }
+    } else {
+        Scaffold {
+            if (showEdit) {
+                SubmissionsForm(
+                    uris = submissionsViewModel.uris,
+                    artistsViewModel = artistsViewModel,
+                    charactersViewModel = charactersViewModel,
+                    submissionDetails = submissionsViewModel.editingSubmissionDetails,
+                    onItemValueChange = {
+                        submissionsViewModel.updateEditingUiState(it)
+                    },
+                    onSaveClick = {
+                        scope.launch { submissionsViewModel.editSubmission() }
+                        submissionsViewModel.setShowEditSubmission(false)
+                    },
+                    onCancelClick = {
+                        submissionsViewModel.setShowEditSubmission(false)
+                    },
+                    currentImageIndex = currentImageIndex
+                )
+            } else {
+                SubmissionInfo(
+                    submission,
+                    onArtistCardClick = { artistId ->
+                        navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/$artistId")
+                    },
+                    onCharacterCardClick = { characterId ->
+                        navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/$characterId")
+                    },
+                    onDelete = {
+                        submissionsViewModel.setShowPopup(true)
+                    },
+                    onEdit = {
+                        submissionsViewModel.setShowEditSubmission(true)
+                    },
+                    onImageChange = {
+                        submissionsViewModel.setCurrentImage(it)
+                    },
+                    currentImageIndex = currentImageIndex,
+                    onImageClick = { submissionsViewModel.setShowFullscreen(true) },
+                )
+            }
         }
     }
 }
-
 
 @Composable
 fun SubmissionInfo(
@@ -136,102 +145,91 @@ fun SubmissionInfo(
     onCharacterCardClick: (Long) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
-    currentImage: Int,
-    onImageChange: (Int) -> Unit
+    currentImageIndex: Int,
+    onImageChange: (Int) -> Unit,
+    onImageClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
-    var fullscreen by remember { mutableStateOf(false) }
-
-    if (fullscreen) {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         if (submission.images.isNotEmpty()) {
-            FullscreenImageViewer(
-                submission.images[currentImage].uri,
-                onClose = { fullscreen = false })
-        }
-    } else {
-        Column(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-                .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (submission.images.isNotEmpty()) {
 
-                SubmissionViewer(
-                    submission.submission.title,
-                    submission.images.map { it.uri },
-                    submission.submission.thumbnail,
-                    onImageChange = { onImageChange(it) },
-                    onClick = {
-                        fullscreen = true
-                    }
-
-                )
-            }
-            if (submission.submission.title.isNotEmpty()) {
-                Text(
-                    text = submission.submission.title,
-                    style = MaterialTheme.typography.headlineLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
-            if (submission.submission.description.isNotEmpty()) {
-
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
-                    text = submission.submission.description,
-                    textAlign = TextAlign.Justify
-                )
-            }
-            if (submission.submission.rating > 0) {
-                Rating(submission.submission.rating)
-            }
-
-            submission.artist?.let {
-                ArtistSection(
-                    artist = submission.artist,
-                    onArtistCardClick = { onArtistCardClick(submission.artist.artistId) }
-                )
-            }
-
-            submission.characters.isNotEmpty().let {
-                CharactersSection(
-                    characters = submission.characters,
-                    onCharacterCardClick = { onCharacterCardClick(it) }
-                )
-            }
-
-            HorizontalDivider(
-                thickness = 3.dp,
-                modifier = Modifier.fillMaxWidth()
+            SubmissionViewer(
+                title = submission.submission.title,
+                imagePaths = submission.images.map { it.uri },
+                thumbnail = submission.submission.thumbnail,
+                currentImageIndex = currentImageIndex,
+                onImageChange = { onImageChange(it) },
+                onClick = onImageClick
             )
+        }
+        if (submission.submission.title.isNotEmpty()) {
+            Text(
+                text = submission.submission.title,
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+        if (submission.submission.description.isNotEmpty()) {
 
-            if (submission.images.isNotEmpty()) {
-                ImageInfo(submission.images[currentImage])
-            }
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally),
+                text = submission.submission.description,
+                textAlign = TextAlign.Justify
+            )
+        }
+        if (submission.submission.rating > 0) {
+            Rating(submission.submission.rating)
+        }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                ButtonWithIcon(
-                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
-                    onClick = { onEdit() },
-                    text = "Edit"
-                )
-                ButtonWithIcon(
-                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
-                    onClick = {
-                        onDelete()
-                    },
-                    text = "Delete",
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+        submission.artist?.let {
+            ArtistSection(
+                artist = submission.artist,
+                onArtistCardClick = { onArtistCardClick(submission.artist.artistId) }
+            )
+        }
+
+        submission.characters.isNotEmpty().let {
+            CharactersSection(
+                characters = submission.characters,
+                onCharacterCardClick = { onCharacterCardClick(it) }
+            )
+        }
+
+        HorizontalDivider(
+            thickness = 3.dp,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        if (submission.images.isNotEmpty()) {
+            ImageInfo(submission.images[currentImageIndex])
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            ButtonWithIcon(
+                iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                onClick = { onEdit() },
+                text = "Edit"
+            )
+            ButtonWithIcon(
+                iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                onClick = {
+                    onDelete()
+                },
+                text = "Delete",
+                color = MaterialTheme.colorScheme.error
+            )
         }
     }
 }

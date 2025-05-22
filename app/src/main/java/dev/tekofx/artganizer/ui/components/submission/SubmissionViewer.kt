@@ -92,6 +92,7 @@ fun FullscreenImageViewer(
 fun SubmissionViewer(
     title: String,
     imagePaths: List<Uri>,
+    currentImageIndex: Int,
     thumbnail: Uri,
     onImageChange: (Int) -> Unit,
     onClick: () -> Unit = {}
@@ -99,9 +100,10 @@ fun SubmissionViewer(
 
     if (imagePaths.size > 1) {
         SubmissionPager(
-            imagePaths,
+            imagePaths = imagePaths,
             thumbnail = thumbnail,
-            title,
+            currentImageIndex = currentImageIndex,
+            title = title,
             onImageChange = { onImageChange(it) },
             onClick = onClick
         )
@@ -141,6 +143,7 @@ fun SubmissionImage(
 @Composable
 fun SubmissionPager(
     imagePaths: List<Uri>,
+    currentImageIndex: Int,
     thumbnail: Uri,
     title: String,
     onImageChange: (Int) -> Unit,
@@ -154,7 +157,8 @@ fun SubmissionPager(
     ) {
 
         val pagerState = rememberPagerState(
-            pageCount = { imagePaths.size }
+            pageCount = { imagePaths.size },
+            initialPage = currentImageIndex
         )
 
         // Observe the current page and update currentImage

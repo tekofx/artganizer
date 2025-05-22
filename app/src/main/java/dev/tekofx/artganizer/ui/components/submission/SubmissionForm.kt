@@ -32,6 +32,7 @@ fun SubmissionsForm(
     artistsViewModel: ArtistsViewModel,
     submissionDetails: SubmissionDetails,
     charactersViewModel: CharactersViewModel,
+    currentImageIndex: Int,
     onItemValueChange: (SubmissionDetails) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit = {},
@@ -50,9 +51,10 @@ fun SubmissionsForm(
     ) {
         item {
             SubmissionViewer(
-                submissionDetails.title,
-                uris,
-                submissionDetails.thumbnail,
+                title = submissionDetails.title,
+                imagePaths = uris,
+                thumbnail = submissionDetails.thumbnail,
+                currentImageIndex = currentImageIndex,
                 onImageChange = {}
             )
         }

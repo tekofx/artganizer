@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +25,6 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun SubmissionCreationScreen(
     navHostController: NavHostController,
@@ -34,6 +35,7 @@ fun SubmissionCreationScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val saveImagesOption = submissionsViewModel.saveImagesOption
+    val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
 
     if (submissionsViewModel.uris.size > 1 && saveImagesOption == SaveImagesOptions.EMPTY) {
         Column(
@@ -79,9 +81,9 @@ fun SubmissionCreationScreen(
                 onCancelClick = {
                     submissionsViewModel.clearNewUiState()
                     navHostController.popBackStack()
-                }
+                },
+                currentImageIndex = currentImageIndex
             )
-
         }
     }
 }

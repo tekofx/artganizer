@@ -41,8 +41,6 @@ class SubmissionsViewModel(
     var currentSubmissionDetails by mutableStateOf(SubmissionDetails())
         private set
 
-    // Index of images in current submission
-    val currentImageIndex = MutableStateFlow(0)
 
     // Data of submission to edit
     var editingSubmissionDetails by mutableStateOf(SubmissionDetails())
@@ -67,13 +65,15 @@ class SubmissionsViewModel(
     // Ui State
     val showPopup = MutableStateFlow(false)
     val showEditSubmission = MutableStateFlow(false)
-
+    val showFullscreen = MutableStateFlow(false)
+    val currentImageIndex = MutableStateFlow(0) // Index of images in current submission
 
     init {
         viewModelScope.launch {
             submissionRepo.getAllSubmissions().collect { submissionsList ->
                 Log.d("SubmissionsViewModel", submissionsList.toString())
                 submissions.value = submissionsList
+                currentImageIndex.value = 0
             }
         }
     }
@@ -91,6 +91,23 @@ class SubmissionsViewModel(
         currentImageIndex.value = value
     }
 
+    fun setShowEditSubmission(show: Boolean) {
+        showEditSubmission.value = show
+        if (show) {
+            editingSubmissionDetails = currentSubmissionDetails
+        }
+    }
+
+    fun setShowPopup(show: Boolean) {
+        showPopup.value = show
+    }
+
+    fun setShowFullscreen(show: Boolean) {
+        showFullscreen.value = show
+    }
+
+    // Updates and clears
+
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
         Log.d("updateNewUiState", submissionDetails.characters.toString())
         newSubmissionDetails = submissionDetails
@@ -107,19 +124,6 @@ class SubmissionsViewModel(
 
     fun updateSaveImagesOption(imagesOption: SaveImagesOptions) {
         saveImagesOption = imagesOption
-    }
-
-
-    fun setShowEditSubmission(show: Boolean) {
-        showEditSubmission.value = show
-        if (show) {
-            editingSubmissionDetails = currentSubmissionDetails
-        }
-    }
-
-    fun setShowPopup(show: Boolean) {
-        showPopup.value = show
-
     }
 
 
