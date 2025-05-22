@@ -45,6 +45,7 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmissionWithArtist
 import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.formatFileSize
+import dev.tekofx.artganizer.utils.shareImage
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -156,6 +157,7 @@ fun SubmissionInfo(
     onImageClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -218,6 +220,17 @@ fun SubmissionInfo(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             ButtonWithIcon(
+                iconResource = IconResource.fromDrawableResource(R.drawable.share),
+                onClick = {
+                    shareImage(
+                        context = context,
+                        imageUri = submission.images[currentImageIndex].uri
+                    )
+                },
+                text = "Share",
+                color = MaterialTheme.colorScheme.secondary
+            )
+            ButtonWithIcon(
                 iconResource = IconResource.fromDrawableResource(R.drawable.edit),
                 onClick = { onEdit() },
                 text = "Edit"
@@ -230,6 +243,7 @@ fun SubmissionInfo(
                 text = "Delete",
                 color = MaterialTheme.colorScheme.error
             )
+
         }
     }
 }

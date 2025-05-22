@@ -1,12 +1,14 @@
 package dev.tekofx.artganizer.utils
 
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
+import androidx.core.content.FileProvider
 import androidx.core.graphics.scale
 import androidx.palette.graphics.Palette
 import java.io.File
@@ -14,6 +16,22 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.Locale
 import java.util.UUID
+
+fun shareImage(context: Context, imageUri: Uri) {
+    val file = File(imageUri.path ?: "")
+    val contentUri: Uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.provider",
+        file
+    )
+
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "image/*"
+        putExtra(Intent.EXTRA_STREAM, contentUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    context.startActivity(Intent.createChooser(shareIntent, "Share Image"))
+}
 
 fun saveImageToInternalStorage(context: Context, uri: Uri): Uri {
     val mimeType = context.contentResolver.getType(uri)
