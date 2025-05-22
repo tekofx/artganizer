@@ -2,6 +2,7 @@ package dev.tekofx.artganizer.ui.viewmodels.artists
 
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -104,6 +105,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
     }
 
     fun updateCurrentUiState(artistDetails: ArtistDetails) {
+        Log.d("ArtistsViewModel", "updateCurrentUiState: $artistDetails")
         currentArtistUiState =
             ArtistUiState(
                 artistDetails = artistDetails,
@@ -168,6 +170,7 @@ class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() 
 
         }
         if (validateInput(currentArtistUiState.artistDetails)) {
+            Log.d("ArtistsViewModel", "editArtist: ${currentArtistUiState.artistDetails}")
             repository.updateArtist(currentArtistUiState.artistDetails.toArtistWithSubmissions().artist)
             currentArtistUiState = currentArtistUiState.copy(
                 artistDetails = currentArtistUiState.artistDetails,

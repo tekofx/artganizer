@@ -71,67 +71,82 @@ fun ArtistSelect(
         Dialog(
             onDismissRequest = { expanded = false },
             content = {
-                Surface(
-                    modifier = Modifier
-                        .heightIn(min = 200.dp, max = 500.dp),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 60.dp) // Reserve space for the SearchBar
-                        ) {
-                            Text(
-                                text = title,
-                                style = MaterialTheme.typography.headlineSmall,
-                                modifier = Modifier.padding(bottom = 10.dp)
-                            )
-                            if (items.isEmpty()) {
-                                Text(
-                                    text = "No artists with current search",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                )
-                            } else {
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                                ) {
-                                    items(items.size) { index ->
-                                        val item = items[index]
-                                        if (item.artist.name.contains(query, ignoreCase = true)) {
-                                            SmallCard(
-                                                title = item.artist.name,
-                                                imagePath = item.artist.imagePath,
-                                                onClick = {
-                                                    onQueryChange("") // Clear the search query when an item is selected
-                                                    expanded = false // Close the dropdown
-                                                    onItemSelected(item.artist) // Notify the selection
-                                                },
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // SearchBar at the bottom
-                        SearchBar(
-                            queryText = query,
-                            onValueChange = { onQueryChange(it) },
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .fillMaxWidth()
-                        )
-                    }
-                }
+                ArtistListSelect(
+                    items = items,
+                    onQueryChange = onQueryChange,
+                    onArtistClick = { artist ->
+                        onItemSelected(artist)
+                        expanded = false // Close the dropdown after selection
+                    },
+                    query = query,
+                )
             }
         )
     }
 }
 
+@Composable
+fun ArtistListSelect(
+    items: List<ArtistWithSubmissions>,
+    onQueryChange: (String) -> Unit,
+    onArtistClick: (Artist) -> Unit,
+    query: String,
+) {
+    Surface(
+        modifier = Modifier
+            .heightIn(min = 200.dp, max = 500.dp),
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 60.dp) // Reserve space for the SearchBar
+            ) {
+                Text(
+                    text = "Select artist",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+                if (items.isEmpty()) {
+                    Text(
+                        text = "No artists with current search",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        items(items.size) { index ->
+                            val item = items[index]
+                            if (item.artist.name.contains(query, ignoreCase = true)) {
+                                SmallCard(
+                                    title = item.artist.name,
+                                    imagePath = item.artist.imagePath,
+                                    onClick = {
+                                        onArtistClick(item.artist)
+                                    },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // SearchBar at the bottom
+            SearchBar(
+                queryText = query,
+                onValueChange = { onQueryChange(it) },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
+        }
+    }
+}
