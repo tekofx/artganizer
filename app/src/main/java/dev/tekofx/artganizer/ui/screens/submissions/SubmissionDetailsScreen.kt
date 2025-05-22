@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,6 +66,11 @@ fun SubmissionDetailsScreen(
     val showPopup by submissionsViewModel.showPopup.collectAsState()
     val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
     val showFullScreen by submissionsViewModel.showFullscreen.collectAsState()
+
+    // Handle back press
+    BackHandler(enabled = showFullScreen) {
+        submissionsViewModel.setShowFullscreen(false)
+    }
 
     if (showPopup) {
         ConfirmationPopup(
