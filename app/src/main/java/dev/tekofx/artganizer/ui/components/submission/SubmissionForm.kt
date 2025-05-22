@@ -19,6 +19,7 @@ import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.ui.components.input.ArtistSelect
 import dev.tekofx.artganizer.ui.components.input.CharactersSelect
+import dev.tekofx.artganizer.ui.components.input.RatingInput
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -119,7 +120,7 @@ fun SubmissionFormFields(
             label = "Description",
             singleLine = false
         )
-        Rating(
+        RatingInput(
             rating = submissionDetails.rating,
             onRatingChange = { onValueChange(submissionDetails.copy(rating = it)) },
         )
