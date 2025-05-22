@@ -30,7 +30,7 @@ fun Gallery(
             items(submissions) { submission ->
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(submission.imagePath)
+                        .data(submission.thumbnail)
                         .build(),
                     contentDescription = submission.title,
                     contentScale = ContentScale.Crop,

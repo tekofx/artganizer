@@ -172,7 +172,7 @@ class SubmissionsViewModel(
 
                 val submissionId = submissionRepo.insertSubmissionDetails(
                     newSubmissionDetails.copy(
-                        imagePath = thumbnail
+                        thumbnail = thumbnail
                     )
                 )
 
@@ -205,7 +205,7 @@ class SubmissionsViewModel(
                     val imageInfo = getImageInfo(context, imagePath)
                     val palette = getPaletteFromUri(context, imagePath)
                     val newSub = newSubmissionDetails.copy(
-                        imagePath = thumbnailPath
+                        thumbnail = thumbnailPath
                     )
                     val submissionId = submissionRepo.insertSubmissionDetails(newSub)
                     Log.d("saveSubmission", newSub.toString())
@@ -235,7 +235,7 @@ class SubmissionsViewModel(
         viewModelScope.launch {
             submissionRepo.deleteSubmission(submission.submission)
             val imagesToRemove = submission.images.map { it.uri }
-            imagesToRemove.plus(submission.submission.imagePath)
+            imagesToRemove.plus(submission.submission.thumbnail)
             removeImagesFromInternalStorage(context, imagesToRemove)
         }
     }

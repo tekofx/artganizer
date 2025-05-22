@@ -52,8 +52,7 @@ fun SubmissionsForm(
             SubmissionViewer(
                 submissionDetails.title,
                 uris,
-                submissionDetails.imagePath,
-                currentImage = 0,
+                submissionDetails.thumbnail,
                 onImageChange = {}
             )
         }

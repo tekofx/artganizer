@@ -23,7 +23,7 @@ data class Submission(
     val title: String,
     val description: String,
     val rating: Int = 0,
-    val imagePath: Uri = Uri.EMPTY,
+    val thumbnail: Uri = Uri.EMPTY,
     // Foreign keys
     val artistId: Long? = null,
     val characterId: Long? = null

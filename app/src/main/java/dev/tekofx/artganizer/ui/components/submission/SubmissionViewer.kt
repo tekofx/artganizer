@@ -25,7 +25,6 @@ fun SubmissionViewer(
     title: String,
     imagePaths: List<Uri>,
     thumbnail: Uri,
-    currentImage: Int,
     onImageChange: (Int) -> Unit
 ) {
 
