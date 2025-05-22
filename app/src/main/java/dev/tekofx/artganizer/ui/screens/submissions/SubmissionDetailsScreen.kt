@@ -151,6 +151,7 @@ fun SubmissionInfo(
             SubmissionViewer(
                 submission.submission.title,
                 submission.images.map { it.uri },
+                submission.submission.imagePath,
                 currentImage,
                 onImageChange = { onImageChange(it) }
             )

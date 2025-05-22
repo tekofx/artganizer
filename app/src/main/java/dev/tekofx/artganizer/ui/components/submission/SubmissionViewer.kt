@@ -24,6 +24,7 @@ import coil.request.ImageRequest
 fun SubmissionViewer(
     title: String,
     imagePaths: List<Uri>,
+    thumbnail: Uri,
     currentImage: Int,
     onImageChange: (Int) -> Unit
 ) {
@@ -31,13 +32,14 @@ fun SubmissionViewer(
     if (imagePaths.size > 1) {
         SubmissionPager(
             imagePaths,
+            thumbnail = thumbnail,
             title,
-            currentImage = currentImage,
             onImageChange = { onImageChange(it) }
         )
     } else if (imagePaths.size == 1) {
         SubmissionImage(
             imagePaths[0],
+            thumbnail,
             title
         )
     }
@@ -47,23 +49,25 @@ fun SubmissionViewer(
 @Composable
 fun SubmissionImage(
     imagePath: Uri,
+    thumbnail: Uri,
     title: String
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imagePath)
+            .placeholderMemoryCacheKey(thumbnail.toString())
             .build(),
         contentDescription = title,
         modifier = Modifier.fillMaxWidth(),
-        contentScale = ContentScale.FillWidth
+        contentScale = ContentScale.FillWidth,
     )
 }
 
 @Composable
 fun SubmissionPager(
     imagePaths: List<Uri>,
+    thumbnail: Uri,
     title: String,
-    currentImage: Int,
     onImageChange: (Int) -> Unit
 
 ) {
@@ -88,7 +92,8 @@ fun SubmissionPager(
         ) { page ->
             SubmissionImage(
                 title = title,
-                imagePath = imagePaths[page]
+                imagePath = imagePaths[page],
+                thumbnail = thumbnail
             )
         }
 
