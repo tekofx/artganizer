@@ -34,9 +34,7 @@ fun ArtistCreationScreen(artistsViewModel: ArtistsViewModel, navHostController: 
             },
             onCancelClick = {
                 navHostController.popBackStack()
-                artistsViewModel.clearNewUiState()
             }
         )
-
     }
 }
