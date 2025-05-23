@@ -11,6 +11,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import dev.tekofx.artganizer.HandleSharedLink
 import dev.tekofx.artganizer.ui.screens.TagsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
@@ -24,6 +25,9 @@ import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 
 @Composable
@@ -31,12 +35,28 @@ fun Navigation(
     navHostController: NavHostController,
     submissionsViewModel: SubmissionsViewModel,
     artistsViewModel: ArtistsViewModel,
-    charactersViewModel: CharactersViewModel
+    charactersViewModel: CharactersViewModel,
+    sharedText: String?
 ) {
+    val urlEncoded = if (sharedText == null) null else URLEncoder.encode(
+        sharedText,
+        StandardCharsets.UTF_8.toString()
+    )
+
     NavHost(
         navController = navHostController,
-        startDestination = NavigateDestinations.SUBMISSIONS_SCREEN
+        startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.SUBMISSIONS_SCREEN
     ) {
+
+        composable(
+            route = "handleSharedLink/{sharedText}",
+            arguments = listOf(navArgument("sharedText") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val sharedText = backStackEntry.arguments?.getString("sharedText")?.let {
+                URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
+            } ?: return@composable
+            HandleSharedLink(sharedText, artistsViewModel, navHostController)
+        }
 
         // Submissions
         composable(
