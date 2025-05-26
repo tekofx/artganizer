@@ -31,6 +31,7 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsUiState
 @Composable
 fun InteractiveGallery(
     submissions: SubmissionsUiState,
+    isSelecting: Boolean,
     onImageClick: (Long) -> Unit,
     onLongClick: (Long) -> Unit
 ) {
@@ -43,6 +44,7 @@ fun InteractiveGallery(
             InteractiveGalleryItem(
                 submission = submission,
                 selected = submissions.selectedSubmissions.contains(submission.submission.submissionId),
+                isSelecting = isSelecting,
                 onImageClick = {
                     if (submissions.selectedSubmissions.isEmpty()) {
                         onImageClick(submission.submission.submissionId)
@@ -63,6 +65,7 @@ fun InteractiveGallery(
 fun InteractiveGalleryItem(
     submission: SubmissionWithArtist,
     selected: Boolean,
+    isSelecting: Boolean,
     onImageClick: (Long) -> Unit,
     onLongClick: (Long) -> Unit
 ) {
@@ -78,7 +81,7 @@ fun InteractiveGalleryItem(
                 .clip(MaterialTheme.shapes.small)
                 .then(
                     if (selected) Modifier.border(
-                        BorderStroke(2.dp, Color.Blue),
+                        BorderStroke(5.dp, Color.Blue),
                         MaterialTheme.shapes.small
                     ) else Modifier
                 )
@@ -87,16 +90,19 @@ fun InteractiveGalleryItem(
                     onLongClick = { onLongClick(submission.submission.submissionId) }
                 )
         )
-        Icon(
-            painter = if (selected) IconResource.fromDrawableResource(R.drawable.circle_check_filled)
-                .asPainterResource()
-            else IconResource.fromDrawableResource(R.drawable.circle)
-                .asPainterResource(),
-            contentDescription = if (selected) "Selected" else "Not selected",
-            tint = if (selected) Color.Blue else Color.Gray,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(20.dp)
-        )
+
+        if (isSelecting) {
+            Icon(
+                painter = if (selected) IconResource.fromDrawableResource(R.drawable.circle_check_filled)
+                    .asPainterResource()
+                else IconResource.fromDrawableResource(R.drawable.circle)
+                    .asPainterResource(),
+                contentDescription = if (selected) "Selected" else "Not selected",
+                tint = if (selected) Color.Blue else Color.Gray,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(20.dp)
+            )
+        }
     }
 }
