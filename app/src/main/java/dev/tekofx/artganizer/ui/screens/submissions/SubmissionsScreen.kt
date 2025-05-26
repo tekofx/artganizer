@@ -2,7 +2,6 @@ package dev.tekofx.artganizer.ui.screens.submissions
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +35,7 @@ import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
+import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.InteractiveGallery
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
@@ -58,6 +58,9 @@ fun SubmissionsScreen(
     // Data
     val submissions by submissionsViewModel.submissions.collectAsState()
 
+    // Ui
+    val showPopup by submissionsViewModel.showPopup.collectAsState()
+
 
     // States
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -69,7 +72,6 @@ fun SubmissionsScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    Log.d("SubmissionsScreen", submissions.toString())
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents(),
@@ -104,11 +106,24 @@ fun SubmissionsScreen(
                         selectedSubmissions = submissions.selectedSubmissions.size,
                         submissionsViewModel = submissionsViewModel,
                         scope = scope,
-                        onRemoveClick = { submissionsViewModel.deleteSubmissions(context) }
+                        onRemoveClick = { submissionsViewModel.setShowPopup(true) }
                     )
                 }
             }
         ) {
+            if (showPopup) {
+                ConfirmationPopup(
+                    title = "Remove ${submissions.selectedSubmissions.size} Submissions",
+                    message = "Are you sure you want to proceed?",
+                    onConfirm = {
+                        submissionsViewModel.deleteSelectedSubmissions(context)
+                        submissionsViewModel.setShowPopup(false)
+                    },
+                    onDismiss = {
+                        submissionsViewModel.setShowPopup(false)
+                    }
+                )
+            }
             InteractiveGallery(
                 submissions,
                 onImageClick = {

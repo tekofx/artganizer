@@ -251,7 +251,7 @@ class SubmissionsViewModel(
         }
     }
 
-    fun deleteSubmissions(context: Context) {
+    fun deleteSelectedSubmissions(context: Context) {
         viewModelScope.launch {
             val selectedSubmissions = submissions.value.submissions.filter {
                 submissions.value.selectedSubmissions.contains(it.submission.submissionId)
