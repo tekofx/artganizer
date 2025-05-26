@@ -77,9 +77,12 @@ fun SubmissionsScreen(
                     onClick = { launcher.launch("image/*") })
             }) {
             InteractiveGallery(
-                submissions.toSubmissions(),
+                submissions,
                 onImageClick = {
                     navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
+                },
+                onLongClick = {
+                    submissionsViewModel.onLongClick(it)
                 }
             )
         }

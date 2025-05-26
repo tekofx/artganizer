@@ -11,10 +11,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,32 +19,32 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
 
 @Composable
 fun InteractiveGallery(
-    submissions: List<Submission>,
-    onImageClick: (Long) -> Unit = {}
+    submissions: List<SubmissionUiState>,
+    onImageClick: (Long) -> Unit,
+    onLongClick: (Long) -> Unit
 ) {
-    var selectedIds by remember { mutableStateOf(setOf<Long>()) }
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         items(submissions) { submission ->
-            val isSelected = selectedIds.contains(submission.submissionId)
             InteractiveGalleryItem(
                 submission = submission,
-                selected = isSelected,
-                onImageClick = onImageClick,
-                onLongClick = {
-                    selectedIds = if (isSelected) {
-                        selectedIds - submission.submissionId
+                selected = submission.isSelected,
+                onImageClick = {
+                    if (!submission.isSelected) {
+                        onImageClick(submission.submissionDetails.id)
                     } else {
-                        selectedIds + submission.submissionId
+                        onLongClick(submission.submissionDetails.id)
                     }
+                },
+                onLongClick = {
+                    onLongClick(submission.submissionDetails.id)
                 }
             )
         }
@@ -58,16 +54,16 @@ fun InteractiveGallery(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun InteractiveGalleryItem(
-    submission: Submission,
+    submission: SubmissionUiState,
     selected: Boolean,
     onImageClick: (Long) -> Unit,
-    onLongClick: () -> Unit
+    onLongClick: (Long) -> Unit
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(submission.thumbnail)
+            .data(submission.submissionDetails.thumbnail)
             .build(),
-        contentDescription = submission.title,
+        contentDescription = submission.submissionDetails.title,
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .aspectRatio(1f)
@@ -79,8 +75,8 @@ fun InteractiveGalleryItem(
                 ) else Modifier
             )
             .combinedClickable(
-                onClick = { onImageClick(submission.submissionId) },
-                onLongClick = onLongClick
+                onClick = { onImageClick(submission.submissionDetails.id) },
+                onLongClick = { onLongClick(submission.submissionDetails.id) }
             )
     )
 }

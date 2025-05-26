@@ -62,7 +62,7 @@ class SubmissionsViewModel(
         private set
 
     // Data
-    val submissions = MutableStateFlow<List<SubmissionWithArtist>>(emptyList())
+    val submissions = MutableStateFlow<List<SubmissionUiState>>(emptyList())
 
     // Ui State
     val showPopup = MutableStateFlow(false)
@@ -75,7 +75,7 @@ class SubmissionsViewModel(
         viewModelScope.launch {
             submissionRepo.getAllSubmissions().collect { submissionsList ->
                 Log.d("SubmissionsViewModel", submissionsList.toString())
-                submissions.value = submissionsList
+                submissions.value = submissionsList.toSubmissionUiStateList()
                 currentImageIndex.value = 0
             }
         }
@@ -130,6 +130,26 @@ class SubmissionsViewModel(
         saveImagesOption = imagesOption
     }
 
+
+    fun onLongClick(submissionId: Long) {
+        Log.d("SubmissionsViewModel", "Long clicked on submission: ${submissionId}")
+
+        val currentSubmissions = submissions.value.toMutableList()
+        val submissionIndex =
+            currentSubmissions.indexOfFirst { it.submissionDetails.id == submissionId }
+        if (submissionIndex != -1) {
+            val updatedSubmission =
+                currentSubmissions[submissionIndex].copy(isSelected = !currentSubmissions[submissionIndex].isSelected)
+            currentSubmissions[submissionIndex] = updatedSubmission
+            submissions.value = currentSubmissions
+            Log.d(
+                "SubmissionsViewModel",
+                "Updated submission selection state: ${updatedSubmission.isSelected}"
+            )
+        } else {
+            Log.d("SubmissionsViewModel", "Submission with id $submissionId not found")
+        }
+    }
 
     //////////////////////// Database Operations ////////////////////////
     /**
