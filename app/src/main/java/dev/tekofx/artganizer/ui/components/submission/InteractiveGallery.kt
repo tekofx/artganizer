@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsUiState
 
 @Composable
 fun InteractiveGallery(
-    submissions: List<SubmissionUiState>,
-    selectedSubmissions: Int,
+    submissions: SubmissionsUiState,
     onImageClick: (Long) -> Unit,
     onLongClick: (Long) -> Unit
 ) {
@@ -33,12 +33,12 @@ fun InteractiveGallery(
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        items(submissions) { submission ->
+        items(submissions.submissions) { submission ->
             InteractiveGalleryItem(
                 submission = submission,
                 selected = submission.isSelected,
                 onImageClick = {
-                    if (selectedSubmissions == 0) {
+                    if (submissions.selectedSubmissions.size == 0) {
                         onImageClick(submission.submissionDetails.id)
                     } else {
                         onLongClick(submission.submissionDetails.id)

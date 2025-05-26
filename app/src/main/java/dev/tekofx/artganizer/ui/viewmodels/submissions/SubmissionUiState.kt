@@ -8,6 +8,11 @@ data class SubmissionUiState(
     val isSelected: Boolean = false,
 )
 
+data class SubmissionsUiState(
+    val submissions: List<SubmissionUiState> = emptyList(),
+    val selectedSubmissions: List<SubmissionUiState> = emptyList(),
+)
+
 fun SubmissionWithArtist.toSubmissionUiState(): SubmissionUiState {
     return SubmissionUiState(
         submissionDetails = SubmissionDetails(
@@ -19,6 +24,13 @@ fun SubmissionWithArtist.toSubmissionUiState(): SubmissionUiState {
         ),
         isEntryValid = true, // Assuming the entry is valid for simplicity
         isSelected = false // Default to not selected
+    )
+}
+
+fun List<SubmissionWithArtist>.toSubmissionsUiState(): SubmissionsUiState {
+    return SubmissionsUiState(
+        submissions = this.map { it.toSubmissionUiState() },
+        selectedSubmissions = emptyList() // Default to empty selected list
     )
 }
 

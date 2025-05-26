@@ -62,7 +62,7 @@ class SubmissionsViewModel(
         private set
 
     // Data
-    val submissions = MutableStateFlow<List<SubmissionUiState>>(emptyList())
+    val submissions = MutableStateFlow(SubmissionsUiState())
 
     // Ui State
     val showPopup = MutableStateFlow(false)
@@ -70,13 +70,12 @@ class SubmissionsViewModel(
     val showFullscreen = MutableStateFlow(false)
     val currentImageIndex = MutableStateFlow(0) // Index of images in current submission
     val isLoading = MutableStateFlow(false)
-    val selectedSubmissions = MutableStateFlow(0)
 
     init {
         viewModelScope.launch {
             submissionRepo.getAllSubmissions().collect { submissionsList ->
                 Log.d("SubmissionsViewModel", submissionsList.toString())
-                submissions.value = submissionsList.toSubmissionUiStateList()
+                submissions.value = submissionsList.toSubmissionsUiState()
                 currentImageIndex.value = 0
             }
         }
@@ -133,45 +132,31 @@ class SubmissionsViewModel(
 
     fun clearSelectedSubmissions() {
         Log.d("SubmissionsViewModel", "Deselecting all submissions")
-        val currentSubmissions = submissions.value.toMutableList()
-        submissions.value = currentSubmissions.map { it.copy(isSelected = false) }
-        selectedSubmissions.value = 0
+        val updatedSubmissions = submissions.value.submissions.map { it.copy(isSelected = false) }
+        submissions.value = submissions.value.copy(
+            submissions = updatedSubmissions,
+            selectedSubmissions = emptyList()
+        )
     }
 
 
-    fun onLongClick(submissionId: Long) {
-        Log.d("SubmissionsViewModel", "Long clicked on submission: ${submissionId}")
+    fun onSelectSubmission(submissionId: Long) {
+        Log.d("SubmissionsViewModel", "Long clicked on submission: $submissionId")
 
-        val currentSubmissions = submissions.value.toMutableList()
-        val submissionIndex =
-            currentSubmissions.indexOfFirst { it.submissionDetails.id == submissionId }
-        if (submissionIndex != -1) {
-            val updatedSubmission =
-                currentSubmissions[submissionIndex].copy(isSelected = !currentSubmissions[submissionIndex].isSelected)
-            currentSubmissions[submissionIndex] = updatedSubmission
-            submissions.value = currentSubmissions
-
-            if (!currentSubmissions[submissionIndex].isSelected) {
-                selectedSubmissions.value -= 1
-                Log.d(
-                    "SubmissionsViewModel",
-                    "Image deselected, incrementing index to ${selectedSubmissions.value}"
-                )
+        val updatedSubmissions = submissions.value.submissions.map { submission ->
+            if (submission.submissionDetails.id == submissionId) {
+                submission.copy(isSelected = !submission.isSelected)
             } else {
-                Log.d(
-                    "SubmissionsViewModel",
-                    "Image selected, incrementing index to ${selectedSubmissions.value + 1}"
-                )
-                selectedSubmissions.value += 1
+                submission
             }
-
-            Log.d(
-                "SubmissionsViewModel",
-                "Updated submission selection state: ${updatedSubmission.isSelected}"
-            )
-        } else {
-            Log.d("SubmissionsViewModel", "Submission with id $submissionId not found")
         }
+
+        val selectedSubmissions = updatedSubmissions.filter { it.isSelected }
+
+        submissions.value = submissions.value.copy(
+            submissions = updatedSubmissions,
+            selectedSubmissions = selectedSubmissions
+        )
     }
 
     //////////////////////// Database Operations ////////////////////////

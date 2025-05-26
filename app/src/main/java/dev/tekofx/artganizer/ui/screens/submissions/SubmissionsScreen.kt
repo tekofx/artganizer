@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
@@ -54,7 +56,6 @@ fun SubmissionsScreen(
 
     // Data
     val submissions by submissionsViewModel.submissions.collectAsState()
-    val selectedSubmissions by submissionsViewModel.selectedSubmissions.collectAsState()
 
 
     // States
@@ -89,16 +90,16 @@ fun SubmissionsScreen(
         }) {
         Scaffold(
             floatingActionButton = {
-                if (selectedSubmissions == 0) {
+                if (submissions.selectedSubmissions.isEmpty()) {
                     CreateFab(
                         onClick = { launcher.launch("image/*") }
                     )
                 }
             },
             bottomBar = {
-                if (selectedSubmissions > 0) {
+                if (submissions.selectedSubmissions.isNotEmpty()) {
                     SelectionCard(
-                        selectedSubmissions = selectedSubmissions,
+                        selectedSubmissions = submissions.selectedSubmissions.size,
                         submissionsViewModel = submissionsViewModel,
                         scope = scope
                     )
@@ -107,12 +108,11 @@ fun SubmissionsScreen(
         ) {
             InteractiveGallery(
                 submissions,
-                selectedSubmissions,
                 onImageClick = {
                     navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
                 },
                 onLongClick = {
-                    submissionsViewModel.onLongClick(it)
+                    submissionsViewModel.onSelectSubmission(it)
                 }
             )
         }
@@ -133,27 +133,57 @@ fun SelectionCard(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconButton(
-                onClick = {
-                    scope.launch {
-                        submissionsViewModel.clearSelectedSubmissions()
-                    }
-                }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
             ) {
+
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            submissionsViewModel.clearSelectedSubmissions()
+                        }
+                    }
+                ) {
+                    Icon(
+                        IconResource.fromDrawableResource(R.drawable.x)
+                            .asPainterResource(), contentDescription = ""
+                    )
+                }
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.x)
+                    IconResource.fromDrawableResource(R.drawable.gallery_outlined)
                         .asPainterResource(), contentDescription = ""
                 )
+                Text("Selected: $selectedSubmissions")
             }
 
-            Icon(
-                IconResource.fromDrawableResource(R.drawable.gallery_outlined)
-                    .asPainterResource(), contentDescription = ""
-            )
-
-            Text("Selected: $selectedSubmissions")
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.Start),
+            ) {
+                IconButton(
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        IconResource.fromDrawableResource(R.drawable.edit)
+                            .asPainterResource(), contentDescription = ""
+                    )
+                }
+                IconButton(
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        IconResource.fromDrawableResource(R.drawable.trash)
+                            .asPainterResource(), contentDescription = "",
+                        tint = Color(0xFFB00020)
+                    )
+                }
+            }
         }
     }
 }
