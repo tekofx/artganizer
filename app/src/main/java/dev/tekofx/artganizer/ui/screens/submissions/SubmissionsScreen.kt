@@ -61,6 +61,7 @@ fun SubmissionsScreen(
 
     // Ui
     val showPopup by submissionsViewModel.showPopup.collectAsState()
+    val isSelecting by submissionsViewModel.isSelecting.collectAsState()
 
 
     // States
@@ -128,10 +129,11 @@ fun SubmissionsScreen(
             }
             InteractiveGallery(
                 submissions,
+                isSelecting,
                 onImageClick = {
                     navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
                 },
-                onLongClick = {
+                onSelectImage = {
                     submissionsViewModel.onSelectSubmission(it)
                 }
             )
