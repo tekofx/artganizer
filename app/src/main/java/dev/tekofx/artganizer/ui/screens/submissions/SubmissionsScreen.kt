@@ -5,25 +5,38 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
+import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.submission.InteractiveGallery
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -41,6 +54,9 @@ fun SubmissionsScreen(
 
     // Data
     val submissions by submissionsViewModel.submissions.collectAsState()
+    val selectedSubmissions by submissionsViewModel.selectedSubmissions.collectAsState()
+
+
     // States
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -73,11 +89,25 @@ fun SubmissionsScreen(
         }) {
         Scaffold(
             floatingActionButton = {
-                CreateFab(
-                    onClick = { launcher.launch("image/*") })
-            }) {
+                if (selectedSubmissions == 0) {
+                    CreateFab(
+                        onClick = { launcher.launch("image/*") }
+                    )
+                }
+            },
+            bottomBar = {
+                if (selectedSubmissions > 0) {
+                    SelectionCard(
+                        selectedSubmissions = selectedSubmissions,
+                        submissionsViewModel = submissionsViewModel,
+                        scope = scope
+                    )
+                }
+            }
+        ) {
             InteractiveGallery(
                 submissions,
+                selectedSubmissions,
                 onImageClick = {
                     navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
                 },
@@ -90,5 +120,41 @@ fun SubmissionsScreen(
 }
 
 
+@Composable
+fun SelectionCard(
+    selectedSubmissions: Int,
+    submissionsViewModel: SubmissionsViewModel,
+    scope: CoroutineScope
+) {
+    Card(
+        modifier = Modifier.padding(10.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = {
+                    scope.launch {
+                        submissionsViewModel.clearSelectedSubmissions()
+                    }
+                }
+            ) {
+                Icon(
+                    IconResource.fromDrawableResource(R.drawable.x)
+                        .asPainterResource(), contentDescription = ""
+                )
+            }
 
+            Icon(
+                IconResource.fromDrawableResource(R.drawable.gallery_outlined)
+                    .asPainterResource(), contentDescription = ""
+            )
+
+            Text("Selected: $selectedSubmissions")
+        }
+    }
+}
 

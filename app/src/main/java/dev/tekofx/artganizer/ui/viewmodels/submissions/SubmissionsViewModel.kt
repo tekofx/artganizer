@@ -70,6 +70,7 @@ class SubmissionsViewModel(
     val showFullscreen = MutableStateFlow(false)
     val currentImageIndex = MutableStateFlow(0) // Index of images in current submission
     val isLoading = MutableStateFlow(false)
+    val selectedSubmissions = MutableStateFlow(0)
 
     init {
         viewModelScope.launch {
@@ -130,6 +131,13 @@ class SubmissionsViewModel(
         saveImagesOption = imagesOption
     }
 
+    fun clearSelectedSubmissions() {
+        Log.d("SubmissionsViewModel", "Deselecting all submissions")
+        val currentSubmissions = submissions.value.toMutableList()
+        submissions.value = currentSubmissions.map { it.copy(isSelected = false) }
+        selectedSubmissions.value = 0
+    }
+
 
     fun onLongClick(submissionId: Long) {
         Log.d("SubmissionsViewModel", "Long clicked on submission: ${submissionId}")
@@ -142,6 +150,21 @@ class SubmissionsViewModel(
                 currentSubmissions[submissionIndex].copy(isSelected = !currentSubmissions[submissionIndex].isSelected)
             currentSubmissions[submissionIndex] = updatedSubmission
             submissions.value = currentSubmissions
+
+            if (!currentSubmissions[submissionIndex].isSelected) {
+                selectedSubmissions.value -= 1
+                Log.d(
+                    "SubmissionsViewModel",
+                    "Image deselected, incrementing index to ${selectedSubmissions.value}"
+                )
+            } else {
+                Log.d(
+                    "SubmissionsViewModel",
+                    "Image selected, incrementing index to ${selectedSubmissions.value + 1}"
+                )
+                selectedSubmissions.value += 1
+            }
+
             Log.d(
                 "SubmissionsViewModel",
                 "Updated submission selection state: ${updatedSubmission.isSelected}"

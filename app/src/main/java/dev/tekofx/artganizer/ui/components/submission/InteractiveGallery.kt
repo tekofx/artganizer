@@ -24,6 +24,7 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
 @Composable
 fun InteractiveGallery(
     submissions: List<SubmissionUiState>,
+    selectedSubmissions: Int,
     onImageClick: (Long) -> Unit,
     onLongClick: (Long) -> Unit
 ) {
@@ -37,7 +38,7 @@ fun InteractiveGallery(
                 submission = submission,
                 selected = submission.isSelected,
                 onImageClick = {
-                    if (!submission.isSelected) {
+                    if (selectedSubmissions == 0) {
                         onImageClick(submission.submissionDetails.id)
                     } else {
                         onLongClick(submission.submissionDetails.id)
