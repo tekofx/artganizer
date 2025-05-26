@@ -151,6 +151,14 @@ class SubmissionsViewModel(
         )
     }
 
+    fun selectAll() {
+        Log.d("SubmissionsViewModel", "Selecting all submissions")
+        val allSubmissionIds = submissions.value.submissions.map { it.submission.submissionId }
+        submissions.value = submissions.value.copy(
+            selectedSubmissions = allSubmissionIds
+        )
+    }
+
     //////////////////////// Database Operations ////////////////////////
     /**
      * Gets the submission of the id.

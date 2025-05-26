@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
@@ -104,9 +105,10 @@ fun SubmissionsScreen(
                 if (submissions.selectedSubmissions.isNotEmpty()) {
                     SelectionCard(
                         selectedSubmissions = submissions.selectedSubmissions.size,
-                        submissionsViewModel = submissionsViewModel,
                         scope = scope,
-                        onRemoveClick = { submissionsViewModel.setShowPopup(true) }
+                        onRemoveClick = { submissionsViewModel.setShowPopup(true) },
+                        onSelectAllClick = submissionsViewModel::selectAll,
+                        onClearSelection = submissionsViewModel::clearSelectedSubmissions
                     )
                 }
             }
@@ -141,9 +143,10 @@ fun SubmissionsScreen(
 @Composable
 fun SelectionCard(
     selectedSubmissions: Int,
-    submissionsViewModel: SubmissionsViewModel,
     scope: CoroutineScope,
-    onRemoveClick: () -> Unit
+    onRemoveClick: () -> Unit,
+    onSelectAllClick: () -> Unit,
+    onClearSelection: () -> Unit
 ) {
     Card(
         modifier = Modifier.padding(10.dp),
@@ -157,13 +160,12 @@ fun SelectionCard(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
             ) {
 
                 IconButton(
                     onClick = {
                         scope.launch {
-                            submissionsViewModel.clearSelectedSubmissions()
+                            onClearSelection()
                         }
                     }
                 ) {
@@ -172,6 +174,19 @@ fun SelectionCard(
                             .asPainterResource(), contentDescription = ""
                     )
                 }
+                IconButton(
+                    onClick = onSelectAllClick
+                ) {
+                    Icon(
+                        IconResource.fromDrawableResource(R.drawable.select_all)
+                            .asPainterResource(), contentDescription = ""
+                    )
+                }
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+            ) {
                 Icon(
                     IconResource.fromDrawableResource(R.drawable.gallery_outlined)
                         .asPainterResource(), contentDescription = ""
@@ -210,3 +225,15 @@ fun SelectionCard(
     }
 }
 
+@Preview
+@Composable
+fun SelectionCardPreview() {
+
+    SelectionCard(
+        selectedSubmissions = 5,
+        scope = rememberCoroutineScope(),
+        onRemoveClick = {},
+        onSelectAllClick = {},
+        onClearSelection = {}
+    )
+}
