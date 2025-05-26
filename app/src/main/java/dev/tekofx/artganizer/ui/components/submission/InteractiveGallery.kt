@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionUiState
+import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsUiState
 
 @Composable
@@ -36,16 +36,16 @@ fun InteractiveGallery(
         items(submissions.submissions) { submission ->
             InteractiveGalleryItem(
                 submission = submission,
-                selected = submission.isSelected,
+                selected = submissions.selectedSubmissions.contains(submission.submission.submissionId),
                 onImageClick = {
-                    if (submissions.selectedSubmissions.size == 0) {
-                        onImageClick(submission.submissionDetails.id)
+                    if (submissions.selectedSubmissions.isEmpty()) {
+                        onImageClick(submission.submission.submissionId)
                     } else {
-                        onLongClick(submission.submissionDetails.id)
+                        onLongClick(submission.submission.submissionId)
                     }
                 },
                 onLongClick = {
-                    onLongClick(submission.submissionDetails.id)
+                    onLongClick(submission.submission.submissionId)
                 }
             )
         }
@@ -55,16 +55,16 @@ fun InteractiveGallery(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun InteractiveGalleryItem(
-    submission: SubmissionUiState,
+    submission: SubmissionWithArtist,
     selected: Boolean,
     onImageClick: (Long) -> Unit,
     onLongClick: (Long) -> Unit
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(submission.submissionDetails.thumbnail)
+            .data(submission.submission.thumbnail)
             .build(),
-        contentDescription = submission.submissionDetails.title,
+        contentDescription = submission.submission.title,
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .aspectRatio(1f)
@@ -76,8 +76,8 @@ fun InteractiveGalleryItem(
                 ) else Modifier
             )
             .combinedClickable(
-                onClick = { onImageClick(submission.submissionDetails.id) },
-                onLongClick = { onLongClick(submission.submissionDetails.id) }
+                onClick = { onImageClick(submission.submission.submissionId) },
+                onLongClick = { onLongClick(submission.submission.submissionId) }
             )
     )
 }

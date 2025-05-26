@@ -1,17 +1,21 @@
 package dev.tekofx.artganizer.repository
 
+import android.content.Context
 import dev.tekofx.artganizer.dao.ICharacterSubmissionCrossRef
+import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
 import dev.tekofx.artganizer.entities.CharacterSubmissionCrossRef
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
+import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import kotlinx.coroutines.flow.Flow
 
 class SubmissionRepository(
     private val submissionDao: ISubmissionDao,
-    private val characterSubmissionCrossRef: ICharacterSubmissionCrossRef
+    private val characterSubmissionCrossRef: ICharacterSubmissionCrossRef,
+    private val imageDao: IImageDao
 ) {
 
     // GET
@@ -58,5 +62,31 @@ class SubmissionRepository(
     }
 
     // DELETE
-    suspend fun deleteSubmission(submission: Submission) = submissionDao.delete(submission)
+    suspend fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
+        // Delete submission
+        submissionDao.delete(submission.submission)
+
+        // Delete character submission cross references
+        submission.submission.characterId?.let {
+            characterSubmissionCrossRef.deleteCharacterSubmissionCrossRefs(
+                it
+            )
+        }
+
+        // Delete images associated with the submission
+        submission.images.forEach {
+            imageDao.delete(it)
+            removeImageFromInternalStorage(context, it.uri)
+        }
+
+        // Delete thumbnail
+        removeImageFromInternalStorage(context, submission.submission.thumbnail)
+
+    }
+
+    suspend fun deleteSubmissions(context: Context, submissions: List<SubmissionWithArtist>) {
+        submissions.forEach { submission ->
+            deleteSubmission(context, submission)
+        }
+    }
 }

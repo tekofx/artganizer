@@ -26,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
@@ -66,6 +67,7 @@ fun SubmissionsScreen(
         )
     )
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Log.d("SubmissionsScreen", submissions.toString())
 
@@ -101,7 +103,8 @@ fun SubmissionsScreen(
                     SelectionCard(
                         selectedSubmissions = submissions.selectedSubmissions.size,
                         submissionsViewModel = submissionsViewModel,
-                        scope = scope
+                        scope = scope,
+                        onRemoveClick = { submissionsViewModel.deleteSubmissions(context) }
                     )
                 }
             }
@@ -124,7 +127,8 @@ fun SubmissionsScreen(
 fun SelectionCard(
     selectedSubmissions: Int,
     submissionsViewModel: SubmissionsViewModel,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    onRemoveClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.padding(10.dp),
@@ -175,6 +179,9 @@ fun SelectionCard(
                 }
                 IconButton(
                     onClick = {
+                        scope.launch {
+                            onRemoveClick()
+                        }
                     }
                 ) {
                     Icon(

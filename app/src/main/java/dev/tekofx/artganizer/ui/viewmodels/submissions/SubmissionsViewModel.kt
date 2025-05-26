@@ -15,7 +15,6 @@ import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.getImageInfo
 import dev.tekofx.artganizer.utils.getPaletteFromUri
-import dev.tekofx.artganizer.utils.removeImagesFromInternalStorage
 import dev.tekofx.artganizer.utils.saveImageToInternalStorage
 import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.Dispatchers
@@ -132,30 +131,23 @@ class SubmissionsViewModel(
 
     fun clearSelectedSubmissions() {
         Log.d("SubmissionsViewModel", "Deselecting all submissions")
-        val updatedSubmissions = submissions.value.submissions.map { it.copy(isSelected = false) }
         submissions.value = submissions.value.copy(
-            submissions = updatedSubmissions,
             selectedSubmissions = emptyList()
         )
     }
 
 
     fun onSelectSubmission(submissionId: Long) {
-        Log.d("SubmissionsViewModel", "Long clicked on submission: $submissionId")
-
-        val updatedSubmissions = submissions.value.submissions.map { submission ->
-            if (submission.submissionDetails.id == submissionId) {
-                submission.copy(isSelected = !submission.isSelected)
-            } else {
-                submission
-            }
+        val newSelectedSubmissions =
+            submissions.value.selectedSubmissions.toMutableList()
+        if (newSelectedSubmissions.contains(submissionId)) {
+            newSelectedSubmissions.remove(submissionId)
+        } else {
+            newSelectedSubmissions.add(submissionId)
         }
 
-        val selectedSubmissions = updatedSubmissions.filter { it.isSelected }
-
         submissions.value = submissions.value.copy(
-            submissions = updatedSubmissions,
-            selectedSubmissions = selectedSubmissions
+            selectedSubmissions = newSelectedSubmissions
         )
     }
 
@@ -255,10 +247,16 @@ class SubmissionsViewModel(
 
     fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
         viewModelScope.launch {
-            submissionRepo.deleteSubmission(submission.submission)
-            val imagesToRemove = submission.images.map { it.uri }
-            imagesToRemove.plus(submission.submission.thumbnail)
-            removeImagesFromInternalStorage(context, imagesToRemove)
+            submissionRepo.deleteSubmission(context, submission)
+        }
+    }
+
+    fun deleteSubmissions(context: Context) {
+        viewModelScope.launch {
+            val selectedSubmissions = submissions.value.submissions.filter {
+                submissions.value.selectedSubmissions.contains(it.submission.submissionId)
+            }
+            submissionRepo.deleteSubmissions(context, selectedSubmissions)
         }
     }
 

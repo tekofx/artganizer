@@ -66,12 +66,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val submissionRepository by lazy {
-            SubmissionRepository(
-                AppDatabase.getDatabase(this).submissionDao(),
-                AppDatabase.getDatabase(this).characterSubmissionCrossRefDao()
-            )
-        }
 
         val artistsRepository by lazy {
             ArtistsRepository(AppDatabase.getDatabase(this).artistDao())
@@ -83,6 +77,14 @@ class MainActivity : ComponentActivity() {
 
         val charactersRepository by lazy {
             CharactersRepository(AppDatabase.getDatabase(this).characterDao())
+        }
+
+        val submissionRepository by lazy {
+            SubmissionRepository(
+                AppDatabase.getDatabase(this).submissionDao(),
+                AppDatabase.getDatabase(this).characterSubmissionCrossRefDao(),
+                AppDatabase.getDatabase(this).imageDao()
+            )
         }
 
 
