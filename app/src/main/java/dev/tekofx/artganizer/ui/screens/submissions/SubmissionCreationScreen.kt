@@ -41,8 +41,9 @@ fun SubmissionCreationScreen(
     val saveImagesOption = submissionsViewModel.saveImagesOption
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
     val isLoading by submissionsViewModel.isLoading.collectAsState()
+    val savingProgress by submissionsViewModel.savingProgress.collectAsState()
 
-    DialogLoader(isLoading = isLoading)
+    DialogLoader(isLoading = isLoading, savingProgress)
 
     if (submissionsViewModel.uris.size > 1 && saveImagesOption == SaveImagesOptions.EMPTY) {
         Column(
@@ -98,6 +99,7 @@ fun SubmissionCreationScreen(
 @Composable
 fun DialogLoader(
     isLoading: Boolean,
+    progress: Float,
 ) {
     if (isLoading) {
         Dialog(
@@ -112,7 +114,11 @@ fun DialogLoader(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text("Saving Submission")
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        progress = {
+                            progress
+                        },
+                    )
                 }
             }
         }

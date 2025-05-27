@@ -70,6 +70,7 @@ class SubmissionsViewModel(
     val currentImageIndex = MutableStateFlow(0) // Index of images in current submission
     val isLoading = MutableStateFlow(false)
     val isSelecting = MutableStateFlow(false)
+    val savingProgress = MutableStateFlow(0f)
 
     init {
         viewModelScope.launch {
@@ -200,10 +201,15 @@ class SubmissionsViewModel(
     suspend fun saveSubmission(context: Context) {
         Log.d("saveSubmission", "Started saving submission")
         isLoading.value = true
+        var i = 0f
+        val total = uris.size.toFloat()
         try {
             withContext(Dispatchers.IO) {
                 if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
+
+                    // FIXME: Loader not working properly
                     val imagePaths = uris.map { uri ->
+
                         saveImageToInternalStorage(context, uri)
                     }
 
@@ -228,6 +234,8 @@ class SubmissionsViewModel(
                                 submissionId = submissionId
                             )
                         )
+                        savingProgress.value =
+                            i / total
                     }
                 } else {
                     uris.forEach { uri ->
@@ -251,12 +259,15 @@ class SubmissionsViewModel(
                                 submissionId = submissionId
                             )
                         )
+                        savingProgress.value =
+                            (uris.indexOf(uri) + 1).toFloat() / total
                     }
                 }
             }
         } finally {
             Log.d("saveSubmission", "Finished saving submission")
             isLoading.value = false
+            savingProgress.value = 0f
         }
     }
 
