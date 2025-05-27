@@ -91,9 +91,33 @@ fun CharacterFormFields(
             enabled = enabled
         )
         FormTextfield(
+            value = characterDetails.description ?: "",
+            onValueChange = { onValueChange(characterDetails.copy(description = it)) },
+            label = "Description",
+            enabled = enabled
+        )
+        FormTextfield(
             value = characterDetails.species ?: "",
             onValueChange = { onValueChange(characterDetails.copy(species = it)) },
             label = "Species",
+            enabled = enabled
+        )
+        FormTextfield(
+            value = characterDetails.gender ?: "",
+            onValueChange = { onValueChange(characterDetails.copy(gender = it)) },
+            label = "Gender",
+            enabled = enabled
+        )
+        FormTextfield(
+            value = characterDetails.pronouns ?: "",
+            onValueChange = { onValueChange(characterDetails.copy(pronouns = it)) },
+            label = "Pronouns",
+            enabled = enabled
+        )
+        FormTextfield(
+            value = characterDetails.height ?: "",
+            onValueChange = { onValueChange(characterDetails.copy(height = it)) },
+            label = "Height",
             enabled = enabled
         )
     }

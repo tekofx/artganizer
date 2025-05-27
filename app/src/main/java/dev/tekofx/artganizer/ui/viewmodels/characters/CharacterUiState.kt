@@ -15,7 +15,11 @@ fun CharacterUiState.toCharacterWithSubmissions(): CharacterWithSubmissions =
             characterId = characterDetails.id,
             name = characterDetails.name,
             imagePath = characterDetails.imagePath,
-            species = characterDetails.species
+            species = characterDetails.species,
+            pronouns = characterDetails.pronouns,
+            gender = characterDetails.gender,
+            height = characterDetails.height,
+            description = characterDetails.description
         ),
         submissions = characterDetails.submissions
     )

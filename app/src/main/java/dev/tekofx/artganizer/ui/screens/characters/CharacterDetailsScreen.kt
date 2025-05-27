@@ -1,11 +1,16 @@
 package dev.tekofx.artganizer.ui.screens.characters
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -15,13 +20,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
+import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
@@ -106,10 +116,6 @@ fun CharacterInfo(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Avatar(
-            characterWithSubmissions.character.imagePath,
-            size = AVATAR_SIZE
-        )
         Text(
             text = characterWithSubmissions.character.name,
             style = MaterialTheme.typography.headlineLarge,
@@ -117,16 +123,42 @@ fun CharacterInfo(
             modifier = Modifier
                 .fillMaxWidth()
         )
-        characterWithSubmissions.character.species?.let { species ->
+        Avatar(
+            characterWithSubmissions.character.imagePath,
+            size = AVATAR_SIZE
+        )
+
+        characterWithSubmissions.character.description?.let {
             Text(
-                text = species,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Light,
+                text = it,
+                style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
             )
         }
+        HorizontalDivider(
+            modifier = Modifier
+                .width(100.dp)
+                .clip(MaterialTheme.shapes.small),
+            thickness = 5.dp,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Box(
+            modifier = Modifier
+                .height(10.dp)
+                .height(200.dp)
+                .background(Color(0xFFFFFFFF))
+        )
+        CharacterInfoField("Species", characterWithSubmissions.character.species)
+        HorizontalDivider(modifier = Modifier.fillMaxWidth())
+        CharacterInfoField("Gender", characterWithSubmissions.character.gender)
+        HorizontalDivider(modifier = Modifier.fillMaxWidth())
+        CharacterInfoField("Pronouns", characterWithSubmissions.character.pronouns)
+        HorizontalDivider(modifier = Modifier.fillMaxWidth())
+        CharacterInfoField("Height", characterWithSubmissions.character.height)
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -149,3 +181,51 @@ fun CharacterInfo(
     }
 }
 
+@Composable
+fun CharacterInfoField(
+    fieldName: String,
+    fieldValue: String?
+) {
+    fieldValue?.let {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                fieldName,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                text = fieldValue,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+fun CharacterInfoPreview() {
+    CharacterInfo(
+        characterWithSubmissions = CharacterWithSubmissions(
+            character = Character(
+                characterId = 1,
+                name = "Teko",
+                species = "Arctic Fox",
+                gender = "Male",
+                pronouns = "He/Him",
+                height = "1.75m",
+                description = "Artic foxxo with blue hair",
+                imagePath = null // Replace with a valid URI if needed
+            ),
+            submissions = emptyList<Submission>()
+        ),
+        onImageClick = {},
+        onEditClick = {},
+        onDeleteClick = {}
+    )
+}

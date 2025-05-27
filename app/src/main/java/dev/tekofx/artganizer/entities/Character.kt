@@ -10,5 +10,9 @@ data class Character(
     val characterId: Long = 0,
     val name: String,
     val species: String?,
+    val gender: String?,
+    val pronouns: String?,
+    val height: String?,
+    val description: String?,
     val imagePath: Uri?,
 )

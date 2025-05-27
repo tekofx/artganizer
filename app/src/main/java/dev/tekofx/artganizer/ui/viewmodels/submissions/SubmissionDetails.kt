@@ -51,6 +51,10 @@ fun List<CharacterWithSubmissions>.toListOfCharacters(): List<Character> {
             name = characterWithSubmissions.character.name,
             species = characterWithSubmissions.character.species,
             imagePath = characterWithSubmissions.character.imagePath,
+            pronouns = characterWithSubmissions.character.pronouns,
+            gender = characterWithSubmissions.character.gender,
+            height = characterWithSubmissions.character.height,
+            description = characterWithSubmissions.character.description
         )
     }
 }
