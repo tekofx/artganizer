@@ -66,10 +66,11 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+    implementation(libs.zoomable.image.coil3)
 
     // Gson
     implementation(libs.gson)
 
     // Palette
-    implementation("androidx.palette:palette-ktx:1.0.0")
+    implementation(libs.androidx.palette.ktx)
 }
