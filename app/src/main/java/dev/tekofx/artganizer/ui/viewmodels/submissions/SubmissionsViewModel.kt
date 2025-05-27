@@ -207,18 +207,14 @@ class SubmissionsViewModel(
             withContext(Dispatchers.IO) {
                 if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
 
-                    // FIXME: Loader not working properly
                     val imagePaths = uris.map { uri ->
-
                         saveImageToInternalStorage(context, uri)
                     }
 
                     val thumbnail = saveThumbnail(context, imagePaths[0])
-
                     val submissionId = submissionRepo.insertSubmissionDetails(
                         newSubmissionDetails.copy(thumbnail = thumbnail)
                     )
-
                     imagePaths.forEach { imagePath ->
                         val imageInfo = getImageInfo(context, imagePath)
                         val palette = getPaletteFromUri(context, imagePath)
@@ -234,6 +230,7 @@ class SubmissionsViewModel(
                                 submissionId = submissionId
                             )
                         )
+                        i++
                         savingProgress.value =
                             i / total
                     }
