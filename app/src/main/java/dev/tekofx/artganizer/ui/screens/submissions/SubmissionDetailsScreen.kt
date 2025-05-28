@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
@@ -257,12 +258,22 @@ fun CharactersSection(
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            text = "Characters",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
-        )
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
+        ) {
+            Icon(
+                IconResource.fromDrawableResource(R.drawable.paw_filled).asPainterResource(),
+                contentDescription = "",
+                modifier = Modifier.size(30.dp)
+            )
+            Text(
+                text = "Characters",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineSmall,
+            )
+        }
         characters.forEach { character ->
             SmallCard(
                 title = character.name,
@@ -285,12 +296,23 @@ fun ArtistSection(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Text(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            text = "Artist",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
-        )
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
+        ) {
+            Icon(
+                IconResource.fromDrawableResource(R.drawable.palette_filled).asPainterResource(),
+                contentDescription = "",
+                modifier = Modifier.size(30.dp)
+            )
+
+            Text(
+                text = "Artist",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineSmall,
+            )
+        }
         SmallCard(
             title = artist.name,
             imagePath = artist.imagePath,
@@ -317,8 +339,12 @@ fun ImageInfo(image: Image) {
             Icon(
                 IconResource.fromDrawableResource(R.drawable.file_info).asPainterResource(),
                 contentDescription = "",
+                modifier = Modifier.size(30.dp)
             )
-            Text("File Info")
+            Text(
+                "File Info",
+                style = MaterialTheme.typography.headlineSmall,
+            )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
