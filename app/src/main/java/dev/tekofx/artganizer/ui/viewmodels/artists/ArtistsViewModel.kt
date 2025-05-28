@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
-import dev.tekofx.artganizer.repository.ArtistsRepository
+import dev.tekofx.artganizer.repository.ArtistRepository
 import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
-class ArtistsViewModel(private val repository: ArtistsRepository) : ViewModel() {
+class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
 
     // Data states
     var newArtistUiState by mutableStateOf(ArtistUiState())

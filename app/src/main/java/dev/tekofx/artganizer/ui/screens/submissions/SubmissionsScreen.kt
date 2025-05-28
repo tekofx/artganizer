@@ -30,8 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.entities.Submission
-import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
@@ -42,11 +40,6 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
-
-fun List<SubmissionWithArtist>.toSubmissions(): List<Submission> {
-    return this.map { it.submission }
-}
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

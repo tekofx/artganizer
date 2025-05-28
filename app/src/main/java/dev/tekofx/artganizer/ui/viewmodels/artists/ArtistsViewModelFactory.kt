@@ -2,11 +2,11 @@ package dev.tekofx.artganizer.ui.viewmodels.artists
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import dev.tekofx.artganizer.repository.ArtistsRepository
+import dev.tekofx.artganizer.repository.ArtistRepository
 
 @Suppress("UNCHECKED_CAST")
 class ArtistsViewModelFactory(
-    private val repository: ArtistsRepository,
+    private val repository: ArtistRepository,
 ) :
     ViewModelProvider.Factory {
 

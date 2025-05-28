@@ -22,5 +22,12 @@ data class SubmissionWithArtist(
         entityColumn = "characterId",
         associateBy = Junction(CharacterSubmissionCrossRef::class)
     )
-    val characters: List<Character>
+    val characters: List<Character>,
+
+    @Relation(
+        parentColumn = "submissionId",
+        entityColumn = "tagId",
+        associateBy = Junction(TagSubmissionCrossRef::class)
+    )
+    val tags: List<Tag>
 )

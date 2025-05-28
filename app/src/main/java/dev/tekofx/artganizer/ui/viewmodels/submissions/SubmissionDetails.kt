@@ -7,6 +7,7 @@ import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
+import dev.tekofx.artganizer.entities.Tag
 
 data class SubmissionDetails(
     val id: Long = 0,
@@ -17,7 +18,8 @@ data class SubmissionDetails(
     val artistId: Long? = null,
     val artist: Artist? = null,
     val images: List<Image> = emptyList<Image>(),
-    val characters: List<Character> = emptyList<Character>()
+    val characters: List<Character> = emptyList<Character>(),
+    val tags: List<Tag> = emptyList<Tag>()
 )
 
 fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = SubmissionWithArtist(
@@ -31,7 +33,8 @@ fun SubmissionDetails.toSubmissionWithArtist(): SubmissionWithArtist = Submissio
     ),
     artist = artist,
     images = images,
-    characters = characters
+    characters = characters,
+    tags = tags
 )
 
 fun SubmissionDetails.toSubmission(): Submission = Submission(

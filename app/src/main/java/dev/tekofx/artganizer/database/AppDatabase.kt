@@ -10,6 +10,7 @@ import dev.tekofx.artganizer.dao.ICharacterDao
 import dev.tekofx.artganizer.dao.ICharacterSubmissionCrossRef
 import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
+import dev.tekofx.artganizer.dao.ITagDao
 import dev.tekofx.artganizer.database.converters.DateConverter
 import dev.tekofx.artganizer.database.converters.IntListConverter
 import dev.tekofx.artganizer.database.converters.LongListConverter
@@ -21,6 +22,8 @@ import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.CharacterSubmissionCrossRef
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.entities.Tag
+import dev.tekofx.artganizer.entities.TagSubmissionCrossRef
 
 /**
  * Database class with a singleton Instance object.
@@ -31,7 +34,9 @@ import dev.tekofx.artganizer.entities.Submission
         Artist::class,
         Image::class,
         Character::class,
-        CharacterSubmissionCrossRef::class
+        CharacterSubmissionCrossRef::class,
+        Tag::class,
+        TagSubmissionCrossRef::class
     ],
     version = 1,
     exportSchema = false
@@ -51,6 +56,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun imageDao(): IImageDao
     abstract fun characterDao(): ICharacterDao
     abstract fun characterSubmissionCrossRefDao(): ICharacterSubmissionCrossRef
+    abstract fun tagDao(): ITagDao
 
     companion object {
         @Volatile

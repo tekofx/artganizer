@@ -19,4 +19,6 @@ object NavigateDestinations {
 
 
     const val TAGS_SCREEN = "TagsScreen"
+    const val TAG_CREATION_SCREEN = "TagCreationScreen"
+    const val TAG_DETAILS_SCREEN = "TagsScreen/{tagId}"
 }

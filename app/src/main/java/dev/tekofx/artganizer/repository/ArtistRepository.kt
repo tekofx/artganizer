@@ -3,7 +3,7 @@ package dev.tekofx.artganizer.repository
 import dev.tekofx.artganizer.dao.IArtistDao
 import dev.tekofx.artganizer.entities.Artist
 
-class ArtistsRepository(private val artistsDao: IArtistDao) {
+class ArtistRepository(private val artistsDao: IArtistDao) {
 
     // INSERT
     suspend fun insertArtist(artist: Artist) = artistsDao.insert(artist)

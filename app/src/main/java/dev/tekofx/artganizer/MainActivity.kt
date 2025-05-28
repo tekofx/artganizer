@@ -44,10 +44,11 @@ import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.navigation.showBottomAppBar
-import dev.tekofx.artganizer.repository.ArtistsRepository
+import dev.tekofx.artganizer.repository.ArtistRepository
 import dev.tekofx.artganizer.repository.CharactersRepository
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
+import dev.tekofx.artganizer.repository.TagRepository
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.BottomNavigationBar
 import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
@@ -59,6 +60,7 @@ import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModelFactory
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModelFactory
+import dev.tekofx.artganizer.ui.viewmodels.tags.TagViewModelFactory
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -67,8 +69,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
 
-        val artistsRepository by lazy {
-            ArtistsRepository(AppDatabase.getDatabase(this).artistDao())
+        val artistRepository by lazy {
+            ArtistRepository(AppDatabase.getDatabase(this).artistDao())
         }
 
         val imageRepository by lazy {
@@ -87,6 +89,12 @@ class MainActivity : ComponentActivity() {
             )
         }
 
+        val tagRepository by lazy {
+            TagRepository(
+                AppDatabase.getDatabase(this).tagDao(),
+            )
+        }
+
 
         val submissionsViewModel = ViewModelProvider(
             this, SubmissionsViewModelFactory(
@@ -96,7 +104,7 @@ class MainActivity : ComponentActivity() {
 
         val artistsViewModel = ViewModelProvider(
             this, ArtistsViewModelFactory(
-                artistsRepository
+                artistRepository
             )
         )[ArtistsViewModel::class.java]
 
@@ -105,6 +113,12 @@ class MainActivity : ComponentActivity() {
                 charactersRepository
             )
         )[CharactersViewModel::class.java]
+
+        val tagsViewModel = ViewModelProvider(
+            this, TagViewModelFactory(
+                tagRepository
+            )
+        )[ArtistsViewModel::class.java]
 
         setContent {
             val sharedText = intent?.getStringExtra(Intent.EXTRA_TEXT)
