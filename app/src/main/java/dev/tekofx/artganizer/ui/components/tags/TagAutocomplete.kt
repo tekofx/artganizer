@@ -1,11 +1,11 @@
 package dev.tekofx.artganizer.ui.components.tags
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -28,6 +29,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.ui.IconResource
 
 
 val items = listOf(
@@ -77,7 +80,6 @@ fun TagAutocomplete() {
                         isFocused = focusState.isFocused
                     }
                     .onKeyEvent { keyEvent ->
-                        Log.d("TagAutocomplete", "Key event: ${keyEvent.nativeKeyEvent.keyCode}")
                         when {
                             keyEvent.nativeKeyEvent.keyCode == 67 && value.isEmpty() && selectedItems.value.isNotEmpty() -> {
                                 selectedItems.value = selectedItems.value.dropLast(1)
@@ -105,23 +107,38 @@ fun TagAutocomplete() {
                 modifier = Modifier.heightIn(max = 100.dp)
             ) {
                 LazyColumn {
-                    items(items.size) { index ->
-                        val item = items[index]
-                        if (item.contains(value, ignoreCase = true)) {
-                            Text(
-                                text = item,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(10.dp)
-                                    .clickable(
-                                        onClick = {
-                                            if (item !in selectedItems.value) {
-                                                selectedItems.value = selectedItems.value + item
-                                            }
-                                            value = "" // Clear the input after selection
-                                        }
-                                    )
+                    val filteredItems = items.filter { it.contains(value, ignoreCase = true) }
+                    if (filteredItems.isEmpty()) {
+                        item {
+                            val capitalizedValue =
+                                value.replaceFirstChar { it.uppercaseChar() }
+                            ListItem(
+                                "Create tag $capitalizedValue",
+                                onClick = {
+                                    if (value !in selectedItems.value) {
+                                        selectedItems.value = selectedItems.value + capitalizedValue
+                                    }
+                                    value = "" // Clear the input after selection
+                                }
                             )
+                        }
+                    } else {
+                        items(items.size) { index ->
+                            val item = items[index]
+                            if (item.contains(value, ignoreCase = true)) {
+                                ListItem(
+                                    item,
+                                    onClick = {
+                                        val capitalizedItem =
+                                            item.replaceFirstChar { it.uppercaseChar() }
+                                        if (item !in selectedItems.value) {
+                                            selectedItems.value =
+                                                selectedItems.value + capitalizedItem
+                                        }
+                                        value = "" // Clear the input after selection
+                                    }
+                                )
+                            }
                         }
                     }
                 }
@@ -131,15 +148,52 @@ fun TagAutocomplete() {
 }
 
 @Composable
+fun ListItem(
+    text: String,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.padding(horizontal = 5.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+            contentDescription = ""
+        )
+        Text(
+            text = text,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+                .clickable(
+                    onClick = onClick
+                )
+        )
+    }
+}
+
+@Composable
 fun SelectedItem(
     name: String,
 ) {
     Card {
-        Text(
-            text = name,
-            modifier = Modifier
-                .clickable { /* Handle click */ }
-                .padding(10.dp)
-        )
+        Row(
+            modifier = Modifier.padding(horizontal = 5.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                contentDescription = ""
+            )
+
+            Text(
+                text = name,
+                modifier = Modifier
+                    .clickable { /* Handle click */ }
+                    .padding(10.dp)
+            )
+        }
     }
 }
