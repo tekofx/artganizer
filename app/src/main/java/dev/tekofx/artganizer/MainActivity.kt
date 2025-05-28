@@ -61,6 +61,7 @@ import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModelFactory
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModelFactory
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagViewModelFactory
+import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -118,7 +119,7 @@ class MainActivity : ComponentActivity() {
             this, TagViewModelFactory(
                 tagRepository
             )
-        )[ArtistsViewModel::class.java]
+        )[TagsViewModel::class.java]
 
         setContent {
             val sharedText = intent?.getStringExtra(Intent.EXTRA_TEXT)
@@ -130,6 +131,7 @@ class MainActivity : ComponentActivity() {
                     artistsViewModel,
                     charactersViewModel,
                     navController,
+                    tagsViewModel,
                     sharedText
                 )
             }
@@ -143,6 +145,7 @@ fun MainApp(
     artistsViewModel: ArtistsViewModel,
     charactersViewModel: CharactersViewModel,
     navController: NavHostController,
+    tagsViewModel: TagsViewModel,
     sharedText: String?,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -169,6 +172,7 @@ fun MainApp(
                 submissionsViewModel,
                 artistsViewModel,
                 charactersViewModel,
+                tagsViewModel,
                 sharedText
             )
         }

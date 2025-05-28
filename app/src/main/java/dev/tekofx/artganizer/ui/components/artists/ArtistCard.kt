@@ -31,7 +31,6 @@ fun ArtistCard(
 ) {
     Card(
         modifier = modifier
-            .padding(8.dp)
             .fillMaxWidth()
             .height(150.dp),
         onClick = { onClick() }

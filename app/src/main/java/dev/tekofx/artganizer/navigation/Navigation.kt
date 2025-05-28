@@ -12,7 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import dev.tekofx.artganizer.HandleSharedLink
-import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
@@ -22,9 +21,12 @@ import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -36,6 +38,7 @@ fun Navigation(
     submissionsViewModel: SubmissionsViewModel,
     artistsViewModel: ArtistsViewModel,
     charactersViewModel: CharactersViewModel,
+    tagsViewModel: TagsViewModel,
     sharedText: String?
 ) {
     val urlEncoded = if (sharedText == null) null else URLEncoder.encode(
@@ -161,7 +164,21 @@ fun Navigation(
             route = NavigateDestinations.TAGS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            TagsScreen()
+            TagsScreen(navHostController, tagsViewModel)
+        }
+
+        composable(
+            route = NavigateDestinations.TAG_DETAILS_SCREEN,
+            arguments = listOf(navArgument("tagId") { type = NavType.StringType }),
+            exitTransition = { fadeOut() }
+        ) { backStackEntry ->
+            val tagId = backStackEntry.arguments?.getString("tagId")
+            if (tagId == null) {
+                navHostController.popBackStack()
+                return@composable
+            }
+            tagsViewModel.getTagById(tagId.toLong())
+            TagDetailsScreen(tagsViewModel, navHostController)
         }
 
 

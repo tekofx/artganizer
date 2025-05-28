@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.ui.viewmodels.tags
 
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -126,15 +125,13 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
         }
     }
 
-    suspend fun saveTag(context: Context) {
-
-
+    suspend fun saveTag() {
         if (validateInput()) {
             repository.insertTag(newTagUiState.tagDetails.toTagWithSubmissions().tag)
         }
     }
 
-    suspend fun editTag(context: Context) {
+    suspend fun editTag() {
 
         if (validateInput(currentTagUiState.tagDetails)) {
             Log.d("TagsViewModel", "editTag: ${currentTagUiState.tagDetails}")
@@ -146,7 +143,7 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
         }
     }
 
-    fun deleteTag(context: Context, tag: TagUiState) {
+    fun deleteTag(tag: TagUiState) {
         viewModelScope.launch {
             repository.deleteTag(tag.toTagWithSubmissions().tag)
         }
