@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components.tags
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
 
@@ -75,15 +77,27 @@ fun TagAutocomplete() {
                         isFocused = focusState.isFocused
                     }
                     .onKeyEvent { keyEvent ->
-                        if (keyEvent.nativeKeyEvent.keyCode == 67 && value.isEmpty() && selectedItems.value.isNotEmpty()
-                        ) {
-                            selectedItems.value = selectedItems.value.dropLast(1)
-                            true
-                        } else {
-                            false
+                        Log.d("TagAutocomplete", "Key event: ${keyEvent.nativeKeyEvent.keyCode}")
+                        when {
+                            keyEvent.nativeKeyEvent.keyCode == 67 && value.isEmpty() && selectedItems.value.isNotEmpty() -> {
+                                selectedItems.value = selectedItems.value.dropLast(1)
+                                true
+                            }
+
+                            keyEvent.nativeKeyEvent.keyCode == 66 && value.isNotEmpty() -> { // 66 is the keyCode for Enter
+                                val capitalizedValue = value.replaceFirstChar { it.uppercaseChar() }
+                                if (capitalizedValue !in selectedItems.value) {
+                                    selectedItems.value = selectedItems.value + capitalizedValue
+                                }
+                                value = "" // Clear the input after adding
+                                true
+                            }
+
+                            else -> false
                         }
                     },
-                keyboardOptions = KeyboardOptions.Default,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.None), // Prevents keyboard from closing
+
             )
         }
         if (isFocused) {
@@ -98,6 +112,7 @@ fun TagAutocomplete() {
                                 text = item,
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .padding(10.dp)
                                     .clickable(
                                         onClick = {
                                             if (item !in selectedItems.value) {
