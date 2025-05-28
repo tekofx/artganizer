@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.ui.components.input.form.FormAvatar
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
@@ -88,37 +89,38 @@ fun CharacterFormFields(
             value = characterDetails.name,
             onValueChange = { onValueChange(characterDetails.copy(name = it)) },
             label = "Name",
-            enabled = enabled
+            enabled = enabled,
         )
         FormTextfield(
             value = characterDetails.description ?: "",
             onValueChange = { onValueChange(characterDetails.copy(description = it)) },
             label = "Description",
-            enabled = enabled
+            enabled = enabled,
         )
         FormTextfield(
             value = characterDetails.species ?: "",
             onValueChange = { onValueChange(characterDetails.copy(species = it)) },
             label = "Species",
-            enabled = enabled
+            enabled = enabled,
         )
         FormTextfield(
             value = characterDetails.gender ?: "",
             onValueChange = { onValueChange(characterDetails.copy(gender = it)) },
             label = "Gender",
-            enabled = enabled
+            enabled = enabled,
         )
         FormTextfield(
             value = characterDetails.pronouns ?: "",
             onValueChange = { onValueChange(characterDetails.copy(pronouns = it)) },
             label = "Pronouns",
-            enabled = enabled
+            enabled = enabled,
         )
         FormTextfield(
             value = characterDetails.height ?: "",
             onValueChange = { onValueChange(characterDetails.copy(height = it)) },
             label = "Height",
-            enabled = enabled
+            enabled = enabled,
+            imeAction = ImeAction.Done,
         )
     }
 }
