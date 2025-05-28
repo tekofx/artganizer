@@ -22,6 +22,7 @@ import dev.tekofx.artganizer.ui.components.input.CharactersSelect
 import dev.tekofx.artganizer.ui.components.input.RatingInput
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
+import dev.tekofx.artganizer.ui.components.tags.TagAutocomplete
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -98,9 +99,13 @@ fun SubmissionFormFields(
     modifier: Modifier = Modifier,
     queryText: String,
     onValueChange: (SubmissionDetails) -> Unit = {},
+
+    // Artists
     artists: List<ArtistWithSubmissions>,
     areThereArtists: Boolean,
     onArtistSearchTextChange: (String) -> Unit,
+
+    // Characters
     characters: List<CharacterWithSubmissions>,
     areThereCharacters: Boolean,
     onCharacterSearchTextChange: (String) -> Unit = {},
@@ -167,5 +172,6 @@ fun SubmissionFormFields(
                 )
             }
         }
+        TagAutocomplete()
     }
 }
