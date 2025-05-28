@@ -280,6 +280,7 @@ class SubmissionsViewModel(
                 submissions.value.selectedSubmissions.contains(it.submission.submissionId)
             }
             submissionRepo.deleteSubmissions(context, selectedSubmissions)
+            clearSelectedSubmissions()
         }
     }
 
