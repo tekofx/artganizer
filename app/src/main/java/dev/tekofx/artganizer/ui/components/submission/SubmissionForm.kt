@@ -150,7 +150,7 @@ fun SubmissionFormFields(
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text("Artist", style = MaterialTheme.typography.headlineSmall)
+                Text("Character", style = MaterialTheme.typography.headlineSmall)
                 CharactersSelect(
                     title = "Select a Character",
                     selectedItems = submissionDetails.characters,
