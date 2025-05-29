@@ -43,7 +43,7 @@ fun TagCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.share).asPainterResource(),
+                    IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
                     contentDescription = null,
                     modifier = Modifier.size(30.dp)
                 )
