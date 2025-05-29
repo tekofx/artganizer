@@ -2,18 +2,18 @@
 agp = "8.10.1"
 coilCompose = "3.2.0"
 gson = "2.11.0"
-kotlin = "2.0.21"
+kotlin = "2.1.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.7"
+lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
-composeBom = "2024.09.00"
-navigationCompose = "2.8.9"
+composeBom = "2025.05.01"
+navigationCompose = "2.9.0"
 paletteKtx = "1.0.0"
-room = "2.6.1"
-ksp = "2.0.21-1.0.26"
+room = "2.7.1"
+ksp = "2.1.20-1.0.32"
 zoomableImageCoil3 = "0.16.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,7 +37,6 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-room-compiler = { module = "androidx.room:room-compiler" }
 zoomable-image-coil3 = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "zoomableImageCoil3" }
 
 [plugins]
