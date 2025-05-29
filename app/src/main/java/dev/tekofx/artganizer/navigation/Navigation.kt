@@ -21,6 +21,7 @@ import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -179,6 +180,13 @@ fun Navigation(
             }
             tagsViewModel.getTagById(tagId.toLong())
             TagDetailsScreen(tagsViewModel, navHostController)
+        }
+
+        composable(
+            route = NavigateDestinations.TAG_CREATION_SCREEN,
+            exitTransition = { fadeOut() }
+        ) {
+            TagCreationScreen(navHostController, tagsViewModel)
         }
 
 
