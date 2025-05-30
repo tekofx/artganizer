@@ -87,9 +87,13 @@ fun TagAutocomplete() {
                             }
 
                             keyEvent.nativeKeyEvent.keyCode == 66 && value.isNotEmpty() -> { // 66 is the keyCode for Enter
-                                val capitalizedValue = value.replaceFirstChar { it.uppercaseChar() }
-                                if (capitalizedValue !in selectedItems.value) {
-                                    selectedItems.value = selectedItems.value + capitalizedValue
+                                val matchingItem =
+                                    items.firstOrNull { it.contains(value, ignoreCase = true) }
+                                val itemToAdd =
+                                    matchingItem?.replaceFirstChar { it.uppercaseChar() }
+                                        ?: value.replaceFirstChar { it.uppercaseChar() }
+                                if (itemToAdd !in selectedItems.value) {
+                                    selectedItems.value = selectedItems.value + itemToAdd
                                 }
                                 value = "" // Clear the input after adding
                                 true
