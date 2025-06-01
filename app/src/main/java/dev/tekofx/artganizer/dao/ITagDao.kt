@@ -31,4 +31,8 @@ interface ITagDao {
     // DELETE
     @Delete
     suspend fun delete(tag: Tag)
+
+    // OTHER
+    @Query("SELECT COUNT(*) > 0 FROM tags WHERE name = :tagName")
+    fun doesTagExist(tagName: String): Boolean
 }
