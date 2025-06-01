@@ -85,8 +85,9 @@ class MainActivity : ComponentActivity() {
         val submissionRepository by lazy {
             SubmissionRepository(
                 AppDatabase.getDatabase(this).submissionDao(),
+                AppDatabase.getDatabase(this).imageDao(),
                 AppDatabase.getDatabase(this).characterSubmissionCrossRefDao(),
-                AppDatabase.getDatabase(this).imageDao()
+                AppDatabase.getDatabase(this).tagSubmissionCrossRefDao()
             )
         }
 

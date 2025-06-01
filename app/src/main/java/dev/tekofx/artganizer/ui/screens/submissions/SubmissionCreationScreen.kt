@@ -27,6 +27,7 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -34,7 +35,8 @@ fun SubmissionCreationScreen(
     navHostController: NavHostController,
     submissionsViewModel: SubmissionsViewModel,
     artistsViewModel: ArtistsViewModel,
-    charactersViewModel: CharactersViewModel
+    charactersViewModel: CharactersViewModel,
+    tagsViewModel: TagsViewModel
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -78,6 +80,7 @@ fun SubmissionCreationScreen(
                 uris = submissionsViewModel.uris,
                 artistsViewModel = artistsViewModel,
                 charactersViewModel = charactersViewModel,
+                tagsViewModel = tagsViewModel,
                 submissionDetails = submissionsViewModel.newSubmissionDetails,
                 onItemValueChange = { newValue -> submissionsViewModel.updateNewUiState(newValue) },
                 onSaveClick = {

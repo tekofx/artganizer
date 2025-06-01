@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,7 @@ import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
+import dev.tekofx.artganizer.entities.Tag
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.SmallCard
@@ -44,6 +47,7 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmissionWithArtist
+import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.formatFileSize
 import dev.tekofx.artganizer.utils.shareImage
@@ -56,6 +60,7 @@ fun SubmissionDetailsScreen(
     submissionsViewModel: SubmissionsViewModel,
     artistsViewModel: ArtistsViewModel,
     charactersViewModel: CharactersViewModel,
+    tagsViewModel: TagsViewModel
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -107,6 +112,7 @@ fun SubmissionDetailsScreen(
                     uris = submissionsViewModel.uris,
                     artistsViewModel = artistsViewModel,
                     charactersViewModel = charactersViewModel,
+                    tagsViewModel = tagsViewModel,
                     submissionDetails = submissionsViewModel.editingSubmissionDetails,
                     onItemValueChange = {
                         submissionsViewModel.updateEditingUiState(it)
@@ -128,6 +134,9 @@ fun SubmissionDetailsScreen(
                     },
                     onCharacterCardClick = { characterId ->
                         navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/$characterId")
+                    },
+                    onTagCardClick = { tagId ->
+                        navHostController.navigate("${NavigateDestinations.TAGS_SCREEN}/$tagId")
                     },
                     onDelete = {
                         submissionsViewModel.setShowPopup(true)
@@ -151,6 +160,7 @@ fun SubmissionInfo(
     submission: SubmissionWithArtist,
     onArtistCardClick: (Long) -> Unit,
     onCharacterCardClick: (Long) -> Unit,
+    onTagCardClick: (Long) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     currentImageIndex: Int,
@@ -206,6 +216,11 @@ fun SubmissionInfo(
         CharactersSection(
             characters = submission.characters,
             onCharacterCardClick = { onCharacterCardClick(it) }
+        )
+
+        TagsSection(
+            tags = submission.tags,
+            onTagClick = { onTagCardClick(it) }
         )
 
         HorizontalDivider(
@@ -320,6 +335,51 @@ fun ArtistSection(
                 onArtistCardClick(artist.artistId)
             }
         )
+    }
+}
+
+@Composable
+fun TagsSection(
+    tags: List<Tag>,
+    onTagClick: (Long) -> Unit
+) {
+    Log.d("TagsSection", "Tags: $tags")
+
+    if (tags.isEmpty()) return
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
+        ) {
+            Icon(
+                IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                contentDescription = "",
+                modifier = Modifier.size(30.dp)
+            )
+            Text(
+                text = "Tags",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineSmall,
+            )
+        }
+        tags.forEach { tag ->
+
+            Card(
+                onClick = { onTagClick(tag.tagId) }
+            ) {
+                Text(
+                    text = tag.name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 }
 

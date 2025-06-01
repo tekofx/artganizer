@@ -70,5 +70,6 @@ fun SubmissionWithArtist.toSubmissionDetails(): SubmissionDetails = SubmissionDe
     rating = submission.rating,
     artist = artist,
     images = images,
-    characters = characters
+    characters = characters,
+    tags = tags
 )

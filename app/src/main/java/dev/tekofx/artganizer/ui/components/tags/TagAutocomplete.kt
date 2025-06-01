@@ -30,25 +30,20 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.entities.Tag
 import dev.tekofx.artganizer.ui.IconResource
 
 
-val items = listOf(
-    "Avatar",
-    "Sketch",
-    "Sticker",
-    "Fullbody",
-    "Illustration",
-    "Concept Art",
-    "Digital Art",
-    "Traditional Art",
-)
-
 @Composable
-fun TagAutocomplete() {
+fun TagAutocomplete(
+    tags: List<Tag>,
+    selectedTags: List<Tag>,
+    onSelectedTagsChange: (List<Tag>) -> Unit,
+    onAddTag: (String) -> Unit
+
+) {
     var value by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
-    val selectedItems = remember { mutableStateOf(emptyList<String>()) }
 
     Column {
         FlowRow(
@@ -60,8 +55,8 @@ fun TagAutocomplete() {
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            selectedItems.value.map { item ->
-                SelectedItem(name = item)
+            selectedTags.map { tag ->
+                SelectedItem(name = tag.name)
             }
             OutlinedTextField(
                 value = value,
@@ -81,19 +76,24 @@ fun TagAutocomplete() {
                     }
                     .onKeyEvent { keyEvent ->
                         when {
-                            keyEvent.nativeKeyEvent.keyCode == 67 && value.isEmpty() && selectedItems.value.isNotEmpty() -> {
-                                selectedItems.value = selectedItems.value.dropLast(1)
+                            keyEvent.nativeKeyEvent.keyCode == 67 && value.isEmpty() && selectedTags.isNotEmpty() -> {
+                                onSelectedTagsChange(selectedTags.dropLast(1))
                                 true
                             }
 
                             keyEvent.nativeKeyEvent.keyCode == 66 && value.isNotEmpty() -> { // 66 is the keyCode for Enter
                                 val matchingItem =
-                                    items.firstOrNull { it.contains(value, ignoreCase = true) }
-                                val itemToAdd =
-                                    matchingItem?.replaceFirstChar { it.uppercaseChar() }
-                                        ?: value.replaceFirstChar { it.uppercaseChar() }
-                                if (itemToAdd !in selectedItems.value) {
-                                    selectedItems.value = selectedItems.value + itemToAdd
+                                    tags.firstOrNull { it.name.contains(value, ignoreCase = true) }
+
+                                // Check if another tag exists with the same name
+                                if (matchingItem != null && matchingItem !in selectedTags) {
+                                    onSelectedTagsChange(selectedTags + matchingItem)
+                                    onAddTag(matchingItem.name)
+                                } else if (value !in selectedTags.map { it.name }) {
+                                    val newTag =
+                                        Tag(name = value.replaceFirstChar { it.uppercaseChar() })
+                                    onSelectedTagsChange(selectedTags + newTag)
+                                    onAddTag(newTag.name)
                                 }
                                 value = "" // Clear the input after adding
                                 true
@@ -111,7 +111,7 @@ fun TagAutocomplete() {
                 modifier = Modifier.heightIn(max = 100.dp)
             ) {
                 LazyColumn {
-                    val filteredItems = items.filter { it.contains(value, ignoreCase = true) }
+                    val filteredItems = tags.filter { it.name.contains(value, ignoreCase = true) }
                     if (filteredItems.isEmpty()) {
                         item {
                             val capitalizedValue =
@@ -119,25 +119,29 @@ fun TagAutocomplete() {
                             ListItem(
                                 "Create tag $capitalizedValue",
                                 onClick = {
-                                    if (value !in selectedItems.value) {
-                                        selectedItems.value = selectedItems.value + capitalizedValue
+                                    // If tag not in tags list, create it
+                                    if (capitalizedValue !in tags.map { it.name }) {
+                                        val newTag = Tag(name = capitalizedValue)
+                                        onSelectedTagsChange(selectedTags + newTag)
+                                        onAddTag(newTag.name)
                                     }
                                     value = "" // Clear the input after selection
                                 }
                             )
                         }
                     } else {
-                        items(items.size) { index ->
-                            val item = items[index]
-                            if (item.contains(value, ignoreCase = true)) {
+                        items(tags.size) { index ->
+                            val item = tags[index]
+                            if (item.name.contains(value, ignoreCase = true)) {
                                 ListItem(
-                                    item,
+                                    item.name,
                                     onClick = {
                                         val capitalizedItem =
-                                            item.replaceFirstChar { it.uppercaseChar() }
-                                        if (item !in selectedItems.value) {
-                                            selectedItems.value =
-                                                selectedItems.value + capitalizedItem
+                                            item.name.replaceFirstChar { it.uppercaseChar() }
+                                        // If tag not in selectedTags, add it
+                                        if (capitalizedItem !in selectedTags.map { it.name }) {
+                                            onSelectedTagsChange(selectedTags + item)
+                                            onAddTag(item.name)
                                         }
                                         value = "" // Clear the input after selection
                                     }

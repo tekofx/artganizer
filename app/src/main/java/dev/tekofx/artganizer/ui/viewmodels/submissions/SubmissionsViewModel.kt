@@ -180,6 +180,7 @@ class SubmissionsViewModel(
                 return@launch
             }
             currentSubmissionDetails = submission.toSubmissionDetails()
+            Log.d("SubmissionsViewModel", "Got submission: ${currentSubmissionDetails.tags}")
             uris = submission.images.map { it.uri }
         }
     }

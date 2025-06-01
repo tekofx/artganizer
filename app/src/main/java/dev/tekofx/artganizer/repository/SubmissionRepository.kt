@@ -1,12 +1,15 @@
 package dev.tekofx.artganizer.repository
 
 import android.content.Context
+import android.util.Log
 import dev.tekofx.artganizer.dao.ICharacterSubmissionCrossRef
 import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
+import dev.tekofx.artganizer.dao.ITagSubmissionCrossRef
 import dev.tekofx.artganizer.entities.CharacterSubmissionCrossRef
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
+import dev.tekofx.artganizer.entities.TagSubmissionCrossRef
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
 import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
@@ -14,8 +17,9 @@ import kotlinx.coroutines.flow.Flow
 
 class SubmissionRepository(
     private val submissionDao: ISubmissionDao,
+    private val imageDao: IImageDao,
     private val characterSubmissionCrossRef: ICharacterSubmissionCrossRef,
-    private val imageDao: IImageDao
+    private val tagSubmissionCrossRef: ITagSubmissionCrossRef
 ) {
 
     // GET
@@ -29,6 +33,8 @@ class SubmissionRepository(
         submissionDao.insert(submission)
 
     suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long {
+
+        Log.d("SubmissionRepository", "Inserting submission details: $submissionDetails")
         val id = insertSubmission(submissionDetails.toSubmission())
         submissionDetails.characters.forEach { character ->
             insertCharacterSubmissionCrossRef(
@@ -38,11 +44,24 @@ class SubmissionRepository(
                 )
             )
         }
+
+        submissionDetails.tags.forEach { tag ->
+            insertTagSubmissionCrossRef(
+                TagSubmissionCrossRef(
+                    tagId = tag.tagId,
+                    submissionId = id
+                )
+            )
+        }
+
         return id
     }
 
     suspend fun insertCharacterSubmissionCrossRef(submission: CharacterSubmissionCrossRef) =
         characterSubmissionCrossRef.insert(submission)
+
+    suspend fun insertTagSubmissionCrossRef(submission: TagSubmissionCrossRef) =
+        tagSubmissionCrossRef.insert(submission)
 
     // UPDATE
     private suspend fun updateSubmission(submission: Submission) =
@@ -51,11 +70,23 @@ class SubmissionRepository(
     suspend fun updateSubmissionWithArtist(submissionWithArtist: SubmissionWithArtist) {
         updateSubmission(submissionWithArtist.submission)
         characterSubmissionCrossRef.deleteCharacterSubmissionCrossRefs(submissionWithArtist.submission.submissionId)
+
+        // Insert new character submission cross references
         submissionWithArtist.characters.forEach { character ->
             insertCharacterSubmissionCrossRef(
                 CharacterSubmissionCrossRef(
                     submissionId = submissionWithArtist.submission.submissionId,
                     characterId = character.characterId
+                )
+            )
+        }
+
+        // Insert new tags submission cross references
+        submissionWithArtist.tags.forEach { tag ->
+            insertTagSubmissionCrossRef(
+                TagSubmissionCrossRef(
+                    tagId = tag.tagId,
+                    submissionId = submissionWithArtist.submission.submissionId
                 )
             )
         }

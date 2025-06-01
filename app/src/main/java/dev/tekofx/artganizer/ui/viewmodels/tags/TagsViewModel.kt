@@ -125,6 +125,22 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
         }
     }
 
+    suspend fun createTag(tagName: String) {
+        newTagUiState = TagUiState(
+            tagDetails = TagDetails(name = tagName),
+            isEntryValid = validateInput(TagDetails(name = tagName))
+        )
+
+        if (validateInput()) {
+            Log.d("TagsViewModel", "createTag: ${newTagUiState.tagDetails}")
+            repository.insertTag(newTagUiState.tagDetails.toTagWithSubmissions().tag)
+            newTagUiState = newTagUiState.copy(
+                tagDetails = TagDetails(),
+                isEntryValid = false
+            )
+        }
+    }
+
     suspend fun saveTag() {
         if (validateInput()) {
             repository.insertTag(newTagUiState.tagDetails.toTagWithSubmissions().tag)
@@ -132,7 +148,6 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
     }
 
     suspend fun editTag() {
-
         if (validateInput(currentTagUiState.tagDetails)) {
             Log.d("TagsViewModel", "editTag: ${currentTagUiState.tagDetails}")
             repository.updateTag(currentTagUiState.tagDetails.toTagWithSubmissions().tag)

@@ -78,7 +78,8 @@ fun Navigation(
                 navHostController,
                 submissionsViewModel,
                 artistsViewModel,
-                charactersViewModel
+                charactersViewModel,
+                tagsViewModel
             )
         }
 
@@ -97,7 +98,8 @@ fun Navigation(
                 navHostController,
                 submissionsViewModel,
                 artistsViewModel,
-                charactersViewModel
+                charactersViewModel,
+                tagsViewModel
             )
         }
 

@@ -21,3 +21,10 @@ fun TagWithSubmissions.toTagDetails(): TagDetails = TagDetails(
     id = tag.tagId,
     name = tag.name
 )
+
+fun TagWithSubmissions.toTag(): Tag = Tag(
+    tagId = tag.tagId,
+    name = tag.name
+)
+
+fun List<TagWithSubmissions>.toListOfTags(): List<Tag> = this.map { it.toTag() }

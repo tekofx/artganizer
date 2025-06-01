@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.BottomSheetScaffold
@@ -28,6 +29,7 @@ import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.entities.Character
+import dev.tekofx.artganizer.entities.Tag
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
@@ -41,6 +43,8 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toListOfCharacters
+import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.tags.toListOfTags
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,18 +54,28 @@ fun SubmissionsForm(
     artistsViewModel: ArtistsViewModel,
     submissionDetails: SubmissionDetails,
     charactersViewModel: CharactersViewModel,
+    tagsViewModel: TagsViewModel,
     currentImageIndex: Int,
     onItemValueChange: (SubmissionDetails) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit = {},
 ) {
     val queryText by artistsViewModel.queryText.collectAsState()
+
+    // Artists
     val artists by artistsViewModel.artists.collectAsState()
-    val characters by charactersViewModel.characters.collectAsState()
     val areThereArtists by artistsViewModel.areThereArtists
-    val areThereCharacters by charactersViewModel.areThereCharacters
     var showArtistsSheet by remember { mutableStateOf(true) }
+
+    // Characters
+    val characters by charactersViewModel.characters.collectAsState()
+    val areThereCharacters by charactersViewModel.areThereCharacters
     var showCharactersSheet by remember { mutableStateOf(false) }
+
+
+    // Tags
+    val tags by tagsViewModel.tags.collectAsState()
+    var showTagsSheet by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
@@ -116,6 +130,28 @@ fun SubmissionsForm(
                 },
                 queryText = queryText,
             )
+            TagsSheet(
+                showTagsSheet = showTagsSheet,
+                tags = tags.toListOfTags(),
+                selectedTags = submissionDetails.tags,
+                onSelectedTagsChange = {
+                    onItemValueChange(
+                        submissionDetails.copy(
+                            tags = it // Update the list of selected tags
+                        )
+                    )
+                },
+                onAddTag = {
+                    scope.launch {
+                        tagsViewModel.createTag(it)
+                    }
+                },
+                closeBottomSheet = {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.hide()
+                    }
+                },
+            )
         }
     ) {
         LazyColumn(
@@ -154,6 +190,14 @@ fun SubmissionsForm(
                         scope.launch {
                             scaffoldState.bottomSheetState.expand()
                         }
+                    },
+                    onAddTagsButton = {
+                        showTagsSheet = true
+                        showArtistsSheet = false
+                        showCharactersSheet = false
+                        scope.launch {
+                            scaffoldState.bottomSheetState.expand()
+                        }
                     }
                 )
             }
@@ -188,7 +232,10 @@ fun SubmissionFormFields(
 
     // Characters
     areThereCharacters: Boolean,
-    onAddCharactersButton: () -> Unit
+    onAddCharactersButton: () -> Unit,
+
+    // Tags
+    onAddTagsButton: () -> Unit
 
 ) {
     Column(
@@ -226,7 +273,8 @@ fun SubmissionFormFields(
 
         TagsInput(
             submissionDetails = submissionDetails,
-            onValueChange = { onValueChange(submissionDetails.copy(tags = it.tags)) }
+            onValueChange = { onValueChange(submissionDetails.copy(tags = it.tags)) },
+            onAddTagsClick = onAddTagsButton
         )
 
     }
@@ -310,10 +358,57 @@ fun CharactersInput(
 @Composable
 fun TagsInput(
     submissionDetails: SubmissionDetails,
+    onAddTagsClick: () -> Unit,
     onValueChange: (SubmissionDetails) -> Unit
 ) {
     Text("Tags", style = MaterialTheme.typography.headlineSmall)
-    TagAutocomplete()
+
+    if (submissionDetails.tags.isEmpty()) {
+        ButtonWithIcon(
+            onClick = onAddTagsClick,
+            iconResource = IconResource.fromDrawableResource(R.drawable.tag_filled),
+            text = "Add Tags",
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun TagsSheet(
+    showTagsSheet: Boolean,
+
+    // Tags
+    tags: List<Tag>,
+    selectedTags: List<Tag> = emptyList(),
+    onSelectedTagsChange: (List<Tag>) -> Unit,
+    onAddTag: (String) -> Unit,
+
+    closeBottomSheet: () -> Unit,
+) {
+    if (showTagsSheet) {
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+                .imePadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text("Select Tags", style = MaterialTheme.typography.headlineSmall)
+            TagAutocomplete(
+                tags = tags,
+                selectedTags = selectedTags,
+                onSelectedTagsChange = onSelectedTagsChange,
+                onAddTag = onAddTag,
+            )
+            ButtonWithIcon(
+                onClick = {
+                    closeBottomSheet()
+                },
+                iconResource = IconResource.fromDrawableResource(R.drawable.x),
+                text = "Close",
+            )
+        }
+    }
 }
 
 @Composable
