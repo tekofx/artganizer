@@ -70,7 +70,8 @@ fun ArtistListSelect(
             onValueChange = { onQueryChange(it) },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            onClear = { onQueryChange("") },
         )
     }
 }

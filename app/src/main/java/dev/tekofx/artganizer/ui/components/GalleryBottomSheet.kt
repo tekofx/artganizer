@@ -18,6 +18,10 @@ fun GalleryBottomSheet() {
             .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        SearchBar(label = { Text("Search Anything") }, queryText = "")
+        SearchBar(
+            label = { Text("Search Anything") }, queryText = "",
+            onValueChange = {},
+            onClear = {}
+        )
     }
 }

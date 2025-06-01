@@ -81,6 +81,9 @@ fun CharactersSelectList(
             SearchBar(
                 queryText = query,
                 onValueChange = { onQueryChange(it) },
+                onClear = {
+                    onQueryChange("")
+                }
             )
         }
     }

@@ -58,7 +58,9 @@ fun ArtistScreen(
             bottomBar = {
                 SearchBar(
                     queryText = queryText,
-                    onValueChange = { artistsViewModel.onSearchTextChanged(it) })
+                    onValueChange = { artistsViewModel.onSearchTextChanged(it) },
+                    onClear = { artistsViewModel.onSearchTextChanged("") },
+                )
             }
         ) {
             LazyColumn {

@@ -52,7 +52,11 @@ fun CharactersScreen(
     ) {
         Scaffold(
             bottomBar = {
-                SearchBar(queryText = "")
+                SearchBar(
+                    queryText = "",
+                    onValueChange = {},
+                    onClear = {},
+                )
             },
             floatingActionButton = {
                 CreateFab(
