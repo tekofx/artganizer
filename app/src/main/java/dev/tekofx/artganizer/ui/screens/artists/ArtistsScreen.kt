@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -63,16 +64,17 @@ fun ArtistScreen(
                 )
             }
         ) {
-            LazyColumn {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(10.dp)
+            ) {
                 items(artists) { artist ->
                     ArtistCard(
                         artist,
                         onClick = {
                             navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.artist.artistId}")
                         },
-                        modifier = Modifier
-                            .animateItem()
-                            .padding(10.dp),
+                        modifier = Modifier.animateItem()
                     )
                 }
             }

@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.tags
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -64,13 +65,15 @@ fun TagsScreen(
                 )
             },
         ) {
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 items(tags) { tag ->
                     TagCard(
                         tag = tag,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         onClick = { navHostController.navigate("${NavigateDestinations.TAGS_SCREEN}/${tag.tag.tagId}") }
                     )
                 }
