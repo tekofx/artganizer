@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -38,6 +40,7 @@ import dev.tekofx.artganizer.ui.components.input.CharactersSelectList
 import dev.tekofx.artganizer.ui.components.input.RatingInput
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
+import dev.tekofx.artganizer.ui.components.tags.SmallTagCard
 import dev.tekofx.artganizer.ui.components.tags.TagAutocomplete
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
@@ -362,7 +365,6 @@ fun TagsInput(
     onValueChange: (SubmissionDetails) -> Unit
 ) {
     Text("Tags", style = MaterialTheme.typography.headlineSmall)
-
     if (submissionDetails.tags.isEmpty()) {
         ButtonWithIcon(
             onClick = onAddTagsClick,
@@ -370,6 +372,24 @@ fun TagsInput(
             text = "Add Tags",
             modifier = Modifier.fillMaxWidth()
         )
+    } else {
+        LazyRow {
+            items(submissionDetails.tags) { tag ->
+                SmallTagCard(
+                    tag,
+                    modifier = Modifier.padding(5.dp),
+                    onClick = onAddTagsClick,
+                    deletable = true,
+                    onClear = {
+                        onValueChange(
+                            submissionDetails.copy(
+                                tags = submissionDetails.tags.filterNot { it.tagId == tag.tagId }
+                            )
+                        )
+                    }
+                )
+            }
+        }
     }
 }
 

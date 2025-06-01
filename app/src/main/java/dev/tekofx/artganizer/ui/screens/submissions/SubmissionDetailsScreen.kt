@@ -9,9 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +44,7 @@ import dev.tekofx.artganizer.ui.components.submission.PaletteColorList
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.components.submission.SubmissionViewer
 import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
+import dev.tekofx.artganizer.ui.components.tags.SmallTagCard
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
@@ -365,18 +367,14 @@ fun TagsSection(
                 style = MaterialTheme.typography.headlineSmall,
             )
         }
-        tags.forEach { tag ->
 
-            Card(
-                onClick = { onTagClick(tag.tagId) }
-            ) {
-                Text(
-                    text = tag.name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(tags) {
+                SmallTagCard(
+                    tag = it,
+                    onClick = { onTagClick(it.tagId) },
                 )
             }
         }
