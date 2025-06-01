@@ -25,6 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.entities.Artist
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
+import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
@@ -57,7 +60,7 @@ fun SubmissionsForm(
     val characters by charactersViewModel.characters.collectAsState()
     val areThereArtists by artistsViewModel.areThereArtists
     val areThereCharacters by charactersViewModel.areThereCharacters
-    var showArtistsSheet by remember { mutableStateOf(false) }
+    var showArtistsSheet by remember { mutableStateOf(true) }
     var showCharactersSheet by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
@@ -72,78 +75,47 @@ fun SubmissionsForm(
         scaffoldState = scaffoldState,
         sheetSwipeEnabled = false,
         sheetDragHandle = null,
+        sheetContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         sheetContent = {
-            if (showArtistsSheet) {
-                Column(
-                    modifier = Modifier.padding(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Text("Select Artist", style = MaterialTheme.typography.headlineSmall)
-                    ArtistListSelect(
-                        items = artists,
-                        onQueryChange = { artistsViewModel.onSearchTextChanged(it) },
-                        onArtistClick = { artist ->
-                            onItemValueChange(
-                                submissionDetails.copy(
-                                    artistId = artist.artistId,
-                                    artist = artist
-                                )
-                            )
-                            scope.launch {
-                                scaffoldState.bottomSheetState.hide()
-                            }
-                        },
-                        query = queryText,
+            ArtistSheet(
+                showArtistsSheet = showArtistsSheet,
+                artists = artists,
+                onSearch = { artistsViewModel.onSearchTextChanged(it) },
+                onItemValueChange = { artist ->
+                    onItemValueChange(
+                        submissionDetails.copy(
+                            artistId = artist.artistId,
+                            artist = artist
+                        )
                     )
-                    ButtonWithIcon(
-                        onClick = {
-                            scope.launch {
-                                scaffoldState.bottomSheetState.hide()
-                            }
-                        },
-                        iconResource = IconResource.fromDrawableResource(R.drawable.x),
-                        text = "Close",
+                },
+                closeBottomSheet = {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.hide()
+                    }
+                },
+                queryText = queryText,
+            )
+
+            CharactersSheet(
+                showCharactersSheet = showCharactersSheet,
+                characters = characters.toListOfCharacters(),
+                selectedCharacters = submissionDetails.characters,
+                onSearch = { charactersViewModel.onSearchTextChanged(it) },
+                onItemValueChange = { selectedItems ->
+                    onItemValueChange(
+                        submissionDetails.copy(
+                            characters = selectedItems // Update the list of selected characters
+                        )
                     )
-
-                }
-            }
-
-            if (showCharactersSheet) {
-                Column(
-                    modifier = Modifier.padding(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Text("Select Characters", style = MaterialTheme.typography.headlineSmall)
-                    CharactersSelectList(
-                        selectedItems = submissionDetails.characters,
-                        title = "Select Characters",
-                        items = characters.toListOfCharacters(),
-                        onItemsSelected = { selectedItems ->
-                            onItemValueChange(
-                                submissionDetails.copy(
-                                    characters = selectedItems // Update the list of selected characters
-                                )
-                            )
-                        },
-                        onQueryChange = { charactersViewModel.onSearchTextChanged(it) },
-                        query = queryText,
-                    )
-
-                    ButtonWithIcon(
-                        onClick = {
-                            scope.launch {
-                                scaffoldState.bottomSheetState.hide()
-                            }
-                        },
-                        iconResource = IconResource.fromDrawableResource(R.drawable.check),
-                        text = "Ok",
-                    )
-
-
-                }
-            }
+                },
+                closeBottomSheet = {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.hide()
+                    }
+                },
+                queryText = queryText,
+            )
         }
     ) {
         LazyColumn(
@@ -169,14 +141,14 @@ fun SubmissionsForm(
                     modifier = Modifier.fillMaxWidth(),
                     areThereArtists = areThereArtists,
                     areThereCharacters = areThereCharacters,
-                    artistsCardClick = {
+                    onAddArtistButton = {
                         showArtistsSheet = true
                         showCharactersSheet = false
                         scope.launch {
                             scaffoldState.bottomSheetState.expand()
                         }
                     },
-                    charactersCardClick = {
+                    onAddCharactersButton = {
                         showCharactersSheet = true
                         showArtistsSheet = false
                         scope.launch {
@@ -212,11 +184,11 @@ fun SubmissionFormFields(
 
     // Artists
     areThereArtists: Boolean,
-    artistsCardClick: () -> Unit,
+    onAddArtistButton: () -> Unit,
 
     // Characters
     areThereCharacters: Boolean,
-    charactersCardClick: () -> Unit
+    onAddCharactersButton: () -> Unit
 
 ) {
     Column(
@@ -238,49 +210,184 @@ fun SubmissionFormFields(
             rating = submissionDetails.rating,
             onRatingChange = { onValueChange(submissionDetails.copy(rating = it)) },
         )
-        if (areThereArtists) {
-            Column {
-                Text("Artist", style = MaterialTheme.typography.headlineSmall)
-                SmallCard(
-                    title = submissionDetails.artist?.name ?: " No Artist Selected",
-                    imagePath = submissionDetails.artist?.imagePath,
-                    onClick = artistsCardClick,
-                    deletable = true,
-                    onClear = {}
-                )
-            }
-        }
-        if (areThereCharacters) {
-            if (submissionDetails.characters.isNotEmpty()) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    submissionDetails.characters.forEach { item ->
-                        SmallCard(
-                            title = item.name,
-                            imagePath = item.imagePath,
-                            onClick = charactersCardClick,
-                            deletable = true,
-                            onClear = {}
+
+        ArtistInput(
+            areThereArtists = areThereArtists,
+            submissionDetails = submissionDetails,
+            onAddArtistButton = onAddArtistButton,
+            onValueChange = onValueChange
+        )
+        CharactersInput(
+            areThereCharacters = areThereCharacters,
+            submissionDetails = submissionDetails,
+            onAddCharactersButton = onAddCharactersButton,
+            onValueChange = onValueChange
+        )
+
+        TagsInput(
+            submissionDetails = submissionDetails,
+            onValueChange = { onValueChange(submissionDetails.copy(tags = it.tags)) }
+        )
+
+    }
+}
+
+@Composable
+fun ArtistInput(
+    areThereArtists: Boolean,
+    submissionDetails: SubmissionDetails,
+    onAddArtistButton: () -> Unit,
+    onValueChange: (SubmissionDetails) -> Unit
+) {
+    if (areThereArtists) {
+        Text("Artist", style = MaterialTheme.typography.headlineSmall)
+        if (submissionDetails.artist == null) {
+            ButtonWithIcon(
+                onClick = onAddArtistButton,
+                iconResource = IconResource.fromDrawableResource(R.drawable.palette_filled),
+                text = "Add Artist",
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
+            SmallCard(
+                title = submissionDetails.artist.name,
+                imagePath = submissionDetails.artist.imagePath,
+                onClick = onAddArtistButton,
+                deletable = true,
+                onClear = {
+                    onValueChange(
+                        submissionDetails.copy(
+                            artistId = null,
+                            artist = null
                         )
-                    }
-                }
-            } else {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Text(
-                        text = "Characters",
-                        style = MaterialTheme.typography.headlineSmall
                     )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun CharactersInput(
+    areThereCharacters: Boolean,
+    submissionDetails: SubmissionDetails,
+    onAddCharactersButton: () -> Unit,
+    onValueChange: (SubmissionDetails) -> Unit
+) {
+    if (areThereCharacters) {
+        Text("Characters", style = MaterialTheme.typography.headlineSmall)
+        if (submissionDetails.characters.isEmpty()) {
+            ButtonWithIcon(
+                onClick = onAddCharactersButton,
+                iconResource = IconResource.fromDrawableResource(R.drawable.paw_filled),
+                text = "Add Characters",
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                submissionDetails.characters.forEach { item ->
                     SmallCard(
-                        title = "No Characters Selected",
-                        imagePath = null,
-                        onClick = charactersCardClick
+                        title = item.name,
+                        imagePath = item.imagePath,
+                        onClick = onAddCharactersButton,
+                        deletable = true,
+                        onClear = {
+                            onValueChange(
+                                submissionDetails.copy(
+                                    characters = submissionDetails.characters.filterNot { it.characterId == item.characterId }
+                                )
+                            )
+                        }
                     )
                 }
             }
         }
-        TagAutocomplete()
+    }
+}
+
+@Composable
+fun TagsInput(
+    submissionDetails: SubmissionDetails,
+    onValueChange: (SubmissionDetails) -> Unit
+) {
+    Text("Tags", style = MaterialTheme.typography.headlineSmall)
+    TagAutocomplete()
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun ArtistSheet(
+    showArtistsSheet: Boolean,
+    artists: List<ArtistWithSubmissions>,
+    onSearch: (String) -> Unit,
+    onItemValueChange: (Artist) -> Unit,
+    closeBottomSheet: () -> Unit,
+    queryText: String
+) {
+    if (showArtistsSheet) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text("Select Artist", style = MaterialTheme.typography.headlineSmall)
+            ArtistListSelect(
+                items = artists,
+                onQueryChange = { onSearch(it) },
+                onArtistClick = { artist ->
+                    onItemValueChange(artist)
+                    closeBottomSheet()
+                },
+                query = queryText,
+            )
+            ButtonWithIcon(
+                onClick = {
+                    closeBottomSheet()
+                },
+                iconResource = IconResource.fromDrawableResource(R.drawable.x),
+                text = "Close",
+            )
+
+        }
+    }
+}
+
+@Composable
+fun CharactersSheet(
+    showCharactersSheet: Boolean,
+    characters: List<Character>,
+    selectedCharacters: List<Character>,
+    onSearch: (String) -> Unit,
+    onItemValueChange: (List<Character>) -> Unit,
+    closeBottomSheet: () -> Unit,
+    queryText: String
+) {
+    if (showCharactersSheet) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text("Select Characters", style = MaterialTheme.typography.headlineSmall)
+            CharactersSelectList(
+                selectedItems = selectedCharacters,
+                title = "Select Characters",
+                items = characters,
+                onItemsSelected = { selectedItems ->
+                    onItemValueChange(selectedItems)
+                },
+                onQueryChange = { onSearch(it) },
+                query = queryText,
+            )
+            ButtonWithIcon(
+                onClick = {
+                    closeBottomSheet()
+                },
+                iconResource = IconResource.fromDrawableResource(R.drawable.x),
+                text = "Close",
+            )
+        }
     }
 }
