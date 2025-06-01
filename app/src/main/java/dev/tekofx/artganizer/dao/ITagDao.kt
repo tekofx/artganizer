@@ -21,7 +21,7 @@ interface ITagDao {
     @Query("SELECT * FROM tags WHERE tagId = :id")
     suspend fun getTagById(id: Long): TagWithSubmissions?
 
-    @Query("SELECT * FROM tags ")
+    @Query("SELECT * FROM tags ORDER BY name ASC")
     fun getTags(): Flow<List<TagWithSubmissions>>
 
     // UPDATE

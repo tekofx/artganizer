@@ -23,7 +23,7 @@ interface ICharacterDao {
     fun getAllCharacters(): Flow<List<Character>>
 
     @Transaction
-    @Query("SELECT * FROM characters")
+    @Query("SELECT * FROM characters ORDER BY name ASC")
     fun getAllCharactersWithSubmissions(): Flow<List<CharacterWithSubmissions>>
 
     @Transaction
