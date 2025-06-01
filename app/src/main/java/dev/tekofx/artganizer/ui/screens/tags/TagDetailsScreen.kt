@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -105,13 +107,24 @@ fun TagInfo(
     ) {
 
         item {
-            Text(
-                text = tagWithSubmissions.tag.name,
-                style = MaterialTheme.typography.displayMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                    contentDescription = "",
+                    modifier = Modifier.size(50.dp)
+                )
+                Text(
+                    text = tagWithSubmissions.tag.name,
+                    style = MaterialTheme.typography.displayMedium,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
         item {
             Row(
