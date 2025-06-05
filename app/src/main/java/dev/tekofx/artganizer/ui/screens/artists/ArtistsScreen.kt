@@ -3,6 +3,8 @@ package dev.tekofx.artganizer.ui.screens.artists
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,7 +24,7 @@ import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
-import dev.tekofx.artganizer.ui.components.input.SearchBar
+import dev.tekofx.artganizer.ui.components.input.ThinSearchBar
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 
 
@@ -57,16 +59,23 @@ fun ArtistScreen(
                 )
             },
             bottomBar = {
-                SearchBar(
-                    queryText = queryText,
-                    onValueChange = { artistsViewModel.onSearchTextChanged(it) },
-                    onClear = { artistsViewModel.onSearchTextChanged("") },
-                )
+                Row(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .padding(horizontal = 10.dp),
+
+                    ) {
+                    ThinSearchBar(
+                        onClear = { artistsViewModel.onSearchTextChanged("") },
+                        state = artistsViewModel.state
+                    )
+                }
             }
         ) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier
+                    .padding(10.dp)
             ) {
                 items(artists) { artist ->
                     ArtistCard(
@@ -74,7 +83,7 @@ fun ArtistScreen(
                         onClick = {
                             navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.artist.artistId}")
                         },
-                        modifier = Modifier.animateItem()
+                        //modifier = Modifier.animateItem()
                     )
                 }
             }

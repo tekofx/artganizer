@@ -3,23 +3,26 @@ package dev.tekofx.artganizer.ui.viewmodels.artists
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.repository.ArtistRepository
 import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import dev.tekofx.artganizer.utils.saveThumbnail
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
+@OptIn(FlowPreview::class)
 class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
 
     // Data states
@@ -28,19 +31,29 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     var currentArtistUiState by mutableStateOf(ArtistUiState())
         private set
 
+    val state = TextFieldState()
+
+
     // UI State
     val showPopup = MutableStateFlow(false)
     val showEditArtist = MutableStateFlow(false)
 
     // Inputs
-    private val _queryText = MutableStateFlow("")
-    val queryText = _queryText.asStateFlow()
+    val queryText = snapshotFlow {
+        state.text.toString()
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        ""
+    )
+
+    //val queryText = _queryText.asStateFlow()
 
     // Data
     val areThereArtists = mutableStateOf(false)
     private val _artists = MutableStateFlow<List<ArtistWithSubmissions>>(emptyList())
     val artists = _artists
-        .combine(_queryText) { artists, query ->
+        .combine(queryText) { artists, query ->
             if (query.isBlank()) {
                 artists
             } else {
@@ -80,7 +93,7 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
      * Callback of TextField
      */
     fun onSearchTextChanged(text: String) {
-        _queryText.value = text
+        //_queryText.value = text
     }
 
     //////////////////////// Setters ////////////////////////

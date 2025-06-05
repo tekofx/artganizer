@@ -16,6 +16,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -24,7 +25,6 @@ import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.characters.CharacterCard
 import dev.tekofx.artganizer.ui.components.input.SearchBar
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +35,7 @@ fun CharactersScreen(
 ) {
 
     val characters = charactersViewModel.characters.collectAsState()
+    val queryText by charactersViewModel.queryText.collectAsState()
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -53,9 +54,9 @@ fun CharactersScreen(
         Scaffold(
             bottomBar = {
                 SearchBar(
-                    queryText = "",
-                    onValueChange = {},
-                    onClear = {},
+                    queryText = queryText,
+                    onValueChange = { charactersViewModel.onSearchTextChanged(it) },
+                    onClear = { charactersViewModel.onSearchTextChanged("") },
                 )
             },
             floatingActionButton = {
