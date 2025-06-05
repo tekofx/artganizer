@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +27,6 @@ import dev.tekofx.artganizer.ui.components.input.ThinSearchBar
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtistScreen(
@@ -36,7 +34,6 @@ fun ArtistScreen(
 ) {
 
     val artists by artistsViewModel.artists.collectAsState()
-    val queryText by artistsViewModel.queryText.collectAsState()
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -71,11 +68,12 @@ fun ArtistScreen(
                     )
                 }
             }
-        ) {
+        ) { innerPaddingValues ->
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .padding(10.dp)
+                    .padding(bottom = innerPaddingValues.calculateBottomPadding())
             ) {
                 items(artists) { artist ->
                     ArtistCard(
