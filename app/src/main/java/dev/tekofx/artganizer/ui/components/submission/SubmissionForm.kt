@@ -183,6 +183,7 @@ fun SubmissionsForm(
                     onAddArtistButton = {
                         showArtistsSheet = true
                         showCharactersSheet = false
+                        showTagsSheet = false
                         scope.launch {
                             scaffoldState.bottomSheetState.expand()
                         }
@@ -190,6 +191,7 @@ fun SubmissionsForm(
                     onAddCharactersButton = {
                         showCharactersSheet = true
                         showArtistsSheet = false
+                        showTagsSheet = false
                         scope.launch {
                             scaffoldState.bottomSheetState.expand()
                         }
