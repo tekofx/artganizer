@@ -1,6 +1,7 @@
 [versions]
 agp = "8.10.1"
 coilCompose = "3.2.0"
+foundation = "1.8.2"
 gson = "2.11.0"
 kotlin = "2.1.20"
 coreKtx = "1.16.0"
@@ -17,6 +18,7 @@ ksp = "2.1.20-1.0.32"
 zoomableImageCoil3 = "0.16.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 androidx-palette-ktx = { module = "androidx.palette:palette-ktx", version.ref = "paletteKtx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }

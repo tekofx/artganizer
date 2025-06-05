@@ -36,12 +36,16 @@ fun InteractiveGallery(
     onImageClick: (Long) -> Unit,
     onSelectImage: (Long) -> Unit
 ) {
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        items(submissions.submissions) { submission ->
+        items(
+            items = submissions.submissions,
+            key = { it.submission.submissionId }
+        ) { submission ->
             InteractiveGalleryItem(
                 submission = submission,
                 selected = submissions.selectedSubmissions.contains(submission.submission.submissionId),
@@ -55,7 +59,8 @@ fun InteractiveGallery(
                 },
                 onLongClick = {
                     onSelectImage(submission.submission.submissionId)
-                }
+                },
+                modifier = Modifier.animateItem() // Add animation for item placement
             )
         }
     }
@@ -68,9 +73,10 @@ fun InteractiveGalleryItem(
     selected: Boolean,
     isSelecting: Boolean,
     onImageClick: (Long) -> Unit,
-    onLongClick: (Long) -> Unit
+    onLongClick: (Long) -> Unit,
+    modifier: Modifier = Modifier // Accept modifier for animation
 ) {
-    Box {
+    Box(modifier = modifier) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(submission.submission.thumbnail)

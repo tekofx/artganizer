@@ -73,4 +73,7 @@ dependencies {
 
     // Palette
     implementation(libs.androidx.palette.ktx)
+
+    // Animate Item Placement in Gallery
+    implementation(libs.androidx.foundation)
 }
