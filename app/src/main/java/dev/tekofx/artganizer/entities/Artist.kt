@@ -12,3 +12,15 @@ data class Artist(
     val imagePath: Uri?,
     val socialNetworks: List<String>,
 )
+
+
+fun Artist.getSocialShareText(): String {
+    return buildString {
+        append("\uD83C\uDFA8: ")
+        if (socialNetworks.isNotEmpty()) {
+            append(socialNetworks.first())
+        } else {
+            append(name)
+        }
+    }
+}

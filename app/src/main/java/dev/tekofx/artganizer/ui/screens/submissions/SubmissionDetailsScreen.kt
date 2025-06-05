@@ -34,6 +34,7 @@ import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.entities.Tag
+import dev.tekofx.artganizer.entities.getSocialShareText
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.SmallCard
@@ -242,7 +243,8 @@ fun SubmissionInfo(
                 onClick = {
                     shareImage(
                         context = context,
-                        imageUri = submission.images[currentImageIndex].uri
+                        imageUri = submission.images[currentImageIndex].uri,
+                        text = submission.artist?.getSocialShareText()
                     )
                 },
                 text = "Share",
