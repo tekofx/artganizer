@@ -10,5 +10,5 @@ data class TagUiState(
 
 fun TagUiState.toTagWithSubmissions(): TagWithSubmissions = TagWithSubmissions(
     tag = tagDetails.toTagWithSubmissions().tag,
-    submissions = tagDetails.toTagWithSubmissions().submissions
+    submissions = tagDetails.submissions
 )

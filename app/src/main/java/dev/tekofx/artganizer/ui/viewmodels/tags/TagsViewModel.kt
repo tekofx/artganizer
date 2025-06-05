@@ -117,6 +117,7 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
             if (tag == null) {
                 return@launch
             }
+            Log.d("TagsViewModel", "getTagById: ${tag.toTagDetails()}")
             currentTagUiState =
                 TagUiState(
                     tagDetails = tag.toTagDetails(),

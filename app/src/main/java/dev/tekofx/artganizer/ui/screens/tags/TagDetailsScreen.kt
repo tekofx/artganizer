@@ -2,10 +2,8 @@ package dev.tekofx.artganizer.ui.screens.tags
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,7 +26,7 @@ import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
-import dev.tekofx.artganizer.ui.components.submission.Gallery
+import dev.tekofx.artganizer.ui.components.submission.GalleryRow
 import dev.tekofx.artganizer.ui.components.tags.TagForm
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.toTagWithSubmissions
@@ -143,17 +141,11 @@ fun TagInfo(
                 )
             }
         }
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp) // Set a fixed height for the grid
-            ) {
-                Gallery(
-                    tagWithSubmissions.submissions,
-                    onImageClick = {
-                        onImageClick(it)
-                    }
+        tagWithSubmissions.submissions.chunked(3).forEach { chunk ->
+            item {
+                GalleryRow(
+                    submissions = chunk,
+                    onImageClick = onImageClick
                 )
             }
         }
