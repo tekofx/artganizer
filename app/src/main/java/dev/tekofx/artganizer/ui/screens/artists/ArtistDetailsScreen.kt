@@ -1,11 +1,11 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
@@ -17,12 +17,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
+import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
@@ -30,7 +35,7 @@ import dev.tekofx.artganizer.ui.components.artists.ArtistForm
 import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
-import dev.tekofx.artganizer.ui.components.submission.Gallery
+import dev.tekofx.artganizer.ui.components.submission.GalleryRow
 import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistWithSubmissions
@@ -143,19 +148,16 @@ fun ArtistInfo(
                 )
             }
         }
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp) // Set a fixed height for the grid
-            ) {
-                Gallery(
-                    artistWithSubmissions.submissions,
-                    onImageClick = {
-                        onImageClick(it)
-                    }
+
+        // Group submissions into chunks of 3
+        artistWithSubmissions.submissions.chunked(3).forEach { chunk ->
+            item {
+                GalleryRow(
+                    submissions = chunk,
+                    onImageClick = onImageClick
                 )
             }
         }
     }
 }
+

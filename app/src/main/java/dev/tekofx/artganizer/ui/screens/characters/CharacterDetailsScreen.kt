@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,7 +38,7 @@ import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.characters.CharacterForm
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
-import dev.tekofx.artganizer.ui.components.submission.Gallery
+import dev.tekofx.artganizer.ui.components.submission.GalleryRow
 import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.toCharacterWithSubmissions
@@ -94,7 +94,7 @@ fun CharacterDetailsScreen(
                 },
                 onImageClick = { imageId ->
                     navHostController.navigate(
-                        "${NavigateDestinations.SUBMISSION_DETAILS_SCREEN}/$imageId"
+                        "${NavigateDestinations.SUBMISSIONS_SCREEN}/$imageId"
                     )
                 },
             )
@@ -109,75 +109,108 @@ fun CharacterInfo(
     onDeleteClick: () -> Unit,
     onImageClick: (Long) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Text(
-            text = characterWithSubmissions.character.name,
-            style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-        Avatar(
-            characterWithSubmissions.character.imagePath,
-            size = AVATAR_SIZE
-        )
-
-        characterWithSubmissions.character.description?.let {
+        item {
             Text(
-                text = it,
-                style = MaterialTheme.typography.titleLarge,
+                text = characterWithSubmissions.character.name,
+                style = MaterialTheme.typography.headlineLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
             )
         }
-        HorizontalDivider(
-            modifier = Modifier
-                .width(100.dp)
-                .clip(MaterialTheme.shapes.small),
-            thickness = 5.dp,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Box(
-            modifier = Modifier
-                .height(10.dp)
-                .height(200.dp)
-                .background(Color(0xFFFFFFFF))
-        )
-        CharacterInfoField("Species", characterWithSubmissions.character.species)
-        HorizontalDivider(modifier = Modifier.fillMaxWidth())
-        CharacterInfoField("Gender", characterWithSubmissions.character.gender)
-        HorizontalDivider(modifier = Modifier.fillMaxWidth())
-        CharacterInfoField("Pronouns", characterWithSubmissions.character.pronouns)
-        HorizontalDivider(modifier = Modifier.fillMaxWidth())
-        CharacterInfoField("Height", characterWithSubmissions.character.height)
+        item {
+            Avatar(
+                characterWithSubmissions.character.imagePath,
+                size = AVATAR_SIZE
+            )
+        }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            ButtonWithIcon(
-                onClick = onEditClick,
-                text = "Edit",
-                iconResource = IconResource.fromDrawableResource(R.drawable.edit),
-            )
-            ButtonWithIcon(
-                onClick = onDeleteClick,
-                text = "Delete",
-                iconResource = IconResource.fromDrawableResource(R.drawable.trash),
-                color = MaterialTheme.colorScheme.error,
+
+        characterWithSubmissions.character.description?.let {
+            item {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                )
+            }
+        }
+        item {
+
+            HorizontalDivider(
+                modifier = Modifier
+                    .width(100.dp)
+                    .clip(MaterialTheme.shapes.small),
+                thickness = 5.dp,
+                color = MaterialTheme.colorScheme.primary
             )
         }
-        Gallery(
-            characterWithSubmissions.submissions,
-            onImageClick = onImageClick
-        )
+        item {
+
+            Box(
+                modifier = Modifier
+                    .height(10.dp)
+                    .height(200.dp)
+                    .background(Color(0xFFFFFFFF))
+            )
+        }
+        item {
+            CharacterInfoField("Species", characterWithSubmissions.character.species)
+        }
+        item {
+            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+        }
+        item {
+            CharacterInfoField("Gender", characterWithSubmissions.character.gender)
+        }
+        item {
+            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+        }
+        item {
+            CharacterInfoField("Pronouns", characterWithSubmissions.character.pronouns)
+        }
+        item {
+            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+        }
+        item {
+            CharacterInfoField("Height", characterWithSubmissions.character.height)
+        }
+        item {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                ButtonWithIcon(
+                    onClick = onEditClick,
+                    text = "Edit",
+                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                )
+                ButtonWithIcon(
+                    onClick = onDeleteClick,
+                    text = "Delete",
+                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
+        }
+        // Group submissions into chunks of 3
+        characterWithSubmissions.submissions.chunked(3).forEach { chunk ->
+            item {
+                GalleryRow(
+                    submissions = chunk,
+                    onImageClick = onImageClick
+                )
+            }
+        }
     }
 }
 
