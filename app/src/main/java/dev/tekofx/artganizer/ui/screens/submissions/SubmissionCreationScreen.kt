@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
-import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
+import dev.tekofx.artganizer.ui.components.submission.form.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions

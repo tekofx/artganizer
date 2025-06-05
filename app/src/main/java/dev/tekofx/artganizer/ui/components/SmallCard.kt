@@ -24,7 +24,7 @@ fun SmallCard(
     title: String,
     imagePath: Uri?,
     selected: Boolean = false,
-    onClick: () -> Unit,
+    onClick: () -> Unit? = {},
     deletable: Boolean = false,
     onClear: () -> Unit = {},
 ) {

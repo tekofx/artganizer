@@ -44,7 +44,7 @@ import dev.tekofx.artganizer.ui.components.submission.FullscreenImageViewer
 import dev.tekofx.artganizer.ui.components.submission.PaletteColorList
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.components.submission.SubmissionViewer
-import dev.tekofx.artganizer.ui.components.submission.SubmissionsForm
+import dev.tekofx.artganizer.ui.components.submission.form.SubmissionsForm
 import dev.tekofx.artganizer.ui.components.tags.SmallTagCard
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel

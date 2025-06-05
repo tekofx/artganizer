@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.ui.IconResource
 
@@ -22,6 +23,7 @@ fun ButtonWithIcon(
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
     enabled: Boolean = true,
+    shape: Shape = ButtonDefaults.shape,
 ) {
     Button(
         modifier = modifier,
@@ -30,7 +32,8 @@ fun ButtonWithIcon(
             containerColor = color,
             contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
-        enabled = enabled
+        enabled = enabled,
+        shape = shape
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
