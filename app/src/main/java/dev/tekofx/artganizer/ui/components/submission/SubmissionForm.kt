@@ -38,10 +38,10 @@ import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.CharactersSelectList
 import dev.tekofx.artganizer.ui.components.input.RatingInput
+import dev.tekofx.artganizer.ui.components.input.TagsSelectList
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.components.tags.SmallTagCard
-import dev.tekofx.artganizer.ui.components.tags.TagAutocomplete
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -274,6 +274,8 @@ fun SubmissionFormFields(
             onValueChange = onValueChange
         )
 
+
+
         TagsInput(
             submissionDetails = submissionDetails,
             onValueChange = { onValueChange(submissionDetails.copy(tags = it.tags)) },
@@ -395,6 +397,46 @@ fun TagsInput(
 
 @Composable
 fun TagsSheet(
+    showCharactersSheet: Boolean,
+    selectedTags: List<Tag>,
+    tags: List<Tag>,
+    onSearch: (String) -> Unit,
+    onItemValueChange: (List<Tag>) -> Unit,
+    closeBottomSheet: () -> Unit,
+    queryText: String
+) {
+    if (showCharactersSheet) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text("Select Tags", style = MaterialTheme.typography.headlineSmall)
+            TagsSelectList(
+                selectedTags = selectedTags,
+                title = "Select Tags",
+                items = tags,
+                onItemsSelected = { selectedItems ->
+                    onItemValueChange(selectedTags)
+                },
+                onQueryChange = { query ->
+                    onSearch(query)
+                },
+                query = queryText
+            )
+            ButtonWithIcon(
+                onClick = {
+                    closeBottomSheet()
+                },
+                iconResource = IconResource.fromDrawableResource(R.drawable.x),
+                text = "Close",
+            )
+        }
+    }
+}
+
+@Composable
+fun TagsSheet(
     showTagsSheet: Boolean,
 
     // Tags
@@ -414,11 +456,15 @@ fun TagsSheet(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text("Select Tags", style = MaterialTheme.typography.headlineSmall)
-            TagAutocomplete(
-                tags = tags,
+            TagsSelectList(
                 selectedTags = selectedTags,
-                onSelectedTagsChange = onSelectedTagsChange,
-                onAddTag = onAddTag,
+                title = "Select Tags",
+                items = tags,
+                onItemsSelected = { selectedItems ->
+                    onSelectedTagsChange(selectedItems)
+                },
+                onQueryChange = {},
+                query = ""
             )
             ButtonWithIcon(
                 onClick = {
@@ -506,3 +552,4 @@ fun CharactersSheet(
         }
     }
 }
+
