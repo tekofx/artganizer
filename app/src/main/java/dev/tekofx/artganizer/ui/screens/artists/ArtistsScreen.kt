@@ -6,15 +6,12 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,9 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
@@ -66,44 +60,19 @@ fun ArtistScreen(
             skipHiddenState = false,
         )
     )
-    val isSearchBarFocused = remember { mutableStateOf(false) }
-    val focusManager = LocalFocusManager.current
+    val isSearchBarFocused by artistsViewModel.isSearchBarFocused.collectAsState()
 
-
-    // Get screen height in dp
-    val configuration = LocalConfiguration.current
-    val screenHeightPx = configuration.screenHeightDp
-    val screenHeightDp = with(LocalDensity.current) { screenHeightPx.dp }
-
-
-    // Animate offset based on focus state
-    val searchBarOffset by animateDpAsState(
-        if (isSearchBarFocused.value) -screenHeightDp + 150.dp else 0.dp
-    )
     var alignment by remember {
         mutableStateOf(Alignment.Center)
     }
 
-    LaunchedEffect(isSearchBarFocused.value) {
-        if (isSearchBarFocused.value) {
-            alignment = Alignment.TopCenter
+    LaunchedEffect(isSearchBarFocused) {
+        alignment = if (isSearchBarFocused) {
+            Alignment.TopCenter
         } else {
-            alignment = Alignment.BottomCenter
+            Alignment.BottomCenter
         }
     }
-
-    // Monitor keyboard visibility
-    val isImeVisible = WindowInsets.isImeVisible
-    LaunchedEffect(isImeVisible) {
-        if (!isImeVisible) {
-            focusManager.clearFocus() // Clear focus when keyboard is hidden
-            isSearchBarFocused.value = false // Reset search bar focus state
-        }
-    }
-
-
-
-
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState, sheetContent = {
@@ -113,7 +82,7 @@ fun ArtistScreen(
         }) {
         Scaffold(
             floatingActionButton = {
-                if (!isSearchBarFocused.value && artistsViewModel.state.text.isEmpty()) {
+                if (!isSearchBarFocused && artistsViewModel.state.text.isEmpty()) {
                     CreateFab(
                         modifier = Modifier.padding(bottom = 40.dp),
                         onClick = { navHostController.navigate(NavigateDestinations.ARTIST_CREATION_SCREEN) },
@@ -129,8 +98,8 @@ fun ArtistScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier
                         .padding(
-                            top = if (isSearchBarFocused.value) 50.dp else 0.dp,
-                            bottom = if (!isSearchBarFocused.value) 50.dp else 0.dp,
+                            top = if (isSearchBarFocused) 50.dp else 0.dp,
+                            bottom = if (!isSearchBarFocused) 50.dp else 0.dp,
                             start = 10.dp,
                             end = 10.dp
                         ),
@@ -150,8 +119,7 @@ fun ArtistScreen(
                 ThinSearchBar(
                     onClear = { artistsViewModel.clearTextField() },
                     state = artistsViewModel.state,
-                    onFocusChanged = { isSearchBarFocused.value = it },
-                    focusManager = focusManager,
+                    onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
                     modifier = Modifier
                         .align(alignment)
                         .animatePlacement()

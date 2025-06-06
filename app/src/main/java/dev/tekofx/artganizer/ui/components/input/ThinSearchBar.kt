@@ -2,8 +2,11 @@ package dev.tekofx.artganizer.ui.components.input
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldState
@@ -15,23 +18,34 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun ThinSearchBar(
     modifier: Modifier = Modifier,
     onClear: () -> Unit,
     state: TextFieldState,
-    focusManager: FocusManager,
     onFocusChanged: (Boolean) -> Unit = {},
 ) {
+
+
+    val focusManager = LocalFocusManager.current
+    val isImeVisible = WindowInsets.isImeVisible
+    LaunchedEffect(isImeVisible) {
+        if (!isImeVisible) {
+            focusManager.clearFocus() // Clear focus when keyboard is hidden
+            onFocusChanged(false)
+        }
+    }
+
     Card(
         modifier = modifier.fillMaxWidth(),
     ) {

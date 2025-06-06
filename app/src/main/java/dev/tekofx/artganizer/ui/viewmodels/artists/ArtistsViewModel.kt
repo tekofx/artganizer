@@ -38,6 +38,7 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     // UI State
     val showPopup = MutableStateFlow(false)
     val showEditArtist = MutableStateFlow(false)
+    val isSearchBarFocused = MutableStateFlow(false)
 
     // Inputs
     val queryText = snapshotFlow {
@@ -92,6 +93,10 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
 
     fun clearTextField() {
         state.clearText()
+    }
+
+    fun setIsSearchBarFocused(isFocused: Boolean) {
+        isSearchBarFocused.value = isFocused
     }
 
     /**
