@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -31,6 +32,7 @@ import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +68,8 @@ fun ArtistScreen(
         )
     )
     val isSearchBarFocused by artistsViewModel.isSearchBarFocused.collectAsState()
+    val lazyListState = rememberLazyListState()
+    val firstShowedItem by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
 
     var alignment by remember {
         mutableStateOf(Alignment.BottomCenter)
@@ -79,6 +83,8 @@ fun ArtistScreen(
         }
     }
 
+
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState, sheetContent = {
             Column {
@@ -88,7 +94,7 @@ fun ArtistScreen(
         Scaffold(
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = !isSearchBarFocused && artistsViewModel.state.text.isEmpty(),
+                    visible = (lazyListState.lastScrolledBackward || firstShowedItem == 0) && !isSearchBarFocused && artistsViewModel.state.text.isEmpty(),
                     enter = slideInHorizontally(
                         animationSpec = spring(
                             stiffness = Spring.StiffnessMediumLow,
@@ -100,7 +106,7 @@ fun ArtistScreen(
                             stiffness = Spring.StiffnessHigh,
                             dampingRatio = Spring.DampingRatioNoBouncy
                         )
-                    ) { fullWidth -> fullWidth } // Correct: returns an Int
+                    ) { fullWidth -> fullWidth }
                 ) {
                     CreateFab(
                         modifier = Modifier.padding(bottom = 50.dp),
@@ -115,14 +121,9 @@ fun ArtistScreen(
             ) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.padding(horizontal = 10.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    state = lazyListState
                 ) {
-                    /*if (isSearchBarFocused) {
-                        item {
-                            Spacer(modifier = Modifier.height(50.dp))
-                        }
-                    }*/
-
                     items(artists) { artist ->
                         ArtistCard(
                             artist, onClick = {
@@ -137,16 +138,33 @@ fun ArtistScreen(
 
 
                 }
-                ThinSearchBar(
-                    onClear = { artistsViewModel.clearTextField() },
-                    state = artistsViewModel.state,
-                    onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
+                AnimatedVisibility(
                     modifier = Modifier
                         .align(alignment)
                         .animatePlacement()
-                        .padding(10.dp)
+                        .padding(10.dp),
+                    visible = lazyListState.lastScrolledBackward || firstShowedItem == 0,
+                    enter = slideInHorizontally(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessMediumLow,
+                            dampingRatio = Spring.DampingRatioMediumBouncy
+                        )
+                    ) { fullWidth -> fullWidth },
+                    exit = slideOutHorizontally(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessHigh,
+                            dampingRatio = Spring.DampingRatioNoBouncy
+                        )
+                    ) { fullWidth -> fullWidth }
+                ) {
+                    ThinSearchBar(
+                        onClear = { artistsViewModel.clearTextField() },
+                        state = artistsViewModel.state,
+                        onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
 
-                )
+
+                        )
+                }
             }
         }
     }
