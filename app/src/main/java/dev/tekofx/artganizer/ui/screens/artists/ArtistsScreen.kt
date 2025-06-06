@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.screens.artists
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.Spring
@@ -55,7 +56,10 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+    ExperimentalSharedTransitionApi::class
+)
 @Composable
 fun ArtistScreen(
     navHostController: NavHostController, artistsViewModel: ArtistsViewModel
@@ -121,9 +125,18 @@ fun ArtistScreen(
             ) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp),
                     state = lazyListState
                 ) {
+                    item {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                    if (isSearchBarFocused) {
+                        item {
+                            Spacer(modifier = Modifier.height(50.dp))
+                        }
+                    }
                     items(artists) { artist ->
                         ArtistCard(
                             artist, onClick = {
