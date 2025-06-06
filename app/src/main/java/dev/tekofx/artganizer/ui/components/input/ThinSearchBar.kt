@@ -64,6 +64,7 @@ fun ThinSearchBar(
                 Icon(Icons.Filled.Search, contentDescription = "")
                 BasicTextField(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .onFocusChanged {
                             onFocusChanged(it.isFocused)
                         },

@@ -63,7 +63,7 @@ fun ArtistScreen(
     val isSearchBarFocused by artistsViewModel.isSearchBarFocused.collectAsState()
 
     var alignment by remember {
-        mutableStateOf(Alignment.Center)
+        mutableStateOf(Alignment.BottomCenter)
     }
 
     LaunchedEffect(isSearchBarFocused) {
@@ -145,14 +145,15 @@ fun Modifier.animatePlacement(): Modifier = composed {
                 .round()
         }
         .offset {
+
             // Animate to the new target offset when alignment changes.
             val anim = animatable ?: Animatable(targetOffset, IntOffset.VectorConverter)
                 .also {
                     animatable = it
                 }
 
-
-            if (anim.targetValue != targetOffset) {
+            // Skip animation if already at the target position
+            if (anim.targetValue != targetOffset && anim.value != targetOffset) {
                 scope.launch {
                     anim.animateTo(targetOffset, spring(stiffness = Spring.StiffnessMediumLow))
                 }
