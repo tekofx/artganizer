@@ -4,6 +4,7 @@ package dev.tekofx.artganizer.ui.viewmodels.artists
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -87,6 +88,10 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
         return with(uiState) {
             uiState.name.isNotEmpty()
         }
+    }
+
+    fun clearTextField() {
+        state.clearText()
     }
 
     /**
