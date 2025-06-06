@@ -13,7 +13,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,10 +45,10 @@ fun ThinSearchBar(
             onFocusChanged(false)
         }
     }
-
-    Card(
+    ElevatedCard(
         modifier = modifier.fillMaxWidth(),
-    ) {
+
+        ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -2,16 +2,21 @@ package dev.tekofx.artganizer.ui.screens.artists
 
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -82,9 +87,23 @@ fun ArtistScreen(
         }) {
         Scaffold(
             floatingActionButton = {
-                if (!isSearchBarFocused && artistsViewModel.state.text.isEmpty()) {
+                AnimatedVisibility(
+                    visible = !isSearchBarFocused && artistsViewModel.state.text.isEmpty(),
+                    enter = slideInHorizontally(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessMediumLow,
+                            dampingRatio = Spring.DampingRatioMediumBouncy
+                        )
+                    ) { fullWidth -> fullWidth },
+                    exit = slideOutHorizontally(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessHigh,
+                            dampingRatio = Spring.DampingRatioNoBouncy
+                        )
+                    ) { fullWidth -> fullWidth } // Correct: returns an Int
+                ) {
                     CreateFab(
-                        modifier = Modifier.padding(bottom = 40.dp),
+                        modifier = Modifier.padding(bottom = 50.dp),
                         onClick = { navHostController.navigate(NavigateDestinations.ARTIST_CREATION_SCREEN) },
                     )
                 }
@@ -96,15 +115,13 @@ fun ArtistScreen(
             ) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier
-                        .padding(
-                            top = if (isSearchBarFocused) 50.dp else 0.dp,
-                            bottom = if (!isSearchBarFocused) 50.dp else 0.dp,
-                            start = 10.dp,
-                            end = 10.dp
-                        ),
+                    modifier = Modifier.padding(horizontal = 10.dp)
                 ) {
-
+                    /*if (isSearchBarFocused) {
+                        item {
+                            Spacer(modifier = Modifier.height(50.dp))
+                        }
+                    }*/
 
                     items(artists) { artist ->
                         ArtistCard(
@@ -112,6 +129,10 @@ fun ArtistScreen(
                                 navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.artist.artistId}")
                             }, modifier = Modifier.animateItem()
                         )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(50.dp))
                     }
 
 
@@ -123,7 +144,8 @@ fun ArtistScreen(
                     modifier = Modifier
                         .align(alignment)
                         .animatePlacement()
-                        .padding(horizontal = 10.dp)
+                        .padding(10.dp)
+
                 )
             }
         }
