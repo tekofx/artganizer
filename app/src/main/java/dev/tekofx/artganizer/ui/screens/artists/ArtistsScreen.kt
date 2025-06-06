@@ -115,6 +115,7 @@ fun ArtistScreen(
             floatingActionButton = {
                 if (!isSearchBarFocused.value && artistsViewModel.state.text.isEmpty()) {
                     CreateFab(
+                        modifier = Modifier.padding(bottom = 40.dp),
                         onClick = { navHostController.navigate(NavigateDestinations.ARTIST_CREATION_SCREEN) },
                     )
                 }
