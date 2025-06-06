@@ -81,12 +81,15 @@ fun ThinSearchBar(
                     ),
                 )
             }
-            IconButton(
-                onClick = {
-                    onClear()
-                    focusManager.clearFocus()
-                }) {
-                Icon(Icons.Filled.Clear, contentDescription = "")
+
+            if (state.text.isNotEmpty()) {
+                IconButton(
+                    onClick = {
+                        onClear()
+                        focusManager.clearFocus()
+                    }) {
+                    Icon(Icons.Filled.Clear, contentDescription = "")
+                }
             }
         }
     }
