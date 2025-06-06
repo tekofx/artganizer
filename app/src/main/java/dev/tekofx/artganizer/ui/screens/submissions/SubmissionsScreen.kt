@@ -88,6 +88,7 @@ fun SubmissionsScreen(
             GalleryBottomSheet()
         }) {
         Scaffold(
+            modifier = Modifier.padding(10.dp),
             floatingActionButton = {
                 if (submissions.selectedSubmissions.isEmpty()) {
                     CreateFab(
