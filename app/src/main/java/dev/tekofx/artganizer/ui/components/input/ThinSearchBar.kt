@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 fun ThinSearchBar(
     modifier: Modifier = Modifier,
     onClear: () -> Unit,
-    state: TextFieldState,
+    textFieldState: TextFieldState,
     onFocusChanged: (Boolean) -> Unit = {},
 ) {
 
@@ -48,8 +48,7 @@ fun ThinSearchBar(
     }
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
-
-        ) {
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,7 +70,7 @@ fun ThinSearchBar(
                         .onFocusChanged {
                             onFocusChanged(it.isFocused)
                         },
-                    state = state,
+                    state = textFieldState,
                     cursorBrush = Brush.horizontalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.primary,
@@ -85,7 +84,7 @@ fun ThinSearchBar(
                 )
             }
 
-            if (state.text.isNotEmpty()) {
+            if (textFieldState.text.isNotEmpty()) {
                 IconButton(
                     onClick = {
                         onClear()

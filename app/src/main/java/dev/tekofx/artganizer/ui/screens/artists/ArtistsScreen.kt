@@ -12,11 +12,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -48,7 +46,7 @@ import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
-import dev.tekofx.artganizer.ui.components.input.ThinSearchBar
+import dev.tekofx.artganizer.ui.components.layout.AnimatedThinSearchBarScaffold
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
 
@@ -108,9 +106,13 @@ fun ArtistScreen(
                 }
             },
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
+
+            AnimatedThinSearchBarScaffold(
+                alignment = alignment,
+                visible = listState.lastScrolledBackward || firstShowedItem == 0,
+                onClear = { artistsViewModel.clearTextField() },
+                textFieldState = artistsViewModel.state,
+                onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
             ) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -139,31 +141,6 @@ fun ArtistScreen(
                     }
 
 
-                }
-                AnimatedVisibility(
-                    modifier = Modifier
-                        .align(alignment)
-                        .animatePlacement()
-                        .padding(10.dp),
-                    visible = listState.lastScrolledBackward || firstShowedItem == 0,
-                    enter = slideInHorizontally(
-                        animationSpec = spring(
-                            stiffness = Spring.StiffnessMediumLow,
-                            dampingRatio = Spring.DampingRatioMediumBouncy
-                        )
-                    ) { fullWidth -> fullWidth },
-                    exit = slideOutHorizontally(
-                        animationSpec = spring(
-                            stiffness = Spring.StiffnessHigh,
-                            dampingRatio = Spring.DampingRatioNoBouncy
-                        )
-                    ) { fullWidth -> fullWidth }
-                ) {
-                    ThinSearchBar(
-                        onClear = { artistsViewModel.clearTextField() },
-                        state = artistsViewModel.state,
-                        onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-                    )
                 }
             }
         }
