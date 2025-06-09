@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.viewmodels.artists
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.getValue
@@ -40,6 +41,7 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     val showPopup = MutableStateFlow(false)
     val showEditArtist = MutableStateFlow(false)
     val isSearchBarFocused = MutableStateFlow(false)
+    val listState = MutableStateFlow(LazyListState())
 
     private val _alignment = MutableStateFlow(Alignment.BottomCenter)
     val alignment = _alignment

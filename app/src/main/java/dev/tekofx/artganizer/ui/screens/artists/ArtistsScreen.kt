@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -62,19 +61,22 @@ import kotlinx.coroutines.launch
 fun ArtistScreen(
     navHostController: NavHostController, artistsViewModel: ArtistsViewModel
 ) {
+
+    // Data
     val artists by artistsViewModel.artists.collectAsState()
+
+
+    // UI
+    val isSearchBarFocused by artistsViewModel.isSearchBarFocused.collectAsState()
+    val alignment by artistsViewModel.alignment.collectAsState()
+    val listState by artistsViewModel.listState.collectAsState()
+    val firstShowedItem by remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
             initialValue = SheetValue.Hidden,
             skipHiddenState = false,
         )
     )
-    val isSearchBarFocused by artistsViewModel.isSearchBarFocused.collectAsState()
-    val alignment by artistsViewModel.alignment.collectAsState()
-
-    val lazyListState = rememberLazyListState()
-    val firstShowedItem by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
-
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState, sheetContent = {
@@ -85,7 +87,7 @@ fun ArtistScreen(
         Scaffold(
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = (lazyListState.lastScrolledBackward || firstShowedItem == 0) && !isSearchBarFocused && artistsViewModel.state.text.isEmpty(),
+                    visible = (listState.lastScrolledBackward || firstShowedItem == 0) && !isSearchBarFocused && artistsViewModel.state.text.isEmpty(),
                     enter = slideInHorizontally(
                         animationSpec = spring(
                             stiffness = Spring.StiffnessMediumLow,
@@ -114,7 +116,7 @@ fun ArtistScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier
                         .padding(horizontal = 10.dp),
-                    state = lazyListState
+                    state = listState
                 ) {
                     item {
                         Spacer(modifier = Modifier.height(10.dp))
@@ -143,7 +145,7 @@ fun ArtistScreen(
                         .align(alignment)
                         .animatePlacement()
                         .padding(10.dp),
-                    visible = lazyListState.lastScrolledBackward || firstShowedItem == 0,
+                    visible = listState.lastScrolledBackward || firstShowedItem == 0,
                     enter = slideInHorizontally(
                         animationSpec = spring(
                             stiffness = Spring.StiffnessMediumLow,
