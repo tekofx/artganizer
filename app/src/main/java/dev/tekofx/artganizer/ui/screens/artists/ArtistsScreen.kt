@@ -85,7 +85,7 @@ fun ArtistScreen(
         Scaffold(
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = (listState.lastScrolledBackward || firstShowedItem == 0) && !isSearchBarFocused && artistsViewModel.state.text.isEmpty(),
+                    visible = (listState.lastScrolledBackward || firstShowedItem == 0) && !isSearchBarFocused && artistsViewModel.textFieldState.text.isEmpty(),
                     enter = slideInHorizontally(
                         animationSpec = spring(
                             stiffness = Spring.StiffnessMediumLow,
@@ -111,23 +111,23 @@ fun ArtistScreen(
                 alignment = alignment,
                 visible = listState.lastScrolledBackward || firstShowedItem == 0,
                 onClear = { artistsViewModel.clearTextField() },
-                textFieldState = artistsViewModel.state,
+                textFieldState = artistsViewModel.textFieldState,
                 onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
             ) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier
-                        .padding(horizontal = 10.dp),
+                        .padding(10.dp),
                     state = listState
                 ) {
-                    item {
+                    /*item {
                         Spacer(modifier = Modifier.height(10.dp))
-                    }
-                    if (isSearchBarFocused) {
+                    }*/
+                    /*if (isSearchBarFocused) {
                         item {
                             Spacer(modifier = Modifier.height(50.dp))
                         }
-                    }
+                    }*/
                     items(artists) { artist ->
                         ArtistCard(
                             artist, onClick = {

@@ -29,7 +29,14 @@ fun AnimatedThinSearchBarScaffold(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        content()
+        Box(
+            modifier = Modifier.then(
+                if (alignment == Alignment.TopCenter) Modifier.padding(top = 60.dp)
+                else Modifier
+            )
+        ) {
+            content()
+        }
         AnimatedVisibility(
             modifier = Modifier
                 .align(alignment)

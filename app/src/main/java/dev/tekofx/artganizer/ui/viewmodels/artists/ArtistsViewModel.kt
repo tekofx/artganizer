@@ -34,21 +34,19 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     var currentArtistUiState by mutableStateOf(ArtistUiState())
         private set
 
-    val state = TextFieldState()
-
 
     // UI State
+    val textFieldState = TextFieldState()
     val showPopup = MutableStateFlow(false)
     val showEditArtist = MutableStateFlow(false)
     val isSearchBarFocused = MutableStateFlow(false)
     val listState = MutableStateFlow(LazyListState())
 
-    private val _alignment = MutableStateFlow(Alignment.BottomCenter)
-    val alignment = _alignment
+    val alignment = MutableStateFlow(Alignment.BottomCenter)
 
     // Inputs
     val queryText = snapshotFlow {
-        state.text.toString()
+        textFieldState.text.toString()
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
@@ -98,13 +96,13 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     }
 
     fun clearTextField() {
-        state.clearText()
+        textFieldState.clearText()
     }
 
     fun setIsSearchBarFocused(isFocused: Boolean) {
         isSearchBarFocused.value = isFocused
 
-        _alignment.value = if (isFocused) {
+        alignment.value = if (isFocused) {
             Alignment.TopCenter
         } else {
             Alignment.BottomCenter

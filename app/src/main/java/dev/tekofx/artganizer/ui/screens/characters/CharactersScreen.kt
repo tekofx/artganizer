@@ -23,7 +23,7 @@ import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.characters.CharacterCard
-import dev.tekofx.artganizer.ui.components.input.SearchBar
+import dev.tekofx.artganizer.ui.components.layout.AnimatedThinSearchBarScaffold
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -36,6 +36,7 @@ fun CharactersScreen(
 
     val characters = charactersViewModel.characters.collectAsState()
     val queryText by charactersViewModel.queryText.collectAsState()
+    val alignment by charactersViewModel.alignment.collectAsState()
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -52,42 +53,38 @@ fun CharactersScreen(
         }
     ) {
         Scaffold(
-            bottomBar = {
-                SearchBar(
-                    queryText = queryText,
-                    onValueChange = { charactersViewModel.onSearchTextChanged(it) },
-                    onClear = { charactersViewModel.onSearchTextChanged("") },
-                )
-            },
             floatingActionButton = {
                 CreateFab(
                     onClick = { navHostController.navigate(NavigateDestinations.CHARACTER_CREATION_SCREEN) },
                 )
             },
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(10.dp)
+
+            AnimatedThinSearchBarScaffold(
+                alignment = alignment,
+                visible = true,
+                onClear = { charactersViewModel.clearTextField() },
+                textFieldState = charactersViewModel.textFieldState,
+                onFocusChanged = { charactersViewModel.setIsSearchBarFocused(it) },
             ) {
                 LazyVerticalGrid(
+                    modifier = Modifier.padding(10.dp),
                     columns = GridCells.Fixed(2),
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(characters.value) { character ->
                         CharacterCard(
-                            character,
+                            modifier = Modifier.animateItem(),
+                            character = character,
                             onClick = {
                                 navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/${character.character.characterId}")
                             },
                         )
                     }
-
                 }
             }
         }
-
-
     }
 
 }

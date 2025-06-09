@@ -3,9 +3,13 @@ package dev.tekofx.artganizer.ui.viewmodels.characters
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
@@ -13,7 +17,6 @@ import dev.tekofx.artganizer.repository.CharactersRepository
 import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -28,18 +31,27 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         private set
 
     // UI State
+    val textFieldState = TextFieldState()
     val showPopup = MutableStateFlow(false)
     val showCharacterEdit = MutableStateFlow(false)
+    val isSearchBarFocused = MutableStateFlow(false)
+    val alignment = MutableStateFlow(Alignment.BottomCenter)
 
     // Inputs
-    private val _queryText = MutableStateFlow("")
-    val queryText = _queryText.asStateFlow()
+    val queryText = snapshotFlow {
+        textFieldState.text.toString()
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        ""
+    )
+
 
     // Data
     val areThereCharacters = mutableStateOf(false)
     private val _characters = MutableStateFlow<List<CharacterWithSubmissions>>(emptyList())
     val characters = _characters
-        .combine(_queryText) { characters, query ->
+        .combine(queryText) { characters, query ->
             if (query.isBlank()) {
                 characters
             } else {
@@ -74,11 +86,25 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         }
     }
 
+    fun clearTextField() {
+        textFieldState.clearText()
+    }
+
+    fun setIsSearchBarFocused(isFocused: Boolean) {
+        isSearchBarFocused.value = isFocused
+
+        alignment.value = if (isFocused) {
+            Alignment.TopCenter
+        } else {
+            Alignment.BottomCenter
+        }
+    }
+
     /**
      * Callback of TextField
      */
     fun onSearchTextChanged(text: String) {
-        _queryText.value = text
+        //_queryText.value = text
     }
 
     //////////////////////// Setters ////////////////////////

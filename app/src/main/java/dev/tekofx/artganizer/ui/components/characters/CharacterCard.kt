@@ -18,10 +18,12 @@ import dev.tekofx.artganizer.ui.components.SubmissionCount
 
 @Composable
 fun CharacterCard(
+    modifier: Modifier = Modifier,
     character: CharacterWithSubmissions,
     onClick: (Long) -> Unit
 ) {
     Card(
+        modifier = modifier,
         onClick = { onClick(character.character.characterId) }
     ) {
         Column(
