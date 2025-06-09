@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.ui.components.layout
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -25,6 +26,9 @@ fun AnimatedThinSearchBarScaffold(
     onFocusChanged: (Boolean) -> Unit,
     content: @Composable () -> Unit
 ) {
+    BackHandler(enabled = visible) {
+        onFocusChanged(false) // Remove focus when back is pressed
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
