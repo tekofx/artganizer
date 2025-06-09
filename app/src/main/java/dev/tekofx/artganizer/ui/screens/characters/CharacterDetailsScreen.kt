@@ -164,23 +164,15 @@ fun CharacterInfo(
                     .background(Color(0xFFFFFFFF))
             )
         }
+
         item {
             CharacterInfoField("Species", characterWithSubmissions.character.species)
-        }
-        item {
-            HorizontalDivider(modifier = Modifier.fillMaxWidth())
         }
         item {
             CharacterInfoField("Gender", characterWithSubmissions.character.gender)
         }
         item {
-            HorizontalDivider(modifier = Modifier.fillMaxWidth())
-        }
-        item {
             CharacterInfoField("Pronouns", characterWithSubmissions.character.pronouns)
-        }
-        item {
-            HorizontalDivider(modifier = Modifier.fillMaxWidth())
         }
         item {
             CharacterInfoField("Height", characterWithSubmissions.character.height)
@@ -237,6 +229,8 @@ fun CharacterInfoField(
                 textAlign = TextAlign.Center,
             )
         }
+        HorizontalDivider(modifier = Modifier.fillMaxWidth())
+
     }
 }
 
