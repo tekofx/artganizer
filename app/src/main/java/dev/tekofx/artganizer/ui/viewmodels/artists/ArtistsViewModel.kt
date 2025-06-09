@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
@@ -39,6 +40,9 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     val showPopup = MutableStateFlow(false)
     val showEditArtist = MutableStateFlow(false)
     val isSearchBarFocused = MutableStateFlow(false)
+
+    private val _alignment = MutableStateFlow(Alignment.BottomCenter)
+    val alignment = _alignment
 
     // Inputs
     val queryText = snapshotFlow {
@@ -97,6 +101,12 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
 
     fun setIsSearchBarFocused(isFocused: Boolean) {
         isSearchBarFocused.value = isFocused
+
+        _alignment.value = if (isFocused) {
+            Alignment.TopCenter
+        } else {
+            Alignment.BottomCenter
+        }
     }
 
     /**

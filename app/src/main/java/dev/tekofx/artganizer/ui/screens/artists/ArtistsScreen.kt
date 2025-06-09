@@ -31,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -39,7 +38,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.layout.onPlaced
@@ -72,21 +70,10 @@ fun ArtistScreen(
         )
     )
     val isSearchBarFocused by artistsViewModel.isSearchBarFocused.collectAsState()
+    val alignment by artistsViewModel.alignment.collectAsState()
+
     val lazyListState = rememberLazyListState()
     val firstShowedItem by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
-
-    var alignment by remember {
-        mutableStateOf(Alignment.BottomCenter)
-    }
-
-    LaunchedEffect(isSearchBarFocused) {
-        alignment = if (isSearchBarFocused) {
-            Alignment.TopCenter
-        } else {
-            Alignment.BottomCenter
-        }
-    }
-
 
 
     BottomSheetScaffold(
@@ -174,9 +161,7 @@ fun ArtistScreen(
                         onClear = { artistsViewModel.clearTextField() },
                         state = artistsViewModel.state,
                         onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-
-
-                        )
+                    )
                 }
             }
         }
