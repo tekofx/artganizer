@@ -38,6 +38,7 @@ fun CharactersScreen(
     val alignment by charactersViewModel.alignment.collectAsState()
     val fabVisible by charactersViewModel.fabVisible.collectAsState()
     val searchBarVisible by charactersViewModel.searchBarVisible.collectAsState()
+    val listState by charactersViewModel.gridState.collectAsState()
 
 
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -68,7 +69,8 @@ fun CharactersScreen(
                 modifier = Modifier.padding(10.dp),
                 columns = GridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                state = listState
             ) {
                 items(characters.value) { character ->
                     CharacterCard(

@@ -38,6 +38,7 @@ fun TagsScreen(
     val alignment by tagsViewModel.alignment.collectAsState()
     val fabVisible by tagsViewModel.fabVisible.collectAsState()
     val searchBarVisible by tagsViewModel.searchBarVisible.collectAsState()
+    val listState by tagsViewModel.listState.collectAsState()
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -64,7 +65,8 @@ fun TagsScreen(
             ) {
             LazyColumn(
                 modifier = Modifier.padding(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                state = listState
             ) {
                 items(tags) { tag ->
                     TagCard(

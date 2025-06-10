@@ -34,9 +34,9 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
     val showPopup = MutableStateFlow(false)
     val showTagEdit = MutableStateFlow(false)
     val textFieldState = TextFieldState()
-    val listState = MutableStateFlow(LazyListState())
     val isSearchBarFocused = MutableStateFlow(false)
     val alignment = MutableStateFlow(Alignment.BottomCenter)
+    val listState = MutableStateFlow(LazyListState())
 
     val fabVisible = snapshotFlow {
         Pair(listState.value.firstVisibleItemIndex, isSearchBarFocused.value)

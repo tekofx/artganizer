@@ -3,7 +3,7 @@ package dev.tekofx.artganizer.ui.viewmodels.characters
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.getValue
@@ -38,12 +38,12 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     val showCharacterEdit = MutableStateFlow(false)
     val isSearchBarFocused = MutableStateFlow(false)
     val alignment = MutableStateFlow(Alignment.BottomCenter)
-    val listState = MutableStateFlow(LazyListState())
+    val gridState = MutableStateFlow(LazyGridState())
 
     val fabVisible = snapshotFlow {
-        Pair(listState.value.firstVisibleItemIndex, isSearchBarFocused.value)
+        Pair(gridState.value.firstVisibleItemIndex, isSearchBarFocused.value)
     }.map { (firstVisibleItemIndex, isSearchBarFocused) ->
-        (listState.value.lastScrolledBackward || firstVisibleItemIndex == 0) &&
+        (gridState.value.lastScrolledBackward || firstVisibleItemIndex == 0) &&
                 !isSearchBarFocused && textFieldState.text.isEmpty()
     }.stateIn(
         viewModelScope,
@@ -52,8 +52,8 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     )
     val searchBarVisible = snapshotFlow {
         Triple(
-            listState.value.lastScrolledBackward,
-            listState.value.firstVisibleItemIndex,
+            gridState.value.lastScrolledBackward,
+            gridState.value.firstVisibleItemIndex,
             textFieldState.text.isNotEmpty()
         )
     }.map { (lastScrolledBackward, firstShowedItem, isTextFieldNotEmpty) ->
