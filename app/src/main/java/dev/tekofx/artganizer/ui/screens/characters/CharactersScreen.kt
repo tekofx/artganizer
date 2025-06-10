@@ -3,6 +3,8 @@ package dev.tekofx.artganizer.ui.screens.characters
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -75,6 +77,19 @@ fun CharactersScreen(
                         onClick = {
                             navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/${character.character.characterId}")
                         },
+                    )
+                }
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .height(50.dp)
+
+                    )
+                }
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .height(50.dp)
                     )
                 }
             }
