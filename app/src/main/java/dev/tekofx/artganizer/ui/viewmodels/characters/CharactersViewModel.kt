@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.viewmodels.characters
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.getValue
@@ -18,6 +19,7 @@ import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -36,6 +38,31 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     val showCharacterEdit = MutableStateFlow(false)
     val isSearchBarFocused = MutableStateFlow(false)
     val alignment = MutableStateFlow(Alignment.BottomCenter)
+    val listState = MutableStateFlow(LazyListState())
+
+    val fabVisible = snapshotFlow {
+        Pair(listState.value.firstVisibleItemIndex, isSearchBarFocused.value)
+    }.map { (firstVisibleItemIndex, isSearchBarFocused) ->
+        (listState.value.lastScrolledBackward || firstVisibleItemIndex == 0) &&
+                !isSearchBarFocused && textFieldState.text.isEmpty()
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        false
+    )
+    val searchBarVisible = snapshotFlow {
+        Triple(
+            listState.value.lastScrolledBackward,
+            listState.value.firstVisibleItemIndex,
+            textFieldState.text.isNotEmpty()
+        )
+    }.map { (lastScrolledBackward, firstShowedItem, isTextFieldNotEmpty) ->
+        lastScrolledBackward || firstShowedItem == 0 || isTextFieldNotEmpty
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        false
+    )
 
     // Inputs
     val queryText = snapshotFlow {

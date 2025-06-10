@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -21,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.layout.AnimatedThinSearchBarScaffold
 import dev.tekofx.artganizer.ui.components.tags.TagCard
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
@@ -36,6 +34,8 @@ fun TagsScreen(
 
     val tags by tagsViewModel.tags.collectAsState()
     val alignment by tagsViewModel.alignment.collectAsState()
+    val fabVisible by tagsViewModel.fabVisible.collectAsState()
+    val searchBarVisible by tagsViewModel.searchBarVisible.collectAsState()
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -50,35 +50,28 @@ fun TagsScreen(
                 Text("Sheet")
             }
         },
+    ) {
+        AnimatedThinSearchBarScaffold(
+            alignment = alignment,
+            searchBarVisible = searchBarVisible,
+            onClear = { tagsViewModel.clearTextField() },
+            textFieldState = tagsViewModel.textFieldState,
+            onFocusChanged = { tagsViewModel.setIsSearchBarFocused(it) },
+            fabVisible = fabVisible,
+            onFabClick = { navHostController.navigate(NavigateDestinations.TAG_CREATION_SCREEN) },
 
-        ) {
-        Scaffold(
-            floatingActionButton = {
-                CreateFab(
-                    onClick = { navHostController.navigate(NavigateDestinations.TAG_CREATION_SCREEN) },
-                )
-            },
-        ) {
-
-            AnimatedThinSearchBarScaffold(
-                alignment = alignment,
-                visible = true,
-                onClear = { tagsViewModel.clearTextField() },
-                textFieldState = tagsViewModel.textFieldState,
-                onFocusChanged = { tagsViewModel.setIsSearchBarFocused(it) },
             ) {
-                LazyColumn(
-                    modifier = Modifier.padding(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(tags) { tag ->
-                        TagCard(
-                            tag = tag,
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            onClick = { navHostController.navigate("${NavigateDestinations.TAGS_SCREEN}/${tag.tag.tagId}") }
-                        )
-                    }
+            LazyColumn(
+                modifier = Modifier.padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(tags) { tag ->
+                    TagCard(
+                        tag = tag,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = { navHostController.navigate("${NavigateDestinations.TAGS_SCREEN}/${tag.tag.tagId}") }
+                    )
                 }
             }
 
