@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,10 +24,9 @@ import dev.tekofx.artganizer.ui.components.SmallCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtistListSelect(
-    items: List<ArtistWithSubmissions>,
-    onQueryChange: (String) -> Unit,
+    artists: List<ArtistWithSubmissions>,
     onArtistClick: (Artist) -> Unit,
-    query: String,
+    textFieldState: TextFieldState,
 ) {
     Box(
         modifier = Modifier
@@ -36,7 +38,7 @@ fun ArtistListSelect(
                 .fillMaxWidth()
                 .padding(bottom = 70.dp) // Reserve space for the SearchBar
         ) {
-            if (items.isEmpty()) {
+            if (artists.isEmpty()) {
                 Text(
                     text = "No artists with current search",
                     style = MaterialTheme.typography.bodyMedium,
@@ -48,30 +50,23 @@ fun ArtistListSelect(
                         .heightIn(max = 300.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(items.size) { index ->
-                        val item = items[index]
-                        if (item.artist.name.contains(query, ignoreCase = true)) {
-                            SmallCard(
-                                title = item.artist.name,
-                                imagePath = item.artist.imagePath,
-                                onClick = {
-                                    onArtistClick(item.artist)
-                                },
-                            )
-                        }
+                    items(artists) { artist ->
+                        SmallCard(
+                            title = artist.artist.name,
+                            imagePath = artist.artist.imagePath,
+                            onClick = {
+                                onArtistClick(artist.artist)
+                            },
+                        )
                     }
                 }
             }
         }
 
-        // SearchBar at the bottom
-        SearchBar(
-            queryText = query,
-            onValueChange = { onQueryChange(it) },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth(),
-            onClear = { onQueryChange("") },
+        ThinSearchBar(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onClear = { textFieldState.clearText() },
+            textFieldState = textFieldState,
         )
     }
 }

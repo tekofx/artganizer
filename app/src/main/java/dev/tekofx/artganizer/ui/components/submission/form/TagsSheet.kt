@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +25,7 @@ fun TagsSheet(
     tags: List<Tag>,
     selectedTags: List<Tag> = emptyList(),
     onSelectedTagsChange: (List<Tag>) -> Unit,
-    onAddTag: (String) -> Unit,
+    textFieldState: TextFieldState,
 
     closeBottomSheet: () -> Unit,
 ) {
@@ -39,13 +40,11 @@ fun TagsSheet(
             Text("Select Tags", style = MaterialTheme.typography.headlineSmall)
             TagsSelectList(
                 selectedTags = selectedTags,
-                title = "Select Tags",
-                items = tags,
+                tags = tags,
                 onItemsSelected = { selectedItems ->
                     onSelectedTagsChange(selectedItems)
                 },
-                onQueryChange = {},
-                query = ""
+                textFieldState = textFieldState
             )
             ButtonWithIcon(
                 onClick = {

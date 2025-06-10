@@ -3,11 +3,13 @@ package dev.tekofx.artganizer.ui.components.input
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,11 +24,9 @@ import dev.tekofx.artganizer.ui.components.SmallCard
 @Composable
 fun CharactersSelectList(
     selectedItems: List<Character>,
-    title: String,
-    items: List<Character>,
+    characters: List<Character>,
     onItemsSelected: (List<Character>) -> Unit,
-    onQueryChange: (String) -> Unit,
-    query: String,
+    textFieldState: TextFieldState,
 ) {
 
     Box(
@@ -38,7 +38,7 @@ fun CharactersSelectList(
                 .fillMaxWidth()
                 .padding(bottom = 70.dp),
         ) {
-            if (items.isEmpty()) {
+            if (characters.isEmpty()) {
                 Text(
                     text = "No items with current search",
                     style = MaterialTheme.typography.bodyMedium,
@@ -50,41 +50,30 @@ fun CharactersSelectList(
                         .heightIn(max = 300.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(items.size) { index ->
-                        val item = items[index]
-                        if (item.name.contains(query, ignoreCase = true)) {
-                            SmallCard(
-                                title = item.name,
-                                imagePath = item.imagePath,
-                                selected = selectedItems.contains(item),
-                                onClick = {
-                                    val newSelection =
-                                        if (selectedItems.contains(item)) {
-                                            selectedItems - item
-                                        } else {
-                                            selectedItems + item
-                                        }
-                                    onItemsSelected(newSelection)
-                                },
-                            )
-                        }
+                    items(characters) { character ->
+                        SmallCard(
+                            title = character.name,
+                            imagePath = character.imagePath,
+                            selected = selectedItems.contains(character),
+                            onClick = {
+                                val newSelection =
+                                    if (selectedItems.contains(character)) {
+                                        selectedItems - character
+                                    } else {
+                                        selectedItems + character
+                                    }
+                                onItemsSelected(newSelection)
+                            },
+                        )
                     }
                 }
             }
         }
 
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        ) {
-            SearchBar(
-                queryText = query,
-                onValueChange = { onQueryChange(it) },
-                onClear = {
-                    onQueryChange("")
-                }
-            )
-        }
+        ThinSearchBar(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onClear = { textFieldState.clearText() },
+            textFieldState = textFieldState,
+        )
     }
 }

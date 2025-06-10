@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.components.submission.form
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,10 +22,9 @@ fun CharactersSheet(
     showCharactersSheet: Boolean,
     characters: List<Character>,
     selectedCharacters: List<Character>,
-    onSearch: (String) -> Unit,
     onItemValueChange: (List<Character>) -> Unit,
     closeBottomSheet: () -> Unit,
-    queryText: String
+    textFieldState: TextFieldState
 ) {
     if (showCharactersSheet) {
         Column(
@@ -35,13 +35,11 @@ fun CharactersSheet(
             Text("Select Characters", style = MaterialTheme.typography.headlineSmall)
             CharactersSelectList(
                 selectedItems = selectedCharacters,
-                title = "Select Characters",
-                items = characters,
+                characters = characters,
                 onItemsSelected = { selectedItems ->
                     onItemValueChange(selectedItems)
                 },
-                onQueryChange = { onSearch(it) },
-                query = queryText,
+                textFieldState = textFieldState
             )
             ButtonWithIcon(
                 onClick = {

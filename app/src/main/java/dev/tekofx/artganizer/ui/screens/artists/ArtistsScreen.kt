@@ -80,7 +80,6 @@ fun ArtistScreen(
         AnimatedThinSearchBarScaffold(
             alignment = alignment,
             searchBarVisible = searchBarVisible,
-            onClear = { artistsViewModel.clearTextField() },
             textFieldState = artistsViewModel.textFieldState,
             onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
             onFabClick = { navHostController.navigate(NavigateDestinations.ARTIST_CREATION_SCREEN) },

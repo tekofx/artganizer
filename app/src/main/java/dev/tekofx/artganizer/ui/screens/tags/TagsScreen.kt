@@ -54,7 +54,6 @@ fun TagsScreen(
         AnimatedThinSearchBarScaffold(
             alignment = alignment,
             searchBarVisible = searchBarVisible,
-            onClear = { tagsViewModel.clearTextField() },
             textFieldState = tagsViewModel.textFieldState,
             onFocusChanged = { tagsViewModel.setIsSearchBarFocused(it) },
             fabVisible = fabVisible,

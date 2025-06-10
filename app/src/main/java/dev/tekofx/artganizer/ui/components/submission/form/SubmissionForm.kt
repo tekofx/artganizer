@@ -82,7 +82,6 @@ fun SubmissionsForm(
             ArtistSheet(
                 showArtistsSheet = showArtistsSheet,
                 artists = artists,
-                onSearch = { artistsViewModel.onSearchTextChanged(it) },
                 onItemValueChange = { artist ->
                     onItemValueChange(
                         submissionDetails.copy(
@@ -96,14 +95,13 @@ fun SubmissionsForm(
                         scaffoldState.bottomSheetState.hide()
                     }
                 },
-                queryText = queryText,
+                textFieldState = artistsViewModel.textFieldState
             )
 
             CharactersSheet(
                 showCharactersSheet = showCharactersSheet,
                 characters = characters.toListOfCharacters(),
                 selectedCharacters = submissionDetails.characters,
-                onSearch = { charactersViewModel.onSearchTextChanged(it) },
                 onItemValueChange = { selectedItems ->
                     onItemValueChange(
                         submissionDetails.copy(
@@ -116,7 +114,7 @@ fun SubmissionsForm(
                         scaffoldState.bottomSheetState.hide()
                     }
                 },
-                queryText = queryText,
+                textFieldState = charactersViewModel.textFieldState,
             )
             TagsSheet(
                 showTagsSheet = showTagsSheet,
@@ -129,16 +127,12 @@ fun SubmissionsForm(
                         )
                     )
                 },
-                onAddTag = {
-                    scope.launch {
-                        tagsViewModel.createTag(it)
-                    }
-                },
                 closeBottomSheet = {
                     scope.launch {
                         scaffoldState.bottomSheetState.hide()
                     }
                 },
+                textFieldState = tagsViewModel.textFieldState
             )
         }
     ) {

@@ -57,12 +57,10 @@ fun CharactersScreen(
         AnimatedThinSearchBarScaffold(
             alignment = alignment,
             searchBarVisible = searchBarVisible,
-            onClear = { charactersViewModel.clearTextField() },
             textFieldState = charactersViewModel.textFieldState,
             onFocusChanged = { charactersViewModel.setIsSearchBarFocused(it) },
             onFabClick = { navHostController.navigate(NavigateDestinations.CHARACTER_CREATION_SCREEN) },
             fabVisible = fabVisible
-
         ) {
             LazyVerticalGrid(
                 modifier = Modifier.padding(10.dp),

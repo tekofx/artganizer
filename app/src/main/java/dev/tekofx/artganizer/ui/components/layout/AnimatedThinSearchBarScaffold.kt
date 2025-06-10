@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +26,6 @@ import dev.tekofx.artganizer.ui.screens.artists.animatePlacement
 fun AnimatedThinSearchBarScaffold(
     alignment: Alignment,
     searchBarVisible: Boolean,
-    onClear: () -> Unit,
     textFieldState: TextFieldState,
     onFocusChanged: (Boolean) -> Unit,
     fabVisible: Boolean,
@@ -89,7 +89,7 @@ fun AnimatedThinSearchBarScaffold(
                     )
                 ) { fullWidth -> fullWidth }) {
                 ThinSearchBar(
-                    onClear = onClear,
+                    onClear = { textFieldState.clearText() },
                     textFieldState = textFieldState,
                     onFocusChanged = onFocusChanged,
                 )

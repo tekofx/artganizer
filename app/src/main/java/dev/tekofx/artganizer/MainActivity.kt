@@ -200,13 +200,9 @@ fun HandleSharedLink(
             verticalArrangement = Arrangement.Center,
         ) {
             if (selectedArtist == null) {
-
                 Text(text = "Importing Link: $sharedText")
                 ArtistListSelect(
-                    items = artists,
-                    onQueryChange = {
-                        artistsViewModel.onSearchTextChanged(it)
-                    },
+                    artists = artists,
                     onArtistClick = { artist ->
                         val newSocialNetworks =
                             artist.socialNetworks.toMutableList()
@@ -224,7 +220,7 @@ fun HandleSharedLink(
                         }
                         selectedArtist = artist
                     },
-                    query = queryText,
+                    textFieldState = artistsViewModel.textFieldState
                 )
             } else {
                 Card(

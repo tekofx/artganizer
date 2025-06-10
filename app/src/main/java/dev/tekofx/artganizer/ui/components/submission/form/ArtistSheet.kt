@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.components.submission.form
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,10 +23,9 @@ import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 fun ArtistSheet(
     showArtistsSheet: Boolean,
     artists: List<ArtistWithSubmissions>,
-    onSearch: (String) -> Unit,
     onItemValueChange: (Artist) -> Unit,
     closeBottomSheet: () -> Unit,
-    queryText: String
+    textFieldState: TextFieldState,
 ) {
     if (showArtistsSheet) {
         Column(
@@ -35,13 +35,12 @@ fun ArtistSheet(
         ) {
             Text("Select Artist", style = MaterialTheme.typography.headlineSmall)
             ArtistListSelect(
-                items = artists,
-                onQueryChange = { onSearch(it) },
+                artists = artists,
                 onArtistClick = { artist ->
                     onItemValueChange(artist)
                     closeBottomSheet()
                 },
-                query = queryText,
+                textFieldState = textFieldState
             )
             ButtonWithIcon(
                 onClick = {

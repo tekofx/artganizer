@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,11 +30,9 @@ import dev.tekofx.artganizer.ui.IconResource
 @Composable
 fun TagsSelectList(
     selectedTags: List<Tag>,
-    title: String,
-    items: List<Tag>,
+    tags: List<Tag>,
     onItemsSelected: (List<Tag>) -> Unit,
-    onQueryChange: (String) -> Unit,
-    query: String,
+    textFieldState: TextFieldState
 ) {
 
     Box(
@@ -43,7 +44,7 @@ fun TagsSelectList(
                 .fillMaxWidth()
                 .padding(bottom = 70.dp),
         ) {
-            if (items.isEmpty()) {
+            if (tags.isEmpty()) {
                 Text(
                     text = "No items with current search",
                     style = MaterialTheme.typography.bodyMedium,
@@ -55,41 +56,30 @@ fun TagsSelectList(
                         .heightIn(max = 300.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(items.size) { index ->
-                        val item = items[index]
-                        if (item.name.contains(query, ignoreCase = true)) {
-                            ListItem(
-                                item.name,
-                                selected = selectedTags.contains(item),
-                                onClick = {
-                                    val newSelection =
-                                        if (selectedTags.contains(item)) {
-                                            selectedTags - item
-                                        } else {
-                                            selectedTags + item
-                                        }
-                                    onItemsSelected(newSelection)
-                                }
-                            )
-                        }
+                    items(tags) { tag ->
+                        ListItem(
+                            tag.name,
+                            selected = selectedTags.contains(tag),
+                            onClick = {
+                                val newSelection =
+                                    if (selectedTags.contains(tag)) {
+                                        selectedTags - tag
+                                    } else {
+                                        selectedTags + tag
+                                    }
+                                onItemsSelected(newSelection)
+                            }
+                        )
                     }
                 }
             }
         }
 
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        ) {
-            SearchBar(
-                queryText = query,
-                onValueChange = { onQueryChange(it) },
-                onClear = {
-                    onQueryChange("")
-                }
-            )
-        }
+        ThinSearchBar(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onClear = { textFieldState.clearText() },
+            textFieldState = textFieldState,
+        )
     }
 }
 
