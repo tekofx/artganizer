@@ -5,8 +5,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -40,13 +40,13 @@ fun AnimatedThinSearchBarScaffold(
         floatingActionButton = {
             AnimatedVisibility(
                 visible = fabVisible,
-                enter = slideInHorizontally(
+                enter = slideInVertically(
                     animationSpec = spring(
                         stiffness = Spring.StiffnessMediumLow,
                         dampingRatio = Spring.DampingRatioMediumBouncy
                     )
                 ) { fullWidth -> fullWidth },
-                exit = slideOutHorizontally(
+                exit = slideOutVertically(
                     animationSpec = spring(
                         stiffness = Spring.StiffnessHigh, dampingRatio = Spring.DampingRatioNoBouncy
                     )
@@ -77,13 +77,13 @@ fun AnimatedThinSearchBarScaffold(
                     .animatePlacement()
                     .padding(10.dp),
                 visible = searchBarVisible,
-                enter = slideInHorizontally(
+                enter = slideInVertically(
                     animationSpec = spring(
                         stiffness = Spring.StiffnessMediumLow,
                         dampingRatio = Spring.DampingRatioMediumBouncy
                     )
                 ) { fullWidth -> fullWidth },
-                exit = slideOutHorizontally(
+                exit = slideOutVertically(
                     animationSpec = spring(
                         stiffness = Spring.StiffnessHigh, dampingRatio = Spring.DampingRatioNoBouncy
                     )

@@ -52,7 +52,7 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
-        false
+        true
     )
     val searchBarVisible = snapshotFlow {
         Triple(
@@ -65,7 +65,7 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
-        false
+        true
     )
 
     // Inputs

@@ -48,7 +48,7 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
-        false
+        true
     )
     val searchBarVisible = snapshotFlow {
         Triple(
@@ -61,7 +61,7 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
-        false
+        true
     )
 
     // Inputs

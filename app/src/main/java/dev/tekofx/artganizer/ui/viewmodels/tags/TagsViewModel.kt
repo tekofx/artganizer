@@ -46,7 +46,7 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
-        false
+        true
     )
     val searchBarVisible = snapshotFlow {
         Triple(
@@ -59,7 +59,7 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
-        false
+        true
     )
 
 
