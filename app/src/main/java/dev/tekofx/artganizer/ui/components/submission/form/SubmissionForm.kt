@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.ui.components.input.RatingInput
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
@@ -48,7 +49,6 @@ fun SubmissionsForm(
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit = {},
 ) {
-    val queryText by artistsViewModel.queryText.collectAsState()
 
     // Artists
     val artists by artistsViewModel.artists.collectAsState()
@@ -65,14 +65,17 @@ fun SubmissionsForm(
     val tags by tagsViewModel.tags.collectAsState()
     var showTagsSheet by remember { mutableStateOf(false) }
 
-    val scope = rememberCoroutineScope()
 
+    // UI States
+    val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
             initialValue = SheetValue.Hidden,
             skipHiddenState = false,
         )
     )
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetSwipeEnabled = false,
@@ -92,7 +95,9 @@ fun SubmissionsForm(
                 },
                 closeBottomSheet = {
                     scope.launch {
-                        scaffoldState.bottomSheetState.hide()
+                        scaffoldState.bottomSheetState.hide().also {
+                            keyboardController?.hide()
+                        }
                     }
                 },
                 textFieldState = artistsViewModel.textFieldState
@@ -111,7 +116,9 @@ fun SubmissionsForm(
                 },
                 closeBottomSheet = {
                     scope.launch {
-                        scaffoldState.bottomSheetState.hide()
+                        scaffoldState.bottomSheetState.hide().also {
+                            keyboardController?.hide()
+                        }
                     }
                 },
                 textFieldState = charactersViewModel.textFieldState,
@@ -129,7 +136,9 @@ fun SubmissionsForm(
                 },
                 closeBottomSheet = {
                     scope.launch {
-                        scaffoldState.bottomSheetState.hide()
+                        scaffoldState.bottomSheetState.hide().also {
+                            keyboardController?.hide()
+                        }
                     }
                 },
                 textFieldState = tagsViewModel.textFieldState
