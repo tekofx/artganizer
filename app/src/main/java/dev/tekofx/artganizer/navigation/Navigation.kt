@@ -20,6 +20,9 @@ import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -141,12 +144,12 @@ fun Navigation(
             CharacterDetailsScreen(characterId.toLong(), navHostController)
         }
 
-        /*// Tags
+        // Tags
         composable(
             route = NavigateDestinations.TAGS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            TagsScreen(navHostController, tagsViewModel)
+            TagsScreen(navHostController)
         }
 
         composable(
@@ -159,16 +162,15 @@ fun Navigation(
                 navHostController.popBackStack()
                 return@composable
             }
-            tagsViewModel.getTagById(tagId.toLong())
-            TagDetailsScreen(tagsViewModel, navHostController)
+            TagDetailsScreen(tagId.toLong(), navHostController)
         }
 
         composable(
             route = NavigateDestinations.TAG_CREATION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            TagCreationScreen(navHostController, tagsViewModel)
-        }*/
+            TagCreationScreen(navHostController)
+        }
 
 
     }

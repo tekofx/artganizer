@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.layout.AnimatedThinSearchBarScaffold
 import dev.tekofx.artganizer.ui.components.tags.TagCard
@@ -31,7 +32,7 @@ import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 @Composable
 fun TagsScreen(
     navHostController: NavHostController,
-    tagsViewModel: TagsViewModel
+    tagsViewModel: TagsViewModel = getActivityViewModel<TagsViewModel>()
 ) {
 
     val tags by tagsViewModel.tags.collectAsState()

@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.TagWithSubmissions
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
@@ -35,12 +37,17 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TagDetailsScreen(
-    tagsViewModel: TagsViewModel,
-    navHostController: NavHostController
+    tagId: Long,
+    navHostController: NavHostController,
+    tagsViewModel: TagsViewModel = getActivityViewModel<TagsViewModel>(),
 ) {
     val showPopup by tagsViewModel.showPopup.collectAsState()
     val showTagEdit by tagsViewModel.showTagEdit.collectAsState()
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        tagsViewModel.getTagById(tagId)
+    }
 
     if (showPopup) {
         ConfirmationPopup(
