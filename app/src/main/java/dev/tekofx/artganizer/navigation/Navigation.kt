@@ -11,24 +11,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import dev.tekofx.artganizer.HandleSharedLink
-import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
-import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
-import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
-import dev.tekofx.artganizer.ui.screens.characters.CharacterCreationScreen
-import dev.tekofx.artganizer.ui.screens.characters.CharacterDetailsScreen
-import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
-import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
-import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
-import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
-import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
-import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -36,10 +21,6 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun Navigation(
     navHostController: NavHostController,
-    submissionsViewModel: SubmissionsViewModel,
-    artistsViewModel: ArtistsViewModel,
-    charactersViewModel: CharactersViewModel,
-    tagsViewModel: TagsViewModel,
     sharedText: String?
 ) {
     val urlEncoded = if (sharedText == null) null else URLEncoder.encode(
@@ -47,27 +28,28 @@ fun Navigation(
         StandardCharsets.UTF_8.toString()
     )
 
+
     NavHost(
         navController = navHostController,
         startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.SUBMISSIONS_SCREEN
     ) {
 
-        composable(
-            route = "handleSharedLink/{sharedText}",
-            arguments = listOf(navArgument("sharedText") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val sharedText = backStackEntry.arguments?.getString("sharedText")?.let {
-                URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
-            } ?: return@composable
-            HandleSharedLink(sharedText, artistsViewModel, navHostController)
-        }
+        /* composable(
+             route = "handleSharedLink/{sharedText}",
+             arguments = listOf(navArgument("sharedText") { type = NavType.StringType })
+         ) { backStackEntry ->
+             val sharedText = backStackEntry.arguments?.getString("sharedText")?.let {
+                 URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
+             } ?: return@composable
+             HandleSharedLink(sharedText, artistsViewModel, navHostController)
+         }*/
 
         // Submissions
         composable(
             route = NavigateDestinations.SUBMISSIONS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            SubmissionsScreen(navHostController, submissionsViewModel)
+            SubmissionsScreen(navHostController)
         }
 
         composable(
@@ -76,10 +58,6 @@ fun Navigation(
         ) {
             SubmissionCreationScreen(
                 navHostController,
-                submissionsViewModel,
-                artistsViewModel,
-                charactersViewModel,
-                tagsViewModel
             )
         }
 
@@ -93,17 +71,14 @@ fun Navigation(
                 navHostController.popBackStack()
                 return@composable
             }
-            submissionsViewModel.getSubmissionWithArtist(submissionId.toLong())
             SubmissionDetailsScreen(
+                submissionId.toLong(),
                 navHostController,
-                submissionsViewModel,
-                artistsViewModel,
-                charactersViewModel,
-                tagsViewModel
-            )
+
+                )
         }
 
-        // Artists
+        /*// Artists
         composable(
             route = NavigateDestinations.ARTISTS_SCREEN,
             exitTransition = { fadeOut() }
@@ -189,7 +164,7 @@ fun Navigation(
             exitTransition = { fadeOut() }
         ) {
             TagCreationScreen(navHostController, tagsViewModel)
-        }
+        }*/
 
 
     }

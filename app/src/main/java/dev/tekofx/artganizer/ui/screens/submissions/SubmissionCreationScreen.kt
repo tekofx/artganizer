@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.form.SubmissionsForm
@@ -29,14 +30,15 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SubmissionCreationScreen(
     navHostController: NavHostController,
-    submissionsViewModel: SubmissionsViewModel,
-    artistsViewModel: ArtistsViewModel,
-    charactersViewModel: CharactersViewModel,
-    tagsViewModel: TagsViewModel
+    artistsViewModel: ArtistsViewModel = koinViewModel(),
+    charactersViewModel: CharactersViewModel = koinViewModel(),
+    tagsViewModel: TagsViewModel = koinViewModel(),
+    submissionsViewModel: SubmissionsViewModel = getActivityViewModel<SubmissionsViewModel>(),
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -46,6 +48,7 @@ fun SubmissionCreationScreen(
     val savingProgress by submissionsViewModel.savingProgress.collectAsState()
 
     DialogLoader(isLoading = isLoading, savingProgress)
+
 
     if (submissionsViewModel.uris.size > 1 && saveImagesOption == SaveImagesOptions.EMPTY) {
         Column(

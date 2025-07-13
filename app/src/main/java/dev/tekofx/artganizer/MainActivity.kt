@@ -3,6 +3,7 @@ package dev.tekofx.artganizer
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
@@ -35,106 +36,54 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import dev.tekofx.artganizer.database.AppDatabase
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.navigation.showBottomAppBar
-import dev.tekofx.artganizer.repository.ArtistRepository
-import dev.tekofx.artganizer.repository.CharactersRepository
-import dev.tekofx.artganizer.repository.ImageRepository
-import dev.tekofx.artganizer.repository.SubmissionRepository
-import dev.tekofx.artganizer.repository.TagRepository
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.BottomNavigationBar
 import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
 import dev.tekofx.artganizer.ui.theme.AppTheme
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModelFactory
-import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
-import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModelFactory
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModelFactory
-import dev.tekofx.artganizer.ui.viewmodels.tags.TagViewModelFactory
-import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import kotlinx.coroutines.launch
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.context.startKoin
+
+@Composable
+inline fun <reified T : ViewModel> getActivityViewModel(): T =
+    koinViewModel(
+        viewModelStoreOwner = LocalActivity.current as ComponentActivity,
+        key = T::class.java.name
+    )
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-
-        val artistRepository by lazy {
-            ArtistRepository(AppDatabase.getDatabase(this).artistDao())
+        startKoin {
+            androidContext(this@MainActivity)
+            modules(appModules)
         }
-
-        val imageRepository by lazy {
-            ImageRepository(AppDatabase.getDatabase(this).imageDao())
-        }
-
-        val charactersRepository by lazy {
-            CharactersRepository(AppDatabase.getDatabase(this).characterDao())
-        }
-
-        val submissionRepository by lazy {
-            SubmissionRepository(
-                AppDatabase.getDatabase(this).submissionDao(),
-                AppDatabase.getDatabase(this).imageDao(),
-                AppDatabase.getDatabase(this).characterSubmissionCrossRefDao(),
-                AppDatabase.getDatabase(this).tagSubmissionCrossRefDao()
-            )
-        }
-
-        val tagRepository by lazy {
-            TagRepository(
-                AppDatabase.getDatabase(this).tagDao(),
-            )
-        }
-
-
-        val submissionsViewModel = ViewModelProvider(
-            this, SubmissionsViewModelFactory(
-                submissionRepository, imageRepository
-            )
-        )[SubmissionsViewModel::class.java]
-
-        val artistsViewModel = ViewModelProvider(
-            this, ArtistsViewModelFactory(
-                artistRepository
-            )
-        )[ArtistsViewModel::class.java]
-
-        val charactersViewModel = ViewModelProvider(
-            this, CharactersViewModelFactory(
-                charactersRepository
-            )
-        )[CharactersViewModel::class.java]
-
-        val tagsViewModel = ViewModelProvider(
-            this, TagViewModelFactory(
-                tagRepository
-            )
-        )[TagsViewModel::class.java]
 
         setContent {
             val sharedText = intent?.getStringExtra(Intent.EXTRA_TEXT)
             val navController = rememberNavController()
 
             AppTheme {
-                MainApp(
-                    submissionsViewModel,
-                    artistsViewModel,
-                    charactersViewModel,
-                    navController,
-                    tagsViewModel,
-                    sharedText
-                )
+                KoinAndroidContext {
+                    MainApp(
+                        navController,
+                        sharedText
+                    )
+                }
             }
         }
     }
@@ -142,11 +91,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainApp(
-    submissionsViewModel: SubmissionsViewModel,
-    artistsViewModel: ArtistsViewModel,
-    charactersViewModel: CharactersViewModel,
+
     navController: NavHostController,
-    tagsViewModel: TagsViewModel,
     sharedText: String?,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -170,10 +116,6 @@ fun MainApp(
         ) {
             Navigation(
                 navController,
-                submissionsViewModel,
-                artistsViewModel,
-                charactersViewModel,
-                tagsViewModel,
                 sharedText
             )
         }

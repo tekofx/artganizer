@@ -74,3 +74,13 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 }
+
+fun getSubmissionDao(appDatabase: AppDatabase) = appDatabase.submissionDao()
+fun getArtistDao(appDatabase: AppDatabase) = appDatabase.artistDao()
+fun getImageDao(appDatabase: AppDatabase) = appDatabase.imageDao()
+fun getCharacterDao(appDatabase: AppDatabase) = appDatabase.characterDao()
+fun getCharacterSubmissionCrossRefDao(appDatabase: AppDatabase) =
+    appDatabase.characterSubmissionCrossRefDao()
+
+fun getTagDao(appDatabase: AppDatabase) = appDatabase.tagDao()
+fun getTagSubmissionCrossRefDao(appDatabase: AppDatabase) = appDatabase.tagSubmissionCrossRefDao()

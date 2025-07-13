@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,6 +36,7 @@ import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.entities.Tag
 import dev.tekofx.artganizer.entities.getSocialShareText
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.SmallCard
@@ -55,15 +57,17 @@ import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.formatFileSize
 import dev.tekofx.artganizer.utils.shareImage
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SubmissionDetailsScreen(
+    submissionId: Long,
     navHostController: NavHostController,
-    submissionsViewModel: SubmissionsViewModel,
-    artistsViewModel: ArtistsViewModel,
-    charactersViewModel: CharactersViewModel,
-    tagsViewModel: TagsViewModel
+    artistsViewModel: ArtistsViewModel = koinViewModel(),
+    charactersViewModel: CharactersViewModel = koinViewModel(),
+    tagsViewModel: TagsViewModel = koinViewModel(),
+    submissionsViewModel: SubmissionsViewModel = getActivityViewModel<SubmissionsViewModel>()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -76,6 +80,10 @@ fun SubmissionDetailsScreen(
     val showPopup by submissionsViewModel.showPopup.collectAsState()
     val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
     val showFullScreen by submissionsViewModel.showFullscreen.collectAsState()
+
+    LaunchedEffect(Unit) {
+        submissionsViewModel.getSubmissionWithArtist(submissionId)
+    }
 
     // Handle back press
     BackHandler(enabled = showFullScreen) {

@@ -15,16 +15,27 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
 import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import kotlinx.coroutines.flow.Flow
 
+interface SubmissionRepositoryInterface {
+    fun getAllSubmissions(): Flow<List<SubmissionWithArtist>>
+    suspend fun getSubmissionWithArtist(submissionId: Long): SubmissionWithArtist?
+    suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long
+    suspend fun updateSubmissionWithArtist(submissionWithArtist: SubmissionWithArtist)
+    suspend fun deleteSubmission(context: Context, submission: SubmissionWithArtist)
+    suspend fun deleteSubmissions(context: Context, submissions: List<SubmissionWithArtist>)
+}
+
 class SubmissionRepository(
     private val submissionDao: ISubmissionDao,
     private val imageDao: IImageDao,
     private val characterSubmissionCrossRef: ICharacterSubmissionCrossRef,
     private val tagSubmissionCrossRef: ITagSubmissionCrossRef
-) {
+) : SubmissionRepositoryInterface {
 
     // GET
-    fun getAllSubmissions(): Flow<List<SubmissionWithArtist>> = submissionDao.getAllSubmissions()
-    suspend fun getSubmissionWithArtist(submissionId: Long) =
+    override fun getAllSubmissions(): Flow<List<SubmissionWithArtist>> =
+        submissionDao.getAllSubmissions()
+
+    override suspend fun getSubmissionWithArtist(submissionId: Long) =
         submissionDao.getSubmissionWithArtist(submissionId)
 
 
@@ -32,7 +43,7 @@ class SubmissionRepository(
     private suspend fun insertSubmission(submission: Submission): Long =
         submissionDao.insert(submission)
 
-    suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long {
+    override suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long {
 
         Log.d("SubmissionRepository", "Inserting submission details: $submissionDetails")
         val id = insertSubmission(submissionDetails.toSubmission())
@@ -67,7 +78,7 @@ class SubmissionRepository(
     private suspend fun updateSubmission(submission: Submission) =
         submissionDao.update(submission)
 
-    suspend fun updateSubmissionWithArtist(submissionWithArtist: SubmissionWithArtist) {
+    override suspend fun updateSubmissionWithArtist(submissionWithArtist: SubmissionWithArtist) {
         updateSubmission(submissionWithArtist.submission)
         characterSubmissionCrossRef.deleteCharacterSubmissionCrossRefs(submissionWithArtist.submission.submissionId)
 
@@ -93,7 +104,7 @@ class SubmissionRepository(
     }
 
     // DELETE
-    suspend fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
+    override suspend fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
         // Delete submission
         submissionDao.delete(submission.submission)
 
@@ -115,7 +126,10 @@ class SubmissionRepository(
 
     }
 
-    suspend fun deleteSubmissions(context: Context, submissions: List<SubmissionWithArtist>) {
+    override suspend fun deleteSubmissions(
+        context: Context,
+        submissions: List<SubmissionWithArtist>
+    ) {
         submissions.forEach { submission ->
             deleteSubmission(context, submission)
         }

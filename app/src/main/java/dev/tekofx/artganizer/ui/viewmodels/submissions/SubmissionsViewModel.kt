@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
@@ -21,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.scope.ScopeViewModel
 import java.util.Date
 
 enum class SaveImagesOptions {
@@ -32,7 +32,7 @@ enum class SaveImagesOptions {
 class SubmissionsViewModel(
     private val submissionRepo: SubmissionRepository,
     private val imageRepository: ImageRepository
-) : ViewModel() {
+) : ScopeViewModel() {
 
     // New submission data used for creating a submission
     var newSubmissionDetails by mutableStateOf(SubmissionDetails())

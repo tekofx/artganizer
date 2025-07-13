@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
@@ -42,19 +43,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubmissionsScreen(
-    navHostController: NavHostController, submissionsViewModel: SubmissionsViewModel
+    navHostController: NavHostController,
+    viewModel: SubmissionsViewModel = getActivityViewModel<SubmissionsViewModel>()
 ) {
-
     // Data
-    val submissions by submissionsViewModel.submissions.collectAsState()
+    val submissions by viewModel.submissions.collectAsState()
 
     // Ui
-    val showPopup by submissionsViewModel.showPopup.collectAsState()
-    val isSelecting by submissionsViewModel.isSelecting.collectAsState()
+    val showPopup by viewModel.showPopup.collectAsState()
+    val isSelecting by viewModel.isSelecting.collectAsState()
 
 
     // States
@@ -74,8 +75,8 @@ fun SubmissionsScreen(
             uris?.let {
                 if (uris.isNotEmpty()) {
                     scope.launch {
-                        submissionsViewModel.setUris(uris)
-                        submissionsViewModel.updateNewUiState(SubmissionDetails())
+                        viewModel.setUris(uris)
+                        viewModel.updateNewUiState(SubmissionDetails())
                         navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)
                     }
                 }
@@ -101,9 +102,9 @@ fun SubmissionsScreen(
                     SelectionCard(
                         selectedSubmissions = submissions.selectedSubmissions.size,
                         scope = scope,
-                        onRemoveClick = { submissionsViewModel.setShowPopup(true) },
-                        onSelectAllClick = submissionsViewModel::selectAll,
-                        onClearSelection = submissionsViewModel::clearSelectedSubmissions
+                        onRemoveClick = { viewModel.setShowPopup(true) },
+                        onSelectAllClick = viewModel::selectAll,
+                        onClearSelection = viewModel::clearSelectedSubmissions
                     )
                 }
             }
@@ -113,11 +114,11 @@ fun SubmissionsScreen(
                     title = "Remove ${submissions.selectedSubmissions.size} Submissions",
                     message = "Are you sure you want to proceed?",
                     onConfirm = {
-                        submissionsViewModel.deleteSelectedSubmissions(context)
-                        submissionsViewModel.setShowPopup(false)
+                        viewModel.deleteSelectedSubmissions(context)
+                        viewModel.setShowPopup(false)
                     },
                     onDismiss = {
-                        submissionsViewModel.setShowPopup(false)
+                        viewModel.setShowPopup(false)
                     }
                 )
             }
@@ -128,7 +129,7 @@ fun SubmissionsScreen(
                     navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
                 },
                 onSelectImage = {
-                    submissionsViewModel.onSelectSubmission(it)
+                    viewModel.onSelectSubmission(it)
                 }
             )
         }
