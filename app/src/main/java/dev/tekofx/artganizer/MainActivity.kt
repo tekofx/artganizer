@@ -3,7 +3,6 @@ package dev.tekofx.artganizer
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
@@ -36,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -53,15 +51,8 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.compose.KoinAndroidContext
-import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.startKoin
 
-@Composable
-inline fun <reified T : ViewModel> getActivityViewModel(): T =
-    koinViewModel(
-        viewModelStoreOwner = LocalActivity.current as ComponentActivity,
-        key = T::class.java.name
-    )
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
