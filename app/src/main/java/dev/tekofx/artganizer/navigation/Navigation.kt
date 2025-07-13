@@ -14,6 +14,9 @@ import androidx.navigation.navArgument
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharacterCreationScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharacterDetailsScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
@@ -111,18 +114,18 @@ fun Navigation(
 
 
         // Characters
-        /*composable(
+        composable(
             route = NavigateDestinations.CHARACTERS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            CharactersScreen(charactersViewModel, navHostController)
+            CharactersScreen(navHostController)
         }
 
         composable(
             route = NavigateDestinations.CHARACTER_CREATION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            CharacterCreationScreen(charactersViewModel, navHostController)
+            CharacterCreationScreen(navHostController)
         }
 
         composable(
@@ -135,11 +138,10 @@ fun Navigation(
                 navHostController.popBackStack()
                 return@composable
             }
-            charactersViewModel.getCharacterWithSubmission(characterId.toLong())
-            CharacterDetailsScreen(charactersViewModel, navHostController)
+            CharacterDetailsScreen(characterId.toLong(), navHostController)
         }
 
-        // Tags
+        /*// Tags
         composable(
             route = NavigateDestinations.TAGS_SCREEN,
             exitTransition = { fadeOut() }

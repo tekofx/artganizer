@@ -8,6 +8,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.ui.components.characters.CharacterForm
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import kotlinx.coroutines.launch
@@ -15,8 +16,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CharacterCreationScreen(
-    charactersViewModel: CharactersViewModel,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    charactersViewModel: CharactersViewModel = getActivityViewModel<CharactersViewModel>(),
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current

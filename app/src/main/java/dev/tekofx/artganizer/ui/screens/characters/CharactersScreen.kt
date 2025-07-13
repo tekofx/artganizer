@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.characters.CharacterCard
 import dev.tekofx.artganizer.ui.components.layout.AnimatedThinSearchBarScaffold
@@ -30,8 +31,8 @@ import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharactersScreen(
-    charactersViewModel: CharactersViewModel,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    charactersViewModel: CharactersViewModel = getActivityViewModel<CharactersViewModel>(),
 ) {
 
     val characters = charactersViewModel.characters.collectAsState()

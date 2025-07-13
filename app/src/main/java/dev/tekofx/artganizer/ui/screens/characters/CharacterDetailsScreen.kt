@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,6 +33,7 @@ import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.entities.Submission
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
@@ -47,13 +49,18 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CharacterDetailsScreen(
-    charactersViewModel: CharactersViewModel,
-    navHostController: NavHostController
+    characterId: Long,
+    navHostController: NavHostController,
+    charactersViewModel: CharactersViewModel = getActivityViewModel<CharactersViewModel>(),
 ) {
     val showPopup by charactersViewModel.showPopup.collectAsState()
     val showCharacterEdit by charactersViewModel.showCharacterEdit.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        charactersViewModel.getCharacterWithSubmission(characterId)
+    }
 
     if (showPopup) {
         ConfirmationPopup(
