@@ -101,7 +101,7 @@ fun CharacterDetailsScreen(
                 },
                 onImageClick = { imageId ->
                     navHostController.navigate(
-                        "${NavigateDestinations.SUBMISSIONS_SCREEN}/$imageId"
+                        "${NavigateDestinations.SUBMISSIONS_LIST}/$imageId"
                     )
                 },
             )

@@ -1,24 +1,29 @@
 package dev.tekofx.artganizer.navigation
 
+
 object NavigateDestinations {
 
     // Submissions
-    const val SUBMISSIONS_SCREEN = "SubmissionsScreen"
-    const val SUBMISSION_CREATION_SCREEN = "SubmissionCreationScreen"
-    const val SUBMISSION_DETAILS_SCREEN = "SubmissionsScreen/{submissionId}"
+    const val SUBMISSIONS_ROOT = "submissions"
+    const val SUBMISSIONS_LIST = "list"
+    const val SUBMISSION_CREATION = "create"
+    const val SUBMISSION_DETAILS = "details"
 
     // Artists
-    const val ARTISTS_SCREEN = "ArtistsScreen"
-    const val ARTIST_CREATION_SCREEN = "ArtistCreationScreen"
-    const val ARTIST_DETAILS_SCREEN = "ArtistsScreen/{artistId}"
+    const val ARTISTS_ROOT = "artists"
+    const val ARTISTS_LIST = "list"
+    const val ARTIST_CREATION = "create"
+    const val ARTIST_DETAILS = "details"
 
     // Characters
-    const val CHARACTERS_SCREEN = "CharactersScreen"
-    const val CHARACTER_CREATION_SCREEN = "CharacterCreationScreen"
-    const val CHARACTER_DETAILS_SCREEN = "CharactersScreen/{characterId}"
+    const val CHARACTERS_ROOT = "characters"
+    const val CHARACTERS_LIST = "list"
+    const val CHARACTER_CREATION = "create"
+    const val CHARACTER_DETAILS = "details"
 
 
-    const val TAGS_SCREEN = "TagsScreen"
-    const val TAG_CREATION_SCREEN = "TagCreationScreen"
-    const val TAG_DETAILS_SCREEN = "TagsScreen/{tagId}"
+    const val TAGS_ROOT = "tags"
+    const val TAGS_LIST = "list"
+    const val TAG_CREATION = "create"
+    const val TAG_DETAILS = "details"
 }

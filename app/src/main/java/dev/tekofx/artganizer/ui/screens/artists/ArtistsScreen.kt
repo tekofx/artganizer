@@ -84,7 +84,7 @@ fun ArtistScreen(
             searchBarVisible = searchBarVisible,
             textFieldState = artistsViewModel.textFieldState,
             onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-            onFabClick = { navHostController.navigate(NavigateDestinations.ARTIST_CREATION_SCREEN) },
+            onFabClick = { navHostController.navigate(NavigateDestinations.ARTIST_CREATION) },
             fabVisible = fabVisible
         ) {
             LazyColumn(
@@ -104,7 +104,7 @@ fun ArtistScreen(
                 items(artists) { artist ->
                     ArtistCard(
                         artist, onClick = {
-                            navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/${artist.artist.artistId}")
+                            navHostController.navigate("${NavigateDestinations.ARTIST_DETAILS}/${artist.artist.artistId}")
                         }, modifier = Modifier.animateItem()
                     )
                 }

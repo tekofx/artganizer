@@ -180,7 +180,7 @@ fun HandleSharedLink(
                         )
                         Button(
                             onClick = {
-                                navHostController.navigate(NavigateDestinations.ARTISTS_SCREEN)
+                                navHostController.navigate(NavigateDestinations.ARTISTS_ROOT)
                             },
                         ) {
                             Text("Artists Page")

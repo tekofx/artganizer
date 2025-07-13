@@ -88,7 +88,7 @@ fun TagDetailsScreen(
                 },
                 onImageClick = { submissionId ->
                     navHostController.navigate(
-                        "${NavigateDestinations.SUBMISSIONS_SCREEN}/$submissionId"
+                        "${NavigateDestinations.SUBMISSIONS_LIST}/$submissionId"
                     )
                 },
             )

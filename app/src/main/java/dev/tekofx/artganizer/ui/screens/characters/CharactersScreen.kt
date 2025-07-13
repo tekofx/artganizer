@@ -63,7 +63,7 @@ fun CharactersScreen(
             searchBarVisible = searchBarVisible,
             textFieldState = charactersViewModel.textFieldState,
             onFocusChanged = { charactersViewModel.setIsSearchBarFocused(it) },
-            onFabClick = { navHostController.navigate(NavigateDestinations.CHARACTER_CREATION_SCREEN) },
+            onFabClick = { navHostController.navigate(NavigateDestinations.CHARACTER_CREATION) },
             fabVisible = fabVisible
         ) {
             LazyVerticalGrid(
@@ -78,7 +78,7 @@ fun CharactersScreen(
                         modifier = Modifier.animateItem(),
                         character = character,
                         onClick = {
-                            navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/${character.character.characterId}")
+                            navHostController.navigate("${NavigateDestinations.CHARACTER_DETAILS}/${character.character.characterId}")
                         },
                     )
                 }

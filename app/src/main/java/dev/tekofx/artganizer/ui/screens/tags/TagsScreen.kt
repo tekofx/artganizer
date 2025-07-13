@@ -61,7 +61,7 @@ fun TagsScreen(
             textFieldState = tagsViewModel.textFieldState,
             onFocusChanged = { tagsViewModel.setIsSearchBarFocused(it) },
             fabVisible = fabVisible,
-            onFabClick = { navHostController.navigate(NavigateDestinations.TAG_CREATION_SCREEN) },
+            onFabClick = { navHostController.navigate(NavigateDestinations.TAG_CREATION) },
 
             ) {
             LazyColumn(
@@ -74,7 +74,7 @@ fun TagsScreen(
                         tag = tag,
                         modifier = Modifier
                             .fillMaxWidth(),
-                        onClick = { navHostController.navigate("${NavigateDestinations.TAGS_SCREEN}/${tag.tag.tagId}") }
+                        onClick = { navHostController.navigate("${NavigateDestinations.TAG_DETAILS}/${tag.tag.tagId}") }
                     )
                 }
                 item {

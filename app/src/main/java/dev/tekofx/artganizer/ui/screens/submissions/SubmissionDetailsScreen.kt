@@ -140,13 +140,13 @@ fun SubmissionDetailsScreen(
                 SubmissionInfo(
                     submission,
                     onArtistCardClick = { artistId ->
-                        navHostController.navigate("${NavigateDestinations.ARTISTS_SCREEN}/$artistId")
+                        navHostController.navigate("${NavigateDestinations.ARTISTS_ROOT}/$artistId")
                     },
                     onCharacterCardClick = { characterId ->
-                        navHostController.navigate("${NavigateDestinations.CHARACTERS_SCREEN}/$characterId")
+                        navHostController.navigate("${NavigateDestinations.CHARACTERS_ROOT}/$characterId")
                     },
                     onTagCardClick = { tagId ->
-                        navHostController.navigate("${NavigateDestinations.TAGS_SCREEN}/$tagId")
+                        navHostController.navigate("${NavigateDestinations.TAGS_ROOT}/$tagId")
                     },
                     onDelete = {
                         submissionsViewModel.setShowPopup(true)

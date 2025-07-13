@@ -92,7 +92,7 @@ fun ArtistDetailsScreen(
                 },
                 onImageClick = { submissionId ->
                     navHostController.navigate(
-                        "${NavigateDestinations.SUBMISSIONS_SCREEN}/$submissionId"
+                        "${NavigateDestinations.SUBMISSIONS_LIST}/$submissionId"
                     )
                 },
             )

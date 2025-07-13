@@ -13,27 +13,27 @@ sealed class BottomNavigationItems(
         title = "Gallery",
         selectedIcon = IconResource.fromDrawableResource(R.drawable.gallery_filled),
         unselectedIcon = IconResource.fromDrawableResource(R.drawable.gallery_outlined),
-        route = NavigateDestinations.SUBMISSIONS_SCREEN
+        route = NavigateDestinations.SUBMISSIONS_LIST
     )
 
     data object Artists : BottomNavigationItems(
         title = "Artists",
         selectedIcon = IconResource.fromDrawableResource(R.drawable.palette_filled),
         unselectedIcon = IconResource.fromDrawableResource(R.drawable.palette_outlined),
-        route = NavigateDestinations.ARTISTS_SCREEN
+        route = NavigateDestinations.ARTISTS_ROOT
     )
 
     data object Characters : BottomNavigationItems(
         title = "Characters",
         selectedIcon = IconResource.fromDrawableResource(R.drawable.paw_filled),
         unselectedIcon = IconResource.fromDrawableResource(R.drawable.paw_outlined),
-        route = NavigateDestinations.CHARACTERS_SCREEN
+        route = NavigateDestinations.CHARACTERS_ROOT
     )
 
     data object Tags : BottomNavigationItems(
         title = "Tags",
         selectedIcon = IconResource.fromDrawableResource(R.drawable.tag_filled),
         unselectedIcon = IconResource.fromDrawableResource(R.drawable.tag_outlined),
-        route = NavigateDestinations.TAGS_SCREEN
+        route = NavigateDestinations.TAGS_ROOT
     )
 }

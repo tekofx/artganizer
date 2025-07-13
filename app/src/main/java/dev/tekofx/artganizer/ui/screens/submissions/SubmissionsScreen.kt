@@ -77,7 +77,7 @@ fun SubmissionsScreen(
                     scope.launch {
                         viewModel.setUris(uris)
                         viewModel.updateNewUiState(SubmissionDetails())
-                        navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION_SCREEN)
+                        navHostController.navigate(NavigateDestinations.SUBMISSION_CREATION)
                     }
                 }
             }
@@ -126,7 +126,7 @@ fun SubmissionsScreen(
                 submissions,
                 isSelecting,
                 onImageClick = {
-                    navHostController.navigate("${NavigateDestinations.SUBMISSIONS_SCREEN}/${it}")
+                    navHostController.navigate("${NavigateDestinations.SUBMISSION_DETAILS}/${it}")
                 },
                 onSelectImage = {
                     viewModel.onSelectSubmission(it)
