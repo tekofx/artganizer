@@ -57,16 +57,15 @@ import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.formatFileSize
 import dev.tekofx.artganizer.utils.shareImage
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SubmissionDetailsScreen(
     submissionId: Long,
     navHostController: NavHostController,
-    artistsViewModel: ArtistsViewModel = koinViewModel(),
-    charactersViewModel: CharactersViewModel = koinViewModel(),
-    tagsViewModel: TagsViewModel = koinViewModel(),
+    artistsViewModel: ArtistsViewModel = getActivityViewModel<ArtistsViewModel>(),
+    charactersViewModel: CharactersViewModel = getActivityViewModel<CharactersViewModel>(),
+    tagsViewModel: TagsViewModel = getActivityViewModel<TagsViewModel>(),
     submissionsViewModel: SubmissionsViewModel = getActivityViewModel<SubmissionsViewModel>()
 ) {
     val context = LocalContext.current

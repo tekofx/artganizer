@@ -171,7 +171,7 @@ class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
     }
 
     //////////////////////// Database Operations ////////////////////////
-    fun getArtistWithSubmissions(id: Int) {
+    fun getArtistWithSubmissions(id: Long) {
         viewModelScope.launch {
             val artist = repository.getArtistWithSubmissions(id)
             if (artist == null) {

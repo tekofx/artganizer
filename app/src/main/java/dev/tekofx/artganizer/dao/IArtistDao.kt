@@ -27,7 +27,7 @@ interface IArtistDao {
 
     @Transaction
     @Query("SELECT * FROM artists WHERE artistId = :artistId")
-    suspend fun getArtistWithSubmissions(artistId: Int): ArtistWithSubmissions?
+    suspend fun getArtistWithSubmissions(artistId: Long): ArtistWithSubmissions?
 
     @Transaction
     @Query("SELECT * from artists ORDER BY name ASC")

@@ -8,13 +8,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.ui.components.artists.ArtistForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun ArtistCreationScreen(artistsViewModel: ArtistsViewModel, navHostController: NavHostController) {
+fun ArtistCreationScreen(
+    navHostController: NavHostController,
+    artistsViewModel: ArtistsViewModel = getActivityViewModel<ArtistsViewModel>(),
+) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
 import dev.tekofx.artganizer.ui.components.layout.AnimatedThinSearchBarScaffold
@@ -51,7 +52,8 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun ArtistScreen(
-    navHostController: NavHostController, artistsViewModel: ArtistsViewModel
+    navHostController: NavHostController,
+    artistsViewModel: ArtistsViewModel = getActivityViewModel<ArtistsViewModel>()
 ) {
 
     // Data

@@ -11,6 +11,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
+import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
+import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
 import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
@@ -78,19 +81,19 @@ fun Navigation(
                 )
         }
 
-        /*// Artists
+        // Artists
         composable(
             route = NavigateDestinations.ARTISTS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            ArtistScreen(navHostController, artistsViewModel)
+            ArtistScreen(navHostController)
         }
 
         composable(
             route = NavigateDestinations.ARTIST_CREATION_SCREEN,
             exitTransition = { fadeOut() }
         ) {
-            ArtistCreationScreen(artistsViewModel, navHostController)
+            ArtistCreationScreen(navHostController)
         }
 
         composable(
@@ -103,13 +106,12 @@ fun Navigation(
                 navHostController.popBackStack()
                 return@composable
             }
-            artistsViewModel.getArtistWithSubmissions(artistId.toInt())
-            ArtistDetailsScreen(artistsViewModel, navHostController)
+            ArtistDetailsScreen(artistId.toLong(), navHostController)
         }
 
 
         // Characters
-        composable(
+        /*composable(
             route = NavigateDestinations.CHARACTERS_SCREEN,
             exitTransition = { fadeOut() }
         ) {
