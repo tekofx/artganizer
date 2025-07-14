@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
@@ -38,7 +37,7 @@ fun Navigation(
 
     NavHost(
         navController = navHostController,
-        startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.SUBMISSIONS_ROOT
+        startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.SUBMISSIONS_LIST
     ) {
 
         /* composable(
@@ -62,139 +61,122 @@ fun Navigation(
 
 
 fun NavGraphBuilder.submissionsGraph(navController: NavHostController) {
-    navigation(
-        route = NavigateDestinations.SUBMISSIONS_ROOT,
-        startDestination = NavigateDestinations.SUBMISSIONS_LIST
 
+    composable(
+        route = NavigateDestinations.SUBMISSIONS_LIST,
+        exitTransition = { fadeOut() }
     ) {
-        composable(
-            route = NavigateDestinations.SUBMISSIONS_LIST,
-            exitTransition = { fadeOut() }
-        ) {
-            SubmissionsScreen(navController)
-        }
+        SubmissionsScreen(navController)
+    }
 
-        composable(
-            route = NavigateDestinations.SUBMISSION_CREATION,
-            exitTransition = { fadeOut() }
-        ) {
-            SubmissionCreationScreen(navController)
-        }
+    composable(
+        route = NavigateDestinations.SUBMISSION_CREATION,
+        exitTransition = { fadeOut() }
+    ) {
+        SubmissionCreationScreen(navController)
+    }
 
-        composable(
-            route = "details/{submissionId}",
-            arguments = listOf(navArgument("submissionId") { type = NavType.LongType }),
-            exitTransition = { fadeOut() }
-        ) { backStackEntry ->
-            val submissionId = backStackEntry.arguments?.getLong("submissionId")
-            if (submissionId == null) {
-                navController.popBackStack()
-                return@composable
-            }
-            SubmissionDetailsScreen(submissionId, navController)
+    composable(
+        route = "${NavigateDestinations.SUBMISSION_DETAILS}/{submissionId}",
+        arguments = listOf(navArgument("submissionId") { type = NavType.LongType }),
+        exitTransition = { fadeOut() }
+    ) { backStackEntry ->
+        val submissionId = backStackEntry.arguments?.getLong("submissionId")
+        if (submissionId == null) {
+            navController.popBackStack()
+            return@composable
         }
+        SubmissionDetailsScreen(submissionId, navController)
     }
 }
 
 fun NavGraphBuilder.artistsGraph(navController: NavHostController) {
-    navigation(
-        route = NavigateDestinations.ARTISTS_ROOT,
-        startDestination = NavigateDestinations.ARTISTS_LIST
+
+    composable(
+        route = NavigateDestinations.ARTISTS_LIST,
+        exitTransition = { fadeOut() }
     ) {
-        composable(
-            route = NavigateDestinations.ARTISTS_LIST,
-            exitTransition = { fadeOut() }
-        ) {
-            ArtistScreen(navController)
-        }
+        ArtistScreen(navController)
+    }
 
-        composable(
-            route = NavigateDestinations.ARTIST_CREATION,
-            exitTransition = { fadeOut() }
-        ) {
-            ArtistCreationScreen(navController)
-        }
+    composable(
+        route = NavigateDestinations.ARTIST_CREATION,
+        exitTransition = { fadeOut() }
+    ) {
+        ArtistCreationScreen(navController)
+    }
 
-        composable(
-            route = "details/{artistId}",
-            arguments = listOf(navArgument("artistId") { type = NavType.StringType }),
-            exitTransition = { fadeOut() }
-        ) { backStackEntry ->
-            val artistId = backStackEntry.arguments?.getString("artistId")
-            if (artistId == null) {
-                navController.popBackStack()
-                return@composable
-            }
-            ArtistDetailsScreen(artistId.toLong(), navController)
+    composable(
+        route = "${NavigateDestinations.ARTIST_DETAILS}/{artistId}",
+        arguments = listOf(navArgument("artistId") { type = NavType.StringType }),
+        exitTransition = { fadeOut() }
+    ) { backStackEntry ->
+        val artistId = backStackEntry.arguments?.getString("artistId")
+        if (artistId == null) {
+            navController.popBackStack()
+            return@composable
         }
+        ArtistDetailsScreen(artistId.toLong(), navController)
     }
 }
 
 
 fun NavGraphBuilder.charactersGraph(navController: NavHostController) {
-    navigation(
-        route = NavigateDestinations.CHARACTERS_ROOT,
-        startDestination = NavigateDestinations.CHARACTERS_LIST
+
+    composable(
+        route = NavigateDestinations.CHARACTERS_LIST,
+        exitTransition = { fadeOut() }
     ) {
-        composable(
-            route = NavigateDestinations.CHARACTERS_LIST,
-            exitTransition = { fadeOut() }
-        ) {
-            CharactersScreen(navController)
-        }
+        CharactersScreen(navController)
+    }
 
-        composable(
-            route = NavigateDestinations.CHARACTER_CREATION,
-            exitTransition = { fadeOut() }
-        ) {
-            CharacterCreationScreen(navController)
-        }
+    composable(
+        route = NavigateDestinations.CHARACTER_CREATION,
+        exitTransition = { fadeOut() }
+    ) {
+        CharacterCreationScreen(navController)
+    }
 
-        composable(
-            route = "details/{characterId}",
-            arguments = listOf(navArgument("characterId") { type = NavType.StringType }),
-            exitTransition = { fadeOut() }
-        ) { backStackEntry ->
-            val characterId = backStackEntry.arguments?.getString("characterId")
-            if (characterId == null) {
-                navController.popBackStack()
-                return@composable
-            }
-            CharacterDetailsScreen(characterId.toLong(), navController)
+    composable(
+        route = "${NavigateDestinations.CHARACTER_DETAILS}/{characterId}",
+        arguments = listOf(navArgument("characterId") { type = NavType.StringType }),
+        exitTransition = { fadeOut() }
+    ) { backStackEntry ->
+        val characterId = backStackEntry.arguments?.getString("characterId")
+        if (characterId == null) {
+            navController.popBackStack()
+            return@composable
         }
+        CharacterDetailsScreen(characterId.toLong(), navController)
     }
 }
 
 fun NavGraphBuilder.tagsGraph(navController: NavHostController) {
-    navigation(
-        route = NavigateDestinations.TAGS_ROOT,
-        startDestination = NavigateDestinations.TAGS_LIST
+
+    composable(
+        route = NavigateDestinations.TAGS_LIST,
+        exitTransition = { fadeOut() }
     ) {
-        composable(
-            route = NavigateDestinations.TAGS_LIST,
-            exitTransition = { fadeOut() }
-        ) {
-            TagsScreen(navController)
-        }
+        TagsScreen(navController)
+    }
 
-        composable(
-            route = NavigateDestinations.TAG_CREATION,
-            exitTransition = { fadeOut() }
-        ) {
-            TagCreationScreen(navController)
-        }
+    composable(
+        route = NavigateDestinations.TAG_CREATION,
+        exitTransition = { fadeOut() }
+    ) {
+        TagCreationScreen(navController)
+    }
 
-        composable(
-            route = "details/{tagId}",
-            arguments = listOf(navArgument("tagId") { type = NavType.StringType }),
-            exitTransition = { fadeOut() }
-        ) { backStackEntry ->
-            val tagId = backStackEntry.arguments?.getString("tagId")
-            if (tagId == null) {
-                navController.popBackStack()
-                return@composable
-            }
-            TagDetailsScreen(tagId.toLong(), navController)
+    composable(
+        route = "${NavigateDestinations.TAG_DETAILS}/{tagId}",
+        arguments = listOf(navArgument("tagId") { type = NavType.StringType }),
+        exitTransition = { fadeOut() }
+    ) { backStackEntry ->
+        val tagId = backStackEntry.arguments?.getString("tagId")
+        if (tagId == null) {
+            navController.popBackStack()
+            return@composable
         }
+        TagDetailsScreen(tagId.toLong(), navController)
     }
 }

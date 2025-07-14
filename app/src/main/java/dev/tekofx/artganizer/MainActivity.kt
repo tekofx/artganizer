@@ -2,6 +2,7 @@ package dev.tekofx.artganizer
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -88,6 +89,7 @@ fun MainApp(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    Log.d("MainApp", "Current route: ${navBackStackEntry?.destination?.id}")
     Scaffold(
         modifier = Modifier
             .fillMaxSize()

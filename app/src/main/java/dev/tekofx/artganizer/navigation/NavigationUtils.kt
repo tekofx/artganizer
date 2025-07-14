@@ -14,12 +14,5 @@ fun showBottomAppBar(currentRoute: String?): Boolean {
         return false
     }
 
-    return when (currentRoute) {
-        NavigateDestinations.SUBMISSIONS_LIST -> true
-        NavigateDestinations.ARTISTS_ROOT -> true
-        NavigateDestinations.CHARACTERS_ROOT -> true
-        NavigateDestinations.TAGS_ROOT -> true
-        else -> false
-    }
-
+    return currentRoute.contains("/list")
 }
