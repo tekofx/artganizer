@@ -3,6 +3,7 @@ package dev.tekofx.artganizer.ui.components.submission
 
 import android.net.Uri
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,8 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -52,14 +55,31 @@ fun FullscreenImageViewer(
             modifier = Modifier
                 .fillMaxSize(),
         )
+        ViewerButton(
+            onClick = { onClose() },
+            modifier = Modifier.align(Alignment.BottomEnd)
+        )
+    }
+}
+
+@Composable
+fun ViewerButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier
+            .padding(16.dp),
+        shape = CircleShape,
+        color = Color.Transparent,
+        border = BorderStroke(color = MaterialTheme.colorScheme.primary, width = 1.dp)
+    ) {
         IconButton(
-            onClick = onClose,
+            onClick = { onClick() },
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Close,
+                imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = "Close",
                 tint = MaterialTheme.colorScheme.onBackground
             )

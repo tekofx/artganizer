@@ -6,11 +6,14 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
@@ -45,7 +48,6 @@ import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.FullscreenImageViewer
 import dev.tekofx.artganizer.ui.components.submission.PaletteColorList
 import dev.tekofx.artganizer.ui.components.submission.Rating
-import dev.tekofx.artganizer.ui.components.submission.SubmissionViewer
 import dev.tekofx.artganizer.ui.components.submission.form.SubmissionsForm
 import dev.tekofx.artganizer.ui.components.tags.SmallTagCard
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -79,6 +81,10 @@ fun SubmissionDetailsScreen(
     val showPopup by submissionsViewModel.showPopup.collectAsState()
     val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
     val showFullScreen by submissionsViewModel.showFullscreen.collectAsState()
+    val pagerState = rememberPagerState(
+        pageCount = { 2 },
+        initialPage = 0
+    )
 
     LaunchedEffect(Unit) {
         submissionsViewModel.getSubmissionWithArtist(submissionId)
@@ -108,58 +114,74 @@ fun SubmissionDetailsScreen(
         )
     }
 
-    if (showFullScreen) {
-        if (submission.images.isNotEmpty()) {
-            FullscreenImageViewer(
-                submission.images[currentImageIndex].uri,
-                onClose = { submissionsViewModel.setShowFullscreen(false) }
+
+    Scaffold {
+        if (showEdit) {
+            SubmissionsForm(
+                uris = submissionsViewModel.uris,
+                artistsViewModel = artistsViewModel,
+                charactersViewModel = charactersViewModel,
+                tagsViewModel = tagsViewModel,
+                submissionDetails = submissionsViewModel.editingSubmissionDetails,
+                onItemValueChange = {
+                    submissionsViewModel.updateEditingUiState(it)
+                },
+                onSaveClick = {
+                    scope.launch { submissionsViewModel.editSubmission() }
+                    submissionsViewModel.setShowEditSubmission(false)
+                },
+                onCancelClick = {
+                    submissionsViewModel.setShowEditSubmission(false)
+                },
+                currentImageIndex = currentImageIndex
             )
-        }
-    } else {
-        Scaffold {
-            if (showEdit) {
-                SubmissionsForm(
-                    uris = submissionsViewModel.uris,
-                    artistsViewModel = artistsViewModel,
-                    charactersViewModel = charactersViewModel,
-                    tagsViewModel = tagsViewModel,
-                    submissionDetails = submissionsViewModel.editingSubmissionDetails,
-                    onItemValueChange = {
-                        submissionsViewModel.updateEditingUiState(it)
-                    },
-                    onSaveClick = {
-                        scope.launch { submissionsViewModel.editSubmission() }
-                        submissionsViewModel.setShowEditSubmission(false)
-                    },
-                    onCancelClick = {
-                        submissionsViewModel.setShowEditSubmission(false)
-                    },
-                    currentImageIndex = currentImageIndex
-                )
-            } else {
-                SubmissionInfo(
-                    submission,
-                    onArtistCardClick = { artistId ->
-                        navHostController.navigate("${NavigateDestinations.ARTISTS_ROOT}/$artistId")
-                    },
-                    onCharacterCardClick = { characterId ->
-                        navHostController.navigate("${NavigateDestinations.CHARACTERS_ROOT}/$characterId")
-                    },
-                    onTagCardClick = { tagId ->
-                        navHostController.navigate("${NavigateDestinations.TAGS_ROOT}/$tagId")
-                    },
-                    onDelete = {
-                        submissionsViewModel.setShowPopup(true)
-                    },
-                    onEdit = {
-                        submissionsViewModel.setShowEditSubmission(true)
-                    },
-                    onImageChange = {
-                        submissionsViewModel.setCurrentImage(it)
-                    },
-                    currentImageIndex = currentImageIndex,
-                    onImageClick = { submissionsViewModel.setShowFullscreen(true) },
-                )
+        } else {
+
+            VerticalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                userScrollEnabled = true
+            ) { page ->
+                when (page) {
+                    0 -> {
+                        if (submission.images.isNotEmpty()) {
+                            FullscreenImageViewer(
+                                submission.images[currentImageIndex].uri,
+                                onClose = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(1)
+                                    }
+                                }
+                            )
+                        }
+                    }
+
+                    1 -> {
+                        SubmissionInfo(
+                            submission,
+                            onArtistCardClick = { artistId ->
+                                navHostController.navigate("${NavigateDestinations.ARTISTS_ROOT}/$artistId")
+                            },
+                            onCharacterCardClick = { characterId ->
+                                navHostController.navigate("${NavigateDestinations.CHARACTERS_ROOT}/$characterId")
+                            },
+                            onTagCardClick = { tagId ->
+                                navHostController.navigate("${NavigateDestinations.TAGS_ROOT}/$tagId")
+                            },
+                            onDelete = {
+                                submissionsViewModel.setShowPopup(true)
+                            },
+                            onEdit = {
+                                submissionsViewModel.setShowEditSubmission(true)
+                            },
+                            onImageChange = {
+                                submissionsViewModel.setCurrentImage(it)
+                            },
+                            currentImageIndex = currentImageIndex,
+                            onImageClick = { submissionsViewModel.setShowFullscreen(true) },
+                        )
+                    }
+                }
             }
         }
     }
@@ -187,18 +209,8 @@ fun SubmissionInfo(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (submission.images.isNotEmpty()) {
 
-            SubmissionViewer(
-                title = submission.submission.title,
-                imagePaths = submission.images.map { it.uri },
-                thumbnail = submission.submission.thumbnail,
-                currentImageIndex = currentImageIndex,
-                onImageChange = { onImageChange(it) },
-                onClick = onImageClick
-            )
-        }
-        SubmissionInfo(
+        SubmissionDetails(
             submission,
             currentImageIndex = currentImageIndex,
             onArtistCardClick = onArtistCardClick,
@@ -211,7 +223,7 @@ fun SubmissionInfo(
 }
 
 @Composable
-fun SubmissionInfo(
+fun SubmissionDetails(
     submission: SubmissionWithArtist,
     currentImageIndex: Int,
     onArtistCardClick: (Long) -> Unit,
