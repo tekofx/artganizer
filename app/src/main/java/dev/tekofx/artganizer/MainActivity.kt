@@ -95,8 +95,8 @@ fun MainApp(
             .fillMaxSize()
             .navigationBarsPadding(), bottomBar = {
             AnimatedVisibility(
-                enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
+                enter = slideInVertically(initialOffsetY = { 2 * it }),
+                exit = slideOutVertically(targetOffsetY = { 2 * it }),
                 visible = showBottomAppBar(currentRoute)
             ) {
                 BottomNavigationBar(

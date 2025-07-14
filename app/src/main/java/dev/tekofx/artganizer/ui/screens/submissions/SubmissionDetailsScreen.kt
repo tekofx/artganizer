@@ -45,7 +45,7 @@ import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
-import dev.tekofx.artganizer.ui.components.submission.FullscreenImageViewer
+import dev.tekofx.artganizer.ui.components.submission.FullscreenSubmissionViewer
 import dev.tekofx.artganizer.ui.components.submission.PaletteColorList
 import dev.tekofx.artganizer.ui.components.submission.Rating
 import dev.tekofx.artganizer.ui.components.submission.form.SubmissionsForm
@@ -145,13 +145,11 @@ fun SubmissionDetailsScreen(
                 when (page) {
                     0 -> {
                         if (submission.images.isNotEmpty()) {
-                            FullscreenImageViewer(
-                                submission.images[currentImageIndex].uri,
-                                onClose = {
-                                    scope.launch {
-                                        pagerState.animateScrollToPage(1)
-                                    }
-                                }
+                            FullscreenSubmissionViewer(
+                                imagePaths = submission.images.map { it.uri },
+                                currentImageIndex = currentImageIndex,
+                                thumbnail = submission.images[currentImageIndex].uri,
+                                onImageChange = { submissionsViewModel.setCurrentImage(it) },
                             )
                         }
                     }

@@ -153,7 +153,6 @@ fun SubmissionsForm(
         ) {
             item {
                 SubmissionViewer(
-                    title = submissionDetails.title,
                     imagePaths = uris,
                     thumbnail = submissionDetails.thumbnail,
                     currentImageIndex = currentImageIndex,
