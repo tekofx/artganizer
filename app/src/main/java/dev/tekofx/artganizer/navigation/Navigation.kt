@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import dev.tekofx.artganizer.ui.screens.SettingsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
@@ -38,6 +39,8 @@ fun Navigation(
     NavHost(
         navController = navHostController,
         startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.SUBMISSIONS_LIST
+        //startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else "settings"
+
     ) {
 
         /* composable(
@@ -54,6 +57,12 @@ fun Navigation(
         artistsGraph(navHostController)
         charactersGraph(navHostController)
         tagsGraph(navHostController)
+
+        composable(
+            route = "settings"
+        ) {
+            SettingsScreen()
+        }
 
 
     }
