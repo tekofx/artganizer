@@ -63,6 +63,7 @@ class SubmissionsViewModel(
     // Data
     val submissions = MutableStateFlow(SubmissionsUiState())
 
+
     // Ui State
     val showPopup = MutableStateFlow(false)
     val showEditSubmission = MutableStateFlow(false)
@@ -144,18 +145,30 @@ class SubmissionsViewModel(
     }
 
     fun onSelectSubmission(submissionId: Long) {
+
+        // Show the selection mode if not already selecting
         isSelecting.value = true
+
         val newSelectedSubmissions =
             submissions.value.selectedSubmissions.toMutableList()
+
+
+        // Toggle the selection of the submission
         if (newSelectedSubmissions.contains(submissionId)) {
             newSelectedSubmissions.remove(submissionId)
         } else {
             newSelectedSubmissions.add(submissionId)
         }
 
+        // Update the state with the new selection
         submissions.value = submissions.value.copy(
             selectedSubmissions = newSelectedSubmissions
         )
+
+        // If no submissions are selected, exit selection mode
+        if (newSelectedSubmissions.isEmpty()) {
+            isSelecting.value = false
+        }
     }
 
     fun selectAll() {
