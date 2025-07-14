@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -99,11 +101,12 @@ fun SubmissionsScreen(
             },
             bottomBar = {
                 if (submissions.selectedSubmissions.isNotEmpty()) {
-                    SelectionCard(
+                    SelectionBar(
                         selectedSubmissions = submissions.selectedSubmissions.size,
                         scope = scope,
                         onRemoveClick = { viewModel.setShowPopup(true) },
                         onSelectAllClick = viewModel::selectAll,
+                        onDeselectAllClick = viewModel::deselectAll,
                         onClearSelection = viewModel::clearSelectedSubmissions
                     )
                 }
@@ -138,11 +141,12 @@ fun SubmissionsScreen(
 
 
 @Composable
-fun SelectionCard(
+fun SelectionBar(
     selectedSubmissions: Int,
     scope: CoroutineScope,
     onRemoveClick: () -> Unit,
     onSelectAllClick: () -> Unit,
+    onDeselectAllClick: () -> Unit,
     onClearSelection: () -> Unit
 ) {
     Card(
@@ -158,7 +162,6 @@ fun SelectionCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 IconButton(
                     onClick = {
                         scope.launch {
@@ -167,29 +170,29 @@ fun SelectionCard(
                     }
                 ) {
                     Icon(
-                        IconResource.fromDrawableResource(R.drawable.x)
-                            .asPainterResource(), contentDescription = ""
+                        painterResource(R.drawable.x),
+                        contentDescription = ""
                     )
                 }
                 IconButton(
                     onClick = onSelectAllClick
                 ) {
                     Icon(
-                        IconResource.fromDrawableResource(R.drawable.select_all)
-                            .asPainterResource(), contentDescription = ""
+                        painterResource(id = R.drawable.select_all),
+                        contentDescription = ""
+                    )
+                }
+                IconButton(
+                    onClick = onDeselectAllClick
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.deselect),
+                        contentDescription = ""
                     )
                 }
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
-            ) {
-                Icon(
-                    IconResource.fromDrawableResource(R.drawable.gallery_outlined)
-                        .asPainterResource(), contentDescription = ""
-                )
-                Text("Selected: $selectedSubmissions")
-            }
+
+            Text("Selected: $selectedSubmissions", style = MaterialTheme.typography.titleMedium)
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -226,11 +229,12 @@ fun SelectionCard(
 @Composable
 fun SelectionCardPreview() {
 
-    SelectionCard(
+    SelectionBar(
         selectedSubmissions = 5,
         scope = rememberCoroutineScope(),
         onRemoveClick = {},
         onSelectAllClick = {},
-        onClearSelection = {}
+        onClearSelection = {},
+        onDeselectAllClick = {}
     )
 }

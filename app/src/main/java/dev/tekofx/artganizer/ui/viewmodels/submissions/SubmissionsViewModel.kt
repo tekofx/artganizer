@@ -162,11 +162,17 @@ class SubmissionsViewModel(
     }
 
     fun selectAll() {
-        Log.d("SubmissionsViewModel", "Selecting all submissions")
         isSelecting.value = true
         val allSubmissionIds = submissions.value.submissions.map { it.submission.submissionId }
         submissions.value = submissions.value.copy(
             selectedSubmissions = allSubmissionIds
+        )
+    }
+
+    fun deselectAll() {
+        isSelecting.value = false
+        submissions.value = submissions.value.copy(
+            selectedSubmissions = emptyList()
         )
     }
 
