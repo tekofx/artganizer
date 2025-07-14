@@ -172,11 +172,7 @@ fun SubmissionDetailsScreen(
                             onEdit = {
                                 submissionsViewModel.setShowEditSubmission(true)
                             },
-                            onImageChange = {
-                                submissionsViewModel.setCurrentImage(it)
-                            },
                             currentImageIndex = currentImageIndex,
-                            onImageClick = { submissionsViewModel.setShowFullscreen(true) },
                         )
                     }
                 }
@@ -194,11 +190,8 @@ fun SubmissionInfo(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     currentImageIndex: Int,
-    onImageChange: (Int) -> Unit,
-    onImageClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(10.dp)
