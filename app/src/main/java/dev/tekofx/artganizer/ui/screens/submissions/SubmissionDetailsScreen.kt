@@ -198,6 +198,32 @@ fun SubmissionInfo(
                 onClick = onImageClick
             )
         }
+        SubmissionInfo(
+            submission,
+            currentImageIndex = currentImageIndex,
+            onArtistCardClick = onArtistCardClick,
+            onCharacterCardClick = onCharacterCardClick,
+            onTagCardClick = onTagCardClick,
+            onEdit = onEdit,
+            onDelete = onDelete
+        )
+    }
+}
+
+@Composable
+fun SubmissionInfo(
+    submission: SubmissionWithArtist,
+    currentImageIndex: Int,
+    onArtistCardClick: (Long) -> Unit,
+    onCharacterCardClick: (Long) -> Unit,
+    onTagCardClick: (Long) -> Unit,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+) {
+
+    val context = LocalContext.current
+    Column {
+
         if (submission.submission.title.isNotEmpty()) {
             Text(
                 text = submission.submission.title,
