@@ -80,7 +80,6 @@ fun SubmissionDetailsScreen(
     // UI states
     val showPopup by submissionsViewModel.showPopup.collectAsState()
     val showEdit by submissionsViewModel.showEditSubmission.collectAsState()
-    val showFullScreen by submissionsViewModel.showFullscreen.collectAsState()
     val pagerState = rememberPagerState(
         pageCount = { 2 },
         initialPage = 0
@@ -91,8 +90,10 @@ fun SubmissionDetailsScreen(
     }
 
     // Handle back press
-    BackHandler(enabled = showFullScreen) {
-        submissionsViewModel.setShowFullscreen(false)
+    BackHandler(enabled = pagerState.currentPage == 1) {
+        scope.launch {
+            pagerState.animateScrollToPage(0)
+        }
     }
 
     if (showPopup) {

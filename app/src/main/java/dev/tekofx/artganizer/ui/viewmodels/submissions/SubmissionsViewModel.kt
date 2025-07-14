@@ -67,7 +67,6 @@ class SubmissionsViewModel(
     // Ui State
     val showPopup = MutableStateFlow(false)
     val showEditSubmission = MutableStateFlow(false)
-    val showFullscreen = MutableStateFlow(false)
     val currentImageIndex = MutableStateFlow(0) // Index of images in current submission
     val isLoading = MutableStateFlow(false)
     val isSelecting = MutableStateFlow(false)
@@ -107,14 +106,6 @@ class SubmissionsViewModel(
         showPopup.value = show
     }
 
-    fun setShowFullscreen(show: Boolean) {
-        showFullscreen.value = show
-    }
-
-    fun setIsSelecting(value: Boolean) {
-        isSelecting.value = true
-    }
-
 
     //////////////////////// Updates and clears ////////////////////////
 
@@ -138,7 +129,6 @@ class SubmissionsViewModel(
 
     fun clearSelectedSubmissions() {
         isSelecting.value = false
-        Log.d("SubmissionsViewModel", "Deselecting all submissions")
         submissions.value = submissions.value.copy(
             selectedSubmissions = emptyList()
         )
