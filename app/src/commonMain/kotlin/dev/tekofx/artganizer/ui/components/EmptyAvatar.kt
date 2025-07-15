@@ -52,7 +52,7 @@ fun EmptyAvatar(
     }
     val color = remember {
         Color(
-            android.graphics.Color.HSVToColor(
+            Color.HSVToColor(
                 floatArrayOf(
                     (0..360).random().toFloat(), // Random hue
                     0.5f, // Saturation

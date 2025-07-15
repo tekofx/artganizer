@@ -9,12 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import artganizer.app.generated.resources.Res
 import artganizer.app.generated.resources.user_filled
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
 
 @Composable
 fun Avatar(
@@ -38,9 +36,7 @@ fun Avatar(
 
     if (imagePath != null) {
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imagePath)
-                .build(),
+            model = imagePath,
             contentDescription = "icon",
             contentScale = ContentScale.Crop,
             modifier = finalModifier

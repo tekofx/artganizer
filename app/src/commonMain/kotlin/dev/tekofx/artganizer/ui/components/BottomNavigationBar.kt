@@ -16,6 +16,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.BottomNavigationItems
 import dev.tekofx.artganizer.navigation.currentRoute
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BottomNavigationBar(
@@ -45,7 +46,7 @@ fun BottomNavigationBar(
                     onClick = {
                         if (!selected) { // Avoid navigating to the same destination
                             navHostController.navigate(item.route) {
-                                popUpTo(navHostController.graph.findStartDestination().id) {
+                                popUpTo(navHostController.graph.findStartDestination().route!!) {
                                     saveState = true
                                 }
                                 restoreState = true
@@ -56,12 +57,12 @@ fun BottomNavigationBar(
                         if (selected) {
 
                             Icon(
-                                item.selectedIcon.asPainterResource(),
+                                painterResource(item.selectedIcon),
                                 contentDescription = item.title
                             )
                         } else {
                             Icon(
-                                item.unselectedIcon.asPainterResource(),
+                                painterResource(item.unselectedIcon),
                                 contentDescription = item.title
                             )
                         }
