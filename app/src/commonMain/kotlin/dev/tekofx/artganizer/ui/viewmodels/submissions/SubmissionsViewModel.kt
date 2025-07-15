@@ -1,9 +1,6 @@
 package dev.tekofx.artganizer.ui.viewmodels.submissions
 
 
-import android.content.Context
-import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,8 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.scope.ScopeViewModel
-import java.util.Date
+import org.koin.viewmodel.scope.ScopeViewModel
 
 enum class SaveImagesOptions {
     EMPTY,
@@ -57,7 +53,7 @@ class SubmissionsViewModel(
         private set
 
     // Uris of selected images
-    var uris = listOf<Uri>()
+    var uris = listOf<String>()
         private set
 
     // Data
@@ -75,7 +71,6 @@ class SubmissionsViewModel(
     init {
         viewModelScope.launch {
             submissionRepo.getAllSubmissions().collect { submissionsList ->
-                Log.d("SubmissionsViewModel", submissionsList.toString())
                 submissions.value = submissionsList.toSubmissionsUiState()
                 currentImageIndex.value = 0
             }
@@ -85,13 +80,12 @@ class SubmissionsViewModel(
 
     //////////////////////// Setters ////////////////////////
 
-    fun setUris(uris: List<Uri>) {
+    fun setUris(uris: List<String>) {
         this.uris = uris
         saveImagesOption = SaveImagesOptions.EMPTY
     }
 
     fun setCurrentImage(value: Int) {
-        Log.d("setCurrentImage", value.toString())
         currentImageIndex.value = value
     }
 
@@ -110,7 +104,6 @@ class SubmissionsViewModel(
     //////////////////////// Updates and clears ////////////////////////
 
     fun updateNewUiState(submissionDetails: SubmissionDetails) {
-        Log.d("updateNewUiState", submissionDetails.characters.toString())
         newSubmissionDetails = submissionDetails
     }
 
@@ -119,7 +112,6 @@ class SubmissionsViewModel(
     }
 
     fun updateEditingUiState(submissionDetails: SubmissionDetails) {
-        Log.d("updateEditingUiState", editingSubmissionDetails.toString())
         editingSubmissionDetails = submissionDetails
     }
 
@@ -185,11 +177,9 @@ class SubmissionsViewModel(
             currentImageIndex.value = 0
             val submission = submissionRepo.getSubmissionWithArtist(id)
             if (submission == null) {
-                Log.d("SubmissionsViewModel", "Submission with id $id not found")
                 return@launch
             }
             currentSubmissionDetails = submission.toSubmissionDetails()
-            Log.d("SubmissionsViewModel", "Got submission: ${currentSubmissionDetails.tags}")
             uris = submission.images.map { it.uri }
         }
     }
@@ -199,7 +189,6 @@ class SubmissionsViewModel(
      */
     suspend fun editSubmission() {
         val submission = editingSubmissionDetails.toSubmissionWithArtist()
-        Log.d("editSubmission", submission.toString())
         submissionRepo.updateSubmissionWithArtist(submission)
         editingSubmissionDetails = SubmissionDetails()
         currentSubmissionDetails = submission.toSubmissionDetails()
@@ -209,7 +198,6 @@ class SubmissionsViewModel(
      * Saves a new submission
      */
     suspend fun saveSubmission(context: Context) {
-        Log.d("saveSubmission", "Started saving submission")
         isLoading.value = true
         var i = 0f
         val total = uris.size.toFloat()
@@ -231,7 +219,6 @@ class SubmissionsViewModel(
 
                         imageRepository.insert(
                             Image(
-                                date = Date(),
                                 size = imageInfo?.sizeInBytes ?: 0L,
                                 uri = imagePath,
                                 dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
@@ -257,7 +244,6 @@ class SubmissionsViewModel(
                         imageRepository.insert(
                             Image(
                                 imageId = 0,
-                                date = Date(),
                                 uri = imagePath,
                                 size = imageInfo?.sizeInBytes ?: 0L,
                                 dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",

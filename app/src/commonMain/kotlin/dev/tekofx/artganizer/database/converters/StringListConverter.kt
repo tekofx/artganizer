@@ -1,18 +1,17 @@
 package dev.tekofx.artganizer.database.converters
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class StringListConverter {
     @TypeConverter
     fun fromString(value: String): List<String> {
-        val listType = object : TypeToken<List<String>>() {}.type
-        return Gson().fromJson(value, listType)
+        return Json.decodeFromString(value)
     }
 
     @TypeConverter
     fun fromList(list: List<String>): String {
-        return Gson().toJson(list)
+        return Json.encodeToString(list)
     }
 }

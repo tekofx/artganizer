@@ -11,11 +11,10 @@ import dev.tekofx.artganizer.dao.ISubmissionDao
 import dev.tekofx.artganizer.dao.ITagDao
 import dev.tekofx.artganizer.dao.ITagSubmissionCrossRef
 import dev.tekofx.artganizer.database.converters.DateConverter
+import dev.tekofx.artganizer.database.converters.DatetimeConverter
 import dev.tekofx.artganizer.database.converters.IntListConverter
 import dev.tekofx.artganizer.database.converters.LongListConverter
 import dev.tekofx.artganizer.database.converters.StringListConverter
-import dev.tekofx.artganizer.database.converters.UriListConverter
-import dev.tekofx.artganizer.database.converters.UriStringConverter
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.CharacterSubmissionCrossRef
@@ -45,10 +44,11 @@ import kotlin.concurrent.Volatile
     DateConverter::class,
     StringListConverter::class,
     IntListConverter::class,
-    UriListConverter::class,
-    UriStringConverter::class,
-    LongListConverter::class
+    LongListConverter::class,
+    DatetimeConverter::class
 )
+
+
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun submissionDao(): ISubmissionDao

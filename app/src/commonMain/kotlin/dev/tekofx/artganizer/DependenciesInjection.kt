@@ -1,10 +1,5 @@
 package dev.tekofx.artganizer
 
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.LocalActivity
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModel
-import dev.tekofx.artganizer.database.AppDatabase
 import dev.tekofx.artganizer.database.getArtistDao
 import dev.tekofx.artganizer.database.getCharacterDao
 import dev.tekofx.artganizer.database.getCharacterSubmissionCrossRefDao
@@ -21,18 +16,21 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
-import org.koin.androidx.compose.koinViewModel
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 
-@Composable
+expect fun platformModule(): Module
+
+/*@Composable
 inline fun <reified T : ViewModel> getActivityViewModel(): T =
     koinViewModel(
         viewModelStoreOwner = LocalActivity.current as ComponentActivity,
         key = T::class.java.name
-    )
+    )*/
+
 
 val repositoryModule = module {
     singleOf(::ArtistRepository)
@@ -43,7 +41,7 @@ val repositoryModule = module {
 }
 
 val daoModule = module {
-    single { AppDatabase.getDatabase(get()) }
+    single { platformModule() }
     single { getSubmissionDao(get()) }
     single { getArtistDao(get()) }
     single { getImageDao(get()) }

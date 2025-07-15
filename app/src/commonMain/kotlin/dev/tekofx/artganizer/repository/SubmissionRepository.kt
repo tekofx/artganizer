@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.repository
 
 import android.content.Context
-import android.util.Log
 import dev.tekofx.artganizer.dao.ICharacterSubmissionCrossRef
 import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
@@ -15,13 +14,14 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
 import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import kotlinx.coroutines.flow.Flow
 
-interface SubmissionRepositoryInterface {
+
+expect interface SubmissionRepositoryInterface {
     fun getAllSubmissions(): Flow<List<SubmissionWithArtist>>
     suspend fun getSubmissionWithArtist(submissionId: Long): SubmissionWithArtist?
     suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long
     suspend fun updateSubmissionWithArtist(submissionWithArtist: SubmissionWithArtist)
-    suspend fun deleteSubmission(context: Context, submission: SubmissionWithArtist)
-    suspend fun deleteSubmissions(context: Context, submissions: List<SubmissionWithArtist>)
+    suspend fun deleteSubmission(platformContext: Any, submission: SubmissionWithArtist)
+    suspend fun deleteSubmissions(platformContext: Any, submissions: List<SubmissionWithArtist>)
 }
 
 class SubmissionRepository(
@@ -45,7 +45,6 @@ class SubmissionRepository(
 
     override suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long {
 
-        Log.d("SubmissionRepository", "Inserting submission details: $submissionDetails")
         val id = insertSubmission(submissionDetails.toSubmission())
         submissionDetails.characters.forEach { character ->
             insertCharacterSubmissionCrossRef(

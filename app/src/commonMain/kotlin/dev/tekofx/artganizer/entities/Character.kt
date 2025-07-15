@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.entities
 
-import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -14,5 +13,5 @@ data class Character(
     val pronouns: String?,
     val height: String?,
     val description: String?,
-    val imagePath: Uri?,
+    val imagePath: String? = null,
 )
