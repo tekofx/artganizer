@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.entities
 
-import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -9,7 +8,7 @@ data class Artist(
     @PrimaryKey(autoGenerate = true)
     val artistId: Long = 0,
     val name: String,
-    val imagePath: Uri?,
+    val imagePath: String?,
     val socialNetworks: List<String>,
 )
 

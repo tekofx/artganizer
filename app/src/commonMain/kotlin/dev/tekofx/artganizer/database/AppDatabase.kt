@@ -1,8 +1,6 @@
 package dev.tekofx.artganizer.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.tekofx.artganizer.dao.IArtistDao
@@ -25,6 +23,7 @@ import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.entities.Tag
 import dev.tekofx.artganizer.entities.TagSubmissionCrossRef
+import kotlin.concurrent.Volatile
 
 /**
  * Database class with a singleton Instance object.
@@ -64,14 +63,14 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var Instance: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        /*fun getDatabase(context: Context): AppDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, AppDatabase::class.java, "item_database")
                     .build()
                     .also { Instance = it }
             }
-        }
+        }*/
     }
 }
 

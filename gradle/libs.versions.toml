@@ -1,6 +1,11 @@
 [versions]
 agp = "8.10.1"
+# Android SDK versions
+android-compileSdk = "35"
+android-minSdk = "24"
+android-targetSdk = "35"
 coilCompose = "3.2.0"
+androidx-lifecycle = "2.9.1"
 foundation = "1.8.2"
 gson = "2.11.0"
 kotlin = "2.1.20"
@@ -14,7 +19,10 @@ composeBom = "2025.05.01"
 navigationCompose = "2.9.0"
 paletteKtx = "1.0.0"
 room = "2.7.1"
-koin-bom = "4.0.0"
+koin-bom = "4.1.0"
+composeHotReload = "1.0.0-alpha11"
+composeMultiplatform = "1.8.2"
+kotlinx-coroutines = "1.10.2"
 ksp = "2.1.20-1.0.32"
 zoomableImageCoil3 = "0.16.0"
 [libraries]
@@ -41,15 +49,23 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 zoomable-image-coil3 = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "zoomableImageCoil3" }
+androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
 # Koin
-koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
-koin-core = { module = "io.insert-koin:koin-core" }
-koin-android = { module = "io.insert-koin:koin-android" }
-koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin-bom" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-bom" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin-bom" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+# multiplatform
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

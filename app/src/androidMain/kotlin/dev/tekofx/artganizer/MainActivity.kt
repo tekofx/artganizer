@@ -2,20 +2,13 @@ package dev.tekofx.artganizer
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -37,83 +30,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.navigation.Navigation
-import dev.tekofx.artganizer.navigation.showBottomAppBar
 import dev.tekofx.artganizer.ui.IconResource
-import dev.tekofx.artganizer.ui.components.BottomNavigationBar
 import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
 import dev.tekofx.artganizer.ui.theme.AppTheme
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.compose.KoinAndroidContext
-import org.koin.core.context.startKoin
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        startKoin {
-            androidContext(this@MainActivity)
-            modules(appModules)
-        }
-
         setContent {
             val sharedText = intent?.getStringExtra(Intent.EXTRA_TEXT)
-            val navController = rememberNavController()
-
             AppTheme {
-                KoinAndroidContext {
-                    MainApp(
-                        navController,
-                        sharedText
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun MainApp(
-
-    navController: NavHostController,
-    sharedText: String?,
-) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    Log.d("MainApp", "Current route: ${navBackStackEntry?.destination?.id}")
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding(), bottomBar = {
-            AnimatedVisibility(
-                enter = slideInVertically(initialOffsetY = { 2 * it }),
-                exit = slideOutVertically(targetOffsetY = { 2 * it }),
-                visible = showBottomAppBar(currentRoute)
-            ) {
-                BottomNavigationBar(
-                    navHostController = navController,
+                App(
+                    sharedText
                 )
             }
-        }) { padding ->
-        Box(
-            modifier = Modifier.padding(padding)
-        ) {
-            Navigation(
-                navController,
-                sharedText
-            )
         }
     }
 }
+
 
 @Composable
 fun HandleSharedLink(

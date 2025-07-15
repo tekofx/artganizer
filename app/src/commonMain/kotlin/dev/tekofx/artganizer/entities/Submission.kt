@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.entities
 
-import android.net.Uri
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -23,7 +22,7 @@ data class Submission(
     val title: String,
     val description: String,
     val rating: Int = 0,
-    val thumbnail: Uri = Uri.EMPTY,
+    val thumbnail: String = "",
     // Foreign keys
     val artistId: Long? = null,
     val characterId: Long? = null
