@@ -22,7 +22,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.ui.IconResource
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +31,7 @@ import dev.tekofx.artganizer.ui.IconResource
 fun EmptyAvatar(
     modifier: Modifier = Modifier,
     size: Dp?,
-    iconResource: IconResource,
+    icon: DrawableResource,
     shape: Shape = RoundedCornerShape(50.dp)
 ) {
 
@@ -69,8 +70,7 @@ fun EmptyAvatar(
     ) {
         Icon(
             modifier = Modifier.size(newSize - newSize / 3),
-            painter = iconResource
-                .asPainterResource(),
+            painter = painterResource(icon),
             contentDescription = "icon",
         )
     }

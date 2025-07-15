@@ -22,9 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.tag_filled
 import dev.tekofx.artganizer.entities.Tag
-import dev.tekofx.artganizer.ui.IconResource
+import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +103,7 @@ fun ListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+            painterResource(Res.drawable.tag_filled),
             contentDescription = ""
         )
         Text(
@@ -128,7 +129,7 @@ fun SelectedItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                painterResource(Res.drawable.tag_filled),
                 contentDescription = ""
             )
 

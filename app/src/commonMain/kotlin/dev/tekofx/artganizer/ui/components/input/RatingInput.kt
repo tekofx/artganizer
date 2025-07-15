@@ -15,8 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.star_filled
+import artganizer.app.generated.resources.star_outlined
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RatingInput(
@@ -35,10 +37,8 @@ fun RatingInput(
         Row {
             for (i in 1..5) {
                 Icon(
-                    if (i <= rating) IconResource.fromDrawableResource(R.drawable.star_filled)
-                        .asPainterResource()
-                    else IconResource.fromDrawableResource(R.drawable.star_outlined)
-                        .asPainterResource(),
+                    if (i <= rating) painterResource(Res.drawable.star_filled)
+                    else painterResource(Res.drawable.star_outlined),
                     contentDescription = "Rating $i",
                     modifier = Modifier
                         .size(32.dp)

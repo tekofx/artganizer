@@ -2,8 +2,6 @@ package dev.tekofx.artganizer.ui.components.buttons
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -11,13 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.ui.IconResource
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun CreateFab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    iconResource: IconResource = IconResource.fromImageVector(Icons.Filled.Add),
+    icon: DrawableResource,
     text: String = "Add"
 ) {
     ExtendedFloatingActionButton(modifier = modifier, onClick = { onClick() }) {
@@ -26,7 +25,7 @@ fun CreateFab(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                iconResource.asPainterResource(),
+                painterResource(icon),
                 contentDescription = ""
             )
             Text(text)

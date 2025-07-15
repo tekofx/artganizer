@@ -21,10 +21,4 @@ class TagRepository(private val tagDao: ITagDao) {
     // DELETE
     suspend fun deleteTag(tag: Tag) = tagDao.delete(tag)
 
-
-    // OTHER
-    fun doesTagExist(tagName: String): Boolean {
-        return tagDao.doesTagExist(tagName)
-    }
-
 }

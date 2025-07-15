@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.calendar_outlined
+import artganizer.app.generated.resources.device_sd_card_outlined
+import artganizer.app.generated.resources.edit
+import artganizer.app.generated.resources.file_info
+import artganizer.app.generated.resources.file_outlined
+import artganizer.app.generated.resources.maximize_outlined
+import artganizer.app.generated.resources.palette_filled
+import artganizer.app.generated.resources.paw_filled
+import artganizer.app.generated.resources.share
+import artganizer.app.generated.resources.tag_filled
+import artganizer.app.generated.resources.trash
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.Image
@@ -41,7 +51,6 @@ import dev.tekofx.artganizer.entities.Tag
 import dev.tekofx.artganizer.entities.getSocialShareText
 import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
@@ -59,6 +68,7 @@ import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.formatFileSize
 import dev.tekofx.artganizer.utils.shareImage
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -276,7 +286,7 @@ fun SubmissionDetails(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             ButtonWithIcon(
-                iconResource = IconResource.fromDrawableResource(R.drawable.share),
+                icon = Res.drawable.share,
                 onClick = {
                     shareImage(
                         context = context,
@@ -288,12 +298,12 @@ fun SubmissionDetails(
                 color = MaterialTheme.colorScheme.secondary
             )
             ButtonWithIcon(
-                iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                icon = Res.drawable.edit,
                 onClick = { onEdit() },
                 text = "Edit"
             )
             ButtonWithIcon(
-                iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                icon = Res.drawable.trash,
                 onClick = {
                     onDelete()
                 },
@@ -320,7 +330,7 @@ fun CharactersSection(
             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
         ) {
             Icon(
-                IconResource.fromDrawableResource(R.drawable.paw_filled).asPainterResource(),
+                painterResource(Res.drawable.paw_filled),
                 contentDescription = "",
                 modifier = Modifier.size(30.dp)
             )
@@ -358,7 +368,7 @@ fun ArtistSection(
             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
         ) {
             Icon(
-                IconResource.fromDrawableResource(R.drawable.palette_filled).asPainterResource(),
+                painterResource(Res.drawable.palette_filled),
                 contentDescription = "",
                 modifier = Modifier.size(30.dp)
             )
@@ -384,7 +394,6 @@ fun TagsSection(
     tags: List<Tag>,
     onTagClick: (Long) -> Unit
 ) {
-    Log.d("TagsSection", "Tags: $tags")
 
     if (tags.isEmpty()) return
     Column(
@@ -396,7 +405,7 @@ fun TagsSection(
             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
         ) {
             Icon(
-                IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                painterResource(Res.drawable.tag_filled),
                 contentDescription = "",
                 modifier = Modifier.size(30.dp)
             )
@@ -434,7 +443,7 @@ fun ImageInfo(image: Image) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                IconResource.fromDrawableResource(R.drawable.file_info).asPainterResource(),
+                painterResource(Res.drawable.file_info),
                 contentDescription = "",
                 modifier = Modifier.size(30.dp)
             )
@@ -452,8 +461,7 @@ fun ImageInfo(image: Image) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.calendar_outlined)
-                        .asPainterResource(),
+                    painterResource(Res.drawable.calendar_outlined),
                     contentDescription = ""
                 )
                 Text(dateToString(image.date))
@@ -465,8 +473,7 @@ fun ImageInfo(image: Image) {
             ) {
                 Text(image.dimensions)
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.maximize_outlined)
-                        .asPainterResource(),
+                    painterResource(Res.drawable.maximize_outlined),
                     contentDescription = ""
                 )
             }
@@ -480,8 +487,7 @@ fun ImageInfo(image: Image) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.device_sd_card_outlined)
-                        .asPainterResource(),
+                    painterResource(Res.drawable.device_sd_card_outlined),
                     contentDescription = ""
                 )
                 Text(formatFileSize(image.size))
@@ -492,8 +498,7 @@ fun ImageInfo(image: Image) {
             ) {
                 Text(image.extension)
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.file_outlined)
-                        .asPainterResource(),
+                    painterResource(Res.drawable.file_outlined),
                     contentDescription = ""
                 )
             }

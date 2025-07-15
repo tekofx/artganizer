@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.tag_filled
+import artganizer.app.generated.resources.x
 import dev.tekofx.artganizer.entities.Tag
-import dev.tekofx.artganizer.ui.IconResource
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SmallTagCard(
@@ -47,7 +49,7 @@ fun SmallTagCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                    painterResource(Res.drawable.tag_filled),
                     contentDescription = null,
                     modifier = Modifier.size(22.dp)
                 )
@@ -63,8 +65,7 @@ fun SmallTagCard(
                 ) {
                     Icon(
                         modifier = Modifier.size(20.dp),
-                        painter = IconResource.fromDrawableResource(R.drawable.x)
-                            .asPainterResource(),
+                        painter = painterResource(Res.drawable.x),
                         contentDescription = null,
                     )
                 }

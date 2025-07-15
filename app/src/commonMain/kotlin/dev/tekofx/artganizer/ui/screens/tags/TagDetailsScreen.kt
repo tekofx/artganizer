@@ -21,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.edit
+import artganizer.app.generated.resources.tag_filled
+import artganizer.app.generated.resources.trash
 import dev.tekofx.artganizer.entities.TagWithSubmissions
 import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.GalleryRow
@@ -33,6 +35,7 @@ import dev.tekofx.artganizer.ui.components.tags.TagForm
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.toTagWithSubmissions
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -120,7 +123,7 @@ fun TagInfo(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Icon(
-                    IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                    painterResource(Res.drawable.tag_filled),
                     contentDescription = "",
                     modifier = Modifier.size(50.dp)
                 )
@@ -138,12 +141,12 @@ fun TagInfo(
                 ButtonWithIcon(
                     onClick = onEditClick,
                     text = "Edit",
-                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                    icon = Res.drawable.edit,
                 )
                 ButtonWithIcon(
                     onClick = onDeleteClick,
                     text = "Delete",
-                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                    icon = Res.drawable.trash,
                     color = MaterialTheme.colorScheme.error,
                 )
             }

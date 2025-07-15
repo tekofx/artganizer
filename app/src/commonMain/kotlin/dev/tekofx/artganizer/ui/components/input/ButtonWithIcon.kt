@@ -13,13 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.ui.IconResource
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ButtonWithIcon(
     onClick: () -> Unit,
     text: String,
-    iconResource: IconResource,
+    icon: DrawableResource,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
     enabled: Boolean = true,
@@ -40,7 +41,7 @@ fun ButtonWithIcon(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                iconResource.asPainterResource(),
+                painterResource(icon),
                 contentDescription = text,
             )
             Text(text = text, style = MaterialTheme.typography.labelLarge)

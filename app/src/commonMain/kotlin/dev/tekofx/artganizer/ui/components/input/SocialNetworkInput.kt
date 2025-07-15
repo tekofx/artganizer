@@ -21,11 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.utils.getSocialNetworkIconRes
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SocialNetworkInput(
@@ -59,12 +57,11 @@ fun SocialNetworkInput(
                 singleLine = true,
                 leadingIcon = {
                     Icon(
-                        painter = IconResource.fromDrawableResource(
+                        painterResource(
                             getSocialNetworkIconRes(
                                 newSocialNetwork
                             )
-                        )
-                            .asPainterResource(),
+                        ),
                         contentDescription = "Social Network Icon",
                         modifier = Modifier.size(40.dp)
                     )
@@ -104,8 +101,7 @@ fun SocialNetworksList(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = IconResource.fromDrawableResource(getSocialNetworkIconRes(url))
-                        .asPainterResource(),
+                    painterResource(getSocialNetworkIconRes(url)),
                     contentDescription = "Social Network Icon",
                     modifier = Modifier.size(35.dp)
                 )

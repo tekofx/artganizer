@@ -28,11 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
 import dev.tekofx.artganizer.ui.theme.AppTheme
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
@@ -112,8 +112,7 @@ fun HandleSharedLink(
                         Icon(
                             modifier = Modifier.size(100.dp),
                             tint = Color(0xFF4CAF50),
-                            painter = IconResource.fromDrawableResource(R.drawable.check)
-                                .asPainterResource(),
+                            painter = painterResource(Res.drawable.check),
                             contentDescription = ""
                         )
 

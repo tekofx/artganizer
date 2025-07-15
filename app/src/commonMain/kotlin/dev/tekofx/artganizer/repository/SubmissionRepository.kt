@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.repository
 
-import android.content.Context
 import dev.tekofx.artganizer.dao.ICharacterSubmissionCrossRef
 import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.dao.ISubmissionDao
@@ -15,7 +14,7 @@ import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
 import kotlinx.coroutines.flow.Flow
 
 
-expect interface SubmissionRepositoryInterface {
+interface SubmissionRepositoryInterface {
     fun getAllSubmissions(): Flow<List<SubmissionWithArtist>>
     suspend fun getSubmissionWithArtist(submissionId: Long): SubmissionWithArtist?
     suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long
@@ -103,7 +102,7 @@ class SubmissionRepository(
     }
 
     // DELETE
-    override suspend fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
+    override suspend fun deleteSubmission(platformContext: Any, submission: SubmissionWithArtist) {
         // Delete submission
         submissionDao.delete(submission.submission)
 
@@ -117,20 +116,20 @@ class SubmissionRepository(
         // Delete images associated with the submission
         submission.images.forEach {
             imageDao.delete(it)
-            removeImageFromInternalStorage(context, it.uri)
+            removeImageFromInternalStorage(platformContext, it.uri)
         }
 
         // Delete thumbnail
-        removeImageFromInternalStorage(context, submission.submission.thumbnail)
+        removeImageFromInternalStorage(platformContext, submission.submission.thumbnail)
 
     }
 
     override suspend fun deleteSubmissions(
-        context: Context,
+        platformContext: Any,
         submissions: List<SubmissionWithArtist>
     ) {
         submissions.forEach { submission ->
-            deleteSubmission(context, submission)
+            deleteSubmission(platformContext, submission)
         }
     }
 }

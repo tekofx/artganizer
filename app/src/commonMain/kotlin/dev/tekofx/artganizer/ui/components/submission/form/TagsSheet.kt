@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.x
 import dev.tekofx.artganizer.entities.Tag
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.TagsSelectList
 
@@ -50,7 +50,7 @@ fun TagsSheet(
                 onClick = {
                     closeBottomSheet()
                 },
-                iconResource = IconResource.fromDrawableResource(R.drawable.x),
+                icon = Res.drawable.x,
                 text = "Close",
             )
         }

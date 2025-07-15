@@ -34,7 +34,6 @@ import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
@@ -43,6 +42,7 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -203,7 +203,7 @@ fun SelectionBar(
                     }
                 ) {
                     Icon(
-                        IconResource.fromDrawableResource(R.drawable.edit)
+                        painterResource(R.drawable.edit)
                             .asPainterResource(), contentDescription = ""
                     )
                 }
@@ -215,7 +215,7 @@ fun SelectionBar(
                     }
                 ) {
                     Icon(
-                        IconResource.fromDrawableResource(R.drawable.trash)
+                        painterResource(R.drawable.trash)
                             .asPainterResource(), contentDescription = "",
                         tint = Color(0xFFB00020)
                     )

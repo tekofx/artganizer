@@ -13,9 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.tag_filled
 import dev.tekofx.artganizer.entities.Tag
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.tags.SmallTagCard
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -31,7 +31,7 @@ fun TagsSection(
     if (submissionDetails.tags.isEmpty()) {
         ButtonWithIcon(
             onClick = onAddTagsClick,
-            iconResource = IconResource.fromDrawableResource(R.drawable.tag_filled),
+            icon = Res.drawable.tag_filled,
             text = "Add Tags",
             modifier = Modifier.fillMaxWidth()
         )
@@ -56,7 +56,7 @@ fun TagsSection(
             item {
                 ButtonWithIcon(
                     onClick = onAddTagsClick,
-                    iconResource = IconResource.fromDrawableResource(R.drawable.tag_filled),
+                    icon = Res.drawable.tag_filled,
                     text = "Add Tags",
                     modifier = Modifier
                         .fillMaxWidth()

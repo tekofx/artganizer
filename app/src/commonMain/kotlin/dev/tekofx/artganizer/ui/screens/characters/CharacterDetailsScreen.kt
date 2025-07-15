@@ -29,13 +29,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.edit
+import artganizer.app.generated.resources.trash
 import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.entities.Submission
 import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.characters.CharacterForm
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
@@ -191,12 +192,12 @@ fun CharacterInfo(
                 ButtonWithIcon(
                     onClick = onEditClick,
                     text = "Edit",
-                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                    icon = Res.drawable.edit,
                 )
                 ButtonWithIcon(
                     onClick = onDeleteClick,
                     text = "Delete",
-                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                    icon = Res.drawable.trash,
                     color = MaterialTheme.colorScheme.error,
                 )
             }

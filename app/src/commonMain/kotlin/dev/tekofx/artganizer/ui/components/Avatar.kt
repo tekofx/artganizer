@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.components
 
-import android.net.Uri
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -12,14 +11,14 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.user_filled
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
 
 @Composable
 fun Avatar(
-    imagePath: Uri?,
+    imagePath: String?,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
     size: Dp? = null
@@ -48,7 +47,7 @@ fun Avatar(
         )
     } else {
         EmptyAvatar(
-            iconResource = IconResource.fromDrawableResource(R.drawable.user_filled),
+            icon = Res.drawable.user_filled,
             size = size,
             shape = shape
         )

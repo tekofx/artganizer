@@ -5,8 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.palette_filled
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -23,7 +23,7 @@ fun ArtistSection(
         if (submissionDetails.artist == null) {
             ButtonWithIcon(
                 onClick = onAddArtistButton,
-                iconResource = IconResource.fromDrawableResource(R.drawable.palette_filled),
+                icon = Res.drawable.palette_filled,
                 text = "Add Artist",
                 modifier = Modifier.fillMaxWidth()
             )

@@ -5,8 +5,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.cancel
+import artganizer.app.generated.resources.device_floppy
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 
 @Composable
@@ -21,13 +22,13 @@ fun FormButtons(
         ButtonWithIcon(
             onClick = onSaveClick,
             text = "Save",
-            iconResource = IconResource.fromDrawableResource(R.drawable.device_floppy),
+            icon = Res.drawable.device_floppy,
             enabled = enabledSave
         )
         ButtonWithIcon(
             onClick = onCancelClick,
             text = "Cancel",
-            iconResource = IconResource.fromDrawableResource(R.drawable.cancel),
+            icon = Res.drawable.cancel,
             color = MaterialTheme.colorScheme.error
         )
     }

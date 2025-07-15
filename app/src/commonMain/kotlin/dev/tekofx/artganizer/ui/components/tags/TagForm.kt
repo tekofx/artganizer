@@ -11,13 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.tag_filled
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagDetails
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagUiState
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun TagForm(
@@ -33,7 +34,7 @@ fun TagForm(
     ) {
         item {
             Icon(
-                IconResource.fromDrawableResource(R.drawable.tag_filled).asPainterResource(),
+                painterResource(Res.drawable.tag_filled),
                 contentDescription = "",
                 modifier = Modifier.size(AVATAR_SIZE)
             )

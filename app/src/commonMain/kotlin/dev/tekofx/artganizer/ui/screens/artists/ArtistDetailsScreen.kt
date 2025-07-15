@@ -20,11 +20,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.edit
+import artganizer.app.generated.resources.trash
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.artists.ArtistForm
 import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
@@ -139,12 +140,12 @@ fun ArtistInfo(
                 ButtonWithIcon(
                     onClick = onEditClick,
                     text = "Edit",
-                    iconResource = IconResource.fromDrawableResource(R.drawable.edit),
+                    icon = Res.drawable.edit,
                 )
                 ButtonWithIcon(
                     onClick = onDeleteClick,
                     text = "Delete",
-                    iconResource = IconResource.fromDrawableResource(R.drawable.trash),
+                    icon = Res.drawable.trash,
                     color = MaterialTheme.colorScheme.error,
                 )
             }

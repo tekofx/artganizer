@@ -10,8 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.gallery_outlined
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SubmissionCount(
@@ -23,8 +24,7 @@ fun SubmissionCount(
     ) {
         Icon(
             modifier = Modifier.size(30.dp),
-            painter = IconResource.fromDrawableResource(R.drawable.gallery_outlined)
-                .asPainterResource(),
+            painter = painterResource(Res.drawable.gallery_outlined),
             contentDescription = "",
         )
         Text(

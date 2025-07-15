@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.utils.getSocialNetworkIconRes
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SocialNetworks(
@@ -44,9 +44,8 @@ fun SocialNetworkItem(
         modifier = Modifier.size(50.dp)
     ) {
         Icon(
-            painter = IconResource
-                .fromDrawableResource(getSocialNetworkIconRes(socialNetwork))
-                .asPainterResource(),
+            painterResource(getSocialNetworkIconRes(socialNetwork)),
+
             contentDescription = "Social Network Icon",
             modifier = Modifier
                 .fillMaxWidth()

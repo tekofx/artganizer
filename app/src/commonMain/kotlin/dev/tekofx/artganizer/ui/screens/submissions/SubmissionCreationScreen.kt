@@ -19,9 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.copy_plus
+import artganizer.app.generated.resources.square_plus
 import dev.tekofx.artganizer.getActivityViewModel
-import dev.tekofx.artganizer.ui.IconResource
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.form.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -67,12 +68,12 @@ fun SubmissionCreationScreen(
             ButtonWithIcon(
                 onClick = { submissionsViewModel.updateSaveImagesOption(SaveImagesOptions.SINGLE_SUBMISSION) },
                 text = "Single Submission",
-                iconResource = IconResource.fromDrawableResource(R.drawable.square_plus)
+                icon = Res.drawable.square_plus
             )
             ButtonWithIcon(
                 onClick = { submissionsViewModel.updateSaveImagesOption(SaveImagesOptions.MULTIPLE_SUBMISSIONS) },
                 text = "Multiple Submissions",
-                iconResource = IconResource.fromDrawableResource(R.drawable.copy_plus)
+                icon = Res.drawable.copy_plus,
             )
         }
     } else {

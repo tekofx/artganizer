@@ -8,8 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.ui.IconResource
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.paw_filled
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -26,7 +26,7 @@ fun CharactersSection(
         if (submissionDetails.characters.isEmpty()) {
             ButtonWithIcon(
                 onClick = onAddCharactersButton,
-                iconResource = IconResource.fromDrawableResource(R.drawable.paw_filled),
+                icon = Res.drawable.paw_filled,
                 text = "Add Characters",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -50,7 +50,7 @@ fun CharactersSection(
                 }
                 ButtonWithIcon(
                     onClick = onAddCharactersButton,
-                    iconResource = IconResource.fromDrawableResource(R.drawable.paw_filled),
+                    icon = Res.drawable.paw_filled,
                     text = "Add Characters",
                     modifier = Modifier.fillMaxWidth()
                 )
