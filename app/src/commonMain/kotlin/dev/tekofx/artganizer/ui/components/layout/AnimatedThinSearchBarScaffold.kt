@@ -1,7 +1,5 @@
 package dev.tekofx.artganizer.ui.components.layout
 
-import android.annotation.SuppressLint
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -18,13 +16,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.unit.dp
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.copy_plus
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.input.ThinSearchBar
 import dev.tekofx.artganizer.ui.screens.artists.animatePlacement
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalComposeUiApi::class)
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AnimatedThinSearchBarScaffold(
     alignment: Alignment,
@@ -62,6 +65,7 @@ fun AnimatedThinSearchBarScaffold(
                 CreateFab(
                     modifier = Modifier.padding(bottom = 50.dp),
                     onClick = onFabClick,
+                    icon = Res.drawable.copy_plus
                 )
             }
         },

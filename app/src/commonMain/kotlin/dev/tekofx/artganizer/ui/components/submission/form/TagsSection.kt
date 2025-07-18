@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import artganizer.app.generated.resources.Res
 import artganizer.app.generated.resources.tag_filled
@@ -19,6 +18,7 @@ import dev.tekofx.artganizer.entities.Tag
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.tags.SmallTagCard
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Composable

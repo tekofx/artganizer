@@ -15,13 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.SubmissionCount
 import dev.tekofx.artganizer.ui.theme.AppTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ArtistCard(

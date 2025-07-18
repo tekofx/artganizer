@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.components.input.form
 
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
@@ -11,15 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import dev.tekofx.artganizer.R
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.edit
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun FormAvatar(
     fallbackText: String,
-    imagePath: Uri?,
+    imagePath: String?,
     onImageSelect: () -> Unit
 ) {
     Box(
@@ -38,7 +38,7 @@ fun FormAvatar(
 
         // Icon Overlay
         Icon(
-            painter = painterResource(id = R.drawable.edit),
+            painter = painterResource(Res.drawable.edit),
             contentDescription = "Select Image",
             tint = Color.White,
             modifier = Modifier.clickable { onImageSelect() }

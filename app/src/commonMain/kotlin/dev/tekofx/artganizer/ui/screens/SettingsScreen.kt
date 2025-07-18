@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,11 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,12 +22,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.edit
+import artganizer.app.generated.resources.select_all
+import artganizer.app.generated.resources.share
+import artganizer.app.generated.resources.trash
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SettingsScreen() {
     Scaffold {
@@ -113,10 +113,10 @@ fun SubmissionButtonsSettings() {
         Row(
             horizontalArrangement = Arrangement.End
         ) {
-            ButtonPreview(Icons.Filled.Edit)
-            ButtonPreview(Icons.Filled.Delete)
-            ButtonPreview(Icons.Filled.Share)
-            ButtonPreview(Icons.Filled.KeyboardArrowDown)
+            ButtonPreview(Res.drawable.edit)
+            ButtonPreview(Res.drawable.trash)
+            ButtonPreview(Res.drawable.share)
+            ButtonPreview(Res.drawable.select_all)
         }
     }
 
@@ -164,7 +164,7 @@ fun SettingSwitch(
 
 @Composable
 fun ButtonPreview(
-    icon: ImageVector
+    icon: DrawableResource
 ) {
     Surface(
         Modifier
@@ -178,8 +178,8 @@ fun ButtonPreview(
             modifier = Modifier.size(40.dp)
         ) {
             Icon(
+                painterResource(icon),
                 modifier = Modifier.size(30.dp),
-                imageVector = icon,
                 contentDescription = "Close",
                 tint = MaterialTheme.colorScheme.onPrimary
             )

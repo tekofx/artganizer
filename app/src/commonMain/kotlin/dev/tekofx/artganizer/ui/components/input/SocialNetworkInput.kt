@@ -19,11 +19,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.x
 import dev.tekofx.artganizer.ui.utils.getSocialNetworkIconRes
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SocialNetworkInput(
@@ -115,7 +117,7 @@ fun SocialNetworksList(
             }
             IconButton(onClick = { onRemoveSocialNetwork(url) }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.x),
+                    painter = painterResource(Res.drawable.x),
                     contentDescription = "Remove Icon",
                     modifier = Modifier.size(30.dp)
                 )

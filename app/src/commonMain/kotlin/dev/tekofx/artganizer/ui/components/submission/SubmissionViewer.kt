@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.ui.components.submission
 
 
-import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,11 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.copy_plus
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import me.saket.telephoto.zoomable.coil3.ZoomableAsyncImage
+import net.engawapg.lib.zoomable.rememberZoomState
+import net.engawapg.lib.zoomable.zoomable
+import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
@@ -55,7 +54,7 @@ fun ViewerButton(
             modifier = Modifier
         ) {
             Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
+                painterResource(Res.drawable.copy_plus),
                 contentDescription = "Close",
                 tint = MaterialTheme.colorScheme.onBackground
             )
@@ -66,9 +65,9 @@ fun ViewerButton(
 
 @Composable
 fun FullscreenSubmissionViewer(
-    imagePaths: List<Uri>,
+    imagePaths: List<String>,
     currentImageIndex: Int,
-    thumbnail: Uri,
+    thumbnail: String,
     onImageChange: (Int) -> Unit,
     onClick: () -> Unit = {}
 ) {
@@ -85,13 +84,11 @@ fun FullscreenSubmissionViewer(
                 onImageChange = { onImageChange(it) },
             )
         } else if (imagePaths.size == 1) {
-            ZoomableAsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(imagePaths[0])
-                    .build(),
+            AsyncImage(
+                model = imagePaths[0],
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize().zoomable(rememberZoomState()),
             )
         }
         ViewerButton(
@@ -103,9 +100,9 @@ fun FullscreenSubmissionViewer(
 
 @Composable
 fun SubmissionViewer(
-    imagePaths: List<Uri>,
+    imagePaths: List<String>,
     currentImageIndex: Int,
-    thumbnail: Uri,
+    thumbnail: String,
     onImageChange: (Int) -> Unit,
     onClick: () -> Unit = {}
 ) {
@@ -130,8 +127,8 @@ fun SubmissionViewer(
 
 @Composable
 fun SubmissionImage(
-    imagePath: Uri,
-    thumbnail: Uri,
+    imagePath: String,
+    thumbnail: String,
     onClick: () -> Unit
 ) {
     Box(
@@ -142,10 +139,7 @@ fun SubmissionImage(
         var isLoading by remember { mutableStateOf(true) }
 
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imagePath)
-                .placeholderMemoryCacheKey(thumbnail.toString())
-                .build(),
+            model = imagePath,
             contentDescription = "submission",
             modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillWidth,
@@ -164,7 +158,7 @@ fun SubmissionImage(
 
 @Composable
 fun FullscreenSubmissionPager(
-    imagePaths: List<Uri>,
+    imagePaths: List<String>,
     currentImageIndex: Int,
     onImageChange: (Int) -> Unit,
 
@@ -189,13 +183,11 @@ fun FullscreenSubmissionPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth()
         ) { page ->
-            ZoomableAsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(imagePaths[page])
-                    .build(),
+            AsyncImage(
+                model = imagePaths[page],
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize().zoomable(rememberZoomState()),
             )
         }
 
@@ -219,9 +211,9 @@ fun FullscreenSubmissionPager(
 
 @Composable
 fun SubmissionPager(
-    imagePaths: List<Uri>,
+    imagePaths: List<String>,
     currentImageIndex: Int,
-    thumbnail: Uri,
+    thumbnail: String,
     onImageChange: (Int) -> Unit,
     onClick: () -> Unit
 

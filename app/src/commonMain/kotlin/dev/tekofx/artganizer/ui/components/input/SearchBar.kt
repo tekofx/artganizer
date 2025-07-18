@@ -1,9 +1,6 @@
 package dev.tekofx.artganizer.ui.components.input
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.calendar_outlined
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SearchBar(
@@ -32,7 +32,12 @@ fun SearchBar(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         ),
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "") },
+        leadingIcon = {
+            Icon(
+                painterResource(Res.drawable.calendar_outlined),
+                contentDescription = ""
+            )
+        },
         trailingIcon = {
             IconButton(
                 onClick = {
@@ -40,7 +45,7 @@ fun SearchBar(
                     focusManager.clearFocus()
                 }
             ) {
-                Icon(Icons.Filled.Clear, contentDescription = "")
+                Icon(painterResource(Res.drawable.calendar_outlined), contentDescription = "")
             }
         },
         singleLine = true,

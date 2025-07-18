@@ -20,15 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.circle
+import artganizer.app.generated.resources.circle_check_filled
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import dev.tekofx.artganizer.R
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsUiState
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun InteractiveGallery(
@@ -82,9 +82,7 @@ fun InteractiveGalleryItem(
     ) {
 
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(submission.submission.thumbnail)
-                .build(),
+            model = submission.submission.thumbnail,
             contentDescription = submission.submission.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -108,8 +106,8 @@ fun InteractiveGalleryItem(
 
         if (isSelecting) {
             Icon(
-                painter = if (selected) painterResource(R.drawable.circle_check_filled)
-                else painterResource(R.drawable.circle),
+                painter = if (selected) painterResource(Res.drawable.circle_check_filled)
+                else painterResource(Res.drawable.circle),
                 contentDescription = if (selected) "Selected" else "Not selected",
                 tint = if (selected) MaterialTheme.colorScheme.primary else Color.Gray,
                 modifier = Modifier

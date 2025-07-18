@@ -1,8 +1,5 @@
 package dev.tekofx.artganizer.ui.components.artists
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +16,6 @@ import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
-import kotlinx.coroutines.launch
 
 @Composable
 fun ArtistForm(
@@ -29,8 +25,8 @@ fun ArtistForm(
     onCancelClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(), onResult = { uri: Uri? ->
+    /*val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(), onResult = { uri: String? ->
             uri?.let {
                 // Save the image and navigate to the next screen
                 scope.launch {
@@ -42,7 +38,7 @@ fun ArtistForm(
                 }
             }
         }
-    )
+    )*/
 
     LazyColumn(
         modifier = Modifier.padding(10.dp),
@@ -53,7 +49,9 @@ fun ArtistForm(
             FormAvatar(
                 fallbackText = artistUiState.artistDetails.name,
                 artistUiState.artistDetails.imagePath,
-                onImageSelect = { launcher.launch("image/*") })
+                onImageSelect = {
+                    //launcher.launch("image/*")
+                })
         }
         item {
             ArtistFormFields(

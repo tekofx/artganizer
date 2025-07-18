@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -25,9 +22,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.x
+import org.jetbrains.compose.resources.painterResource
+
+@Composable
+fun isKeyboardVisible(): Boolean {
+    return WindowInsets.ime.getBottom(LocalDensity.current) > 0
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
@@ -40,7 +46,7 @@ fun ThinSearchBar(
 
 
     val focusManager = LocalFocusManager.current
-    val isImeVisible = WindowInsets.isImeVisible
+    val isImeVisible = isKeyboardVisible()
     LaunchedEffect(isImeVisible) {
         if (!isImeVisible) {
             focusManager.clearFocus() // Clear focus when keyboard is hidden
@@ -67,7 +73,7 @@ fun ThinSearchBar(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Filled.Search, contentDescription = "")
+                Icon(painterResource(Res.drawable.x), contentDescription = "")
                 BasicTextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -94,7 +100,7 @@ fun ThinSearchBar(
                         onClear()
                         focusManager.clearFocus()
                     }) {
-                    Icon(Icons.Filled.Clear, contentDescription = "")
+                    Icon(painterResource(Res.drawable.x), contentDescription = "")
                 }
             }
         }

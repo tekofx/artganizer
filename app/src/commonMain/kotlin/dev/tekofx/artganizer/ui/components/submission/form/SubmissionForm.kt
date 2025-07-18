@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.components.submission.form
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +38,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubmissionsForm(
-    uris: List<Uri>,
+    uris: List<String>,
     artistsViewModel: ArtistsViewModel,
     submissionDetails: SubmissionDetails,
     charactersViewModel: CharactersViewModel,

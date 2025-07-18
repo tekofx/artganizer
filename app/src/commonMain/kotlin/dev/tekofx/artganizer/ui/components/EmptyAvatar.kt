@@ -51,15 +51,7 @@ fun EmptyAvatar(
             .aspectRatio(1f)
     }
     val color = remember {
-        Color(
-            Color.HSVToColor(
-                floatArrayOf(
-                    (0..360).random().toFloat(), // Random hue
-                    0.5f, // Saturation
-                    0.4f  // Lightness
-                )
-            )
-        )
+        Color.Gray
     }
     Box(
         finalModifier

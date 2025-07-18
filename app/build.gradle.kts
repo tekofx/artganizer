@@ -44,6 +44,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.androidx.ui.tooling.preview)
+            implementation(compose.material3)
+            implementation(libs.ui.backhandler)
             // Room
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.room.ktx)
@@ -67,6 +70,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
+            implementation("net.engawapg.lib:zoomable:2.8.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
