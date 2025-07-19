@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.tags
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,19 +19,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.layout.AnimatedThinSearchBarScaffold
 import dev.tekofx.artganizer.ui.components.tags.TagCard
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagsScreen(
     navHostController: NavHostController,
-    tagsViewModel: TagsViewModel = getActivityViewModel<TagsViewModel>()
+    tagsViewModel: TagsViewModel = viewModel<TagsViewModel>()
 ) {
 
     val tags by tagsViewModel.tags.collectAsState()

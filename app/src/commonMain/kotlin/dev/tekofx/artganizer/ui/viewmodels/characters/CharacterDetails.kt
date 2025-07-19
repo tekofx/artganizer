@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.viewmodels.characters
 
-import android.net.Uri
 import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.entities.Submission
@@ -12,7 +11,7 @@ data class CharacterDetails(
     val gender: String? = null,
     val pronouns: String? = null,
     val height: String? = null,
-    val imagePath: Uri? = null,
+    val imagePath: String? = null,
     val description: String? = null,
     val submissions: List<Submission> = emptyList(),
 )

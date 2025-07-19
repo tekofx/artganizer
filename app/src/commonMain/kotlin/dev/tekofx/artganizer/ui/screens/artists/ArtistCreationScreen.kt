@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.ui.components.artists.ArtistForm
@@ -20,7 +19,6 @@ fun ArtistCreationScreen(
     artistsViewModel: ArtistsViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         artistsViewModel.clearNewUiState()
@@ -35,7 +33,7 @@ fun ArtistCreationScreen(
             onSaveClick = {
                 navHostController.popBackStack()
                 scope.launch {
-                    artistsViewModel.saveArtist(context)
+                    artistsViewModel.saveArtist()
                 }
             },
             onCancelClick = {

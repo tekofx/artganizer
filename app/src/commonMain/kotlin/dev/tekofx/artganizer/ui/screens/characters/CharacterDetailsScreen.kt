@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.characters
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,11 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import artganizer.app.generated.resources.Res
 import artganizer.app.generated.resources.edit
@@ -35,7 +33,6 @@ import artganizer.app.generated.resources.trash
 import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.entities.Submission
-import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.characters.CharacterForm
@@ -46,17 +43,17 @@ import dev.tekofx.artganizer.ui.utils.AVATAR_SIZE
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.toCharacterWithSubmissions
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CharacterDetailsScreen(
     characterId: Long,
     navHostController: NavHostController,
-    charactersViewModel: CharactersViewModel = getActivityViewModel<CharactersViewModel>(),
+    charactersViewModel: CharactersViewModel = viewModel(),
 ) {
     val showPopup by charactersViewModel.showPopup.collectAsState()
     val showCharacterEdit by charactersViewModel.showCharacterEdit.collectAsState()
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
@@ -84,7 +81,7 @@ fun CharacterDetailsScreen(
                 charactersViewModel.currentCharacterUiState,
                 onItemValueChange = { newValue -> charactersViewModel.updateCurrentUiState(newValue) },
                 onSaveClick = {
-                    scope.launch { charactersViewModel.editCharacter(context) }
+                    scope.launch { charactersViewModel.editCharacter() }
                     charactersViewModel.setShowEditArtist(false)
                 },
                 onCancelClick = {

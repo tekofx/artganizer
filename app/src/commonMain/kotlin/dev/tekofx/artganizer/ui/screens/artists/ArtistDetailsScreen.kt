@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,15 +15,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import artganizer.app.generated.resources.Res
 import artganizer.app.generated.resources.edit
 import artganizer.app.generated.resources.trash
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
-import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.artists.ArtistForm
@@ -37,16 +35,15 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistWithSubmissions
 import kotlinx.coroutines.launch
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ArtistDetailsScreen(
     artistId: Long,
     navHostController: NavHostController,
-    artistsViewModel: ArtistsViewModel = getActivityViewModel<ArtistsViewModel>(),
+    artistsViewModel: ArtistsViewModel = viewModel(),
 ) {
     val showPopup by artistsViewModel.showPopup.collectAsState()
     val showEditArtist by artistsViewModel.showEditArtist.collectAsState()
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
 
@@ -60,7 +57,7 @@ fun ArtistDetailsScreen(
             message = "Are you sure you want to proceed?",
             onConfirm = {
                 artistsViewModel.setShowPopup(true)
-                artistsViewModel.deleteArtist(context, artistsViewModel.currentArtistUiState)
+                artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
                 navHostController.popBackStack()
                 artistsViewModel.setShowPopup(false)
             },
@@ -75,7 +72,7 @@ fun ArtistDetailsScreen(
                 artistsViewModel.currentArtistUiState,
                 onItemValueChange = { newValue -> artistsViewModel.updateCurrentUiState(newValue) },
                 onSaveClick = {
-                    scope.launch { artistsViewModel.editArtist(context) }
+                    scope.launch { artistsViewModel.editArtist() }
                     artistsViewModel.setShowEditArtist(false)
                 },
                 onCancelClick = {

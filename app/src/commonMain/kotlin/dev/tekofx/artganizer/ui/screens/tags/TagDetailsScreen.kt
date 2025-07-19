@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.tags
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,13 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import artganizer.app.generated.resources.Res
 import artganizer.app.generated.resources.edit
 import artganizer.app.generated.resources.tag_filled
 import artganizer.app.generated.resources.trash
 import dev.tekofx.artganizer.entities.TagWithSubmissions
-import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
@@ -37,12 +36,12 @@ import dev.tekofx.artganizer.ui.viewmodels.tags.toTagWithSubmissions
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TagDetailsScreen(
     tagId: Long,
     navHostController: NavHostController,
-    tagsViewModel: TagsViewModel = getActivityViewModel<TagsViewModel>(),
+    tagsViewModel: TagsViewModel = viewModel<TagsViewModel>(),
 ) {
     val showPopup by tagsViewModel.showPopup.collectAsState()
     val showTagEdit by tagsViewModel.showTagEdit.collectAsState()

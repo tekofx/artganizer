@@ -4,10 +4,10 @@ import dev.tekofx.artganizer.dao.IImageDao
 import dev.tekofx.artganizer.entities.Image
 import java.io.File
 
-actual class ImageRepository(private val imageDao: IImageDao) {
-    suspend fun insert(image: Image) = imageDao.insert(image)
+actual class ImageRepository actual constructor(private val imageDao: IImageDao) {
+    actual suspend fun insert(image: Image) = imageDao.insert(image)
 
-    suspend fun delete(platformArgs: Any, image: Image) {
+    actual suspend fun delete(image: Image) {
         imageDao.delete(image)
         removeImageFromStorage(image.uri)
     }

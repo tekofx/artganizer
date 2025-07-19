@@ -3,8 +3,8 @@ package dev.tekofx.artganizer.repository
 import java.io.File
 
 actual class FileHandler() {
-    actual fun deleteFile(filePath: String) {
-        val file = File(filePath)
+    actual fun deleteFile(fileName: String) {
+        val file = File(fileName)
         if (file.exists()) {
             file.delete()
         }

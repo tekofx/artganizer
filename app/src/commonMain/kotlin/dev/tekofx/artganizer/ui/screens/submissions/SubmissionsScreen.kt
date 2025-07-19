@@ -1,9 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
-import android.annotation.SuppressLint
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,31 +22,33 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.R
-import dev.tekofx.artganizer.getActivityViewModel
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.deselect
+import artganizer.app.generated.resources.edit
+import artganizer.app.generated.resources.select_all
+import artganizer.app.generated.resources.trash
+import artganizer.app.generated.resources.x
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.GalleryBottomSheet
 import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
 import dev.tekofx.artganizer.ui.components.submission.InteractiveGallery
-import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubmissionsScreen(
     navHostController: NavHostController,
-    viewModel: SubmissionsViewModel = getActivityViewModel<SubmissionsViewModel>()
+    viewModel: SubmissionsViewModel = viewModel<SubmissionsViewModel>()
 ) {
     // Data
     val submissions by viewModel.submissions.collectAsState()
@@ -68,10 +66,9 @@ fun SubmissionsScreen(
         )
     )
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
 
-    val launcher = rememberLauncherForActivityResult(
+    /*val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents(),
         onResult = { uris: List<Uri>? ->
             uris?.let {
@@ -84,7 +81,7 @@ fun SubmissionsScreen(
                 }
             }
         }
-    )
+    )*/
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState, sheetContent = {
@@ -95,7 +92,10 @@ fun SubmissionsScreen(
             floatingActionButton = {
                 if (submissions.selectedSubmissions.isEmpty()) {
                     CreateFab(
-                        onClick = { launcher.launch("image/*") }
+                        onClick = {
+                            //launcher.launch("image/*")
+                        },
+                        icon = Res.drawable.edit
                     )
                 }
             },
@@ -117,7 +117,7 @@ fun SubmissionsScreen(
                     title = "Remove ${submissions.selectedSubmissions.size} Submissions",
                     message = "Are you sure you want to proceed?",
                     onConfirm = {
-                        viewModel.deleteSelectedSubmissions(context)
+                        viewModel.deleteSelectedSubmissions()
                         viewModel.setShowPopup(false)
                     },
                     onDismiss = {
@@ -170,7 +170,7 @@ fun SelectionBar(
                     }
                 ) {
                     Icon(
-                        painterResource(R.drawable.x),
+                        painterResource(Res.drawable.x),
                         contentDescription = ""
                     )
                 }
@@ -178,7 +178,7 @@ fun SelectionBar(
                     onClick = onSelectAllClick
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.select_all),
+                        painterResource(Res.drawable.select_all),
                         contentDescription = ""
                     )
                 }
@@ -186,7 +186,7 @@ fun SelectionBar(
                     onClick = onDeselectAllClick
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.deselect),
+                        painterResource(Res.drawable.deselect),
                         contentDescription = ""
                     )
                 }
@@ -203,8 +203,7 @@ fun SelectionBar(
                     }
                 ) {
                     Icon(
-                        painterResource(R.drawable.edit)
-                            .asPainterResource(), contentDescription = ""
+                        painterResource(Res.drawable.edit), contentDescription = ""
                     )
                 }
                 IconButton(
@@ -215,8 +214,7 @@ fun SelectionBar(
                     }
                 ) {
                     Icon(
-                        painterResource(R.drawable.trash)
-                            .asPainterResource(), contentDescription = "",
+                        painterResource(Res.drawable.trash), contentDescription = "",
                         tint = Color(0xFFB00020)
                     )
                 }

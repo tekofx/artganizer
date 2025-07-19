@@ -1,25 +1,7 @@
 package dev.tekofx.artganizer.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import dev.tekofx.artganizer.R
 
-val bodyFontFamily = FontFamily(
-    Font(
-        R.font.teko_variable_font,
-        weight = FontWeight.Light,
-
-        )
-)
-
-val displayFontFamily = FontFamily(
-    Font(
-        R.font.teko_variable_font,
-        weight = FontWeight.Light
-    )
-)
 
 // Default Material 3 typography values
 val baseline = Typography()

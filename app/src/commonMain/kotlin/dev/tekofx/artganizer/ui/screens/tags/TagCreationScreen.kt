@@ -3,8 +3,8 @@ package dev.tekofx.artganizer.ui.screens.tags
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.ui.components.tags.TagForm
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TagCreationScreen(
     navHostController: NavHostController,
-    tagsViewModel: TagsViewModel = getActivityViewModel<TagsViewModel>(),
+    tagsViewModel: TagsViewModel = viewModel<TagsViewModel>(),
 ) {
     val scope = rememberCoroutineScope()
 

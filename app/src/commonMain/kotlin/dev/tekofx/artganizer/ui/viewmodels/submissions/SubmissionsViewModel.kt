@@ -4,20 +4,18 @@ package dev.tekofx.artganizer.ui.viewmodels.submissions
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
-import dev.tekofx.artganizer.utils.getImageInfo
+import dev.tekofx.artganizer.utils.ImageManager
 import dev.tekofx.artganizer.utils.getPaletteFromUri
-import dev.tekofx.artganizer.utils.saveImageToInternalStorage
-import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.viewmodel.scope.ScopeViewModel
 
 enum class SaveImagesOptions {
     EMPTY,
@@ -27,8 +25,9 @@ enum class SaveImagesOptions {
 
 class SubmissionsViewModel(
     private val submissionRepo: SubmissionRepository,
-    private val imageRepository: ImageRepository
-) : ScopeViewModel() {
+    private val imageRepository: ImageRepository,
+    private val imageManager: ImageManager
+) : ViewModel() {
 
     // New submission data used for creating a submission
     var newSubmissionDetails by mutableStateOf(SubmissionDetails())
@@ -168,6 +167,12 @@ class SubmissionsViewModel(
         )
     }
 
+    fun shareSubmission(submission: SubmissionWithArtist) {
+        viewModelScope.launch {
+            imageManager.shareImage(submission.submission.thumbnail)
+        }
+    }
+
     //////////////////////// Database Operations ////////////////////////
     /**
      * Gets the submission of the id.
@@ -197,7 +202,7 @@ class SubmissionsViewModel(
     /**
      * Saves a new submission
      */
-    suspend fun saveSubmission(context: Context) {
+    suspend fun saveSubmission() {
         isLoading.value = true
         var i = 0f
         val total = uris.size.toFloat()
@@ -206,16 +211,17 @@ class SubmissionsViewModel(
                 if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
 
                     val imagePaths = uris.map { uri ->
-                        saveImageToInternalStorage(context, uri)
+                        imageManager.saveImageToInternalStorage(uri)
                     }
 
-                    val thumbnail = saveThumbnail(context, imagePaths[0])
+                    val thumbnail = imageManager.saveThumbnail(imagePaths[0])
                     val submissionId = submissionRepo.insertSubmissionDetails(
                         newSubmissionDetails.copy(thumbnail = thumbnail)
                     )
                     imagePaths.forEach { imagePath ->
-                        val imageInfo = getImageInfo(context, imagePath)
-                        val palette = getPaletteFromUri(context, imagePath)
+
+                        val imageInfo = imageManager.getImageInfo(imagePath)
+                        val palette = getPaletteFromUri(imagePath)
 
                         imageRepository.insert(
                             Image(
@@ -233,11 +239,11 @@ class SubmissionsViewModel(
                     }
                 } else {
                     uris.forEach { uri ->
-                        val imagePath = saveImageToInternalStorage(context, uri)
-                        val thumbnailPath = saveThumbnail(context, uri)
+                        val imagePath = imageManager.saveImageToInternalStorage(uri)
+                        val thumbnailPath = imageManager.saveThumbnail(uri)
 
-                        val imageInfo = getImageInfo(context, imagePath)
-                        val palette = getPaletteFromUri(context, imagePath)
+                        val imageInfo = imageManager.getImageInfo(imagePath)
+                        val palette = getPaletteFromUri(imagePath)
                         val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath)
                         val submissionId = submissionRepo.insertSubmissionDetails(newSub)
 
@@ -258,24 +264,23 @@ class SubmissionsViewModel(
                 }
             }
         } finally {
-            Log.d("saveSubmission", "Finished saving submission")
             isLoading.value = false
             savingProgress.value = 0f
         }
     }
 
-    fun deleteSubmission(context: Context, submission: SubmissionWithArtist) {
+    fun deleteSubmission(submission: SubmissionWithArtist) {
         viewModelScope.launch {
-            submissionRepo.deleteSubmission(context, submission)
+            submissionRepo.deleteSubmission(imageManager, submission)
         }
     }
 
-    fun deleteSelectedSubmissions(context: Context) {
+    fun deleteSelectedSubmissions() {
         viewModelScope.launch {
             val selectedSubmissions = submissions.value.submissions.filter {
                 submissions.value.selectedSubmissions.contains(it.submission.submissionId)
             }
-            submissionRepo.deleteSubmissions(context, selectedSubmissions)
+            submissionRepo.deleteSubmissions(imageManager, selectedSubmissions)
             clearSelectedSubmissions()
         }
     }

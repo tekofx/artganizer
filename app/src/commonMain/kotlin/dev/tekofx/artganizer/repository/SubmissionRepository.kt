@@ -10,7 +10,7 @@ import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.entities.TagSubmissionCrossRef
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
-import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
+import dev.tekofx.artganizer.utils.ImageManager
 import kotlinx.coroutines.flow.Flow
 
 
@@ -19,8 +19,11 @@ interface SubmissionRepositoryInterface {
     suspend fun getSubmissionWithArtist(submissionId: Long): SubmissionWithArtist?
     suspend fun insertSubmissionDetails(submissionDetails: SubmissionDetails): Long
     suspend fun updateSubmissionWithArtist(submissionWithArtist: SubmissionWithArtist)
-    suspend fun deleteSubmission(platformContext: Any, submission: SubmissionWithArtist)
-    suspend fun deleteSubmissions(platformContext: Any, submissions: List<SubmissionWithArtist>)
+    suspend fun deleteSubmission(imageManager: ImageManager, submission: SubmissionWithArtist)
+    suspend fun deleteSubmissions(
+        imageManager: ImageManager,
+        submissions: List<SubmissionWithArtist>
+    )
 }
 
 class SubmissionRepository(
@@ -102,7 +105,10 @@ class SubmissionRepository(
     }
 
     // DELETE
-    override suspend fun deleteSubmission(platformContext: Any, submission: SubmissionWithArtist) {
+    override suspend fun deleteSubmission(
+        imageManager: ImageManager,
+        submission: SubmissionWithArtist
+    ) {
         // Delete submission
         submissionDao.delete(submission.submission)
 
@@ -116,20 +122,20 @@ class SubmissionRepository(
         // Delete images associated with the submission
         submission.images.forEach {
             imageDao.delete(it)
-            removeImageFromInternalStorage(platformContext, it.uri)
+            imageManager.removeImageFromInternalStorage(it.uri)
         }
 
         // Delete thumbnail
-        removeImageFromInternalStorage(platformContext, submission.submission.thumbnail)
+        imageManager.removeImageFromInternalStorage(submission.submission.thumbnail)
 
     }
 
     override suspend fun deleteSubmissions(
-        platformContext: Any,
+        imageManager: ImageManager,
         submissions: List<SubmissionWithArtist>
     ) {
         submissions.forEach { submission ->
-            deleteSubmission(platformContext, submission)
+            deleteSubmission(imageManager, submission)
         }
     }
 }

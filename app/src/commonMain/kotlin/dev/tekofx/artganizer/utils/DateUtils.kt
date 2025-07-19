@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.utils
 
+import kotlinx.datetime.LocalDate
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -17,7 +18,7 @@ fun stringToDate(dateString: String, format: String = "dd/MM/yyyy"): Date? {
     }
 }
 
-fun dateToString(date: Date, format: String = "dd/MM/yyyy"): String {
+fun dateToString(date: LocalDate, format: String = "dd/MM/yyyy"): String {
     return try {
         val formatter = SimpleDateFormat(format, Locale.getDefault())
         formatter.format(date)

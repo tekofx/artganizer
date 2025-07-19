@@ -6,5 +6,5 @@ import dev.tekofx.artganizer.entities.Image
 
 expect class ImageRepository(imageDao: IImageDao) {
     suspend fun insert(image: Image)
-    suspend fun delete(image: Image, platformArgs: Any)
+    suspend fun delete(image: Image)
 }

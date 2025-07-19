@@ -1,7 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
-import android.annotation.SuppressLint
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,10 +24,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import artganizer.app.generated.resources.Res
 import artganizer.app.generated.resources.calendar_outlined
@@ -48,8 +48,6 @@ import dev.tekofx.artganizer.entities.Character
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.entities.Tag
-import dev.tekofx.artganizer.entities.getSocialShareText
-import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.SmallCard
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
@@ -66,21 +64,20 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmissionWithArtist
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import dev.tekofx.artganizer.utils.dateToString
 import dev.tekofx.artganizer.utils.formatFileSize
-import dev.tekofx.artganizer.utils.shareImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SubmissionDetailsScreen(
     submissionId: Long,
     navHostController: NavHostController,
-    artistsViewModel: ArtistsViewModel = getActivityViewModel<ArtistsViewModel>(),
-    charactersViewModel: CharactersViewModel = getActivityViewModel<CharactersViewModel>(),
-    tagsViewModel: TagsViewModel = getActivityViewModel<TagsViewModel>(),
-    submissionsViewModel: SubmissionsViewModel = getActivityViewModel<SubmissionsViewModel>()
+    artistsViewModel: ArtistsViewModel = viewModel<ArtistsViewModel>(),
+    charactersViewModel: CharactersViewModel = viewModel<CharactersViewModel>(),
+    tagsViewModel: TagsViewModel = viewModel<TagsViewModel>(),
+    submissionsViewModel: SubmissionsViewModel = viewModel<SubmissionsViewModel>()
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     // Data
@@ -113,7 +110,6 @@ fun SubmissionDetailsScreen(
             onConfirm = {
                 submissionsViewModel.setShowPopup(true)
                 submissionsViewModel.deleteSubmission(
-                    context,
                     submission
                 )
                 navHostController.popBackStack()
@@ -168,6 +164,7 @@ fun SubmissionDetailsScreen(
                     1 -> {
                         SubmissionInfo(
                             submission,
+                            currentImageIndex = currentImageIndex,
                             onArtistCardClick = { artistId ->
                                 navHostController.navigate("${NavigateDestinations.ARTISTS_ROOT}/$artistId")
                             },
@@ -183,7 +180,7 @@ fun SubmissionDetailsScreen(
                             onEdit = {
                                 submissionsViewModel.setShowEditSubmission(true)
                             },
-                            currentImageIndex = currentImageIndex,
+                            onShare = { submissionsViewModel.shareSubmission(submission) }
                         )
                     }
                 }
@@ -195,12 +192,13 @@ fun SubmissionDetailsScreen(
 @Composable
 fun SubmissionInfo(
     submission: SubmissionWithArtist,
+    currentImageIndex: Int,
     onArtistCardClick: (Long) -> Unit,
     onCharacterCardClick: (Long) -> Unit,
     onTagCardClick: (Long) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
-    currentImageIndex: Int,
+    onShare: (SubmissionWithArtist) -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -219,7 +217,8 @@ fun SubmissionInfo(
             onCharacterCardClick = onCharacterCardClick,
             onTagCardClick = onTagCardClick,
             onEdit = onEdit,
-            onDelete = onDelete
+            onDelete = onDelete,
+            onShare = onShare
         )
     }
 }
@@ -233,9 +232,9 @@ fun SubmissionDetails(
     onTagCardClick: (Long) -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
+    onShare: (SubmissionWithArtist) -> Unit
 ) {
 
-    val context = LocalContext.current
     Column {
 
         if (submission.submission.title.isNotEmpty()) {
@@ -288,11 +287,8 @@ fun SubmissionDetails(
             ButtonWithIcon(
                 icon = Res.drawable.share,
                 onClick = {
-                    shareImage(
-                        context = context,
-                        imageUri = submission.images[currentImageIndex].uri,
-                        text = submission.artist?.getSocialShareText()
-                    )
+                    onShare(submission)
+
                 },
                 text = "Share",
                 color = MaterialTheme.colorScheme.secondary

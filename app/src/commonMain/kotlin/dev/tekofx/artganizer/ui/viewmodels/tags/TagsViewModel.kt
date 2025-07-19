@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.ui.viewmodels.tags
 
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
@@ -149,7 +148,6 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
     }
 
     fun updateCurrentUiState(tagDetails: TagDetails) {
-        Log.d("ArtistsViewModel", "updateCurrentUiState: $tagDetails")
         currentTagUiState =
             TagUiState(
                 tagDetails = tagDetails,
@@ -164,7 +162,6 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
             if (tag == null) {
                 return@launch
             }
-            Log.d("TagsViewModel", "getTagById: ${tag.toTagDetails()}")
             currentTagUiState =
                 TagUiState(
                     tagDetails = tag.toTagDetails(),
@@ -180,7 +177,6 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
         )
 
         if (validateInput()) {
-            Log.d("TagsViewModel", "createTag: ${newTagUiState.tagDetails}")
             repository.insertTag(newTagUiState.tagDetails.toTagWithSubmissions().tag)
             newTagUiState = newTagUiState.copy(
                 tagDetails = TagDetails(),
@@ -197,7 +193,6 @@ class TagsViewModel(private val repository: TagRepository) : ViewModel() {
 
     suspend fun editTag() {
         if (validateInput(currentTagUiState.tagDetails)) {
-            Log.d("TagsViewModel", "editTag: ${currentTagUiState.tagDetails}")
             repository.updateTag(currentTagUiState.tagDetails.toTagWithSubmissions().tag)
             currentTagUiState = currentTagUiState.copy(
                 tagDetails = currentTagUiState.tagDetails,

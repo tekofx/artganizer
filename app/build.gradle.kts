@@ -71,6 +71,10 @@ kotlin {
 
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
             implementation("net.engawapg.lib:zoomable:2.8.1")
+
+            implementation(libs.kmpalette.core)
+            implementation(libs.kmpalette.extensions.file)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

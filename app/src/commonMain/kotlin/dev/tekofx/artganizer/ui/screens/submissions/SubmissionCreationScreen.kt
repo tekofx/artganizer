@@ -15,14 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import artganizer.app.generated.resources.Res
 import artganizer.app.generated.resources.copy_plus
 import artganizer.app.generated.resources.square_plus
-import dev.tekofx.artganizer.getActivityViewModel
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submission.form.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -31,7 +30,7 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SubmissionCreationScreen(
@@ -39,10 +38,9 @@ fun SubmissionCreationScreen(
     artistsViewModel: ArtistsViewModel = koinViewModel(),
     charactersViewModel: CharactersViewModel = koinViewModel(),
     tagsViewModel: TagsViewModel = koinViewModel(),
-    submissionsViewModel: SubmissionsViewModel = getActivityViewModel<SubmissionsViewModel>(),
+    submissionsViewModel: SubmissionsViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     val saveImagesOption = submissionsViewModel.saveImagesOption
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
     val isLoading by submissionsViewModel.isLoading.collectAsState()
@@ -89,7 +87,7 @@ fun SubmissionCreationScreen(
                 onItemValueChange = { newValue -> submissionsViewModel.updateNewUiState(newValue) },
                 onSaveClick = {
                     scope.launch {
-                        submissionsViewModel.saveSubmission(context)
+                        submissionsViewModel.saveSubmission()
                         navHostController.popBackStack()
                     }
                 },

@@ -1,8 +1,6 @@
 package dev.tekofx.artganizer.ui.viewmodels.characters
 
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
@@ -15,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.repository.CharactersRepository
-import dev.tekofx.artganizer.utils.saveThumbnail
+import dev.tekofx.artganizer.utils.ImageManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -24,7 +22,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
-class CharactersViewModel(private val repository: CharactersRepository) : ViewModel() {
+class CharactersViewModel(
+    private val repository: CharactersRepository,
+    private val imageManager: ImageManager
+) : ViewModel() {
 
     // Data states
     var newCharacterUiState by mutableStateOf(CharacterUiState())
@@ -178,17 +179,13 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         }
     }
 
-    suspend fun editCharacter(context: Context) {
-        Log.d("editARtist", currentCharacterUiState.characterDetails.toString())
+    suspend fun editCharacter() {
         val imagePath = currentCharacterUiState.characterDetails.imagePath
 
         if (imagePath != null) {
             // Save image to private storage
             val newImagePath =
-                saveThumbnail(
-                    context,
-                    imagePath
-                )
+                imageManager.saveThumbnail(imagePath)
 
             currentCharacterUiState = currentCharacterUiState.copy(
                 characterDetails = currentCharacterUiState.characterDetails.copy(
@@ -206,16 +203,13 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         }
     }
 
-    suspend fun saveCharacter(context: Context) {
+    suspend fun saveCharacter() {
         val imagePath = newCharacterUiState.characterDetails.imagePath
 
         if (imagePath != null) {
             // Save image to private storage
             val newImagePath =
-                saveThumbnail(
-                    context,
-                    imagePath
-                )
+                imageManager.saveThumbnail(imagePath)
 
             newCharacterUiState = newCharacterUiState.copy(
                 characterDetails = newCharacterUiState.characterDetails.copy(

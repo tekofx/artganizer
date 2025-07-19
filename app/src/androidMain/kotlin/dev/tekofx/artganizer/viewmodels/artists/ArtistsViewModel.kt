@@ -1,6 +1,7 @@
-package dev.tekofx.artganizer.ui.viewmodels.artists
+package dev.tekofx.artganizer.viewmodels.artists
 
-
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
@@ -9,11 +10,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.repository.ArtistRepository
-import dev.tekofx.artganizer.utils.ImageManager
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
+import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistDetails
+import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistWithSubmissions
+import dev.tekofx.artganizer.utils.removeImageFromInternalStorage
+import dev.tekofx.artganizer.utils.saveThumbnail
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,12 +27,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-
 @OptIn(FlowPreview::class)
-class ArtistsViewModel(
-    private val repository: ArtistRepository,
-    private val imageManager: ImageManager
-) : ViewModel() {
+actual class ArtistsViewModel(private val repository: ArtistRepository) : ViewModel() {
 
     // Data states
     var newArtistUiState by mutableStateOf(ArtistUiState())
@@ -162,6 +163,7 @@ class ArtistsViewModel(
     }
 
     fun updateCurrentUiState(artistDetails: ArtistDetails) {
+        Log.d("ArtistsViewModel", "updateCurrentUiState: $artistDetails")
         currentArtistUiState =
             ArtistUiState(
                 artistDetails = artistDetails,
@@ -184,13 +186,16 @@ class ArtistsViewModel(
         }
     }
 
-    suspend fun saveArtist() {
+    suspend fun saveArtist(context: Context) {
         val imagePath = newArtistUiState.artistDetails.imagePath
 
         if (imagePath != null) {
             // Save image to private storage
             val newImagePath =
-                imageManager.saveThumbnail(imagePath)
+                saveThumbnail(
+                    context,
+                    imagePath
+                )
 
             newArtistUiState = newArtistUiState.copy(
                 artistDetails = newArtistUiState.artistDetails.copy(
@@ -204,14 +209,16 @@ class ArtistsViewModel(
         }
     }
 
-    suspend fun editArtist() {
+    suspend fun editArtist(context: Context) {
         val imagePath = currentArtistUiState.artistDetails.imagePath
 
         if (imagePath != null) {
             // Save image to private storage
-
             val newImagePath =
-                imageManager.saveThumbnail(imagePath)
+                saveThumbnail(
+                    context,
+                    imagePath
+                )
 
             currentArtistUiState = currentArtistUiState.copy(
                 artistDetails = currentArtistUiState.artistDetails.copy(
@@ -221,6 +228,7 @@ class ArtistsViewModel(
 
         }
         if (validateInput(currentArtistUiState.artistDetails)) {
+            Log.d("ArtistsViewModel", "editArtist: ${currentArtistUiState.artistDetails}")
             repository.updateArtist(currentArtistUiState.artistDetails.toArtistWithSubmissions().artist)
             currentArtistUiState = currentArtistUiState.copy(
                 artistDetails = currentArtistUiState.artistDetails,
@@ -229,16 +237,14 @@ class ArtistsViewModel(
         }
     }
 
-    fun deleteArtist(artist: ArtistUiState) {
+    fun deleteArtist(context: Context, artist: ArtistUiState) {
         viewModelScope.launch {
             repository.deleteArtist(artist.toArtistWithSubmissions().artist)
             artist.artistDetails.imagePath?.let {
-                imageManager.removeImageFromInternalStorage(artist.artistDetails.imagePath)
+                removeImageFromInternalStorage(context, artist.artistDetails.imagePath)
             }
         }
     }
 
 
 }
-
-
