@@ -26,32 +26,31 @@ fun App(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    KoinApplication(application = {
-        modules(appModules)
-    }) {
-
-    }
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding(), bottomBar = {
-            AnimatedVisibility(
-                enter = slideInVertically(initialOffsetY = { 2 * it }),
-                exit = slideOutVertically(targetOffsetY = { 2 * it }),
-                visible = showBottomAppBar(currentRoute)
+    KoinApplication(
+        application = {
+            modules(appModules)
+        })
+    {
+        Scaffold(
+            modifier = Modifier.fillMaxSize().navigationBarsPadding(), bottomBar = {
+                AnimatedVisibility(
+                    enter = slideInVertically(initialOffsetY = { 2 * it }),
+                    exit = slideOutVertically(targetOffsetY = { 2 * it }),
+                    visible = showBottomAppBar(currentRoute)
+                ) {
+                    BottomNavigationBar(
+                        navHostController = navController,
+                    )
+                }
+            }) { padding ->
+            Box(
+                modifier = Modifier.padding(padding)
             ) {
-                BottomNavigationBar(
-                    navHostController = navController,
+                Navigation(
+                    navController, sharedText
                 )
             }
-        }) { padding ->
-        Box(
-            modifier = Modifier.padding(padding)
-        ) {
-            Navigation(
-                navController,
-                sharedText
-            )
         }
+
     }
 }

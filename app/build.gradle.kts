@@ -39,13 +39,13 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(libs.androidx.navigation.compose)
+            implementation("org.jetbrains.compose.ui:ui-util")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.androidx.ui.tooling.preview)
-            implementation(compose.material3)
             implementation(libs.ui.backhandler)
             // Room
             implementation(libs.androidx.room.runtime)
@@ -74,7 +74,6 @@ kotlin {
 
             implementation(libs.kmpalette.core)
             implementation(libs.kmpalette.extensions.file)
-
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

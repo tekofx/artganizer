@@ -28,9 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import artganizer.app.generated.resources.Res
+import artganizer.app.generated.resources.check
 import dev.tekofx.artganizer.entities.Artist
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.input.ArtistListSelect
@@ -38,6 +39,7 @@ import dev.tekofx.artganizer.ui.theme.AppTheme
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 
 
 class MainActivity : ComponentActivity() {
@@ -92,7 +94,7 @@ fun HandleSharedLink(
                             )
                         )
                         scope.launch {
-                            artistsViewModel.editArtist(context)
+                            artistsViewModel.editArtist()
                         }
                         selectedArtist = artist
                     },

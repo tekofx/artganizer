@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import dev.tekofx.artganizer.ui.screens.SettingsScreen
@@ -35,15 +34,18 @@ fun Navigation(
         StandardCharsets.UTF_8.toString()
     )
 
-
-    NavHost(
+    SettingsScreen()
+    /*NavHost(
         navController = navHostController,
-        startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.SUBMISSIONS_LIST
-        //startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else "settings"
+        //startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.SUBMISSIONS_LIST
+        startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else "settings",
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
 
     ) {
 
-        /* composable(
+        *//* composable(
              route = "handleSharedLink/{sharedText}",
              arguments = listOf(navArgument("sharedText") { type = NavType.StringType })
          ) { backStackEntry ->
@@ -51,12 +53,12 @@ fun Navigation(
                  URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
              } ?: return@composable
              HandleSharedLink(sharedText, artistsViewModel, navHostController)
-         }*/
+         }*//*
 
-        submissionsGraph(navHostController)
-        artistsGraph(navHostController)
-        charactersGraph(navHostController)
-        tagsGraph(navHostController)
+        *//* submissionsGraph(navHostController)
+         artistsGraph(navHostController)
+         charactersGraph(navHostController)
+         tagsGraph(navHostController)*//*
 
         composable(
             route = "settings"
@@ -65,7 +67,7 @@ fun Navigation(
         }
 
 
-    }
+    }*/
 }
 
 

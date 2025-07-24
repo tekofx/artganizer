@@ -36,6 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SettingsScreen() {
+
     Scaffold {
         Column(
             modifier = Modifier.padding(10.dp),
@@ -55,6 +56,10 @@ fun SettingsScreen() {
 
 @Composable
 fun ShareOptionsSettings() {
+
+    var textfieldValue = "Title - Description - Author"
+
+
     Text(
         "Share options",
         modifier = Modifier.fillMaxWidth(),
@@ -92,11 +97,10 @@ fun ShareOptionsSettings() {
     )
 
     TextField(
-        value = " - ",
-        label = { Text("Separator") },
-        onValueChange = {},
-        modifier = Modifier.fillMaxWidth()
+        value = "",
+        onValueChange = { textfieldValue = it },
     )
+
 
 }
 
