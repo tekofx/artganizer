@@ -7,7 +7,16 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+
+    // Room
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
+
 }
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 
 kotlin {
     androidTarget {
@@ -15,13 +24,16 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm()
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // Koin
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -32,6 +44,17 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // Room
+            implementation(libs.androidx.sqlite.bundled)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.compiler)
+
+
+            // Koin
+            implementation(libs.koin.compose.viewmodel.nav)
+
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -72,6 +95,9 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspJvm", libs.androidx.room.compiler)
+
 }
 
 compose.desktop {
@@ -85,3 +111,10 @@ compose.desktop {
         }
     }
 }
+
+configurations.all {
+    exclude(group = "com.intellij", module = "annotations")
+
+}
+
+
