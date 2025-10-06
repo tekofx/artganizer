@@ -10,8 +10,3 @@ class JVMPlatform: Platform {
 
 actual fun getPlatform(): Platform = JVMPlatform()
 
-val platformModule = module {
-    single {
-        Room.databaseBuilder<AppDatabase>("artganizer.db")
-    }
-}

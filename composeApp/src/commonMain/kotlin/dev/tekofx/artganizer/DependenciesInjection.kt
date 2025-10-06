@@ -12,7 +12,11 @@ import dev.tekofx.artganizer.database.getRoomDatabase
 import dev.tekofx.artganizer.database.getSubmissionDao
 import dev.tekofx.artganizer.database.getTagDao
 import dev.tekofx.artganizer.database.getTagSubmissionCrossRefDao
+import dev.tekofx.artganizer.repository.TagRepository
+import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
@@ -29,16 +33,23 @@ val daoModule = module {
     single { getTagDao(get()) }
     single { getTagSubmissionCrossRefDao(get()) }
 }
+val viewModelModule = module {
+    viewModelOf(::TagsViewModel)
+}
 
-
-
+val repositoryModule = module {
+    singleOf(::TagRepository)
+}
 val appModules = listOf(
+    platformModule,
     daoModule,
+    repositoryModule,
+    viewModelModule,
 )
 
 fun initKoin(config: KoinAppDeclaration? = null) {
     startKoin {
         config?.invoke(this)
-        modules(daoModule)
+        modules(appModules)
     }
 }
