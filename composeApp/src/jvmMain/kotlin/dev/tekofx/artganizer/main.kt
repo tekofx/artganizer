@@ -6,7 +6,10 @@ import org.koin.core.context.startKoin
 
 
 fun main() = application {
-    initKoin {  }
+    initKoin {
+        modules()
+
+    }
     Window(
         onCloseRequest = ::exitApplication,
         title = "Artganizer",

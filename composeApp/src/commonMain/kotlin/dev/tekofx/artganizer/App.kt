@@ -26,6 +26,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 
 @Composable
@@ -42,7 +43,8 @@ fun App() {
             var showContent by remember { mutableStateOf(false) }
             val tags by tagsViewModel.tags.collectAsState()
             val artists by artistViewModel.artists.collectAsState()
-            Column(
+            ArtistCreationScreen()
+            /*Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primaryContainer)
                     .safeContentPadding()
@@ -88,7 +90,7 @@ fun App() {
                         Text("Compose: $greeting")
                     }
                 }
-            }
+            }*/
         }
     }
 }
