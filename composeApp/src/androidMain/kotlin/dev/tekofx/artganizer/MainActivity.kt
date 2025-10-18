@@ -16,11 +16,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-
         setContent {
             initKoin {
                 androidLogger(Level.DEBUG)
                 androidContext(this@MainActivity)
+                modules(platformModule)
             }
             App()
         }

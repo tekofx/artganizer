@@ -21,17 +21,18 @@ import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.compose_multiplatform
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.supervisorScope
 import org.koin.compose.KoinApplication
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.KoinApplication
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+
 @Composable
 @Preview
 fun App() {
-    val viewModel = koinViewModel<TagsViewModel>()
+    val tagsViewModel = koinViewModel<TagsViewModel>()
+    val artistViewModel = koinViewModel<ArtistsViewModel>()
     KoinApplication(
         application = {
             modules()
@@ -39,7 +40,8 @@ fun App() {
     ) {
         MaterialTheme {
             var showContent by remember { mutableStateOf(false) }
-            val tags by viewModel.tags.collectAsState()
+            val tags by tagsViewModel.tags.collectAsState()
+            val artists by artistViewModel.artists.collectAsState()
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primaryContainer)
@@ -50,22 +52,30 @@ fun App() {
                 Button(onClick = { showContent = !showContent }) {
                     Text("Click me!")
                 }
-                Text(viewModel.newTagUiState.tagDetails.name)
-                Text( "Tags in DB: ${tags.size}" )
+                Text(artistViewModel.newArtistUiState.artistDetails.name)
+                Text( "Artists in DB: ${artists.size}" )
 
 
                 TextField(
-                    value = viewModel.newTagUiState.tagDetails.name,
+                    value = artistViewModel.newArtistUiState.artistDetails.name,
                     onValueChange = {
-                        viewModel.updateNewUiState(viewModel.newTagUiState.tagDetails.copy(name = it))
+                        artistViewModel.updateNewUiState(artistViewModel.newArtistUiState.artistDetails.copy(name = it))
                     }
                 )
                 Button(onClick = {
                     runBlocking {
-                        viewModel.saveTag()
+                        artistViewModel.saveArtist()
                     }
                 }) {
                     Text("Save")
+                }
+
+                tags.forEach {
+                    Text("Tag: ${it.tag.name}")
+                }
+
+                artists.forEach {
+                    Text("Artist: ${it.artist.name}")
                 }
 
                 AnimatedVisibility(showContent) {

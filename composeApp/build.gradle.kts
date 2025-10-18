@@ -62,6 +62,9 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+
+            // Scrimage
+            implementation("org.imgscalr:imgscalr-lib:4.2")
         }
     }
 }
