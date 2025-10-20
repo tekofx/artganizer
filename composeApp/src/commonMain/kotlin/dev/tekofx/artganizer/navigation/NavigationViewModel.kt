@@ -11,7 +11,7 @@ class NavigationViewModel(
 
     val navigationState = navigationManager.navigationState
 
-    fun navigateTo(destination: String) {
+    fun navigateTo(destination: Any) {
         viewModelScope.launch {
             navigationManager.navigateTo(destination)
         }

@@ -4,7 +4,6 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class ArtistWithSubmissions(
     @Embedded val artist: Artist,
     @Relation(

@@ -36,7 +36,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.navigation.NavigateDestinations
+import dev.tekofx.artganizer.navigation.ArtistCreationRoute
+import dev.tekofx.artganizer.navigation.ArtistDetailsRoute
 import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
 import dev.tekofx.artganizer.ui.layout.AnimatedThinSearchBarScaffold
@@ -77,7 +78,7 @@ actual fun ArtistsScreen() {
             searchBarVisible = searchBarVisible,
             textFieldState = artistsViewModel.textFieldState,
             onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-            onFabClick = { navigationViewModel.navigateTo(NavigateDestinations.ARTIST_CREATION)},
+            onFabClick = { navigationViewModel.navigateTo(ArtistCreationRoute)},
             fabVisible = fabVisible
         ) {
             LazyColumn(
@@ -98,7 +99,7 @@ actual fun ArtistsScreen() {
                     ArtistCard(
                         artist,
                         onClick = {
-                            navigationViewModel.navigateTo("${NavigateDestinations.ARTIST_DETAILS}/${artist.artist.artistId}")
+                            navigationViewModel.navigateTo(ArtistDetailsRoute(artist.artist.artistId))
                         },
                         modifier = Modifier.animateItem()
                     )

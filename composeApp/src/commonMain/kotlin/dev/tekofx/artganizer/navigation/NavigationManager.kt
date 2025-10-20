@@ -11,7 +11,7 @@ class NavigationManager  {
     val canNavigateBack = _canNavigateBack.asStateFlow()
 
 
-    fun navigateTo(destination: String) {
+    fun navigateTo(destination: Any) {
         println(destination)
         _navigationState.value = NavigationState.Navigate(destination)
     }
@@ -30,6 +30,6 @@ class NavigationManager  {
 }
 sealed class NavigationState {
     data object Idle : NavigationState()
-    data class Navigate(val destination: String) : NavigationState()
+    data class Navigate(val destination: Any) : NavigationState()
     data object NavigateBack : NavigationState()
 }

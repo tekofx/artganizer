@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room)
 
+    kotlin("plugin.serialization") version "2.2.20"
+
 }
 room {
     schemaDirectory("$projectDir/schemas")
@@ -44,6 +46,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
             // Room
             implementation(libs.androidx.sqlite.bundled)

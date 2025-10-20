@@ -7,11 +7,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.entities.ArtistWithSubmissions
-import dev.tekofx.artganizer.navigation.NavigateDestinations
+import dev.tekofx.artganizer.navigation.ArtistDetailsRoute
 import dev.tekofx.artganizer.navigation.NavigationViewModel
+import dev.tekofx.artganizer.navigation.SubmissionDetailsRoute
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.ArtistInfo
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
@@ -22,13 +20,15 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-actual fun ArtistDetailsScreen(artist: ArtistWithSubmissions) {
+actual fun ArtistDetailsScreen(artist: ArtistDetailsRoute) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val navigationViewModel = koinViewModel<NavigationViewModel>()
     val showPopup by artistsViewModel.showPopup.collectAsState()
     val showEditArtist by artistsViewModel.showEditArtist.collectAsState()
     val scope = rememberCoroutineScope()
-
+    LaunchedEffect(Unit) {
+        artistsViewModel.getArtistWithSubmissions(artist.id)
+    }
 
     if (showPopup) {
         ConfirmationPopup(
@@ -69,7 +69,7 @@ actual fun ArtistDetailsScreen(artist: ArtistWithSubmissions) {
                 },
                 onImageClick = { submissionId ->
                    navigationViewModel.navigateTo(
-                        "${NavigateDestinations.SUBMISSIONS_LIST}/$submissionId"
+                       SubmissionDetailsRoute(submissionId)
                     )
                 },
             )

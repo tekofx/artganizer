@@ -7,14 +7,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.navigation.toRoute
-import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.ui.screens.SettingsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
@@ -36,7 +33,7 @@ fun Navigation() {
 
     NavHost(
         navController = navHostController,
-        startDestination =  NavigateDestinations.ARTISTS_LIST
+        startDestination = ArtistsListRoute
         //startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else "settings"
     ) {
         /* composable(
@@ -97,27 +94,23 @@ fun Navigation() {
 
 fun NavGraphBuilder.artistsGraph() {
 
-    composable(
-        route = NavigateDestinations.ARTISTS_LIST,
+    composable<ArtistsListRoute>(
         exitTransition = { fadeOut() }
     ) {
         ArtistsScreen()
     }
 
-    composable(
-        route = NavigateDestinations.ARTIST_CREATION,
+    composable<ArtistCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
         ArtistCreationScreen()
     }
 
-    composable(
-        route = "${NavigateDestinations.ARTIST_DETAILS}/{artistId}",
-        arguments = listOf(navArgument("artistId") { type = NavType.StringType }),
+    composable<ArtistDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val artist = backStackEntry.toRoute<ArtistWithSubmissions>()
-        ArtistDetailsScreen(artist)
+        val artistId = backStackEntry.toRoute<ArtistDetailsRoute>()
+        ArtistDetailsScreen(artistId)
     }
 }
 
@@ -203,7 +196,6 @@ private fun NavigationEventHandler(
         when (navigationState) {
             is NavigationState.Navigate -> {
                 try {
-                    println("Navigating to ${navigationState.destination}")
                     navController.navigate(navigationState.destination)
                 } catch (e: Exception) {
                     // Handle navigation errors
