@@ -5,10 +5,7 @@ import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 
 @Composable
-actual fun ArtistDetailsScreen(
-    artist: ArtistWithSubmissions,
-    navHostController: NavHostController
-) {
+actual fun ArtistDetailsScreen( artist: ArtistWithSubmissions) {
 
     // TODO: Implement ArtistDetailsScreen for JVM
 

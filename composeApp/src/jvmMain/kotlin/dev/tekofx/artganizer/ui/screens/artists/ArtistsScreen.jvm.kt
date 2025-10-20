@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-actual fun ArtistScreen(navHostController: NavHostController) {
+actual fun ArtistsScreen() {
 //TODO: Implement ArtistScreen for JVM
 
 }

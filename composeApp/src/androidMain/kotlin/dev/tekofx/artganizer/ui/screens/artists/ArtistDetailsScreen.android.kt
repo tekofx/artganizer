@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.navigation.NavigateDestinations
+import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.ArtistInfo
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
@@ -21,11 +22,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-actual fun ArtistDetailsScreen(
-    artist: ArtistWithSubmissions,
-    navHostController: NavHostController
-) {
+actual fun ArtistDetailsScreen(artist: ArtistWithSubmissions) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
+    val navigationViewModel = koinViewModel<NavigationViewModel>()
     val showPopup by artistsViewModel.showPopup.collectAsState()
     val showEditArtist by artistsViewModel.showEditArtist.collectAsState()
     val scope = rememberCoroutineScope()
@@ -38,7 +37,7 @@ actual fun ArtistDetailsScreen(
             onConfirm = {
                 artistsViewModel.setShowPopup(true)
                 artistsViewModel.deleteArtist( artistsViewModel.currentArtistUiState)
-                navHostController.popBackStack()
+                navigationViewModel.navigateBack()
                 artistsViewModel.setShowPopup(false)
             },
             onDismiss = {
@@ -69,7 +68,7 @@ actual fun ArtistDetailsScreen(
                     artistsViewModel.setShowPopup(true)
                 },
                 onImageClick = { submissionId ->
-                    navHostController.navigate(
+                   navigationViewModel.navigateTo(
                         "${NavigateDestinations.SUBMISSIONS_LIST}/$submissionId"
                     )
                 },

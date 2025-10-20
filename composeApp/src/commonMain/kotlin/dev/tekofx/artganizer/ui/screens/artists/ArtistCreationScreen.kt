@@ -15,9 +15,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun ArtistCreationScreen(
-    navController: NavController
-) {
+fun ArtistCreationScreen() {
     val scope = rememberCoroutineScope()
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     LaunchedEffect(Unit) {

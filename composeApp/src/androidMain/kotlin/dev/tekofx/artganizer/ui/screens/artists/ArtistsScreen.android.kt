@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.NavigateDestinations
+import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
 import dev.tekofx.artganizer.ui.layout.AnimatedThinSearchBarScaffold
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -45,8 +46,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-actual fun ArtistScreen(navHostController: NavHostController) {
+actual fun ArtistsScreen() {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
+    val navigationViewModel = koinViewModel<NavigationViewModel>()
 
     // Data
     val artists by artistsViewModel.artists.collectAsState()
@@ -75,7 +77,7 @@ actual fun ArtistScreen(navHostController: NavHostController) {
             searchBarVisible = searchBarVisible,
             textFieldState = artistsViewModel.textFieldState,
             onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-            onFabClick = { navHostController.navigate(NavigateDestinations.ARTIST_CREATION) },
+            onFabClick = { navigationViewModel.navigateTo(NavigateDestinations.ARTIST_CREATION)},
             fabVisible = fabVisible
         ) {
             LazyColumn(
@@ -94,9 +96,11 @@ actual fun ArtistScreen(navHostController: NavHostController) {
                 }*/
                 items(artists) { artist ->
                     ArtistCard(
-                        artist, onClick = {
-                            navHostController.navigate("${NavigateDestinations.ARTIST_DETAILS}/${artist.artist.artistId}")
-                        }, modifier = Modifier.animateItem()
+                        artist,
+                        onClick = {
+                            navigationViewModel.navigateTo("${NavigateDestinations.ARTIST_DETAILS}/${artist.artist.artistId}")
+                        },
+                        modifier = Modifier.animateItem()
                     )
                 }
 

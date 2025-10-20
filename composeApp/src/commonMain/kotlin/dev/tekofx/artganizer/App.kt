@@ -34,9 +34,6 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 @Composable
 @Preview
 fun App() {
-    val tagsViewModel = koinViewModel<TagsViewModel>()
-    val artistViewModel = koinViewModel<ArtistsViewModel>()
-    val navController = rememberNavController()
     KoinApplication(
         application = {
             modules()
@@ -47,7 +44,7 @@ fun App() {
             val tags by tagsViewModel.tags.collectAsState()
             val artists by artistViewModel.artists.collectAsState()
             ArtistCreationScreen()*/
-            Navigation(navController)
+            Navigation()
             /*Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primaryContainer)

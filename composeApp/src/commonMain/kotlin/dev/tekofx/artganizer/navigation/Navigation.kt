@@ -2,46 +2,43 @@ package dev.tekofx.artganizer.navigation
 
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.ui.screens.SettingsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
-import dev.tekofx.artganizer.ui.screens.artists.ArtistScreen
-import dev.tekofx.artganizer.ui.screens.characters.CharacterCreationScreen
-import dev.tekofx.artganizer.ui.screens.characters.CharacterDetailsScreen
-import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
-import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
-import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
-import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
-import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
-import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
-import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
-import org.koin.core.component.getScopeName
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import dev.tekofx.artganizer.ui.screens.artists.ArtistsScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun Navigation(
-    navHostController: NavHostController,
-) {
-
-
+fun Navigation() {
+    val navHostController = rememberNavController()
+    val navigationViewModel = koinViewModel<NavigationViewModel>()
+    val navigationState by navigationViewModel.navigationState.collectAsState()
+    NavigationEventHandler(
+        navigationState = navigationState,
+        navController = navHostController,
+        onEventHandled = navigationViewModel::clearNavigation,
+        onBackStackChanged = navigationViewModel::updateBackStackState
+    )
 
     NavHost(
         navController = navHostController,
         startDestination =  NavigateDestinations.ARTISTS_LIST
         //startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else "settings"
-
     ) {
-
         /* composable(
              route = "handleSharedLink/{sharedText}",
              arguments = listOf(navArgument("sharedText") { type = NavType.StringType })
@@ -53,7 +50,7 @@ fun Navigation(
          }*/
 
         //submissionsGraph(navHostController)
-        artistsGraph(navHostController)
+        artistsGraph()
         //charactersGraph(navHostController)
         //tagsGraph(navHostController)
 
@@ -98,20 +95,20 @@ fun Navigation(
     }
 }*/
 
-fun NavGraphBuilder.artistsGraph(navController: NavHostController) {
+fun NavGraphBuilder.artistsGraph() {
 
     composable(
         route = NavigateDestinations.ARTISTS_LIST,
         exitTransition = { fadeOut() }
     ) {
-        ArtistScreen(navController)
+        ArtistsScreen()
     }
 
     composable(
         route = NavigateDestinations.ARTIST_CREATION,
         exitTransition = { fadeOut() }
     ) {
-        ArtistCreationScreen(navController)
+        ArtistCreationScreen()
     }
 
     composable(
@@ -120,7 +117,7 @@ fun NavGraphBuilder.artistsGraph(navController: NavHostController) {
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
         val artist = backStackEntry.toRoute<ArtistWithSubmissions>()
-        ArtistDetailsScreen(artist, navController)
+        ArtistDetailsScreen(artist)
     }
 }
 
@@ -185,3 +182,44 @@ fun NavGraphBuilder.tagsGraph(navController: NavHostController) {
         TagDetailsScreen(tagId.toLong(), navController)
     }
 }*/
+@Composable
+private fun NavigationEventHandler(
+    navigationState: NavigationState,
+    navController: NavHostController,
+    onEventHandled: () -> Unit,
+    onBackStackChanged: (Boolean) -> Unit
+) {
+    // Monitor back stack changes
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    LaunchedEffect(backStackEntry) {
+        val canGoBack = navController.previousBackStackEntry != null
+        onBackStackChanged(canGoBack)
+    }
+
+    // Handle navigation events
+    LaunchedEffect(navigationState) {
+        println(navigationState)
+        when (navigationState) {
+            is NavigationState.Navigate -> {
+                try {
+                    println("Navigating to ${navigationState.destination}")
+                    navController.navigate(navigationState.destination)
+                } catch (e: Exception) {
+                    // Handle navigation errors
+                    println("Navigation error: ${e.message}")
+                }
+                onEventHandled()
+            }
+            is NavigationState.NavigateBack -> {
+                if (navController.previousBackStackEntry != null) {
+                    navController.popBackStack()
+                }
+                onEventHandled()
+            }
+            NavigationState.Idle -> {
+                // Do nothing
+            }
+        }
+    }
+}

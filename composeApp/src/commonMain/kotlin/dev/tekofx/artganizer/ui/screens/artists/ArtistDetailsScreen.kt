@@ -5,7 +5,4 @@ import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 
 @Composable
-expect fun ArtistDetailsScreen(
-    artist: ArtistWithSubmissions,
-    navHostController: NavHostController,
-)
+expect fun ArtistDetailsScreen(artist: ArtistWithSubmissions)

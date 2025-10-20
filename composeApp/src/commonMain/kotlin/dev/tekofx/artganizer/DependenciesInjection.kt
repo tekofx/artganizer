@@ -12,6 +12,8 @@ import dev.tekofx.artganizer.database.getRoomDatabase
 import dev.tekofx.artganizer.database.getSubmissionDao
 import dev.tekofx.artganizer.database.getTagDao
 import dev.tekofx.artganizer.database.getTagSubmissionCrossRefDao
+import dev.tekofx.artganizer.navigation.NavigationManager
+import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.repository.ArtistRepository
 import dev.tekofx.artganizer.repository.TagRepository
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -40,11 +42,13 @@ val daoModule = module {
 val viewModelModule = module {
     viewModelOf(::TagsViewModel)
     viewModelOf(::ArtistsViewModel)
+    viewModelOf(::NavigationViewModel)
 }
 
 val repositoryModule = module {
     singleOf(::TagRepository)
     singleOf(::ArtistRepository)
+    singleOf(::NavigationManager)
 }
 val appModules = listOf(
     platformModule,
