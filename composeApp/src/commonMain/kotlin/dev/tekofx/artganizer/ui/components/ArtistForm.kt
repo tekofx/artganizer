@@ -21,6 +21,10 @@ import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.openFilePicker
+import io.github.vinceglb.filekit.path
 import kotlinx.coroutines.launch
 
 @Composable
@@ -30,12 +34,12 @@ fun ArtistForm(
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit,
 ) {
-    var selectedImagePath by androidx.compose.runtime.remember { mutableStateOf("No image selected") }
     val scope = rememberCoroutineScope()
-    val imagePicker = rememberImagePicker { path ->
+    var selectedImagePath by androidx.compose.runtime.remember { mutableStateOf("No image selected") }
+    /*val imagePicker = rememberImagePicker { path ->
         artistUiState.artistDetails.imagePath
         selectedImagePath = path
-    }
+    }*/
     /*val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(), onResult = { uri: Uri? ->
             uri?.let {
@@ -51,25 +55,37 @@ fun ArtistForm(
         }
     )*/
 
-    imagePicker.Content()
+    //imagePicker.Content()
 
     LazyColumn(
         modifier = Modifier.padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        item{
+        /*item {
             Text(selectedImagePath)
-        }
+        }*/
         item {
             FormAvatar(
                 fallbackText = artistUiState.artistDetails.name,
                 artistUiState.artistDetails.imagePath,
                 onImageSelect = {
-                    println("asdfsdf")
-                    imagePicker.launch()
+                    scope.launch {
+                        val imageFile = FileKit.openFilePicker(type = FileKitType.Image)
+                        imageFile?.let {
+                            onItemValueChange(
+                                artistUiState.artistDetails.copy(
+                                    imagePath = it.path
+                                )
+                            )
+                            println(artistUiState.artistDetails)
+                            println(it.path)
+                        }
+                    }
+                    //imagePicker.launch()
+                },
+            )
 
-                })
         }
         item {
             ArtistFormFields(
