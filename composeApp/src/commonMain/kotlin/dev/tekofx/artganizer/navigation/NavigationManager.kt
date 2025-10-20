@@ -3,12 +3,18 @@ package dev.tekofx.artganizer.navigation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class NavigationManager  {
+class NavigationManager {
     private val _navigationState = MutableStateFlow<NavigationState>(NavigationState.Idle)
     val navigationState = _navigationState.asStateFlow()
 
     private val _canNavigateBack = MutableStateFlow(false)
     val canNavigateBack = _canNavigateBack.asStateFlow()
+
+    val currentDestination: Any?
+        get() = when (val state = _navigationState.value) {
+            is NavigationState.Navigate -> state.destination
+            else -> null
+        }
 
 
     fun navigateTo(destination: Any) {
@@ -28,6 +34,7 @@ class NavigationManager  {
         _canNavigateBack.value = canGoBack
     }
 }
+
 sealed class NavigationState {
     data object Idle : NavigationState()
     data class Navigate(val destination: Any) : NavigationState()

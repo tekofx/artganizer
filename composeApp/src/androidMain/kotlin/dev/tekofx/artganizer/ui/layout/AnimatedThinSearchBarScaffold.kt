@@ -19,8 +19,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.components.ThinSearchBar
+import dev.tekofx.artganizer.ui.components.buttons.CreateFab
 import dev.tekofx.artganizer.ui.screens.artists.animatePlacement
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,6 +61,9 @@ fun AnimatedThinSearchBarScaffold(
                 )
             }
         },
+        bottomBar = {
+            BottomNavigationBar()
+        }
     ) {
 
 

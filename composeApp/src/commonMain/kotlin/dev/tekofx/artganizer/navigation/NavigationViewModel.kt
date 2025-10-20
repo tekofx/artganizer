@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.navigation
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -10,6 +9,8 @@ class NavigationViewModel(
 ) : ViewModel() {
 
     val navigationState = navigationManager.navigationState
+    val currentDestination: Any?
+        get() = navigationManager.currentDestination
 
     fun navigateTo(destination: Any) {
         viewModelScope.launch {
