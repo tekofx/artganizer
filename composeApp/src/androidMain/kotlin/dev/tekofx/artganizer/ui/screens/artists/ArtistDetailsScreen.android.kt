@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.navigation.NavigateDestinations
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.ArtistInfo
@@ -21,7 +22,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 actual fun ArtistDetailsScreen(
-    artistId: Long,
+    artist: ArtistWithSubmissions,
     navHostController: NavHostController
 ) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
@@ -30,10 +31,6 @@ actual fun ArtistDetailsScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-
-    LaunchedEffect(Unit) {
-        artistsViewModel.getArtistWithSubmissions(artistId)
-    }
 
     if (showPopup) {
         ConfirmationPopup(

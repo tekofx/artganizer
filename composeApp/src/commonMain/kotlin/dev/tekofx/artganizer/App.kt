@@ -26,6 +26,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.navigation.compose.rememberNavController
+import dev.tekofx.artganizer.navigation.Navigation
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 
@@ -34,16 +36,18 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 fun App() {
     val tagsViewModel = koinViewModel<TagsViewModel>()
     val artistViewModel = koinViewModel<ArtistsViewModel>()
+    val navController = rememberNavController()
     KoinApplication(
         application = {
             modules()
         }
     ) {
         MaterialTheme {
-            var showContent by remember { mutableStateOf(false) }
+            /*var showContent by remember { mutableStateOf(false) }
             val tags by tagsViewModel.tags.collectAsState()
             val artists by artistViewModel.artists.collectAsState()
-            ArtistCreationScreen()
+            ArtistCreationScreen()*/
+            Navigation(navController, "")
             /*Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primaryContainer)
