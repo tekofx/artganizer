@@ -43,7 +43,7 @@ import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(markerClass = [ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class, ExperimentalSharedTransitionApi::class])
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 actual fun ArtistScreen(navHostController: NavHostController) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()

@@ -23,6 +23,7 @@ import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
+import org.koin.core.component.getScopeName
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -30,17 +31,13 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun Navigation(
     navHostController: NavHostController,
-    sharedText: String?
 ) {
-    val urlEncoded = if (sharedText == null) null else URLEncoder.encode(
-        sharedText,
-        StandardCharsets.UTF_8.toString()
-    )
+
 
 
     NavHost(
         navController = navHostController,
-        startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else NavigateDestinations.ARTISTS_LIST
+        startDestination =  NavigateDestinations.ARTISTS_LIST
         //startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else "settings"
 
     ) {

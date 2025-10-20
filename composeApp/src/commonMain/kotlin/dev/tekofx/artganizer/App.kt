@@ -47,7 +47,7 @@ fun App() {
             val tags by tagsViewModel.tags.collectAsState()
             val artists by artistViewModel.artists.collectAsState()
             ArtistCreationScreen()*/
-            Navigation(navController, "")
+            Navigation(navController)
             /*Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primaryContainer)

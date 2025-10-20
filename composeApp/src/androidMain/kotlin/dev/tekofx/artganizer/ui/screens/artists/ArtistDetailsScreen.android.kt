@@ -28,7 +28,6 @@ actual fun ArtistDetailsScreen(
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val showPopup by artistsViewModel.showPopup.collectAsState()
     val showEditArtist by artistsViewModel.showEditArtist.collectAsState()
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
 
