@@ -6,19 +6,13 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,7 +30,7 @@ import androidx.compose.ui.unit.round
 import dev.tekofx.artganizer.navigation.AppRoute
 import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
-import dev.tekofx.artganizer.ui.layout.AnimatedThinSearchBarScaffold
+import dev.tekofx.artganizer.ui.layout.BottomAppBarScaffold
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -51,59 +45,39 @@ actual fun ArtistsScreen() {
     val artists by artistsViewModel.artists.collectAsState()
 
     // UI
-    val alignment by artistsViewModel.alignment.collectAsState()
     val listState by artistsViewModel.listState.collectAsState()
-    val fabVisible by artistsViewModel.fabVisible.collectAsState()
-    val searchBarVisible by artistsViewModel.searchBarVisible.collectAsState()
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(
-            initialValue = SheetValue.Hidden,
-            skipHiddenState = false,
-        )
-    )
 
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState, sheetContent = {
-            Column {
-                Text("Sheet")
-            }
-        }
+    BottomAppBarScaffold(
+        textFieldState = artistsViewModel.textFieldState,
+        onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
+        onAddButtonClick = { navigationViewModel.navigateTo(AppRoute.ArtistCreation) },
     ) {
-        AnimatedThinSearchBarScaffold(
-            alignment = alignment,
-            searchBarVisible = searchBarVisible,
-            textFieldState = artistsViewModel.textFieldState,
-            onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-            onFabClick = { navigationViewModel.navigateTo(AppRoute.ArtistCreation) },
-            fabVisible = fabVisible
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier
+                .padding(10.dp),
+            state = listState
         ) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .padding(10.dp),
-                state = listState
-            ) {
-                /*item {
-                    Spacer(modifier = Modifier.height(10.dp))
-                }*/
-                /*if (isSearchBarFocused) {
-                    item {
-                        Spacer(modifier = Modifier.height(50.dp))
-                    }
-                }*/
-                items(artists) { artist ->
-                    ArtistCard(
-                        artist,
-                        onClick = {
-                            navigationViewModel.navigateTo(AppRoute.ArtistDetails(artist.artist.artistId))
-                        },
-                        modifier = Modifier.animateItem()
-                    )
-                }
-
+            /*item {
+                Spacer(modifier = Modifier.height(10.dp))
+            }*/
+            /*if (isSearchBarFocused) {
                 item {
                     Spacer(modifier = Modifier.height(50.dp))
                 }
+            }*/
+            items(artists) { artist ->
+                ArtistCard(
+                    artist,
+                    onClick = {
+                        navigationViewModel.navigateTo(AppRoute.ArtistDetails(artist.artist.artistId))
+                    },
+                    modifier = Modifier.animateItem()
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(50.dp))
             }
         }
     }
