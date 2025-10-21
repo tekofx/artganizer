@@ -16,6 +16,15 @@ import dev.tekofx.artganizer.ui.screens.SettingsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistsScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharacterCreationScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharacterDetailsScreen
+import dev.tekofx.artganizer.ui.screens.characters.CharactersScreen
+import dev.tekofx.artganizer.ui.screens.submissions.SubmissionCreationScreen
+import dev.tekofx.artganizer.ui.screens.submissions.SubmissionDetailsScreen
+import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
+import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -34,22 +43,11 @@ fun Navigation() {
     NavHost(
         navController = navHostController,
         startDestination = ArtistsListRoute
-        //startDestination = if (urlEncoded != null) "handleSharedLink/${urlEncoded}" else "settings"
     ) {
-        /* composable(
-             route = "handleSharedLink/{sharedText}",
-             arguments = listOf(navArgument("sharedText") { type = NavType.StringType })
-         ) { backStackEntry ->
-             val sharedText = backStackEntry.arguments?.getString("sharedText")?.let {
-                 URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
-             } ?: return@composable
-             HandleSharedLink(sharedText, artistsViewModel, navHostController)
-         }*/
-
-        //submissionsGraph(navHostController)
+        submissionsGraph()
         artistsGraph()
-        //charactersGraph(navHostController)
-        //tagsGraph(navHostController)
+        charactersGraph()
+        tagsGraph()
 
         composable(
             route = "settings"
@@ -62,35 +60,27 @@ fun Navigation() {
 }
 
 
-/*fun NavGraphBuilder.submissionsGraph(navController: NavHostController) {
+fun NavGraphBuilder.submissionsGraph() {
 
-    composable(
-        route = NavigateDestinations.SUBMISSIONS_LIST,
+    composable<SubmissionsListRoute>(
         exitTransition = { fadeOut() }
     ) {
-        SubmissionsScreen(navController)
+        SubmissionsScreen()
     }
 
-    composable(
-        route = NavigateDestinations.SUBMISSION_CREATION,
+    composable<SubmissionCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
-        SubmissionCreationScreen(navController)
+        SubmissionCreationScreen()
     }
 
-    composable(
-        route = "${NavigateDestinations.SUBMISSION_DETAILS}/{submissionId}",
-        arguments = listOf(navArgument("submissionId") { type = NavType.LongType }),
+    composable<SubmissionDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val submissionId = backStackEntry.arguments?.getLong("submissionId")
-        if (submissionId == null) {
-            navController.popBackStack()
-            return@composable
-        }
-        SubmissionDetailsScreen(submissionId, navController)
+        val submissionDetailsRoute = backStackEntry.toRoute<SubmissionDetailsRoute>()
+        SubmissionDetailsScreen(submissionDetailsRoute)
     }
-}*/
+}
 
 fun NavGraphBuilder.artistsGraph() {
 
@@ -109,72 +99,58 @@ fun NavGraphBuilder.artistsGraph() {
     composable<ArtistDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val artistId = backStackEntry.toRoute<ArtistDetailsRoute>()
-        ArtistDetailsScreen(artistId)
+        val artistDetailsRoute = backStackEntry.toRoute<ArtistDetailsRoute>()
+        ArtistDetailsScreen(artistDetailsRoute)
     }
 }
 
 
-/*
-fun NavGraphBuilder.charactersGraph(navController: NavHostController) {
+fun NavGraphBuilder.charactersGraph() {
 
-    composable(
-        route = NavigateDestinations.CHARACTERS_LIST,
+    composable<CharactersListRoute>(
         exitTransition = { fadeOut() }
     ) {
-        CharactersScreen(navController)
+        CharactersScreen()
     }
 
-    composable(
-        route = NavigateDestinations.CHARACTER_CREATION,
+    composable<CharacterCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
-        CharacterCreationScreen(navController)
+        CharacterCreationScreen()
     }
 
-    composable(
-        route = "${NavigateDestinations.CHARACTER_DETAILS}/{characterId}",
-        arguments = listOf(navArgument("characterId") { type = NavType.StringType }),
+    composable<CharacterDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val characterId = backStackEntry.arguments?.getString("characterId")
-        if (characterId == null) {
-            navController.popBackStack()
-            return@composable
-        }
-        CharacterDetailsScreen(characterId.toLong(), navController)
+        val characterDetailsRoute = backStackEntry.toRoute<CharacterDetailsRoute>()
+
+        CharacterDetailsScreen(characterDetailsRoute)
     }
 }
 
-fun NavGraphBuilder.tagsGraph(navController: NavHostController) {
+fun NavGraphBuilder.tagsGraph() {
 
-    composable(
-        route = NavigateDestinations.TAGS_LIST,
+    composable<TagsListRoute>(
+
         exitTransition = { fadeOut() }
     ) {
-        TagsScreen(navController)
+        TagsScreen()
     }
 
-    composable(
-        route = NavigateDestinations.TAG_CREATION,
+    composable<TagCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
-        TagCreationScreen(navController)
+        TagCreationScreen()
     }
 
-    composable(
-        route = "${NavigateDestinations.TAG_DETAILS}/{tagId}",
-        arguments = listOf(navArgument("tagId") { type = NavType.StringType }),
+    composable<TagDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val tagId = backStackEntry.arguments?.getString("tagId")
-        if (tagId == null) {
-            navController.popBackStack()
-            return@composable
-        }
-        TagDetailsScreen(tagId.toLong(), navController)
+        val tagDetailsRoute = backStackEntry.toRoute<TagDetailsRoute>()
+        TagDetailsScreen(tagDetailsRoute)
     }
-}*/
+}
+
 @Composable
 private fun NavigationEventHandler(
     navigationState: NavigationState,
@@ -203,13 +179,15 @@ private fun NavigationEventHandler(
                 }
                 onEventHandled()
             }
+
             is NavigationState.NavigateBack -> {
                 if (navController.previousBackStackEntry != null) {
                     navController.popBackStack()
                 }
                 onEventHandled()
             }
-            NavigationState.Idle -> {
+
+            is NavigationState.Idle -> {
                 // Do nothing
             }
         }

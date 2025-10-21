@@ -1,8 +1,9 @@
 package dev.tekofx.artganizer.ui.screens.tags
 
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 
 @Composable
-actual fun TagCreationScreen(navHostController: NavHostController) {
+actual fun TagCreationScreen() {
+    Text("Tag Creation Screen - JVM Implementation")
 }

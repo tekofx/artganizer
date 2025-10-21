@@ -67,23 +67,32 @@ fun BottomNavigationBar(
                     modifier = Modifier
                         .wrapContentWidth()
                         .padding(horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp)
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items.forEach { item ->
-                        val selected = navigationViewModel.currentDestination == item.route
-
-                        if (selected) {
-                            Icon(
-                                modifier = Modifier.height(40.dp),
-                                painter = painterResource(item.selectedIcon),
-                                contentDescription = item.title
-                            )
-                        } else {
-                            Icon(
-                                modifier = Modifier.height(40.dp),
-                                painter = painterResource(item.unselectedIcon),
-                                contentDescription = item.title
-                            )
+                        val selected = navigationViewModel.currentDestination?.equals(item.route)
+                        IconButton(
+                            onClick = {
+                                println(navigationViewModel.navigationState.value)
+                                println("selected$selected")
+                                println(navigationViewModel.currentDestination)
+                                println(item.route)
+                                navigationViewModel.navigateTo(item.route)
+                            }
+                        ) {
+                            if (selected == true) {
+                                Icon(
+                                    modifier = Modifier.height(40.dp),
+                                    painter = painterResource(item.selectedIcon),
+                                    contentDescription = item.title
+                                )
+                            } else {
+                                Icon(
+                                    modifier = Modifier.height(40.dp),
+                                    painter = painterResource(item.unselectedIcon),
+                                    contentDescription = item.title
+                                )
+                            }
                         }
                     }
                 }

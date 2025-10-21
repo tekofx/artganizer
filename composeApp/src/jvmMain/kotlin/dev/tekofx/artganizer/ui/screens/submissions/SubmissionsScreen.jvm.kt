@@ -1,6 +1,9 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
-import androidx.navigation.NavHostController
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 
-actual fun SubmissionsScreen(navHostController: NavHostController) {
+@Composable
+actual fun SubmissionsScreen() {
+    Text("Submissions Screen - JVM")
 }

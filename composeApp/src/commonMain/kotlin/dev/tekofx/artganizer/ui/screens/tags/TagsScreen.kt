@@ -1,10 +1,6 @@
 package dev.tekofx.artganizer.ui.screens.tags
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 
 @Composable
-expect fun TagsScreen(
-    navHostController: NavHostController,
-)
+expect fun TagsScreen()

@@ -1,12 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
+import dev.tekofx.artganizer.navigation.SubmissionDetailsRoute
 
 @Composable
-expect fun SubmissionDetailsScreen(
-    submissionId: Long,
-    navHostController: NavHostController,
-)
+expect fun SubmissionDetailsScreen(submissionDetailsRoute: SubmissionDetailsRoute)

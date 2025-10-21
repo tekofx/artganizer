@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.ui.screens.submissions
 
-import androidx.navigation.NavHostController
+import androidx.compose.runtime.Composable
 
-expect fun SubmissionsScreen(
-    navHostController: NavHostController,
-)
+@Composable
+expect fun SubmissionsScreen()
