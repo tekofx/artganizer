@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.repository.ArtistRepository
-import dev.tekofx.artganizer.repository.ImageRepository
+import dev.tekofx.artganizer.repository.ImageManager
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @OptIn(FlowPreview::class)
 class ArtistsViewModel(
     private val repository: ArtistRepository,
-    private val imageRepository: ImageRepository
+    private val imageManager: ImageManager
 ) : ViewModel() {
 
     // Data states
@@ -187,7 +187,7 @@ class ArtistsViewModel(
     fun saveArtist() = viewModelScope.launch {
         val imagePath = newArtistUiState.artistDetails.imagePath
         val newImagePath = if (imagePath != null) {
-            imageRepository.saveImageFromPath(imagePath, "artist_${System.currentTimeMillis()}.jpg")
+            imageManager.saveImageFromPath(imagePath, "artist_${System.currentTimeMillis()}.jpg")
             // Return app-specific path where it was saved
             "artist_${System.currentTimeMillis()}.jpg"
         } else null
@@ -202,7 +202,7 @@ class ArtistsViewModel(
 
         if (imagePath != null) {
             val fileName = "thumb_${System.currentTimeMillis()}.jpg"
-            val newImagePath = imageRepository.saveThumbnail(imagePath, fileName)
+            val newImagePath = imageManager.saveThumbnail(imagePath, fileName)
 
             currentArtistUiState = currentArtistUiState.copy(
                 artistDetails = currentArtistUiState.artistDetails.copy(imagePath = newImagePath)
@@ -220,7 +220,7 @@ class ArtistsViewModel(
             repository.deleteArtist(artist.toArtistWithSubmissions().artist)
             artist.artistDetails.imagePath?.let { imagePath ->
                 val fileName = imagePath.substringAfterLast("/")
-                imageRepository.removeImage(fileName)
+                imageManager.removeImage(fileName)
             }
         }
     }

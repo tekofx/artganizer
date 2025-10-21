@@ -21,7 +21,7 @@ data class Image(
     @PrimaryKey(autoGenerate = true)
     val imageId: Long = 0,
     val date: Date = Date(),
-    val uri: String? = null,
+    val uri: String = "",
     val size: Long = 0L,
     val dimensions: String = "",
     val extension: String = "",

@@ -2,7 +2,7 @@ package dev.tekofx.artganizer.utils
 
 // androidMain/kotlin/ImageStorage.android.kt
 import android.content.Context
-import androidx.core.content.edit
+import dev.tekofx.artganizer.entities.ImageInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -13,6 +13,7 @@ actual interface ImageStorage {
     actual suspend fun deleteImage(name: String): Result<Unit>
     actual suspend fun saveThumbnail(bytes: ByteArray, outputName: String): String?
     actual suspend fun getImagePath(name: String): String?
+    actual suspend fun getImageInfo(bytes: ByteArray): ImageInfo?
 }
 
 @Suppress("ACTUAL_WITHOUT_EXPECT")
@@ -28,7 +29,7 @@ actual class AndroidImageStorage(private val context: Context) : ImageStorage {
             }
         }
 
-     override suspend fun deleteImage(name: String): Result<Unit> =
+    override suspend fun deleteImage(name: String): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
                 val file = File(imagesDir, name)
@@ -47,4 +48,9 @@ actual class AndroidImageStorage(private val context: Context) : ImageStorage {
         withContext(Dispatchers.IO) {
             File(imagesDir, name).takeIf { it.exists() }?.absolutePath
         }
+
+    override suspend fun getImageInfo(bytes: ByteArray): ImageInfo? {
+        // Implement image info extraction logic here if needed
+        return null
+    }
 }

@@ -1,30 +1,18 @@
 package dev.tekofx.artganizer.repository
 
-import dev.tekofx.artganizer.utils.ImageStorage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.File
+import dev.tekofx.artganizer.dao.IImageDao
+import dev.tekofx.artganizer.entities.Image
 
-class ImageRepository(private val storage: ImageStorage) {
+class ImageRepository(
+    private val imageDao: IImageDao,
+    private val imageManager: ImageManager
+) {
+    suspend fun insert(image: Image) = imageDao.insert(image)
 
-    suspend fun saveImageFromPath(imagePath: String, name: String): Result<Unit> {
-        val bytes = loadImageBytes(imagePath) // You need to implement this per platform
-        return storage.saveImage(bytes, name)
+    // Delete
+    suspend fun delete(image: Image) {
+        imageDao.delete(image)
+        imageManager.removeImage(image.uri)
     }
 
-    suspend fun removeImage(name: String): Result<Unit> =
-        storage.deleteImage(name)
-
-    suspend fun saveThumbnail(imagePath: String, outputName: String): String? {
-        val bytes = loadImageBytes(imagePath)
-        return storage.saveThumbnail(bytes, outputName)
-    }
-
-    // Platform-specific function to read image bytes from a path
-    private suspend fun loadImageBytes(path: String): ByteArray {
-        // This could also be abstracted via expect/actual if needed
-        return withContext(Dispatchers.IO) {
-            File(path).readBytes()
-        }
-    }
 }
