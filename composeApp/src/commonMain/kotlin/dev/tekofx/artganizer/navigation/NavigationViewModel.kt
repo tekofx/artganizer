@@ -2,6 +2,7 @@ package dev.tekofx.artganizer.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
 import kotlinx.coroutines.launch
 
 class NavigationViewModel(
@@ -9,10 +10,9 @@ class NavigationViewModel(
 ) : ViewModel() {
 
     val navigationState = navigationManager.navigationState
-    val currentDestination: Any?
-        get() = navigationManager.currentDestination
+    val currentDestination = navigationManager.currentRoute
 
-    fun navigateTo(destination: Any) {
+    fun navigateTo(destination: AppRoute) {
         viewModelScope.launch {
             navigationManager.navigateTo(destination)
         }
@@ -33,6 +33,12 @@ class NavigationViewModel(
     fun updateBackStackState(canGoBack: Boolean) {
         viewModelScope.launch {
             navigationManager.updateBackStackState(canGoBack)
+        }
+    }
+
+    fun updateCurrentRoute(route: NavBackStackEntry?) {
+        viewModelScope.launch {
+            navigationManager.updateCurrentRoute(route)
         }
     }
 }

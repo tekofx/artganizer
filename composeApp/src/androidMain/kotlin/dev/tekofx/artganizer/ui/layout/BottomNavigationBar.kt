@@ -15,11 +15,14 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.add
 import artganizer.composeapp.generated.resources.search
@@ -33,6 +36,7 @@ fun BottomNavigationBar(
     onSearchClick: () -> Unit = {},
 ) {
     val navigationViewModel = koinViewModel<NavigationViewModel>()
+    val currentDestination by navigationViewModel.currentDestination.collectAsState()
 
 
     val items = listOf(
@@ -70,17 +74,15 @@ fun BottomNavigationBar(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items.forEach { item ->
-                        val selected = navigationViewModel.currentDestination?.equals(item.route)
+                        val selected =
+                            currentDestination?.destination?.hasRoute(item.route::class)
+                                ?: false
                         IconButton(
                             onClick = {
-                                println(navigationViewModel.navigationState.value)
-                                println("selected$selected")
-                                println(navigationViewModel.currentDestination)
-                                println(item.route)
                                 navigationViewModel.navigateTo(item.route)
                             }
                         ) {
-                            if (selected == true) {
+                            if (selected) {
                                 Icon(
                                     modifier = Modifier.height(40.dp),
                                     painter = painterResource(item.selectedIcon),

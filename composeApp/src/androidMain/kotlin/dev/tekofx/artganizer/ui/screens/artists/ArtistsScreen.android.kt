@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.screens.artists
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.Spring
@@ -8,7 +7,6 @@ import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -35,9 +33,7 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
-import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.navigation.ArtistCreationRoute
-import dev.tekofx.artganizer.navigation.ArtistDetailsRoute
+import dev.tekofx.artganizer.navigation.AppRoute
 import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
 import dev.tekofx.artganizer.ui.layout.AnimatedThinSearchBarScaffold
@@ -78,7 +74,7 @@ actual fun ArtistsScreen() {
             searchBarVisible = searchBarVisible,
             textFieldState = artistsViewModel.textFieldState,
             onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-            onFabClick = { navigationViewModel.navigateTo(ArtistCreationRoute)},
+            onFabClick = { navigationViewModel.navigateTo(AppRoute.ArtistCreation) },
             fabVisible = fabVisible
         ) {
             LazyColumn(
@@ -99,7 +95,7 @@ actual fun ArtistsScreen() {
                     ArtistCard(
                         artist,
                         onClick = {
-                            navigationViewModel.navigateTo(ArtistDetailsRoute(artist.artist.artistId))
+                            navigationViewModel.navigateTo(AppRoute.ArtistDetails(artist.artist.artistId))
                         },
                         modifier = Modifier.animateItem()
                     )

@@ -7,9 +7,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import dev.tekofx.artganizer.navigation.ArtistDetailsRoute
+import dev.tekofx.artganizer.navigation.AppRoute
 import dev.tekofx.artganizer.navigation.NavigationViewModel
-import dev.tekofx.artganizer.navigation.SubmissionDetailsRoute
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.ArtistInfo
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
@@ -20,7 +19,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-actual fun ArtistDetailsScreen(artist: ArtistDetailsRoute) {
+actual fun ArtistDetailsScreen(artist: AppRoute.ArtistDetails) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val navigationViewModel = koinViewModel<NavigationViewModel>()
     val showPopup by artistsViewModel.showPopup.collectAsState()
@@ -36,7 +35,7 @@ actual fun ArtistDetailsScreen(artist: ArtistDetailsRoute) {
             message = "Are you sure you want to proceed?",
             onConfirm = {
                 artistsViewModel.setShowPopup(true)
-                artistsViewModel.deleteArtist( artistsViewModel.currentArtistUiState)
+                artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
                 navigationViewModel.navigateBack()
                 artistsViewModel.setShowPopup(false)
             },
@@ -68,8 +67,8 @@ actual fun ArtistDetailsScreen(artist: ArtistDetailsRoute) {
                     artistsViewModel.setShowPopup(true)
                 },
                 onImageClick = { submissionId ->
-                   navigationViewModel.navigateTo(
-                       SubmissionDetailsRoute(submissionId)
+                    navigationViewModel.navigateTo(
+                        AppRoute.SubmissionDetails(submissionId)
                     )
                 },
             )

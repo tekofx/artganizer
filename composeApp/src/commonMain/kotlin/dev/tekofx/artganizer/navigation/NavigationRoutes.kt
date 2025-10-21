@@ -3,37 +3,40 @@ package dev.tekofx.artganizer.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ArtistsListRoute
+sealed class AppRoute {
+    @Serializable
+    object ArtistsList : AppRoute()
 
-@Serializable
-data class ArtistDetailsRoute(val id:Long)
+    @Serializable
+    data class ArtistDetails(val id: Long) : AppRoute()
 
-@Serializable
-object ArtistCreationRoute
+    @Serializable
+    object ArtistCreation : AppRoute()
 
-@Serializable
-object CharactersListRoute
+    @Serializable
+    object CharactersList : AppRoute()
 
-@Serializable
-data class CharacterDetailsRoute(val id:Long)
+    @Serializable
+    data class CharacterDetails(val id: Long) : AppRoute()
 
-@Serializable
-object CharacterCreationRoute
+    @Serializable
+    object CharacterCreation : AppRoute()
 
-@Serializable
-object SubmissionsListRoute
+    @Serializable
+    object SubmissionsList : AppRoute()
 
-@Serializable
-data class SubmissionDetailsRoute(val id:Long)
+    @Serializable
+    data class SubmissionDetails(val id: Long) : AppRoute()
 
-@Serializable
-object SubmissionCreationRoute
+    @Serializable
+    object SubmissionCreation : AppRoute()
 
-@Serializable
-object TagsListRoute
+    @Serializable
+    object TagsList : AppRoute()
 
-@Serializable
-data class TagDetailsRoute(val id:Long)
+    @Serializable
+    data class TagDetails(val id: Long) : AppRoute()
 
-@Serializable
-object TagCreationRoute
+    @Serializable
+    object TagCreation : AppRoute()
+}

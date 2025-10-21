@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,8 +27,8 @@ import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
+import dev.tekofx.artganizer.utils.FIRST_ROUTE
 import org.koin.compose.viewmodel.koinViewModel
-
 
 @Composable
 fun Navigation() {
@@ -37,16 +39,17 @@ fun Navigation() {
         navigationState = navigationState,
         navController = navHostController,
         onEventHandled = navigationViewModel::clearNavigation,
-        onBackStackChanged = navigationViewModel::updateBackStackState
+        onRouteChanged = navigationViewModel::updateCurrentRoute,
+        onBackStackChanged = navigationViewModel::updateBackStackState,
     )
 
     NavHost(
         navController = navHostController,
-        startDestination = ArtistsListRoute
+        startDestination = FIRST_ROUTE
     ) {
-        submissionsGraph()
         artistsGraph()
         charactersGraph()
+        submissionsGraph()
         tagsGraph()
 
         composable(
@@ -59,70 +62,69 @@ fun Navigation() {
     }
 }
 
-
-fun NavGraphBuilder.submissionsGraph() {
-
-    composable<SubmissionsListRoute>(
-        exitTransition = { fadeOut() }
-    ) {
-        SubmissionsScreen()
-    }
-
-    composable<SubmissionCreationRoute>(
-        exitTransition = { fadeOut() }
-    ) {
-        SubmissionCreationScreen()
-    }
-
-    composable<SubmissionDetailsRoute>(
-        exitTransition = { fadeOut() }
-    ) { backStackEntry ->
-        val submissionDetailsRoute = backStackEntry.toRoute<SubmissionDetailsRoute>()
-        SubmissionDetailsScreen(submissionDetailsRoute)
-    }
-}
-
 fun NavGraphBuilder.artistsGraph() {
 
-    composable<ArtistsListRoute>(
+    composable<AppRoute.ArtistsList>(
         exitTransition = { fadeOut() }
     ) {
         ArtistsScreen()
     }
 
-    composable<ArtistCreationRoute>(
+    composable<AppRoute.ArtistCreation>(
         exitTransition = { fadeOut() }
     ) {
         ArtistCreationScreen()
     }
 
-    composable<ArtistDetailsRoute>(
+    composable<AppRoute.ArtistDetails>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val artistDetailsRoute = backStackEntry.toRoute<ArtistDetailsRoute>()
+        val artistDetailsRoute = backStackEntry.toRoute<AppRoute.ArtistDetails>()
         ArtistDetailsScreen(artistDetailsRoute)
+    }
+}
+
+fun NavGraphBuilder.submissionsGraph() {
+
+    composable<AppRoute.SubmissionsList>(
+        exitTransition = { fadeOut() }
+    ) {
+        SubmissionsScreen()
+    }
+
+    composable<AppRoute.SubmissionCreation>(
+        exitTransition = { fadeOut() }
+    ) {
+        SubmissionCreationScreen()
+    }
+
+    composable<AppRoute.SubmissionDetails>(
+        exitTransition = { fadeOut() }
+    ) { backStackEntry ->
+        val submissionDetailsRoute = backStackEntry.toRoute<AppRoute.SubmissionDetails>()
+        SubmissionDetailsScreen(submissionDetailsRoute)
     }
 }
 
 
 fun NavGraphBuilder.charactersGraph() {
 
-    composable<CharactersListRoute>(
+    composable<AppRoute.CharactersList>(
         exitTransition = { fadeOut() }
     ) {
         CharactersScreen()
     }
 
-    composable<CharacterCreationRoute>(
+    composable<AppRoute.CharacterCreation>(
         exitTransition = { fadeOut() }
     ) {
         CharacterCreationScreen()
     }
 
-    composable<CharacterDetailsRoute>(
+    composable<AppRoute.CharacterDetails>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val characterDetailsRoute = backStackEntry.toRoute<CharacterDetailsRoute>()
+        val characterDetailsRoute = backStackEntry.toRoute<AppRoute.CharacterDetails>()
 
         CharacterDetailsScreen(characterDetailsRoute)
     }
@@ -130,45 +132,50 @@ fun NavGraphBuilder.charactersGraph() {
 
 fun NavGraphBuilder.tagsGraph() {
 
-    composable<TagsListRoute>(
+    composable<AppRoute.TagsList>(
 
         exitTransition = { fadeOut() }
     ) {
         TagsScreen()
     }
 
-    composable<TagCreationRoute>(
+    composable<AppRoute.TagCreation>(
         exitTransition = { fadeOut() }
     ) {
         TagCreationScreen()
     }
 
-    composable<TagDetailsRoute>(
+    composable<AppRoute.TagDetails>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val tagDetailsRoute = backStackEntry.toRoute<TagDetailsRoute>()
+        val tagDetailsRoute = backStackEntry.toRoute<AppRoute.TagDetails>()
         TagDetailsScreen(tagDetailsRoute)
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun NavigationEventHandler(
     navigationState: NavigationState,
     navController: NavHostController,
     onEventHandled: () -> Unit,
+    onRouteChanged: (NavBackStackEntry?) -> Unit,
     onBackStackChanged: (Boolean) -> Unit
 ) {
     // Monitor back stack changes
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(backStackEntry) {
+        println("BackStackEntry changed: $backStackEntry")
         val canGoBack = navController.previousBackStackEntry != null
         onBackStackChanged(canGoBack)
+        onRouteChanged(backStackEntry)
     }
+
 
     // Handle navigation events
     LaunchedEffect(navigationState) {
-        println(navigationState)
+        println("NavigationState changed: $navigationState")
         when (navigationState) {
             is NavigationState.Navigate -> {
                 try {
@@ -181,6 +188,7 @@ private fun NavigationEventHandler(
             }
 
             is NavigationState.NavigateBack -> {
+                println("NavigateBack event received")
                 if (navController.previousBackStackEntry != null) {
                     navController.popBackStack()
                 }
