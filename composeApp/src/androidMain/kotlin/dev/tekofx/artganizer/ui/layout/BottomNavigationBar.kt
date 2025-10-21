@@ -20,20 +20,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.add
-import artganizer.composeapp.generated.resources.search
 import dev.tekofx.artganizer.navigation.BottomNavigationItems
 import dev.tekofx.artganizer.navigation.NavigationViewModel
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BottomNavigationBar(
-    onSearchClick: () -> Unit = {},
+    firstButtonIcon: DrawableResource,
+    onFirstButtonClick: () -> Unit,
+    onAddButtonClick: () -> Unit = {}
 ) {
     val navigationViewModel = koinViewModel<NavigationViewModel>()
     val currentDestination by navigationViewModel.currentDestination.collectAsState()
@@ -99,61 +100,16 @@ fun BottomNavigationBar(
                     }
                 }
             }
-
-            /* NavigationBar(
-                 containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                 modifier = Modifier
-                     .width(150.dp)
-                     .height(40.dp)
-                     .clip(RoundedCornerShape(30.dp)),
-                 tonalElevation = 40.dp,
-             ) {
-                 items.forEach { item ->
-                     val selected = navigationViewModel.currentDestination == item.route
-                     NavigationBarItem(
-                         modifier = Modifier
-                             .background(Color.Red)
-                             .height(20.dp)
-                             .width(20.dp),
-                         selected = selected,
-
-                         onClick = {
-                             if (!selected) { // Avoid navigating to the same destination
-                                 navigationViewModel.navigateTo(item.route)
-                             }
-                         },
-                         icon = {
-                             if (selected) {
-                                 Icon(
-                                     painter = painterResource(item.selectedIcon),
-                                     contentDescription = item.title
-                                 )
-                             } else {
-                                 Icon(
-                                     painter = painterResource(item.unselectedIcon),
-                                     contentDescription = item.title
-                                 )
-                             }
-                         },
-                         label = {
-                             if (selected) {
-                                 Text(
-                                     text = item.title,
-                                 )
-                             }
-                         })
-                 }
-             }*/
             Row {
                 IconButton(
                     colors = IconButtonDefaults.iconButtonColors().copy(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
-                    onClick = { onSearchClick() }
+                    onClick = onFirstButtonClick
                 ) {
                     Icon(
                         contentDescription = "",
-                        painter = painterResource(Res.drawable.search),
+                        painter = painterResource(firstButtonIcon),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
@@ -161,7 +117,7 @@ fun BottomNavigationBar(
                     colors = IconButtonDefaults.iconButtonColors().copy(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
-                    onClick = {}
+                    onClick = onAddButtonClick
                 ) {
                     Icon(
                         contentDescription = "",
@@ -173,11 +129,4 @@ fun BottomNavigationBar(
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun BottomNavigationBarPreview() {
-    BottomNavigationBar()
 }
