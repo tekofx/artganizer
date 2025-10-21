@@ -1,10 +1,11 @@
-package dev.tekofx.artganizer.utils
+package dev.tekofx.artganizer.repository
 
+import dev.tekofx.artganizer.utils.ImageStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class ImageManager(private val storage: ImageStorage) {
+class ImageRepository(private val storage: ImageStorage) {
 
     suspend fun saveImageFromPath(imagePath: String, name: String): Result<Unit> {
         val bytes = loadImageBytes(imagePath) // You need to implement this per platform

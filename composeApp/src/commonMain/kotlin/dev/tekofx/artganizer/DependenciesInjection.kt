@@ -1,8 +1,6 @@
 package dev.tekofx.artganizer
 
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import dev.tekofx.artganizer.Platform
 import dev.tekofx.artganizer.database.AppDatabase
 import dev.tekofx.artganizer.database.getArtistDao
 import dev.tekofx.artganizer.database.getCharacterDao
@@ -18,14 +16,11 @@ import dev.tekofx.artganizer.repository.ArtistRepository
 import dev.tekofx.artganizer.repository.TagRepository
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
-import dev.tekofx.artganizer.utils.ImageManager
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
-
-
 
 
 val daoModule = module {
