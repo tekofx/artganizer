@@ -68,6 +68,9 @@ kotlin {
             implementation(libs.filekit.dialogs)
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.filekit.coil)
+
+            // KMPalette
+            implementation(libs.kmpalette.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

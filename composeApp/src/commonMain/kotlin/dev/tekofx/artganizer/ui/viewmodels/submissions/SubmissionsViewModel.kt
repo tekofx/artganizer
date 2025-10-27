@@ -11,14 +11,12 @@ import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.repository.ImageManager
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
-import dev.tekofx.artganizer.utils.getImageInfo
-import dev.tekofx.artganizer.utils.getPaletteFromUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.skiko.currentNanoTime
 import java.util.Date
+import java.util.UUID
 
 enum class SaveImagesOptions {
     EMPTY,
@@ -208,20 +206,20 @@ class SubmissionsViewModel(
                 if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
 
                     val imagePaths = uris.map { uri ->
-                        val name = "submission_${currentNanoTime()}"
+                        val name = "submission_${UUID.randomUUID()}"
                         imageManager.saveImageFromPath(uri, name)
                         name
                     }
 
                     val thumbnail =
-                        imageManager.saveThumbnail(imagePaths[0], "thumb_${currentNanoTime()}")
+                        imageManager.saveThumbnail(imagePaths[0], "thumb_${UUID.randomUUID()}")
 
                     val submissionId = submissionRepo.insertSubmissionDetails(
-                        newSubmissionDetails.copy(thumbnail = thumbnail)
+                        newSubmissionDetails.copy(thumbnail = thumbnail!!)
                     )
                     imagePaths.forEach { imagePath ->
-                        val imageInfo = getImageInfo(imagePath)
-                        val palette = getPaletteFromUri(imagePath)
+                        val imageInfo = imageManager.getImageInfo(imagePath)
+                        val palette = imageManager.getColorPalette(imagePath)
 
                         imageRepository.insert(
                             Image(
@@ -241,16 +239,16 @@ class SubmissionsViewModel(
                 } else {
                     uris.forEach { uri ->
                         val name =
-                            "submission_${currentNanoTime()}"
+                            "submission_${UUID.randomUUID()}"
 
 
                         imageManager.saveImageFromPath(uri, name)
                         val thumbnailPath =
-                            imageManager.saveThumbnail(uri, "thumb_${currentNanoTime()}")
+                            imageManager.saveThumbnail(uri, "thumb_${UUID.randomUUID()}")
 
-                        val imageInfo = getImageInfo(name)
-                        val palette = getPaletteFromUri(name)
-                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath)
+                        val imageInfo = imageManager.getImageInfo(name)
+                        val palette = imageManager.getColorPalette(name)
+                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath!!)
                         val submissionId = submissionRepo.insertSubmissionDetails(newSub)
 
                         imageRepository.insert(

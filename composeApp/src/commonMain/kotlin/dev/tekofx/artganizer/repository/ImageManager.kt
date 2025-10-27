@@ -30,8 +30,10 @@ class ImageManager(private val storage: ImageStorage) {
     }
 
     suspend fun getImageInfo(path: String): ImageInfo? {
+        return storage.getImageInfo(path)
+    }
 
-        val bytes = loadImageBytes(path)
-        return storage.getImageInfo(bytes)
+    suspend fun getColorPalette(path: String): List<Int> {
+        return storage.getColorpalette(path)
     }
 }
