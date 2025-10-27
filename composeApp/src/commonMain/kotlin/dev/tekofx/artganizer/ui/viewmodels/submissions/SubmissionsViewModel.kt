@@ -81,6 +81,7 @@ class SubmissionsViewModel(
     //////////////////////// Setters ////////////////////////
 
     fun setUris(uris: List<String>) {
+        println(uris)
         this.uris = uris
         saveImagesOption = SaveImagesOptions.EMPTY
     }
@@ -198,6 +199,7 @@ class SubmissionsViewModel(
      * Saves a new submission
      */
     suspend fun saveSubmission() {
+        println(uris)
         isLoading.value = true
         var i = 0f
         val total = uris.size.toFloat()

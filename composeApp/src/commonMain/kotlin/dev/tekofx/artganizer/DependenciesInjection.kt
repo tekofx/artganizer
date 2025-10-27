@@ -13,8 +13,13 @@ import dev.tekofx.artganizer.database.getTagSubmissionCrossRefDao
 import dev.tekofx.artganizer.navigation.NavigationManager
 import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.repository.ArtistRepository
+import dev.tekofx.artganizer.repository.CharactersRepository
+import dev.tekofx.artganizer.repository.ImageRepository
+import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.repository.TagRepository
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.module.dsl.singleOf
@@ -38,12 +43,19 @@ val viewModelModule = module {
     viewModelOf(::TagsViewModel)
     viewModelOf(::ArtistsViewModel)
     viewModelOf(::NavigationViewModel)
+    viewModelOf(::CharactersViewModel)
+    viewModelOf(::SubmissionsViewModel)
+
 }
 
 val repositoryModule = module {
     singleOf(::TagRepository)
     singleOf(::ArtistRepository)
     singleOf(::NavigationManager)
+    singleOf(::CharactersRepository)
+    singleOf(::SubmissionRepository)
+    singleOf(::ImageRepository)
+
 }
 val appModules = listOf(
     platformModule,

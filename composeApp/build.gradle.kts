@@ -71,6 +71,9 @@ kotlin {
 
             // KMPalette
             implementation(libs.kmpalette.core)
+
+            // Zoomable Image
+            implementation("net.engawapg.lib:zoomable:2.8.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
