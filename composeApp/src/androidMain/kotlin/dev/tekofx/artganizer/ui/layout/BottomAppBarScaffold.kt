@@ -14,18 +14,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import artganizer.composeapp.generated.resources.Res
-import artganizer.composeapp.generated.resources.search
+import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.ui.components.ThinSearchBar
-import org.jetbrains.compose.resources.DrawableResource
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BottomAppBarScaffold(
     textFieldState: TextFieldState,
     onFocusChanged: (Boolean) -> Unit,
-    onAddButtonClick: (() -> Unit),
-    firstButtonIcon: DrawableResource = Res.drawable.search,
+    navController: NavHostController,
+    actions: List<@Composable () -> Unit>,
     content: @Composable () -> Unit,
 ) {
 
@@ -36,10 +34,9 @@ fun BottomAppBarScaffold(
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(
-                firstButtonIcon = firstButtonIcon,
-                onFirstButtonClick = { showComponent = true },
-                onAddButtonClick = onAddButtonClick
+            BottomBar(
+                navController = navController,
+                actions = actions
             )
         }
     ) {

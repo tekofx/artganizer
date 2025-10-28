@@ -27,10 +27,7 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
-import dev.tekofx.artganizer.navigation.AppRoute
-import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.ui.components.artists.ArtistCard
-import dev.tekofx.artganizer.ui.layout.BottomAppBarScaffold
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -39,7 +36,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 actual fun ArtistsScreen() {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
-    val navigationViewModel = koinViewModel<NavigationViewModel>()
 
     // Data
     val artists by artistsViewModel.artists.collectAsState()
@@ -47,38 +43,33 @@ actual fun ArtistsScreen() {
     // UI
     val listState by artistsViewModel.listState.collectAsState()
 
-    BottomAppBarScaffold(
-        textFieldState = artistsViewModel.textFieldState,
-        onFocusChanged = { artistsViewModel.setIsSearchBarFocused(it) },
-        onAddButtonClick = { navigationViewModel.navigateTo(AppRoute.ArtistCreation) },
-    ) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier
-                .padding(10.dp),
-            state = listState
-        ) {
-            /*item {
-                Spacer(modifier = Modifier.height(10.dp))
-            }*/
-            /*if (isSearchBarFocused) {
-                item {
-                    Spacer(modifier = Modifier.height(50.dp))
-                }
-            }*/
-            items(artists) { artist ->
-                ArtistCard(
-                    artist,
-                    onClick = {
-                        navigationViewModel.navigateTo(AppRoute.ArtistDetails(artist.artist.artistId))
-                    },
-                    modifier = Modifier.animateItem()
-                )
-            }
 
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier
+            .padding(10.dp),
+        state = listState
+    ) {
+        /*item {
+            Spacer(modifier = Modifier.height(10.dp))
+        }*/
+        /*if (isSearchBarFocused) {
             item {
                 Spacer(modifier = Modifier.height(50.dp))
             }
+        }*/
+        items(artists) { artist ->
+            ArtistCard(
+                artist,
+                onClick = {
+                    /*navigationViewModel.navigateTo(ArtistDetails(artist.artist.artistId))*/
+                },
+                modifier = Modifier.animateItem()
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(50.dp))
         }
     }
 

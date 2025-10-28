@@ -1,7 +1,7 @@
 package dev.tekofx.artganizer.ui.screens.tags
 
 import androidx.compose.runtime.Composable
-import dev.tekofx.artganizer.navigation.AppRoute
+import dev.tekofx.artganizer.navigation.TagDetails
 
 @Composable
-expect fun TagDetailsScreen(tagDetailsRoute: AppRoute.TagDetails)
+expect fun TagDetailsScreen(tagDetailsRoute: TagDetails)

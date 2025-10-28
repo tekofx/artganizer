@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.gallery_outlined
-import dev.tekofx.artganizer.navigation.NavigationViewModel
 import dev.tekofx.artganizer.ui.components.DialogLoader
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.ui.components.submissions.form.SubmissionsForm
@@ -35,7 +34,6 @@ actual fun SubmissionCreationScreen() {
     val charactersViewModel = koinViewModel<CharactersViewModel>()
     val tagsViewModel = koinViewModel<TagsViewModel>()
     val submissionsViewModel = koinViewModel<SubmissionsViewModel>()
-    val navigationViewModel = koinViewModel<NavigationViewModel>()
 
     val saveImagesOption = submissionsViewModel.saveImagesOption
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
@@ -85,12 +83,12 @@ actual fun SubmissionCreationScreen() {
                 onSaveClick = {
                     scope.launch {
                         submissionsViewModel.saveSubmission()
-                        navigationViewModel.navigateBack()
+                        /*navigationViewModel.navigateBack()*/
                     }
                 },
                 onCancelClick = {
                     submissionsViewModel.clearNewUiState()
-                    navigationViewModel.navigateBack()
+                    /*navigationViewModel.navigateBack()*/
                 },
                 currentImageIndex = currentImageIndex
             )

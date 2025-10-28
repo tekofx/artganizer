@@ -21,27 +21,27 @@ sealed class BottomNavigationItems(
         title = "Gallery",
         selectedIcon = Res.drawable.gallery_filled,
         unselectedIcon = Res.drawable.gallery_outlined,
-        route = AppRoute.SubmissionsList
+        route = SubmissionsList
     )
 
     data object Artists : BottomNavigationItems(
         title = "Artists",
         selectedIcon = Res.drawable.palette_filled,
         unselectedIcon = Res.drawable.palette_outlined,
-        route = AppRoute.ArtistsList
+        route = ArtistsList
     )
 
     data object Characters : BottomNavigationItems(
         title = "Characters",
         selectedIcon = Res.drawable.paw_filled,
         unselectedIcon = Res.drawable.paw_outlined,
-        route = AppRoute.CharactersList
+        route = CharactersList
     )
 
     data object Tags : BottomNavigationItems(
         title = "Tags",
         selectedIcon = Res.drawable.tag_filled,
         unselectedIcon = Res.drawable.tag_outlined,
-        route = AppRoute.TagsList
+        route = TagsList
     )
 }

@@ -2,9 +2,9 @@ package dev.tekofx.artganizer.ui.screens.tags
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import dev.tekofx.artganizer.navigation.AppRoute
+import dev.tekofx.artganizer.navigation.TagDetails
 
 @Composable
-actual fun TagDetailsScreen(tagDetailsRoute: AppRoute.TagDetails) {
+actual fun TagDetailsScreen(tagDetailsRoute: TagDetails) {
     Text("Tag Details Screen - Android Implementation")
 }

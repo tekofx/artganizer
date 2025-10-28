@@ -6,8 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import dev.tekofx.artganizer.navigation.AppRoute
-import dev.tekofx.artganizer.navigation.NavigationViewModel
+import dev.tekofx.artganizer.navigation.ArtistDetails
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.ArtistInfo
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
@@ -18,9 +17,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ArtistComponent(artist: AppRoute.ArtistDetails) {
+fun ArtistComponent(artist: ArtistDetails) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
-    val navigationViewModel = koinViewModel<NavigationViewModel>()
     val showPopup by artistsViewModel.showPopup.collectAsState()
     val showEditArtist by artistsViewModel.showEditArtist.collectAsState()
     val scope = rememberCoroutineScope()
@@ -35,7 +33,6 @@ fun ArtistComponent(artist: AppRoute.ArtistDetails) {
             onConfirm = {
                 artistsViewModel.setShowPopup(true)
                 artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
-                navigationViewModel.navigateBack()
                 artistsViewModel.setShowPopup(false)
             },
             onDismiss = {
@@ -66,9 +63,9 @@ fun ArtistComponent(artist: AppRoute.ArtistDetails) {
                     artistsViewModel.setShowPopup(true)
                 },
                 onImageClick = { submissionId ->
-                    navigationViewModel.navigateTo(
-                        AppRoute.SubmissionDetails(submissionId)
-                    )
+                    /* navigationViewModel.navigateTo(
+                         SubmissionDetails(submissionId)
+                     )*/
                 },
             )
         }

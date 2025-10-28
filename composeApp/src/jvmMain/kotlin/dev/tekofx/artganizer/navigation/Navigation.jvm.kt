@@ -27,7 +27,7 @@ actual fun Navigation() {
         navController = navHostController,
         startDestination = FIRST_ROUTE
     ) {
-        composable<AppRoute.SubmissionsList> {
+        composable<SubmissionsList> {
             SubmissionsScreen()
         }
     }
