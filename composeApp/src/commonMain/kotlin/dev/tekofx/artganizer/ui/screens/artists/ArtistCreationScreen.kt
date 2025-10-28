@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
@@ -15,7 +14,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun ArtistCreationScreen() {
+fun ArtistCreationScreen(
+    navController: NavHostController
+) {
     val scope = rememberCoroutineScope()
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     LaunchedEffect(Unit) {
@@ -29,9 +30,13 @@ fun ArtistCreationScreen() {
             artistsViewModel.newArtistUiState,
             onItemValueChange = { newValue -> artistsViewModel.updateNewUiState(newValue) },
             onSaveClick = {
-                scope.launch { artistsViewModel.saveArtist() }
+                scope.launch {
+                    artistsViewModel.saveArtist()
+                    navController.popBackStack()
+                }
             },
             onCancelClick = {
+                navController.popBackStack()
             }
         )
     }

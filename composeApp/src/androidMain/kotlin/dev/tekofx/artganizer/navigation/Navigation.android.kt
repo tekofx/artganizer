@@ -36,11 +36,17 @@ import dev.tekofx.artganizer.ui.screens.submissions.SubmissionsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.utils.AppLogger
 import dev.tekofx.artganizer.utils.FIRST_ROUTE
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 actual fun Navigation() {
+    // Viewmodels
+    val artistViewModel = koinViewModel<ArtistsViewModel>()
+
+    // Routing
     val navHostController = rememberNavController()
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.toRoute<AppRoute>()
@@ -133,12 +139,22 @@ actual fun Navigation() {
 
     val actions2 = when {
         navBackStackEntry?.destination?.hasRoute<ArtistDetails>() ?: false -> listOf(
-            @Composable { Action(icon = Res.drawable.share, onClick = { }) },
-            @Composable { Action(icon = Res.drawable.edit, onClick = { }) },
+            @Composable {
+                Action(icon = Res.drawable.share, onClick = {
+
+                })
+            },
+            @Composable {
+                Action(icon = Res.drawable.edit, onClick = {
+                    artistViewModel.setShowEditArtist(true)
+                })
+            },
             @Composable {
                 Action(
                     icon = Res.drawable.trash,
-                    onClick = { },
+                    onClick = {
+                        artistViewModel.setShowDeletePopup(true)
+                    },
                     containerColor = MaterialTheme.colorScheme.error,
                     onContainerColor = MaterialTheme.colorScheme.onErrorContainer
                 )
@@ -188,14 +204,14 @@ fun NavGraphBuilder.artistsGraph(navController: NavHostController) {
     composable<ArtistCreation>(
         exitTransition = { fadeOut() }
     ) {
-        ArtistCreationScreen()
+        ArtistCreationScreen(navController)
     }
 
     composable<ArtistDetails>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
         val artistDetailsRoute = backStackEntry.toRoute<ArtistDetails>()
-        ArtistDetailsScreen(artistDetailsRoute)
+        ArtistDetailsScreen(artistDetailsRoute, navController)
     }
 }
 

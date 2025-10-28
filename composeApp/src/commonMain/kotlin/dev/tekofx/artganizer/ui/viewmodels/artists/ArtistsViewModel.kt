@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
+import dev.tekofx.artganizer.managers.UiStateManager
 import dev.tekofx.artganizer.repository.ArtistRepository
 import dev.tekofx.artganizer.repository.ImageManager
 import kotlinx.coroutines.FlowPreview
@@ -26,7 +27,8 @@ import kotlinx.coroutines.launch
 @OptIn(FlowPreview::class)
 class ArtistsViewModel(
     private val repository: ArtistRepository,
-    private val imageManager: ImageManager
+    private val imageManager: ImageManager,
+    private val uiStateManager: UiStateManager,
 ) : ViewModel() {
 
     // Data states
@@ -38,8 +40,9 @@ class ArtistsViewModel(
 
     // UI State
     val textFieldState = TextFieldState()
-    val showPopup = MutableStateFlow(false)
-    val showEditArtist = MutableStateFlow(false)
+    val showDeletePopup = uiStateManager.showDeletePopup
+    val showEditArtist = uiStateManager.showEditArtist
+
     val isSearchBarFocused = MutableStateFlow(false)
     val listState = MutableStateFlow(LazyListState())
 
@@ -141,8 +144,8 @@ class ArtistsViewModel(
     }
 
     //////////////////////// Setters ////////////////////////
-    fun setShowPopup(show: Boolean) {
-        showPopup.value = show
+    fun setShowDeletePopup(show: Boolean) {
+        showDeletePopup.value = show
     }
 
     fun setShowEditArtist(show: Boolean) {

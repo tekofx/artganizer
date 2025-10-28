@@ -10,6 +10,7 @@ import dev.tekofx.artganizer.database.getRoomDatabase
 import dev.tekofx.artganizer.database.getSubmissionDao
 import dev.tekofx.artganizer.database.getTagDao
 import dev.tekofx.artganizer.database.getTagSubmissionCrossRefDao
+import dev.tekofx.artganizer.managers.UiStateManager
 import dev.tekofx.artganizer.navigation.NavigationManager
 import dev.tekofx.artganizer.repository.ArtistRepository
 import dev.tekofx.artganizer.repository.CharactersRepository
@@ -53,6 +54,7 @@ val repositoryModule = module {
     singleOf(::CharactersRepository)
     singleOf(::SubmissionRepository)
     singleOf(::ImageRepository)
+    singleOf(::UiStateManager)
 
 }
 val appModules = listOf(
