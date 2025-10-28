@@ -34,7 +34,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-actual fun ArtistsScreen() {
+fun ArtistsScreen(
+    onArtistClick: (Long) -> Unit
+) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
 
     // Data
@@ -62,7 +64,7 @@ actual fun ArtistsScreen() {
             ArtistCard(
                 artist,
                 onClick = {
-                    /*navigationViewModel.navigateTo(ArtistDetails(artist.artist.artistId))*/
+                    onArtistClick(artist.artist.artistId)
                 },
                 modifier = Modifier.animateItem()
             )

@@ -23,11 +23,10 @@ fun BottomAppBarScaffold(
     textFieldState: TextFieldState,
     onFocusChanged: (Boolean) -> Unit,
     navController: NavHostController,
+    showBottomNavBar: Boolean,
     actions: List<@Composable () -> Unit>,
     content: @Composable () -> Unit,
 ) {
-
-
     var showComponent by remember {
         mutableStateOf(false)
     }
@@ -36,17 +35,16 @@ fun BottomAppBarScaffold(
         bottomBar = {
             BottomBar(
                 navController = navController,
-                actions = actions
+                actions = actions,
+                showBottomNavBar = showBottomNavBar
             )
         }
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
         ) {
-
             Column {
                 if (showComponent) {
                     ThinSearchBar(
