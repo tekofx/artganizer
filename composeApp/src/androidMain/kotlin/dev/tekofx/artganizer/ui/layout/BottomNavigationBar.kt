@@ -21,11 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hasRoute
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.add
 import dev.tekofx.artganizer.navigation.BottomNavigationItems
 import dev.tekofx.artganizer.navigation.NavigationViewModel
+import dev.tekofx.artganizer.utils.AppLogger
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -37,7 +37,7 @@ fun BottomNavigationBar(
     onAddButtonClick: () -> Unit = {}
 ) {
     val navigationViewModel = koinViewModel<NavigationViewModel>()
-    val currentDestination by navigationViewModel.currentDestination.collectAsState()
+    val routesList by navigationViewModel.routesList.collectAsState()
 
 
     val items = listOf(
@@ -75,9 +75,14 @@ fun BottomNavigationBar(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items.forEach { item ->
+                        AppLogger.d("BottomNavigationBar", "routesList $routesList")
+
+                        AppLogger.d("BottomNavigationBar", "last routesList ${routesList.last()}")
+                        AppLogger.d("BottomNavigationBar", "item.route ${item.route}")
+                        AppLogger.d("BottomNavigationBar", "\n")
+
                         val selected =
-                            currentDestination?.destination?.hasRoute(item.route::class)
-                                ?: false
+                            routesList.last() == item.route
                         IconButton(
                             onClick = {
                                 navigationViewModel.navigateTo(item.route)
@@ -130,3 +135,6 @@ fun BottomNavigationBar(
         }
     }
 }
+
+
+

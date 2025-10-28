@@ -2,7 +2,9 @@ package dev.tekofx.artganizer.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavBackStackEntry
+import artganizer.composeapp.generated.resources.Res
+import artganizer.composeapp.generated.resources.search
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class NavigationViewModel(
@@ -10,7 +12,11 @@ class NavigationViewModel(
 ) : ViewModel() {
 
     val navigationState = navigationManager.navigationState
-    val currentDestination = navigationManager.currentRoute
+    val routesList = navigationManager.routesList
+
+    val showBottomAppBar = MutableStateFlow(false)
+    val firstButtonIcon = MutableStateFlow(Res.drawable.search)
+    val onAddButtonClick = MutableStateFlow(Unit)
 
     fun navigateTo(destination: AppRoute) {
         viewModelScope.launch {
@@ -36,9 +42,5 @@ class NavigationViewModel(
         }
     }
 
-    fun updateCurrentRoute(route: NavBackStackEntry?) {
-        viewModelScope.launch {
-            navigationManager.updateCurrentRoute(route)
-        }
-    }
+
 }

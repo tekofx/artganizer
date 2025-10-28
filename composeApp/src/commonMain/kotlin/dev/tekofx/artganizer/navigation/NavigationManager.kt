@@ -1,6 +1,6 @@
 package dev.tekofx.artganizer.navigation
 
-import androidx.navigation.NavBackStackEntry
+import dev.tekofx.artganizer.utils.FIRST_ROUTE
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -11,17 +11,22 @@ class NavigationManager {
     private val _canNavigateBack = MutableStateFlow(false)
     val canNavigateBack = _canNavigateBack.asStateFlow()
 
-    private val _currentRoute = MutableStateFlow<NavBackStackEntry?>(null)
-    val currentRoute = _currentRoute.asStateFlow()
+
+    private val _routesList = MutableStateFlow(mutableListOf<AppRoute>(FIRST_ROUTE))
+    val routesList = _routesList.asStateFlow()
 
 
     fun navigateTo(destination: AppRoute) {
         _navigationState.value = NavigationState.Navigate(destination)
+        if (_routesList.value.last() != destination) {
+            _routesList.value = _routesList.value.toMutableList().apply { add(destination) }
+        }
     }
 
     fun navigateBack() {
         println("NavigationManager: navigateBack() called")
         _navigationState.value = NavigationState.NavigateBack
+        _routesList.value.removeLast()
     }
 
     fun clearNavigation() {
@@ -32,9 +37,6 @@ class NavigationManager {
         _canNavigateBack.value = canGoBack
     }
 
-    fun updateCurrentRoute(route: NavBackStackEntry?) {
-        _currentRoute.value = route
-    }
 }
 
 sealed class NavigationState {

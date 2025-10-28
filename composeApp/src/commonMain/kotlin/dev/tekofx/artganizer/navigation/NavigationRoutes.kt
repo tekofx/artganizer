@@ -39,4 +39,5 @@ sealed class AppRoute {
 
     @Serializable
     object TagCreation : AppRoute()
+
 }

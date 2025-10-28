@@ -1,6 +1,7 @@
 package dev.tekofx.artganizer.navigation
 
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -9,6 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import artganizer.composeapp.generated.resources.Res
+import artganizer.composeapp.generated.resources.search
+import dev.tekofx.artganizer.ui.layout.BottomAppBarScaffold
 import dev.tekofx.artganizer.ui.screens.SettingsScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistCreationScreen
 import dev.tekofx.artganizer.ui.screens.artists.ArtistDetailsScreen
@@ -34,26 +38,30 @@ actual fun Navigation() {
         navigationState = navigationState,
         navController = navHostController,
         onEventHandled = navigationViewModel::clearNavigation,
-        onRouteChanged = navigationViewModel::updateCurrentRoute,
         onBackStackChanged = navigationViewModel::updateBackStackState,
     )
 
-    NavHost(
-        navController = navHostController,
-        startDestination = FIRST_ROUTE
+    BottomAppBarScaffold(
+        textFieldState = rememberTextFieldState(),
+        onFocusChanged = {},
+        onAddButtonClick = {},
+        firstButtonIcon = Res.drawable.search
     ) {
-        artistsGraph()
-        charactersGraph()
-        submissionsGraph()
-        tagsGraph()
-
-        composable(
-            route = "settings"
+        NavHost(
+            navController = navHostController,
+            startDestination = FIRST_ROUTE
         ) {
-            SettingsScreen()
+            artistsGraph()
+            charactersGraph()
+            submissionsGraph()
+            tagsGraph()
+
+            composable(
+                route = "settings"
+            ) {
+                SettingsScreen()
+            }
         }
-
-
     }
 }
 

@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import dev.tekofx.artganizer.utils.AppLogger
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -14,23 +14,26 @@ fun NavigationEventHandler(
     navigationState: NavigationState,
     navController: NavHostController,
     onEventHandled: () -> Unit,
-    onRouteChanged: (NavBackStackEntry?) -> Unit,
     onBackStackChanged: (Boolean) -> Unit
 ) {
     // Monitor back stack changes
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(backStackEntry) {
-        println("BackStackEntry changed: $backStackEntry")
+        AppLogger.d(
+            "NavigationEventHandler",
+            "BackStackEntry changed: ${backStackEntry?.destination}"
+        )
+
         val canGoBack = navController.previousBackStackEntry != null
         onBackStackChanged(canGoBack)
-        onRouteChanged(backStackEntry)
+
     }
 
 
     // Handle navigation events
     LaunchedEffect(navigationState) {
-        println("NavigationState changed: $navigationState")
+        AppLogger.d("NavigationEventHandler", "NavigationState changed: $navigationState")
         when (navigationState) {
             is NavigationState.Navigate -> {
                 try {
