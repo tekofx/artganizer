@@ -6,7 +6,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import dev.tekofx.artganizer.ui.screens.artists.animatePlacement
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
@@ -14,7 +16,9 @@ import org.jetbrains.compose.resources.painterResource
 fun ActionsBar(
     actions: List<@Composable () -> Unit>
 ) {
-    Row {
+    Row(
+        modifier = Modifier.animatePlacement()
+    ) {
         actions.forEach { action ->
             action()
         }
