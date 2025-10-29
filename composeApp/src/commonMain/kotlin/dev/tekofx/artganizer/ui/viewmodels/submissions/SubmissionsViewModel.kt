@@ -77,7 +77,7 @@ class SubmissionsViewModel(
 
 
     // Ui State
-    val showPopup = MutableStateFlow(false)
+    val showDeletePopup = MutableStateFlow(false)
     val showEditSubmission = MutableStateFlow(false)
     val currentImageIndex = MutableStateFlow(0) // Index of images in current submission
     val isLoading = MutableStateFlow(false)
@@ -108,8 +108,8 @@ class SubmissionsViewModel(
         }
     }
 
-    fun setShowPopup(show: Boolean) {
-        showPopup.value = show
+    fun setShowDeletePopup(show: Boolean) {
+        showDeletePopup.value = show
     }
 
 

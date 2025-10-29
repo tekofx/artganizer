@@ -39,6 +39,7 @@ import dev.tekofx.artganizer.ui.screens.tags.TagCreationScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagDetailsScreen
 import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.utils.AppLogger
 import dev.tekofx.artganizer.utils.FIRST_ROUTE
 import io.github.vinceglb.filekit.FileKit
@@ -56,6 +57,8 @@ actual fun Navigation() {
 
     // Viewmodels
     val artistViewModel = koinViewModel<ArtistsViewModel>()
+    val submissionsViewModel = koinViewModel<SubmissionsViewModel>()
+
 
     val uiStateManager = koinInject<UiStateManager>()
 
@@ -163,11 +166,6 @@ actual fun Navigation() {
     val actions2 = when {
         navBackStackEntry?.destination?.hasRoute<ArtistDetails>() ?: false -> listOf(
             @Composable {
-                Action(icon = Res.drawable.share, onClick = {
-
-                })
-            },
-            @Composable {
                 Action(icon = Res.drawable.edit, onClick = {
                     artistViewModel.setShowEditArtist(true)
                 })
@@ -176,6 +174,31 @@ actual fun Navigation() {
                 Action(
                     icon = Res.drawable.trash,
                     onClick = {
+                        artistViewModel.setShowDeletePopup(true)
+                    },
+                    containerColor = MaterialTheme.colorScheme.error,
+                    onContainerColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            }
+
+        )
+
+        navBackStackEntry?.destination?.hasRoute<SubmissionDetails>() ?: false -> listOf(
+            @Composable {
+                Action(icon = Res.drawable.share, onClick = {
+
+                })
+            },
+            @Composable {
+                Action(icon = Res.drawable.edit, onClick = {
+                    submissionsViewModel.setShowEditSubmission(true)
+                })
+            },
+            @Composable {
+                Action(
+                    icon = Res.drawable.trash,
+                    onClick = {
+                        submissionsViewModel.setShowDeletePopup(true)
                         artistViewModel.setShowDeletePopup(true)
                     },
                     containerColor = MaterialTheme.colorScheme.error,
