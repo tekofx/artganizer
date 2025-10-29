@@ -23,12 +23,15 @@ import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
+import io.github.vinceglb.filekit.path
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-actual fun SubmissionCreationScreen() {
-
+fun SubmissionCreationScreen(
+    onSaveClick: () -> Unit,
+    onCancelClick: () -> Unit
+) {
     // ViewModels
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val charactersViewModel = koinViewModel<CharactersViewModel>()
@@ -41,10 +44,12 @@ actual fun SubmissionCreationScreen() {
     val savingProgress by submissionsViewModel.savingProgress.collectAsState()
     val scope = rememberCoroutineScope()
 
+    val files by submissionsViewModel.newFiles.collectAsState()
+
     DialogLoader(isLoading = isLoading, savingProgress)
 
 
-    if (submissionsViewModel.uris.size > 1 && saveImagesOption == SaveImagesOptions.EMPTY) {
+    if (files.size > 1 && saveImagesOption == SaveImagesOptions.EMPTY) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -74,7 +79,7 @@ actual fun SubmissionCreationScreen() {
             modifier = Modifier.fillMaxWidth()
         ) {
             SubmissionsForm(
-                uris = submissionsViewModel.uris,
+                uris = files.map { it.path },
                 artistsViewModel = artistsViewModel,
                 charactersViewModel = charactersViewModel,
                 tagsViewModel = tagsViewModel,
@@ -83,12 +88,12 @@ actual fun SubmissionCreationScreen() {
                 onSaveClick = {
                     scope.launch {
                         submissionsViewModel.saveSubmission()
-                        /*navigationViewModel.navigateBack()*/
+                        onSaveClick()
                     }
                 },
                 onCancelClick = {
                     submissionsViewModel.clearNewUiState()
-                    /*navigationViewModel.navigateBack()*/
+                    onCancelClick()
                 },
                 currentImageIndex = currentImageIndex
             )

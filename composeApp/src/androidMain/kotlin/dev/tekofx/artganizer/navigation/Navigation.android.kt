@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -21,6 +22,7 @@ import artganizer.composeapp.generated.resources.filter_outlined
 import artganizer.composeapp.generated.resources.search
 import artganizer.composeapp.generated.resources.share
 import artganizer.composeapp.generated.resources.trash
+import dev.tekofx.artganizer.managers.UiStateManager
 import dev.tekofx.artganizer.ui.layout.Action
 import dev.tekofx.artganizer.ui.layout.BottomAppBarScaffold
 import dev.tekofx.artganizer.ui.screens.SettingsScreen
@@ -39,12 +41,23 @@ import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.utils.AppLogger
 import dev.tekofx.artganizer.utils.FIRST_ROUTE
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.FileKitMode
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.openFilePicker
+import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 actual fun Navigation() {
+
+    val scope = rememberCoroutineScope()
+
     // Viewmodels
     val artistViewModel = koinViewModel<ArtistsViewModel>()
+
+    val uiStateManager = koinInject<UiStateManager>()
 
     // Routing
     val navHostController = rememberNavController()
@@ -103,9 +116,19 @@ actual fun Navigation() {
             },
             @Composable {
                 Action(icon = Res.drawable.add, onClick = {
-                    navHostController.navigate(
-                        SubmissionCreation
-                    )
+                    scope.launch {
+                        val files = FileKit.openFilePicker(
+                            mode = FileKitMode.Multiple(),
+                            type = FileKitType.Image
+                        )
+
+                        files?.let {
+                            uiStateManager.files.value = files
+                        }
+                        navHostController.navigate(
+                            SubmissionCreation
+                        )
+                    }
                 })
             }
         )
@@ -179,9 +202,13 @@ actual fun Navigation() {
         ) {
             artistsGraph(navHostController)
             charactersGraph()
-            submissionsGraph()
+            submissionsGraph(
+                onSubmissionClick = {
+                    navHostController.navigate(SubmissionDetails(it))
+                },
+                navigateBack = { navHostController.popBackStack() }
+            )
             tagsGraph()
-
             composable(
                 route = "settings"
             ) {
@@ -215,18 +242,24 @@ fun NavGraphBuilder.artistsGraph(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.submissionsGraph() {
+fun NavGraphBuilder.submissionsGraph(
+    onSubmissionClick: (Long) -> Unit,
+    navigateBack: () -> Unit
+) {
 
     composable<SubmissionsList>(
         exitTransition = { fadeOut() }
     ) {
-        SubmissionsScreen()
+        SubmissionsScreen(onSubmissionClick)
     }
 
     composable<SubmissionCreation>(
         exitTransition = { fadeOut() }
     ) {
-        SubmissionCreationScreen()
+        SubmissionCreationScreen(
+            onSaveClick = navigateBack,
+            onCancelClick = navigateBack
+        )
     }
 
     composable<SubmissionDetails>(

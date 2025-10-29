@@ -6,11 +6,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kmpalette.palette.graphics.Palette
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
+import dev.tekofx.artganizer.managers.UiStateManager
 import dev.tekofx.artganizer.repository.ImageManager
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
+import dev.tekofx.artganizer.utils.AppLogger
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.ImageFormat
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.compressImage
+import io.github.vinceglb.filekit.dialogs.compose.util.toImageBitmap
+import io.github.vinceglb.filekit.div
+import io.github.vinceglb.filekit.extension
+import io.github.vinceglb.filekit.filesDir
+import io.github.vinceglb.filekit.path
+import io.github.vinceglb.filekit.readBytes
+import io.github.vinceglb.filekit.size
+import io.github.vinceglb.filekit.write
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -27,7 +42,8 @@ enum class SaveImagesOptions {
 class SubmissionsViewModel(
     private val submissionRepo: SubmissionRepository,
     private val imageManager: ImageManager,
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
+    private val uiStateManager: UiStateManager
 ) : ViewModel() {
 
     // New submission data used for creating a submission
@@ -52,9 +68,9 @@ class SubmissionsViewModel(
     var saveImagesOption by mutableStateOf(SaveImagesOptions.EMPTY)
         private set
 
-    // Uris of selected images
-    var uris = listOf<String>()
-        private set
+    // New images to be added as submissions
+    var newFiles = uiStateManager.files
+
 
     // Data
     val submissions = MutableStateFlow(SubmissionsUiState())
@@ -80,11 +96,6 @@ class SubmissionsViewModel(
 
     //////////////////////// Setters ////////////////////////
 
-    fun setUris(uris: List<String>) {
-        println(uris)
-        this.uris = uris
-        saveImagesOption = SaveImagesOptions.EMPTY
-    }
 
     fun setCurrentImage(value: Int) {
         currentImageIndex.value = value
@@ -181,7 +192,7 @@ class SubmissionsViewModel(
                 return@launch
             }
             currentSubmissionDetails = submission.toSubmissionDetails()
-            uris = submission.images.map { it.uri }
+            //uris = submission.images.map { it.uri }
         }
     }
 
@@ -199,38 +210,58 @@ class SubmissionsViewModel(
      * Saves a new submission
      */
     suspend fun saveSubmission() {
-        println(uris)
         isLoading.value = true
         var i = 0f
-        val total = uris.size.toFloat()
+        val total = newFiles.value.size.toFloat()
         try {
             withContext(Dispatchers.IO) {
                 if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
 
-                    val imagePaths = uris.map { uri ->
-                        val name = "submission_${UUID.randomUUID()}"
-                        imageManager.saveImageFromPath(uri, name)
-                        name
+
+                    // Save thumbnail
+                    val compressedBytes = FileKit.compressImage(
+                        bytes = newFiles.value[0].readBytes(),
+                        quality = 80, // 0-100, where 100 is highest quality
+                        maxWidth = 500, // Optional maximum width
+                        maxHeight = 500, // Optional maximum height
+                        imageFormat = ImageFormat.JPEG // JPEG or PNG
+                    )
+                    val thumbnailPath =
+                        PlatformFile(FileKit.filesDir, "submission_${UUID.randomUUID()}.jpg")
+                    thumbnailPath.write(compressedBytes)
+
+                    // Save images
+                    val savedImages = newFiles.value.map { file ->
+                        val name = "submission_${UUID.randomUUID()}.${file.extension}"
+                        val destinationFile = FileKit.filesDir / name
+                        destinationFile.write(file)
+                        destinationFile
                     }
 
-                    val thumbnail =
-                        imageManager.saveThumbnail(imagePaths[0], "thumb_${UUID.randomUUID()}")
-
                     val submissionId = submissionRepo.insertSubmissionDetails(
-                        newSubmissionDetails.copy(thumbnail = thumbnail!!)
+                        newSubmissionDetails.copy(thumbnail = thumbnailPath.path)
                     )
-                    imagePaths.forEach { imagePath ->
-                        val imageInfo = imageManager.getImageInfo(imagePath)
-                        val palette = imageManager.getColorPalette(imagePath)
+                    savedImages.forEach { savedImage ->
+                        AppLogger.d("SubmissionsViewModel", savedImage.path)
+
+                        val palette = Palette.from(savedImage.toImageBitmap()).generate()
+                        val colors = mutableListOf<Int>()
+                        palette.vibrantSwatch?.rgb?.let { colors.add(it) }
+                        palette.mutedSwatch?.rgb?.let { colors.add(it) }
+                        palette.dominantSwatch?.rgb?.let { colors.add(it) }
+                        palette.lightVibrantSwatch?.rgb?.let { colors.add(it) }
+                        palette.lightMutedSwatch?.rgb?.let { colors.add(it) }
+                        palette.darkVibrantSwatch?.rgb?.let { colors.add(it) }
+                        palette.darkMutedSwatch?.rgb?.let { colors.add(it) }
 
                         imageRepository.insert(
                             Image(
                                 date = Date(),
-                                size = imageInfo?.sizeInBytes ?: 0L,
-                                uri = imagePath,
-                                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                                extension = imageInfo?.extension ?: "",
-                                palette = palette,
+                                uri = savedImage.path,
+                                size = savedImage.size(),
+                                dimensions = "${savedImage.toImageBitmap().width}x${savedImage.toImageBitmap().height}",
+                                extension = savedImage.extension,
+                                palette = colors,
                                 submissionId = submissionId
                             )
                         )
@@ -239,34 +270,55 @@ class SubmissionsViewModel(
                             i / total
                     }
                 } else {
-                    uris.forEach { uri ->
-                        val name =
-                            "submission_${UUID.randomUUID()}"
+                    newFiles.value.forEach { file ->
+                        AppLogger.d("SubmissionsViewModel", file.path)
 
 
-                        imageManager.saveImageFromPath(uri, name)
+                        // Save thumbnail
+                        val compressedBytes = FileKit.compressImage(
+                            bytes = file.readBytes(),
+                            quality = 80, // 0-100, where 100 is highest quality
+                            maxWidth = 500, // Optional maximum width
+                            maxHeight = 500, // Optional maximum height
+                            imageFormat = ImageFormat.JPEG // JPEG or PNG
+                        )
+
                         val thumbnailPath =
-                            imageManager.saveThumbnail(uri, "thumb_${UUID.randomUUID()}")
+                            PlatformFile(FileKit.filesDir, "submission_${UUID.randomUUID()}.jpg")
+                        thumbnailPath.write(compressedBytes)
 
-                        val imageInfo = imageManager.getImageInfo(name)
-                        val palette = imageManager.getColorPalette(name)
-                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath!!)
+                        // Save image
+                        val name = "submission_${UUID.randomUUID()}.${file.extension}"
+                        val destinationFile = FileKit.filesDir / name
+                        destinationFile.write(file)
+                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath.path)
                         val submissionId = submissionRepo.insertSubmissionDetails(newSub)
+
+                        // Get palette
+                        val palette = Palette.from(destinationFile.toImageBitmap()).generate()
+                        val colors = mutableListOf<Int>()
+                        palette.vibrantSwatch?.rgb?.let { colors.add(it) }
+                        palette.mutedSwatch?.rgb?.let { colors.add(it) }
+                        palette.dominantSwatch?.rgb?.let { colors.add(it) }
+                        palette.lightVibrantSwatch?.rgb?.let { colors.add(it) }
+                        palette.lightMutedSwatch?.rgb?.let { colors.add(it) }
+                        palette.darkVibrantSwatch?.rgb?.let { colors.add(it) }
+                        palette.darkMutedSwatch?.rgb?.let { colors.add(it) }
 
                         imageRepository.insert(
                             Image(
                                 imageId = 0,
                                 date = Date(),
                                 uri = name,
-                                size = imageInfo?.sizeInBytes ?: 0L,
-                                dimensions = "${imageInfo?.dimensions?.first}x${imageInfo?.dimensions?.second}",
-                                extension = imageInfo?.extension ?: "",
-                                palette = palette,
+                                size = destinationFile.size(),
+                                dimensions = "${destinationFile.toImageBitmap().width}x${destinationFile.toImageBitmap().height}",
+                                extension = destinationFile.extension,
+                                palette = colors,
                                 submissionId = submissionId
                             )
                         )
                         savingProgress.value =
-                            (uris.indexOf(uri) + 1).toFloat() / total
+                            (newFiles.value.indexOf(file) + 1).toFloat() / total
                     }
                 }
             }
