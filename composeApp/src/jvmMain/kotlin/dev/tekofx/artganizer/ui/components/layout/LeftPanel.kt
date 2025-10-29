@@ -27,7 +27,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LeftPanel(
     onArtistClick: (Long) -> Unit
-
 ) {
     // ViewModels
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
@@ -40,7 +39,7 @@ fun LeftPanel(
         TopButtons()
         LazyColumn {
             item {
-                ArtistSection(artists = artists, onArtistClick = {})
+                ArtistSection(artists = artists, onArtistClick = onArtistClick)
             }
         }
     }
@@ -61,12 +60,14 @@ fun ArtistSection(
         }
         Column {
             artists.forEach {
-                Text(it.artist.name)
+                Surface(
+                    onClick = { onArtistClick(it.artist.artistId) },
+                ) {
+                    Text(it.artist.name)
+                }
             }
         }
-
     }
-
 }
 
 
