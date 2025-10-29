@@ -12,6 +12,8 @@ open class AppRoute
 @OptIn(InternalSerializationApi::class)
 fun AppRoute.serialName() = this::class.serializer().descriptor.serialName
 
+
+// Android Route
 @Serializable
 object ArtistsList : AppRoute()
 
@@ -48,3 +50,6 @@ data class TagDetails(val id: Long) : AppRoute()
 @Serializable
 object TagCreation : AppRoute()
 
+// Desktop routes
+@Serializable
+object DesktopMainRoute : AppRoute()

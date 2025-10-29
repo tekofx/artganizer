@@ -1,6 +1,6 @@
 package dev.tekofx.artganizer.navigation
 
-import dev.tekofx.artganizer.utils.FIRST_ROUTE
+import dev.tekofx.artganizer.utils.FIRST_ANDROID_ROUTE
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -12,7 +12,7 @@ class NavigationManager {
     val canNavigateBack = _canNavigateBack.asStateFlow()
 
 
-    private val _routesList = MutableStateFlow(mutableListOf<AppRoute>(FIRST_ROUTE))
+    private val _routesList = MutableStateFlow(mutableListOf<AppRoute>(FIRST_ANDROID_ROUTE))
     val routesList = _routesList.asStateFlow()
 
 

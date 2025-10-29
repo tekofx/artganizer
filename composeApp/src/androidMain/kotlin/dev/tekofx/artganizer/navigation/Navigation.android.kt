@@ -41,7 +41,7 @@ import dev.tekofx.artganizer.ui.screens.tags.TagsScreen
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.utils.AppLogger
-import dev.tekofx.artganizer.utils.FIRST_ROUTE
+import dev.tekofx.artganizer.utils.FIRST_ANDROID_ROUTE
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.FileKitMode
 import io.github.vinceglb.filekit.dialogs.FileKitType
@@ -221,7 +221,7 @@ actual fun Navigation() {
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = FIRST_ROUTE
+            startDestination = FIRST_ANDROID_ROUTE
         ) {
             artistsGraph(navHostController)
             charactersGraph()
