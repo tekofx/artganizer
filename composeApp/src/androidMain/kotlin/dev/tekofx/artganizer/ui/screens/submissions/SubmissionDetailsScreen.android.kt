@@ -10,7 +10,7 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-actual fun SubmissionDetailsScreen(
+fun SubmissionDetailsScreen(
     submissionDetailsRoute: SubmissionDetails
 ) {
     val submissionsViewModel = koinViewModel<SubmissionsViewModel>()
@@ -19,14 +19,15 @@ actual fun SubmissionDetailsScreen(
     LaunchedEffect(Unit) {
         submissionsViewModel.getSubmissionWithArtist(submissionDetailsRoute.id)
     }
-
     Column {
-
-        AsyncImage(
-            model = currentSubmission.thumbnail,
-            contentDescription = ""
-        )
+        if (currentSubmission.images.isNotEmpty()) {
+            AsyncImage(
+                model = currentSubmission.images[0].uri,
+                contentDescription = ""
+            )
+        }
 
         Text(currentSubmission.title)
+        Text(currentSubmission.images.size.toString())
     }
 }

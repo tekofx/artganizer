@@ -216,43 +216,21 @@ class SubmissionsViewModel(
         try {
             withContext(Dispatchers.IO) {
                 if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
-
-
                     // Save thumbnail
-                    val compressedBytes = FileKit.compressImage(
-                        bytes = newFiles.value[0].readBytes(),
-                        quality = 80, // 0-100, where 100 is highest quality
-                        maxWidth = 500, // Optional maximum width
-                        maxHeight = 500, // Optional maximum height
-                        imageFormat = ImageFormat.JPEG // JPEG or PNG
-                    )
-                    val thumbnailPath =
-                        PlatformFile(FileKit.filesDir, "submission_${UUID.randomUUID()}.jpg")
-                    thumbnailPath.write(compressedBytes)
+                    val thumbnailPath = saveThumbnail(newFiles.value[0])
 
                     // Save images
                     val savedImages = newFiles.value.map { file ->
-                        val name = "submission_${UUID.randomUUID()}.${file.extension}"
-                        val destinationFile = FileKit.filesDir / name
-                        destinationFile.write(file)
-                        destinationFile
+                        saveImage(file)
                     }
 
                     val submissionId = submissionRepo.insertSubmissionDetails(
-                        newSubmissionDetails.copy(thumbnail = thumbnailPath.path)
+                        newSubmissionDetails.copy(thumbnail = thumbnailPath)
                     )
                     savedImages.forEach { savedImage ->
                         AppLogger.d("SubmissionsViewModel", savedImage.path)
 
-                        val palette = Palette.from(savedImage.toImageBitmap()).generate()
-                        val colors = mutableListOf<Int>()
-                        palette.vibrantSwatch?.rgb?.let { colors.add(it) }
-                        palette.mutedSwatch?.rgb?.let { colors.add(it) }
-                        palette.dominantSwatch?.rgb?.let { colors.add(it) }
-                        palette.lightVibrantSwatch?.rgb?.let { colors.add(it) }
-                        palette.lightMutedSwatch?.rgb?.let { colors.add(it) }
-                        palette.darkVibrantSwatch?.rgb?.let { colors.add(it) }
-                        palette.darkMutedSwatch?.rgb?.let { colors.add(it) }
+                        val palette = getColorPalette(savedImage)
 
                         imageRepository.insert(
                             Image(
@@ -261,7 +239,7 @@ class SubmissionsViewModel(
                                 size = savedImage.size(),
                                 dimensions = "${savedImage.toImageBitmap().width}x${savedImage.toImageBitmap().height}",
                                 extension = savedImage.extension,
-                                palette = colors,
+                                palette = palette,
                                 submissionId = submissionId
                             )
                         )
@@ -272,48 +250,26 @@ class SubmissionsViewModel(
                 } else {
                     newFiles.value.forEach { file ->
                         AppLogger.d("SubmissionsViewModel", file.path)
-
-
                         // Save thumbnail
-                        val compressedBytes = FileKit.compressImage(
-                            bytes = file.readBytes(),
-                            quality = 80, // 0-100, where 100 is highest quality
-                            maxWidth = 500, // Optional maximum width
-                            maxHeight = 500, // Optional maximum height
-                            imageFormat = ImageFormat.JPEG // JPEG or PNG
-                        )
-
-                        val thumbnailPath =
-                            PlatformFile(FileKit.filesDir, "submission_${UUID.randomUUID()}.jpg")
-                        thumbnailPath.write(compressedBytes)
+                        val thumbnailPath = saveThumbnail(file)
 
                         // Save image
-                        val name = "submission_${UUID.randomUUID()}.${file.extension}"
-                        val destinationFile = FileKit.filesDir / name
-                        destinationFile.write(file)
-                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath.path)
+                        val savedImage = saveImage(file)
+                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath)
                         val submissionId = submissionRepo.insertSubmissionDetails(newSub)
 
                         // Get palette
-                        val palette = Palette.from(destinationFile.toImageBitmap()).generate()
-                        val colors = mutableListOf<Int>()
-                        palette.vibrantSwatch?.rgb?.let { colors.add(it) }
-                        palette.mutedSwatch?.rgb?.let { colors.add(it) }
-                        palette.dominantSwatch?.rgb?.let { colors.add(it) }
-                        palette.lightVibrantSwatch?.rgb?.let { colors.add(it) }
-                        palette.lightMutedSwatch?.rgb?.let { colors.add(it) }
-                        palette.darkVibrantSwatch?.rgb?.let { colors.add(it) }
-                        palette.darkMutedSwatch?.rgb?.let { colors.add(it) }
+                        val palette = getColorPalette(file)
 
                         imageRepository.insert(
                             Image(
                                 imageId = 0,
                                 date = Date(),
-                                uri = name,
-                                size = destinationFile.size(),
-                                dimensions = "${destinationFile.toImageBitmap().width}x${destinationFile.toImageBitmap().height}",
-                                extension = destinationFile.extension,
-                                palette = colors,
+                                uri = savedImage.path,
+                                size = savedImage.size(),
+                                dimensions = "${savedImage.toImageBitmap().width}x${savedImage.toImageBitmap().height}",
+                                extension = savedImage.extension,
+                                palette = palette,
                                 submissionId = submissionId
                             )
                         )
@@ -342,6 +298,45 @@ class SubmissionsViewModel(
             submissionRepo.deleteSubmissions(selectedSubmissions)
             clearSelectedSubmissions()
         }
+    }
+
+    private suspend fun saveThumbnail(file: PlatformFile): String {
+        // Save thumbnail
+        val compressedBytes = FileKit.compressImage(
+            bytes = file.readBytes(),
+            quality = 80, // 0-100, where 100 is highest quality
+            maxWidth = 500, // Optional maximum width
+            maxHeight = 500, // Optional maximum height
+            imageFormat = ImageFormat.JPEG // JPEG or PNG
+        )
+
+        val thumbnailFile =
+            PlatformFile(FileKit.filesDir, "submission_${UUID.randomUUID()}.jpg")
+        thumbnailFile.write(compressedBytes)
+
+        return thumbnailFile.path
+    }
+
+    private suspend fun saveImage(file: PlatformFile): PlatformFile {
+        val name = "submission_${UUID.randomUUID()}.${file.extension}"
+        val destinationFile = FileKit.filesDir / name
+        destinationFile.write(file)
+
+        return destinationFile
+    }
+
+    private suspend fun getColorPalette(image: PlatformFile): List<Int> {
+        val palette = Palette.from(image.toImageBitmap()).generate()
+        val colors = mutableListOf<Int>()
+        palette.vibrantSwatch?.rgb?.let { colors.add(it) }
+        palette.mutedSwatch?.rgb?.let { colors.add(it) }
+        palette.dominantSwatch?.rgb?.let { colors.add(it) }
+        palette.lightVibrantSwatch?.rgb?.let { colors.add(it) }
+        palette.lightMutedSwatch?.rgb?.let { colors.add(it) }
+        palette.darkVibrantSwatch?.rgb?.let { colors.add(it) }
+        palette.darkMutedSwatch?.rgb?.let { colors.add(it) }
+
+        return colors
     }
 
 
