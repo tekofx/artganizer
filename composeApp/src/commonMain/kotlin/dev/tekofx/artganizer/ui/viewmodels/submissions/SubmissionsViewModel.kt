@@ -14,24 +14,18 @@ import dev.tekofx.artganizer.repository.ImageManager
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.AppLogger
-import io.github.vinceglb.filekit.FileKit
-import io.github.vinceglb.filekit.ImageFormat
+import dev.tekofx.artganizer.utils.saveSubmissionFromPlatformFile
+import dev.tekofx.artganizer.utils.saveThumbnailFromPlatformFile
 import io.github.vinceglb.filekit.PlatformFile
-import io.github.vinceglb.filekit.compressImage
 import io.github.vinceglb.filekit.dialogs.compose.util.toImageBitmap
-import io.github.vinceglb.filekit.div
 import io.github.vinceglb.filekit.extension
-import io.github.vinceglb.filekit.filesDir
 import io.github.vinceglb.filekit.path
-import io.github.vinceglb.filekit.readBytes
 import io.github.vinceglb.filekit.size
-import io.github.vinceglb.filekit.write
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
-import java.util.UUID
 
 enum class SaveImagesOptions {
     EMPTY,
@@ -217,15 +211,15 @@ class SubmissionsViewModel(
             withContext(Dispatchers.IO) {
                 if (saveImagesOption == SaveImagesOptions.SINGLE_SUBMISSION) {
                     // Save thumbnail
-                    val thumbnailPath = saveThumbnail(newFiles.value[0])
+                    val thumbnail = saveThumbnailFromPlatformFile(newFiles.value[0])
 
                     // Save images
                     val savedImages = newFiles.value.map { file ->
-                        saveImage(file)
+                        saveSubmissionFromPlatformFile(file)
                     }
 
                     val submissionId = submissionRepo.insertSubmissionDetails(
-                        newSubmissionDetails.copy(thumbnail = thumbnailPath)
+                        newSubmissionDetails.copy(thumbnail = thumbnail.path)
                     )
                     savedImages.forEach { savedImage ->
                         AppLogger.d("SubmissionsViewModel", savedImage.path)
@@ -251,11 +245,11 @@ class SubmissionsViewModel(
                     newFiles.value.forEach { file ->
                         AppLogger.d("SubmissionsViewModel", file.path)
                         // Save thumbnail
-                        val thumbnailPath = saveThumbnail(file)
+                        val thumbnail = saveThumbnailFromPlatformFile(file)
 
                         // Save image
-                        val savedImage = saveImage(file)
-                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnailPath)
+                        val savedImage = saveSubmissionFromPlatformFile(file)
+                        val newSub = newSubmissionDetails.copy(thumbnail = thumbnail.path)
                         val submissionId = submissionRepo.insertSubmissionDetails(newSub)
 
                         // Get palette
@@ -300,30 +294,6 @@ class SubmissionsViewModel(
         }
     }
 
-    private suspend fun saveThumbnail(file: PlatformFile): String {
-        // Save thumbnail
-        val compressedBytes = FileKit.compressImage(
-            bytes = file.readBytes(),
-            quality = 80, // 0-100, where 100 is highest quality
-            maxWidth = 500, // Optional maximum width
-            maxHeight = 500, // Optional maximum height
-            imageFormat = ImageFormat.JPEG // JPEG or PNG
-        )
-
-        val thumbnailFile =
-            PlatformFile(FileKit.filesDir, "submission_${UUID.randomUUID()}.jpg")
-        thumbnailFile.write(compressedBytes)
-
-        return thumbnailFile.path
-    }
-
-    private suspend fun saveImage(file: PlatformFile): PlatformFile {
-        val name = "submission_${UUID.randomUUID()}.${file.extension}"
-        val destinationFile = FileKit.filesDir / name
-        destinationFile.write(file)
-
-        return destinationFile
-    }
 
     private suspend fun getColorPalette(image: PlatformFile): List<Int> {
         val palette = Palette.from(image.toImageBitmap()).generate()

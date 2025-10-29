@@ -14,7 +14,10 @@ import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.managers.UiStateManager
 import dev.tekofx.artganizer.repository.ArtistRepository
-import dev.tekofx.artganizer.repository.ImageManager
+import dev.tekofx.artganizer.utils.saveThumbnailFromPath
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.delete
+import io.github.vinceglb.filekit.path
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,7 +30,6 @@ import kotlinx.coroutines.launch
 @OptIn(FlowPreview::class)
 class ArtistsViewModel(
     private val repository: ArtistRepository,
-    private val imageManager: ImageManager,
     private val uiStateManager: UiStateManager,
 ) : ViewModel() {
 
@@ -189,11 +191,10 @@ class ArtistsViewModel(
 
     fun saveArtist() = viewModelScope.launch {
         val imagePath = newArtistUiState.artistDetails.imagePath
-        val newImagePath = if (imagePath != null) {
-            imageManager.saveImageFromPath(imagePath, "artist_${System.currentTimeMillis()}.jpg")
-            // Return app-specific path where it was saved
-            "artist_${System.currentTimeMillis()}.jpg"
-        } else null
+        if (imagePath != null) {
+            val thumbnail = saveThumbnailFromPath(imagePath)
+            newArtistUiState.artistDetails.copy(imagePath = thumbnail.path)
+        }
 
         if (validateInput()) {
             repository.insertArtist(newArtistUiState.artistDetails.toArtistWithSubmissions().artist)
@@ -204,11 +205,10 @@ class ArtistsViewModel(
         val imagePath = currentArtistUiState.artistDetails.imagePath
 
         if (imagePath != null) {
-            val fileName = "thumb_${System.currentTimeMillis()}.jpg"
-            val newImagePath = imageManager.saveThumbnail(imagePath, fileName)
+            val thumbnail = saveThumbnailFromPath(imagePath)
 
             currentArtistUiState = currentArtistUiState.copy(
-                artistDetails = currentArtistUiState.artistDetails.copy(imagePath = newImagePath)
+                artistDetails = currentArtistUiState.artistDetails.copy(imagePath = thumbnail.path)
             )
         }
 
@@ -222,8 +222,8 @@ class ArtistsViewModel(
         viewModelScope.launch {
             repository.deleteArtist(artist.toArtistWithSubmissions().artist)
             artist.artistDetails.imagePath?.let { imagePath ->
-                val fileName = imagePath.substringAfterLast("/")
-                imageManager.removeImage(fileName)
+                val file = PlatformFile(imagePath)
+                file.delete()
             }
         }
     }
