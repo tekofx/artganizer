@@ -22,7 +22,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -49,29 +48,6 @@ class ArtistsViewModel(
     val listState = MutableStateFlow(LazyListState())
 
     val alignment = MutableStateFlow(Alignment.BottomCenter)
-    val fabVisible = snapshotFlow {
-        Pair(listState.value.firstVisibleItemIndex, isSearchBarFocused.value)
-    }.map { (firstVisibleItemIndex, isSearchBarFocused) ->
-        (listState.value.lastScrolledBackward || firstVisibleItemIndex == 0) &&
-                !isSearchBarFocused && textFieldState.text.isEmpty()
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        true
-    )
-    val searchBarVisible = snapshotFlow {
-        Triple(
-            listState.value.lastScrolledBackward,
-            listState.value.firstVisibleItemIndex,
-            textFieldState.text.isNotEmpty()
-        )
-    }.map { (lastScrolledBackward, firstShowedItem, isTextFieldNotEmpty) ->
-        lastScrolledBackward || firstShowedItem == 0 || isTextFieldNotEmpty
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        true
-    )
 
     // Inputs
     val queryText = snapshotFlow {

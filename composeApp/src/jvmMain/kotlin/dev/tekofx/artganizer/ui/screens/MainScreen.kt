@@ -23,7 +23,6 @@ fun MainScreen(
     val scope = rememberCoroutineScope()
     var isEnabled by remember { mutableStateOf(true) }
 
-
     DesktopLayout(
         leftPanel = {
             LeftPanel(onArtistClick = {

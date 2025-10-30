@@ -1,9 +1,9 @@
 package dev.tekofx.artganizer.ui.components.layout
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import coil3.compose.AsyncImage
+import androidx.navigation.compose.rememberNavController
+import dev.tekofx.artganizer.navigation.ArtistDetails
+import dev.tekofx.artganizer.ui.components.artists.ArtistComponent
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -11,10 +11,14 @@ import org.koin.compose.viewmodel.koinViewModel
 fun RightArtistPanel() {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val currentArtist = artistsViewModel.currentArtistUiState
+    val navController = rememberNavController()
 
-    Column {
-        AsyncImage(model = currentArtist.artistDetails.imagePath, contentDescription = "")
-        Text(currentArtist.artistDetails.name)
+    if (currentArtist.isEntryValid) {
+
+        ArtistComponent(
+            ArtistDetails(currentArtist.artistDetails.id),
+            navController = navController
+        )
     }
 
 }

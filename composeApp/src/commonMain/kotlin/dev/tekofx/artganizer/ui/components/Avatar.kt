@@ -1,7 +1,6 @@
 package dev.tekofx.artganizer.ui.components
 
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import androidx.compose.ui.unit.Dp
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.user_filled
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
 
 @Composable
 fun Avatar(
@@ -26,7 +24,6 @@ fun Avatar(
     val finalModifier = if (size == null) {
         modifier
             .clip(shape)
-            .fillMaxWidth()
             .aspectRatio(1f)
     } else {
         modifier
