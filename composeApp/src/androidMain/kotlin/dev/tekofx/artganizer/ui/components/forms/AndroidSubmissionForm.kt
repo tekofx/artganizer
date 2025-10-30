@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.components.submissions.form
+package dev.tekofx.artganizer.ui.components.forms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +30,9 @@ import dev.tekofx.artganizer.ui.components.submission.form.ArtistSection
 import dev.tekofx.artganizer.ui.components.submission.form.CharactersSection
 import dev.tekofx.artganizer.ui.components.submission.form.TagsSection
 import dev.tekofx.artganizer.ui.components.submission.form.TagsSheet
+import dev.tekofx.artganizer.ui.components.submissions.form.ArtistSheet
+import dev.tekofx.artganizer.ui.components.submissions.form.CharactersSheet
+import dev.tekofx.artganizer.ui.components.submissions.form.SubmissionViewer
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -40,7 +43,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubmissionsForm(
+fun AndroidSubmissionForm(
     uris: List<String>,
     artistsViewModel: ArtistsViewModel,
     submissionDetails: SubmissionDetails,

@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.gallery_outlined
 import dev.tekofx.artganizer.ui.components.DialogLoader
+import dev.tekofx.artganizer.ui.components.forms.AndroidSubmissionForm
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
-import dev.tekofx.artganizer.ui.components.submissions.form.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SaveImagesOptions
@@ -78,7 +78,7 @@ fun SubmissionCreationScreen(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            SubmissionsForm(
+            AndroidSubmissionForm(
                 uris = files.map { it.path },
                 artistsViewModel = artistsViewModel,
                 charactersViewModel = charactersViewModel,

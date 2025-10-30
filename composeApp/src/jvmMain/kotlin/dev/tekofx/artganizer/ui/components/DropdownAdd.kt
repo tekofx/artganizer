@@ -20,7 +20,9 @@ import artganizer.composeapp.generated.resources.tag_outlined
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun DropdownAdd() {
+fun DropdownAdd(
+    onSubmissionAddClick: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
 
     Box {
@@ -40,7 +42,7 @@ fun DropdownAdd() {
                         contentDescription = "Submission"
                     )
                 },
-                onClick = { /* Handle click */ }
+                onClick = onSubmissionAddClick
             )
             DropdownMenuItem(
                 text = { Text("Artist") },
