@@ -2,19 +2,13 @@ package dev.tekofx.artganizer.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.tekofx.artganizer.rememberImagePicker
 import dev.tekofx.artganizer.ui.components.input.SocialNetworkInput
 import dev.tekofx.artganizer.ui.components.input.form.FormAvatar
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
@@ -35,36 +29,14 @@ fun ArtistForm(
     onCancelClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    var selectedImagePath by androidx.compose.runtime.remember { mutableStateOf("No image selected") }
-    /*val imagePicker = rememberImagePicker { path ->
-        artistUiState.artistDetails.imagePath
-        selectedImagePath = path
-    }*/
-    /*val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(), onResult = { uri: Uri? ->
-            uri?.let {
-                // Save the image and navigate to the next screen
-                scope.launch {
-                    onItemValueChange(
-                        artistUiState.artistDetails.copy(
-                            imagePath = uri
-                        )
-                    )
-                }
-            }
-        }
-    )*/
-
-    //imagePicker.Content()
 
     LazyColumn(
-        modifier = Modifier.padding(10.dp),
+        modifier = Modifier
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        /*item {
-            Text(selectedImagePath)
-        }*/
+
         item {
             FormAvatar(
                 fallbackText = artistUiState.artistDetails.name,
@@ -82,7 +54,6 @@ fun ArtistForm(
                             println(it.path)
                         }
                     }
-                    //imagePicker.launch()
                 },
             )
 
@@ -91,7 +62,6 @@ fun ArtistForm(
             ArtistFormFields(
                 artistsDetails = artistUiState.artistDetails,
                 onValueChange = onItemValueChange,
-                modifier = Modifier.fillMaxWidth()
             )
         }
         item {

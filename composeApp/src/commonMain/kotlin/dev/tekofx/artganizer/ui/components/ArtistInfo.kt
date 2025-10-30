@@ -2,8 +2,8 @@ package dev.tekofx.artganizer.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,7 +19,6 @@ import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.ui.components.artists.SocialNetworks
 import dev.tekofx.artganizer.ui.components.input.ButtonWithIcon
 import dev.tekofx.artganizer.utils.AVATAR_SIZE
-import kotlin.collections.chunked
 
 @Composable
 fun ArtistInfo(
@@ -31,7 +30,7 @@ fun ArtistInfo(
     LazyColumn(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxWidth(),
+            .wrapContentWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
@@ -46,8 +45,6 @@ fun ArtistInfo(
                 text = artistWithSubmissions.artist.name,
                 style = MaterialTheme.typography.displayMedium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
             )
         }
         item {

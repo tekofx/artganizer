@@ -14,7 +14,6 @@ fun RightArtistPanel() {
     val navController = rememberNavController()
 
     if (currentArtist.isEntryValid) {
-
         ArtistComponent(
             ArtistDetails(currentArtist.artistDetails.id),
             navController = navController
