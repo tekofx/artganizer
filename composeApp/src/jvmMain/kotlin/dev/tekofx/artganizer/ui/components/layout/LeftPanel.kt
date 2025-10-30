@@ -3,12 +3,15 @@ package dev.tekofx.artganizer.ui.components.layout
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,15 +22,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import artganizer.composeapp.generated.resources.Res
-import artganizer.composeapp.generated.resources.add
 import artganizer.composeapp.generated.resources.settings
 import artganizer.composeapp.generated.resources.share
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.ui.components.Avatar
+import dev.tekofx.artganizer.ui.components.DropdownAdd
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+
 
 @Composable
 fun LeftPanel(
@@ -40,9 +44,13 @@ fun LeftPanel(
     // Entities
     val artists by artistsViewModel.artists.collectAsState()
 
-    Column(modifier = Modifier.fillMaxHeight()) {
+    Column(
+        modifier = Modifier.fillMaxHeight()
+    ) {
         TopButtons()
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.weight(1f)
+        ) {
             item {
                 ArtistSection(artists = artists, onArtistClick = onArtistClick)
             }
@@ -81,10 +89,9 @@ fun ArtistEntry(
 ) {
     Surface(
         onClick = { onArtistClick(artist.artist.artistId) },
-        modifier = Modifier.padding(10.dp)
     ) {
         Row(
-            modifier = Modifier.height(30.dp).wrapContentWidth(),
+            modifier = Modifier.height(30.dp).width(200.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -93,9 +100,9 @@ fun ArtistEntry(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
             ) {
                 Avatar(artist.artist.imagePath)
-
                 Text(artist.artist.name)
             }
+            Spacer(modifier = Modifier.widthIn(10.dp))
             Text(artist.submissions.size.toString())
         }
     }
@@ -106,19 +113,15 @@ fun ArtistEntry(
 @Composable
 fun TopButtons() {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.width(200.dp)
     ) {
-        Icon(
-            painterResource(Res.drawable.share),
-            contentDescription = ""
-        )
-        Icon(
-            painterResource(Res.drawable.settings),
-            contentDescription = ""
-        )
-        Icon(
-            painterResource(Res.drawable.add),
-            contentDescription = ""
-        )
+        IconButton(onClick = { }) {
+            Icon(painterResource(Res.drawable.share), contentDescription = "More options")
+        }
+        IconButton(onClick = { }) {
+            Icon(painterResource(Res.drawable.settings), contentDescription = "More options")
+        }
+        DropdownAdd()
     }
 }
