@@ -8,6 +8,7 @@ class DesktopUiViewModel(
     val desktopUiManager: DesktopUiManager
 ) : ViewModel() {
     val showLeftPanel = desktopUiManager.showLeftPanel
+    val showRightPanel = desktopUiManager.showRightPanel
     val showDialog = desktopUiManager.showDialog
     val dialogContent = desktopUiManager.dialogContent
 
@@ -17,5 +18,9 @@ class DesktopUiViewModel(
 
     fun setDialogContent(dialogContent: DialogContent) {
         desktopUiManager.setDialogContent(dialogContent)
+    }
+
+    fun toggleRightPanel() {
+        desktopUiManager.toggleRightPanel()
     }
 }

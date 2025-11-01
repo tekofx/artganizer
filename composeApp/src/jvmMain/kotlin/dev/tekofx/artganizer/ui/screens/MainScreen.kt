@@ -1,25 +1,28 @@
 package dev.tekofx.artganizer.ui.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
+import artganizer.composeapp.generated.resources.Res
+import artganizer.composeapp.generated.resources.x
 import dev.tekofx.artganizer.managers.DialogContent
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.forms.DesktopSubmissionForm
+import dev.tekofx.artganizer.ui.components.input.form.CharacterForm
 import dev.tekofx.artganizer.ui.components.layout.DesktopLayout
 import dev.tekofx.artganizer.ui.components.layout.LeftPanel
 import dev.tekofx.artganizer.ui.components.layout.RightArtistPanel
@@ -34,6 +37,7 @@ import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.openFilePicker
 import io.github.vinceglb.filekit.path
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -52,8 +56,8 @@ fun MainScreen(
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
 
     val scope = rememberCoroutineScope()
-    var isEnabled by remember { mutableStateOf(true) }
     val showDialog by desktopUiViewModel.showDialog.collectAsState()
+    val showRigthPanel by desktopUiViewModel.showRightPanel.collectAsState()
     val dialogContent by desktopUiViewModel.dialogContent.collectAsState()
 
     if (showDialog) {
@@ -104,6 +108,24 @@ fun MainScreen(
                             desktopUiViewModel.toggleDialog()
                         }
                     )
+
+                    DialogContent.CHARACTER_FORM -> CharacterForm(
+                        charactersViewModel.newCharacterUiState,
+                        onItemValueChange = { newValue ->
+                            charactersViewModel.updateNewUiState(
+                                newValue
+                            )
+                        },
+                        onSaveClick = {
+                            desktopUiViewModel.toggleDialog()
+                            charactersViewModel.saveCharacter()
+                        },
+                        onCancelClick = {
+                            desktopUiViewModel.toggleDialog()
+                        }
+                    )
+
+                    DialogContent.TAG_FORM -> TODO()
                 }
 
 
@@ -116,6 +138,7 @@ fun MainScreen(
             LeftPanel(
                 onArtistClick = {
                     artistsViewModel.getArtistWithSubmissions(it)
+                    desktopUiViewModel.toggleRightPanel()
                 },
                 onSubmissionAddClick = {
                     scope.launch {
@@ -136,13 +159,28 @@ fun MainScreen(
                     desktopUiViewModel.toggleDialog()
 
                 },
-                onCharacterAddClick = {},
+                onCharacterAddClick = {
+                    desktopUiViewModel.setDialogContent(DialogContent.CHARACTER_FORM)
+                    desktopUiViewModel.toggleDialog()
+
+                },
                 onTagAddClick = {}
             )
         },
         rightPanel = {
-            if (isEnabled) {
-                RightArtistPanel()
+            if (showRigthPanel) {
+                Column {
+                    IconButton(
+                        onClick = { desktopUiViewModel.toggleRightPanel() }
+                    ) {
+                        Icon(
+                            painterResource(Res.drawable.x),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentDescription = "Close Right Panel"
+                        )
+                    }
+                    RightArtistPanel()
+                }
             }
         }
     ) {

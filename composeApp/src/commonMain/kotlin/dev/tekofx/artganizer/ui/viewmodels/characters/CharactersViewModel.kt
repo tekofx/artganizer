@@ -202,18 +202,16 @@ class CharactersViewModel(
         }
     }
 
-    suspend fun saveCharacter() {
+    fun saveCharacter() = viewModelScope.launch {
         val imagePath = newCharacterUiState.characterDetails.imagePath
 
         if (imagePath != null) {
             // Save image to private storage
-            val newImagePath =
-                saveThumbnailFromPath(imagePath)
-
+            val thumbnail = saveThumbnailFromPath(imagePath)
 
             newCharacterUiState = newCharacterUiState.copy(
                 characterDetails = newCharacterUiState.characterDetails.copy(
-                    imagePath = newImagePath.path
+                    imagePath = thumbnail.path
                 )
             )
 

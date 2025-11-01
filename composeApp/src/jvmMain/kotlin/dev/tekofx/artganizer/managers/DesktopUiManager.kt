@@ -12,7 +12,9 @@ enum class RightPanelContent {
 enum class DialogContent {
     NONE,
     SUBMISSIONS_FORM,
-    ARTIST_FORM
+    ARTIST_FORM,
+    CHARACTER_FORM,
+    TAG_FORM
 }
 
 class DesktopUiManager {
@@ -45,6 +47,10 @@ class DesktopUiManager {
 
     fun toggleDialog() {
         _showDialog.value = !_showDialog.value
+    }
+
+    fun toggleRightPanel() {
+        _showRightPanel.value = !_showRightPanel.value
     }
 
     fun setDialogContent(dialogContent: DialogContent) {
