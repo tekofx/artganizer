@@ -56,11 +56,10 @@ fun MainScreen(
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
 
     val scope = rememberCoroutineScope()
-    val showDialog by desktopUiViewModel.showDialog.collectAsState()
     val showRigthPanel by desktopUiViewModel.showRightPanel.collectAsState()
     val dialogContent by desktopUiViewModel.dialogContent.collectAsState()
 
-    if (showDialog) {
+    if (dialogContent != DialogContent.NONE) {
         Dialog(
             onDismissRequest = {},
             properties = DialogProperties(
@@ -89,11 +88,11 @@ fun MainScreen(
                             scope.launch {
                                 submissionsViewModel.saveSubmission()
                             }
-                            desktopUiViewModel.toggleDialog()
+                            desktopUiViewModel.setDialogContent(DialogContent.NONE)
                         },
                         onCancelClick = {
                             submissionsViewModel.clearNewUiState()
-                            desktopUiViewModel.toggleDialog()
+                            desktopUiViewModel.setDialogContent(DialogContent.NONE)
                         }
                     )
 
@@ -101,11 +100,12 @@ fun MainScreen(
                         artistUiState = artistsViewModel.newArtistUiState,
                         onItemValueChange = { newValue -> artistsViewModel.updateNewUiState(newValue) },
                         onSaveClick = {
-                            desktopUiViewModel.toggleDialog()
+                            desktopUiViewModel.setDialogContent(DialogContent.ARTIST_FORM)
                             artistsViewModel.saveArtist()
                         },
                         onCancelClick = {
-                            desktopUiViewModel.toggleDialog()
+                            desktopUiViewModel.setDialogContent(DialogContent.NONE)
+
                         }
                     )
 
@@ -117,18 +117,16 @@ fun MainScreen(
                             )
                         },
                         onSaveClick = {
-                            desktopUiViewModel.toggleDialog()
+                            desktopUiViewModel.setDialogContent(DialogContent.CHARACTER_FORM)
                             charactersViewModel.saveCharacter()
                         },
                         onCancelClick = {
-                            desktopUiViewModel.toggleDialog()
+                            desktopUiViewModel.setDialogContent(DialogContent.NONE)
                         }
                     )
 
                     DialogContent.TAG_FORM -> TODO()
                 }
-
-
             }
         }
     }
@@ -150,18 +148,15 @@ fun MainScreen(
                         files?.let {
                             submissionsViewModel.newFiles.value = files
                             desktopUiViewModel.setDialogContent(DialogContent.SUBMISSIONS_FORM)
-                            desktopUiViewModel.toggleDialog()
                         }
                     }
                 },
                 onArtistAddClick = {
                     desktopUiViewModel.setDialogContent(DialogContent.ARTIST_FORM)
-                    desktopUiViewModel.toggleDialog()
 
                 },
                 onCharacterAddClick = {
                     desktopUiViewModel.setDialogContent(DialogContent.CHARACTER_FORM)
-                    desktopUiViewModel.toggleDialog()
 
                 },
                 onTagAddClick = {}

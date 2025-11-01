@@ -28,9 +28,6 @@ class DesktopUiManager {
 
     private val _showBottomPanel = MutableStateFlow(false)
     val showBottomPanel: StateFlow<Boolean> = _showBottomPanel.asStateFlow()
-    private val _showDialog = MutableStateFlow(false)
-    val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
-
 
     private val _rightPanelContent = MutableStateFlow(RightPanelContent.NONE)
     val rightPanelContent: StateFlow<RightPanelContent> = _rightPanelContent.asStateFlow()
@@ -45,9 +42,6 @@ class DesktopUiManager {
     private val _selectedArtist = MutableStateFlow<ArtistWithSubmissions?>(null)
     val selectedArtist = _selectedArtist.asStateFlow()
 
-    fun toggleDialog() {
-        _showDialog.value = !_showDialog.value
-    }
 
     fun toggleRightPanel() {
         _showRightPanel.value = !_showRightPanel.value
