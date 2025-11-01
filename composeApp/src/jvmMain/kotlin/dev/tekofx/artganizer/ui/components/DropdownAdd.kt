@@ -21,7 +21,10 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun DropdownAdd(
-    onSubmissionAddClick: () -> Unit
+    onSubmissionAddClick: () -> Unit,
+    onArtistAddClick: () -> Unit,
+    onCharacterAddClick: () -> Unit,
+    onTagAddClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -55,7 +58,10 @@ fun DropdownAdd(
                         contentDescription = "Artist"
                     )
                 },
-                onClick = { /* Handle click */ }
+                onClick = {
+                    onArtistAddClick()
+                    expanded = false
+                }
             )
             DropdownMenuItem(
                 text = { Text("Character") },
@@ -65,7 +71,10 @@ fun DropdownAdd(
                         contentDescription = "Character"
                     )
                 },
-                onClick = { /* Handle click */ }
+                onClick = {
+                    onCharacterAddClick()
+                    expanded = false
+                }
             )
             DropdownMenuItem(
                 text = { Text("Tag") },
@@ -75,7 +84,10 @@ fun DropdownAdd(
                         contentDescription = "Tag"
                     )
                 },
-                onClick = { /* Handle click */ }
+                onClick = {
+                    onTagAddClick()
+                    expanded = false
+                }
             )
         }
     }

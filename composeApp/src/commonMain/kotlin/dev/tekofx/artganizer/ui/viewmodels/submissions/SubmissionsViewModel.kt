@@ -10,7 +10,6 @@ import com.kmpalette.palette.graphics.Palette
 import dev.tekofx.artganizer.entities.Image
 import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.managers.UiStateManager
-import dev.tekofx.artganizer.repository.ImageManager
 import dev.tekofx.artganizer.repository.ImageRepository
 import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.AppLogger
@@ -35,7 +34,6 @@ enum class SaveImagesOptions {
 
 class SubmissionsViewModel(
     private val submissionRepo: SubmissionRepository,
-    private val imageManager: ImageManager,
     private val imageRepository: ImageRepository,
     private val uiStateManager: UiStateManager
 ) : ViewModel() {

@@ -36,7 +36,10 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LeftPanel(
     onArtistClick: (Long) -> Unit,
-    onSubmissionAddClick: () -> Unit
+    onSubmissionAddClick: () -> Unit,
+    onArtistAddClick: () -> Unit,
+    onCharacterAddClick: () -> Unit,
+    onTagAddClick: () -> Unit
 ) {
     // ViewModels
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
@@ -49,7 +52,10 @@ fun LeftPanel(
         modifier = Modifier.fillMaxHeight()
     ) {
         TopButtons(
-            onSubmissionAddClick = onSubmissionAddClick
+            onSubmissionAddClick = onSubmissionAddClick,
+            onArtistAddClick = onArtistAddClick,
+            onCharacterAddClick = onCharacterAddClick,
+            onTagAddClick = onTagAddClick
         )
         LazyColumn(
             modifier = Modifier.weight(1f)
@@ -115,7 +121,10 @@ fun ArtistEntry(
 
 @Composable
 fun TopButtons(
-    onSubmissionAddClick: () -> Unit
+    onSubmissionAddClick: () -> Unit,
+    onArtistAddClick: () -> Unit,
+    onCharacterAddClick: () -> Unit,
+    onTagAddClick: () -> Unit
 
 ) {
     Row(
@@ -129,7 +138,10 @@ fun TopButtons(
             Icon(painterResource(Res.drawable.settings), contentDescription = "More options")
         }
         DropdownAdd(
-            onSubmissionAddClick = onSubmissionAddClick
+            onSubmissionAddClick = onSubmissionAddClick,
+            onArtistAddClick = onArtistAddClick,
+            onCharacterAddClick = onCharacterAddClick,
+            onTagAddClick = onTagAddClick
         )
     }
 }

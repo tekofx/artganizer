@@ -50,8 +50,6 @@ fun ArtistForm(
                                     imagePath = it.path
                                 )
                             )
-                            println(artistUiState.artistDetails)
-                            println(it.path)
                         }
                     }
                 },

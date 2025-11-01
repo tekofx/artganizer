@@ -58,6 +58,7 @@ kotlin {
 
             // Koin
             implementation(libs.koin.compose.viewmodel.nav)
+            implementation(libs.koin.compose.viewmodel)
 
             // Coil3
             implementation(libs.coil.compose)
