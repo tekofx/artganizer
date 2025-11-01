@@ -2,6 +2,8 @@ package dev.tekofx.artganizer.ui.components.forms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
@@ -23,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import dev.tekofx.artganizer.ui.components.DesktopSubmissionPager
 import dev.tekofx.artganizer.ui.components.input.RatingInput
 import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
@@ -32,7 +36,6 @@ import dev.tekofx.artganizer.ui.components.submission.form.TagsSection
 import dev.tekofx.artganizer.ui.components.submission.form.TagsSheet
 import dev.tekofx.artganizer.ui.components.submissions.form.ArtistSheet
 import dev.tekofx.artganizer.ui.components.submissions.form.CharactersSheet
-import dev.tekofx.artganizer.ui.components.submissions.form.SubmissionViewer
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -150,70 +153,75 @@ fun DesktopSubmissionForm(
             )
         }
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            item {
-                SubmissionViewer(
-                    imagePaths = uris,
-                    thumbnail = submissionDetails.thumbnail,
-                    currentImageIndex = currentImageIndex,
-                    onImageChange = {}
-                )
-            }
 
-            item {
-                SubmissionFormFields(
-                    submissionDetails = submissionDetails,
-                    onValueChange = onItemValueChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    areThereArtists = areThereArtists,
-                    areThereCharacters = areThereCharacters,
-                    onAddArtistButton = {
-                        showArtistsSheet = true
-                        showCharactersSheet = false
-                        showTagsSheet = false
-                        scope.launch {
-                            scaffoldState.bottomSheetState.expand()
-                        }
-                    },
-                    onAddCharactersButton = {
-                        showCharactersSheet = true
-                        showArtistsSheet = false
-                        showTagsSheet = false
-                        scope.launch {
-                            scaffoldState.bottomSheetState.expand()
-                        }
-                    },
-                    onAddTagsButton = {
-                        showTagsSheet = true
-                        showArtistsSheet = false
-                        showCharactersSheet = false
-                        scope.launch {
-                            scaffoldState.bottomSheetState.expand()
-                        }
-                    }
-                )
-            }
-
-            item {
-                HorizontalDivider(
+        Row() {
+            DesktopSubmissionPager(
+                imagePaths = uris,
+                thumbnail = submissionDetails.thumbnail,
+                currentImageIndex = currentImageIndex,
+                onImageChange = {},
+            )
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceContainerLow
+            ) {
+                LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp)
-                )
-            }
+                        .padding(10.dp).fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    item {
+                        SubmissionFormFields(
+                            submissionDetails = submissionDetails,
+                            onValueChange = onItemValueChange,
+                            modifier = Modifier.fillMaxWidth(),
+                            areThereArtists = areThereArtists,
+                            areThereCharacters = areThereCharacters,
+                            onAddArtistButton = {
+                                showArtistsSheet = true
+                                showCharactersSheet = false
+                                showTagsSheet = false
+                                scope.launch {
+                                    scaffoldState.bottomSheetState.expand()
+                                }
+                            },
+                            onAddCharactersButton = {
+                                showCharactersSheet = true
+                                showArtistsSheet = false
+                                showTagsSheet = false
+                                scope.launch {
+                                    scaffoldState.bottomSheetState.expand()
+                                }
+                            },
+                            onAddTagsButton = {
+                                showTagsSheet = true
+                                showArtistsSheet = false
+                                showCharactersSheet = false
+                                scope.launch {
+                                    scaffoldState.bottomSheetState.expand()
+                                }
+                            }
+                        )
+                    }
 
-            item {
-                FormButtons(
-                    onSaveClick = onSaveClick,
-                    onCancelClick = onCancelClick,
-                )
+                    item {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp)
+                        )
+                    }
+
+                    item {
+                        FormButtons(
+                            onSaveClick = onSaveClick,
+                            onCancelClick = onCancelClick,
+                        )
+                    }
+                }
             }
         }
+
     }
 }
 

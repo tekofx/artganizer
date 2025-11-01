@@ -18,10 +18,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.managers.UiStateManager
 import dev.tekofx.artganizer.ui.components.ArtistForm
+import dev.tekofx.artganizer.ui.components.forms.DesktopSubmissionForm
 import dev.tekofx.artganizer.ui.components.layout.DesktopLayout
 import dev.tekofx.artganizer.ui.components.layout.LeftPanel
 import dev.tekofx.artganizer.ui.components.layout.RightArtistPanel
-import dev.tekofx.artganizer.ui.components.submissions.form.SubmissionsForm
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
@@ -66,7 +66,7 @@ fun MainScreen(
                 color = MaterialTheme.colorScheme.surfaceContainerLow
             ) {
 
-                SubmissionsForm(
+                DesktopSubmissionForm(
                     uris = files.map { it.path },
                     artistsViewModel = artistsViewModel,
                     submissionDetails = submissionsViewModel.newSubmissionDetails,

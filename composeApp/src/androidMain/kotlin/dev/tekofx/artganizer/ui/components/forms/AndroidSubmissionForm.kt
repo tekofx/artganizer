@@ -30,9 +30,9 @@ import dev.tekofx.artganizer.ui.components.submission.form.ArtistSection
 import dev.tekofx.artganizer.ui.components.submission.form.CharactersSection
 import dev.tekofx.artganizer.ui.components.submission.form.TagsSection
 import dev.tekofx.artganizer.ui.components.submission.form.TagsSheet
+import dev.tekofx.artganizer.ui.components.submissions.form.AndroidSubmissionViewer
 import dev.tekofx.artganizer.ui.components.submissions.form.ArtistSheet
 import dev.tekofx.artganizer.ui.components.submissions.form.CharactersSheet
-import dev.tekofx.artganizer.ui.components.submissions.form.SubmissionViewer
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
@@ -157,7 +157,7 @@ fun AndroidSubmissionForm(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
-                SubmissionViewer(
+                AndroidSubmissionViewer(
                     imagePaths = uris,
                     thumbnail = submissionDetails.thumbnail,
                     currentImageIndex = currentImageIndex,

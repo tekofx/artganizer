@@ -4,7 +4,6 @@ package dev.tekofx.artganizer.ui.components.submissions.form
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,10 +18,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.keyboard_arrow_down
 import coil3.compose.AsyncImage
+import dev.tekofx.artganizer.ui.components.SubmissionImage
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
 import org.jetbrains.compose.resources.painterResource
@@ -88,7 +83,8 @@ fun FullscreenSubmissionViewer(
                 model = thumbnail,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxSize().zoomable(rememberZoomState())
+                    .fillMaxSize()
+                    .zoomable(rememberZoomState())
             )
         }
         ViewerButton(
@@ -99,7 +95,7 @@ fun FullscreenSubmissionViewer(
 }
 
 @Composable
-fun SubmissionViewer(
+fun AndroidSubmissionViewer(
     imagePaths: List<String>,
     currentImageIndex: Int,
     thumbnail: String,
@@ -117,52 +113,22 @@ fun SubmissionViewer(
         )
     } else if (imagePaths.size == 1) {
         SubmissionImage(
-            imagePaths[0],
-            thumbnail,
-            onClick = onClick
+            imagePath = imagePaths[0],
+            thumbnail = thumbnail,
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth()
+
         )
     }
 }
 
-
-@Composable
-fun SubmissionImage(
-    imagePath: String,
-    thumbnail: String,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-    ) {
-        var isLoading by remember { mutableStateOf(true) }
-
-        AsyncImage(
-            model = imagePath,
-            contentDescription = "submission",
-            modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.FillWidth,
-            onLoading = { isLoading = true },
-            onSuccess = { isLoading = false },
-            onError = { isLoading = false }
-        )
-
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
-    }
-}
 
 @Composable
 fun FullscreenSubmissionPager(
     imagePaths: List<String>,
     currentImageIndex: Int,
     onImageChange: (Int) -> Unit,
-
-    ) {
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -186,7 +152,9 @@ fun FullscreenSubmissionPager(
             AsyncImage(
                 model = imagePaths[page],
                 contentDescription = "submission",
-                modifier = Modifier.fillMaxWidth().zoomable(rememberZoomState()),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .zoomable(rememberZoomState()),
                 contentScale = ContentScale.FillWidth,
             )
         }
