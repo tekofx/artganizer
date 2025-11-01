@@ -37,6 +37,7 @@ fun ArtistComponent(
                 artistsViewModel.setShowDeletePopup(true)
                 artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
                 artistsViewModel.setShowDeletePopup(false)
+                artistsViewModel.updateCurrentUiState(dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails())
                 navController.popBackStack()
             },
             onDismiss = {

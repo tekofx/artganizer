@@ -1,5 +1,6 @@
 package dev.tekofx.artganizer.managers
 
+import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +16,8 @@ enum class DialogContent {
 }
 
 class DesktopUiManager {
+
+    // Panels
     private val _showLeftPanel = MutableStateFlow(false)
     val showLeftPanel: StateFlow<Boolean> = _showLeftPanel.asStateFlow()
 
@@ -31,9 +34,14 @@ class DesktopUiManager {
     val rightPanelContent: StateFlow<RightPanelContent> = _rightPanelContent.asStateFlow()
 
 
+    // Dialogs
     private val _dialogContent = MutableStateFlow(DialogContent.NONE)
     val dialogContent: StateFlow<DialogContent> = _dialogContent.asStateFlow()
 
+
+    // Entities selected
+    private val _selectedArtist = MutableStateFlow<ArtistWithSubmissions?>(null)
+    val selectedArtist = _selectedArtist.asStateFlow()
 
     fun toggleDialog() {
         _showDialog.value = !_showDialog.value
