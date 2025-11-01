@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
 import dev.tekofx.artganizer.managers.UiStateManager
 import dev.tekofx.artganizer.repository.ArtistRepository
+import dev.tekofx.artganizer.utils.AppLogger
 import dev.tekofx.artganizer.utils.saveThumbnailFromPath
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.delete
@@ -169,10 +170,15 @@ class ArtistsViewModel(
         val imagePath = newArtistUiState.artistDetails.imagePath
         if (imagePath != null) {
             val thumbnail = saveThumbnailFromPath(imagePath)
-            newArtistUiState.artistDetails.copy(imagePath = thumbnail.path)
+            AppLogger.d("ArtistsViewModel", thumbnail.path)
+            newArtistUiState = newArtistUiState.copy(
+                artistDetails = newArtistUiState.artistDetails.copy(imagePath = thumbnail.path)
+            )
         }
 
         if (validateInput()) {
+            AppLogger.d("ArtistsViewModel", newArtistUiState.artistDetails.imagePath.toString())
+
             repository.insertArtist(newArtistUiState.artistDetails.toArtistWithSubmissions().artist)
         }
     }

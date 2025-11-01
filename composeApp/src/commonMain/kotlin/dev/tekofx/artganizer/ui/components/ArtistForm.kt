@@ -15,7 +15,6 @@ import dev.tekofx.artganizer.ui.components.input.form.FormButtons
 import dev.tekofx.artganizer.ui.components.input.form.FormTextfield
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistUiState
-import dev.tekofx.artganizer.utils.saveThumbnailFromPlatformFile
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.openFilePicker
@@ -46,10 +45,9 @@ fun ArtistForm(
                     scope.launch {
                         val imageFile = FileKit.openFilePicker(type = FileKitType.Image)
                         imageFile?.let {
-                            val copiedFile = saveThumbnailFromPlatformFile(it)
                             onItemValueChange(
                                 artistUiState.artistDetails.copy(
-                                    imagePath = copiedFile.path
+                                    imagePath = it.path
                                 )
                             )
                         }
