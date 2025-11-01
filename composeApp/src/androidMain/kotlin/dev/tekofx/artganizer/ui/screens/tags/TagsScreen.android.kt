@@ -4,7 +4,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-actual fun TagsScreen() {
+fun TagsScreen() {
 
     Text("Tags Screen - Android Implementation")
 }

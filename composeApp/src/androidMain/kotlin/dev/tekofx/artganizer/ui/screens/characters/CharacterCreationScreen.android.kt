@@ -4,6 +4,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-actual fun CharacterCreationScreen() {
+fun CharacterCreationScreen() {
     Text("Character Creation Screen - Android not implemented yet")
 }

@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 import dev.tekofx.artganizer.navigation.CharacterDetails
 
 @Composable
-actual fun CharacterDetailsScreen(characterDetailsRoute: CharacterDetails) {
+fun CharacterDetailsScreen(characterDetailsRoute: CharacterDetails) {
     Text("Character Details Screen - Android Implementation")
 }

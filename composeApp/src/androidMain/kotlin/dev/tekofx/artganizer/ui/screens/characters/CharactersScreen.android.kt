@@ -4,7 +4,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-actual fun CharactersScreen() {
+fun CharactersScreen() {
 
     Text("Characters Screen - Android")
 }
