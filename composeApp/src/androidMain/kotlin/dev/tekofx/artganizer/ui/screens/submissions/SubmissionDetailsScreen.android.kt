@@ -5,13 +5,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import coil3.compose.AsyncImage
-import dev.tekofx.artganizer.navigation.SubmissionDetails
+import dev.tekofx.artganizer.navigation.SubmissionDetailsRoute
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SubmissionDetailsScreen(
-    submissionDetailsRoute: SubmissionDetails
+    submissionDetailsRoute: SubmissionDetailsRoute
 ) {
     val submissionsViewModel = koinViewModel<SubmissionsViewModel>()
     val currentSubmission = submissionsViewModel.currentSubmissionDetails

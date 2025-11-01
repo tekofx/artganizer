@@ -22,10 +22,10 @@ import artganizer.composeapp.generated.resources.paw_filled
 import artganizer.composeapp.generated.resources.paw_outlined
 import artganizer.composeapp.generated.resources.tag_filled
 import artganizer.composeapp.generated.resources.tag_outlined
-import dev.tekofx.artganizer.navigation.ArtistsList
-import dev.tekofx.artganizer.navigation.CharactersList
-import dev.tekofx.artganizer.navigation.SubmissionsList
-import dev.tekofx.artganizer.navigation.TagsList
+import dev.tekofx.artganizer.navigation.ArtistsListRoute
+import dev.tekofx.artganizer.navigation.CharactersListRoute
+import dev.tekofx.artganizer.navigation.SubmissionsListRoute
+import dev.tekofx.artganizer.navigation.TagsListRoute
 import dev.tekofx.artganizer.navigation.getCurrentRoute
 import dev.tekofx.artganizer.navigation.serialName
 import org.jetbrains.compose.resources.DrawableResource
@@ -36,7 +36,7 @@ fun BottomNavBar(
     navController: NavHostController
 ) {
     val currentRoute = navController.getCurrentRoute()
-    
+
     Surface(
         tonalElevation = 50.dp,
         shape = RoundedCornerShape(50)
@@ -51,29 +51,29 @@ fun BottomNavBar(
                 label = "Submissions",
                 selectedIcon = Res.drawable.gallery_filled,
                 unselectedIcon = Res.drawable.gallery_outlined,
-                onClick = { navController.navigate(SubmissionsList) },
-                selected = SubmissionsList.serialName() == currentRoute,
+                onClick = { navController.navigate(SubmissionsListRoute) },
+                selected = SubmissionsListRoute.serialName() == currentRoute,
             )
             BottomNavItem(
                 label = "Artists",
                 selectedIcon = Res.drawable.palette_filled,
                 unselectedIcon = Res.drawable.palette_outlined,
-                onClick = { navController.navigate(ArtistsList) },
-                selected = ArtistsList.serialName() == currentRoute,
+                onClick = { navController.navigate(ArtistsListRoute) },
+                selected = ArtistsListRoute.serialName() == currentRoute,
             )
             BottomNavItem(
                 label = "Submissions",
                 selectedIcon = Res.drawable.paw_filled,
                 unselectedIcon = Res.drawable.paw_outlined,
-                onClick = { navController.navigate(CharactersList) },
-                selected = CharactersList.serialName() == currentRoute,
+                onClick = { navController.navigate(CharactersListRoute) },
+                selected = CharactersListRoute.serialName() == currentRoute,
             )
             BottomNavItem(
                 label = "Submissions",
                 selectedIcon = Res.drawable.tag_filled,
                 unselectedIcon = Res.drawable.tag_outlined,
-                onClick = { navController.navigate(TagsList) },
-                selected = TagsList.serialName() == currentRoute,
+                onClick = { navController.navigate(TagsListRoute) },
+                selected = TagsListRoute.serialName() == currentRoute,
             )
         }
     }

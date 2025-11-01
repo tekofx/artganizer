@@ -2,7 +2,7 @@ package dev.tekofx.artganizer.ui.components.layout
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
-import dev.tekofx.artganizer.navigation.ArtistDetails
+import dev.tekofx.artganizer.navigation.ArtistDetailsRoute
 import dev.tekofx.artganizer.ui.components.artists.ArtistComponent
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -15,7 +15,7 @@ fun RightArtistPanel() {
 
     if (currentArtist.isEntryValid) {
         ArtistComponent(
-            ArtistDetails(currentArtist.artistDetails.id),
+            ArtistDetailsRoute(currentArtist.artistDetails.id),
             navController = navController
         )
     }

@@ -6,10 +6,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
-import dev.tekofx.artganizer.navigation.ArtistDetails
+import dev.tekofx.artganizer.navigation.ArtistDetailsRoute
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.ArtistInfo
 import dev.tekofx.artganizer.ui.components.input.ConfirmationPopup
+import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.artists.toArtistWithSubmissions
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ArtistComponent(
-    artist: ArtistDetails,
+    artist: ArtistDetailsRoute,
     navController: NavHostController
 ) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
@@ -37,7 +38,7 @@ fun ArtistComponent(
                 artistsViewModel.setShowDeletePopup(true)
                 artistsViewModel.deleteArtist(artistsViewModel.currentArtistUiState)
                 artistsViewModel.setShowDeletePopup(false)
-                artistsViewModel.updateCurrentUiState(dev.tekofx.artganizer.ui.viewmodels.artists.ArtistDetails())
+                artistsViewModel.updateCurrentUiState(ArtistDetails())
                 navController.popBackStack()
             },
             onDismiss = {

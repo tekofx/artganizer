@@ -78,12 +78,12 @@ actual fun Navigation() {
 
         AppLogger.d(
             "Navigation",
-            "ArtistDetails  ${ArtistDetails.serializer().descriptor.serialName}"
+            "ArtistDetails  ${ArtistDetailsRoute.serializer().descriptor.serialName}"
         )
 
         AppLogger.d(
             "Navigation",
-            "ArtistList  ${ArtistsList.serialName()}"
+            "ArtistList  ${ArtistsListRoute.serialName()}"
         )
         AppLogger.d(
             "Navigation",
@@ -92,26 +92,26 @@ actual fun Navigation() {
     }
 
     val showBottomNavBar = when (currentRoute2) {
-        ArtistsList.serialName() -> true
-        SubmissionsList.serialName() -> true
-        TagsList.serialName() -> true
-        CharactersList.serialName() -> true
+        ArtistsListRoute.serialName() -> true
+        SubmissionsListRoute.serialName() -> true
+        TagsListRoute.serialName() -> true
+        CharactersListRoute.serialName() -> true
 
         else -> false
     }
     val actions = when (currentRoute2) {
-        ArtistsList.serialName() -> listOf(
+        ArtistsListRoute.serialName() -> listOf(
             @Composable { Action(icon = Res.drawable.search, onClick = { /* refresh */ }) },
             @Composable {
                 Action(icon = Res.drawable.add, onClick = {
                     navHostController.navigate(
-                        ArtistCreation
+                        ArtistCreationRoute
                     )
                 })
             }
         )
 
-        SubmissionsList.serialName() -> listOf(
+        SubmissionsListRoute.serialName() -> listOf(
             @Composable {
                 Action(
                     icon = Res.drawable.filter_outlined,
@@ -129,30 +129,30 @@ actual fun Navigation() {
                             uiStateManager.files.value = files
                         }
                         navHostController.navigate(
-                            SubmissionCreation
+                            SubmissionCreationRoute
                         )
                     }
                 })
             }
         )
 
-        CharactersList.serialName() -> listOf(
+        CharactersListRoute.serialName() -> listOf(
             @Composable { Action(icon = Res.drawable.search, onClick = { /* refresh */ }) },
             @Composable {
                 Action(icon = Res.drawable.add, onClick = {
                     navHostController.navigate(
-                        CharacterCreation
+                        CharacterCreationRoute
                     )
                 })
             }
         )
 
-        TagsList.serialName() -> listOf(
+        TagsListRoute.serialName() -> listOf(
             @Composable { Action(icon = Res.drawable.search, onClick = { /* refresh */ }) },
             @Composable {
                 Action(icon = Res.drawable.add, onClick = {
                     navHostController.navigate(
-                        TagCreation
+                        TagCreationRoute
                     )
                 })
             }
@@ -164,7 +164,7 @@ actual fun Navigation() {
     }
 
     val actions2 = when {
-        navBackStackEntry?.destination?.hasRoute<ArtistDetails>() ?: false -> listOf(
+        navBackStackEntry?.destination?.hasRoute<ArtistDetailsRoute>() ?: false -> listOf(
             @Composable {
                 Action(icon = Res.drawable.edit, onClick = {
                     artistViewModel.setShowEditArtist(true)
@@ -183,7 +183,7 @@ actual fun Navigation() {
 
         )
 
-        navBackStackEntry?.destination?.hasRoute<SubmissionDetails>() ?: false -> listOf(
+        navBackStackEntry?.destination?.hasRoute<SubmissionDetailsRoute>() ?: false -> listOf(
             @Composable {
                 Action(icon = Res.drawable.share, onClick = {
 
@@ -227,7 +227,7 @@ actual fun Navigation() {
             charactersGraph()
             submissionsGraph(
                 onSubmissionClick = {
-                    navHostController.navigate(SubmissionDetails(it))
+                    navHostController.navigate(SubmissionDetailsRoute(it))
                 },
                 navigateBack = { navHostController.popBackStack() }
             )
@@ -243,24 +243,24 @@ actual fun Navigation() {
 
 fun NavGraphBuilder.artistsGraph(navController: NavHostController) {
 
-    composable<ArtistsList>(
+    composable<ArtistsListRoute>(
         exitTransition = { fadeOut() }
     ) {
         ArtistsScreen(onArtistClick = { artistId ->
-            navController.navigate(ArtistDetails(artistId))
+            navController.navigate(ArtistDetailsRoute(artistId))
         })
     }
 
-    composable<ArtistCreation>(
+    composable<ArtistCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
         ArtistCreationScreen(navController)
     }
 
-    composable<ArtistDetails>(
+    composable<ArtistDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val artistDetailsRoute = backStackEntry.toRoute<ArtistDetails>()
+        val artistDetailsRoute = backStackEntry.toRoute<ArtistDetailsRoute>()
         ArtistDetailsScreen(artistDetailsRoute, navController)
     }
 }
@@ -270,13 +270,13 @@ fun NavGraphBuilder.submissionsGraph(
     navigateBack: () -> Unit
 ) {
 
-    composable<SubmissionsList>(
+    composable<SubmissionsListRoute>(
         exitTransition = { fadeOut() }
     ) {
         SubmissionsScreen(onSubmissionClick)
     }
 
-    composable<SubmissionCreation>(
+    composable<SubmissionCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
         SubmissionCreationScreen(
@@ -285,10 +285,10 @@ fun NavGraphBuilder.submissionsGraph(
         )
     }
 
-    composable<SubmissionDetails>(
+    composable<SubmissionDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val submissionDetailsRoute = backStackEntry.toRoute<SubmissionDetails>()
+        val submissionDetailsRoute = backStackEntry.toRoute<SubmissionDetailsRoute>()
         SubmissionDetailsScreen(submissionDetailsRoute)
     }
 }
@@ -296,22 +296,22 @@ fun NavGraphBuilder.submissionsGraph(
 
 fun NavGraphBuilder.charactersGraph() {
 
-    composable<CharactersList>(
+    composable<CharactersListRoute>(
         exitTransition = { fadeOut() }
     ) {
         CharactersScreen()
     }
 
-    composable<CharacterCreation>(
+    composable<CharacterCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
         CharacterCreationScreen()
     }
 
-    composable<CharacterDetails>(
+    composable<CharacterDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val characterDetailsRoute = backStackEntry.toRoute<CharacterDetails>()
+        val characterDetailsRoute = backStackEntry.toRoute<CharacterDetailsRoute>()
 
         CharacterDetailsScreen(characterDetailsRoute)
     }
@@ -319,23 +319,23 @@ fun NavGraphBuilder.charactersGraph() {
 
 fun NavGraphBuilder.tagsGraph() {
 
-    composable<TagsList>(
+    composable<TagsListRoute>(
 
         exitTransition = { fadeOut() }
     ) {
         TagsScreen()
     }
 
-    composable<TagCreation>(
+    composable<TagCreationRoute>(
         exitTransition = { fadeOut() }
     ) {
         TagCreationScreen()
     }
 
-    composable<TagDetails>(
+    composable<TagDetailsRoute>(
         exitTransition = { fadeOut() }
     ) { backStackEntry ->
-        val tagDetailsRoute = backStackEntry.toRoute<TagDetails>()
+        val tagDetailsRoute = backStackEntry.toRoute<TagDetailsRoute>()
         TagDetailsScreen(tagDetailsRoute)
     }
 }

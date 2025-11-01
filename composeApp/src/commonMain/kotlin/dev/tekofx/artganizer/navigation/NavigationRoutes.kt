@@ -15,40 +15,40 @@ fun AppRoute.serialName() = this::class.serializer().descriptor.serialName
 
 // Android Route
 @Serializable
-object ArtistsList : AppRoute()
+object ArtistsListRoute : AppRoute()
 
 @Serializable
-data class ArtistDetails(val id: Long) : AppRoute()
+data class ArtistDetailsRoute(val id: Long) : AppRoute()
 
 @Serializable
-object ArtistCreation : AppRoute()
+object ArtistCreationRoute : AppRoute()
 
 @Serializable
-object CharactersList : AppRoute()
+object CharactersListRoute : AppRoute()
 
 @Serializable
-data class CharacterDetails(val id: Long) : AppRoute()
+data class CharacterDetailsRoute(val id: Long) : AppRoute()
 
 @Serializable
-object CharacterCreation : AppRoute()
+object CharacterCreationRoute : AppRoute()
 
 @Serializable
-object SubmissionsList : AppRoute()
+object SubmissionsListRoute : AppRoute()
 
 @Serializable
-data class SubmissionDetails(val id: Long) : AppRoute()
+data class SubmissionDetailsRoute(val id: Long) : AppRoute()
 
 @Serializable
-object SubmissionCreation : AppRoute()
+object SubmissionCreationRoute : AppRoute()
 
 @Serializable
-object TagsList : AppRoute()
+object TagsListRoute : AppRoute()
 
 @Serializable
-data class TagDetails(val id: Long) : AppRoute()
+data class TagDetailsRoute(val id: Long) : AppRoute()
 
 @Serializable
-object TagCreation : AppRoute()
+object TagCreationRoute : AppRoute()
 
 // Desktop routes
 @Serializable
