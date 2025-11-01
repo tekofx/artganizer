@@ -3,20 +3,22 @@ package dev.tekofx.artganizer.viewmodel
 import androidx.lifecycle.ViewModel
 import dev.tekofx.artganizer.managers.DesktopUiManager
 import dev.tekofx.artganizer.managers.DialogContent
+import dev.tekofx.artganizer.managers.RightPanelContent
 
 class DesktopUiViewModel(
     val desktopUiManager: DesktopUiManager
 ) : ViewModel() {
     val showLeftPanel = desktopUiManager.showLeftPanel
-    val showRightPanel = desktopUiManager.showRightPanel
     val dialogContent = desktopUiManager.dialogContent
+    val rightPanelContent = desktopUiManager.rightPanelContent
 
 
     fun setDialogContent(dialogContent: DialogContent) {
         desktopUiManager.setDialogContent(dialogContent)
     }
 
-    fun toggleRightPanel() {
-        desktopUiManager.toggleRightPanel()
+    fun setRightPanelContent(rightPanelContent: RightPanelContent) {
+        desktopUiManager.setRightPanelContent(rightPanelContent)
     }
+
 }

@@ -15,8 +15,12 @@ import dev.tekofx.artganizer.repository.SubmissionRepository
 import dev.tekofx.artganizer.utils.AppLogger
 import dev.tekofx.artganizer.utils.saveSubmissionFromPlatformFile
 import dev.tekofx.artganizer.utils.saveThumbnailFromPlatformFile
+import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.dialogs.FileKitMode
+import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.util.toImageBitmap
+import io.github.vinceglb.filekit.dialogs.openFilePicker
 import io.github.vinceglb.filekit.extension
 import io.github.vinceglb.filekit.path
 import io.github.vinceglb.filekit.size
@@ -87,6 +91,17 @@ class SubmissionsViewModel(
 
 
     //////////////////////// Setters ////////////////////////
+
+    fun setNewFiles() = viewModelScope.launch {
+        val files = FileKit.openFilePicker(
+            mode = FileKitMode.Multiple(),
+            type = FileKitType.Image
+        )
+
+        files?.let {
+            newFiles.value = files
+        }
+    }
 
 
     fun setCurrentImage(value: Int) {
@@ -191,7 +206,7 @@ class SubmissionsViewModel(
     /**
      * Updates the data of current submission
      */
-    suspend fun editSubmission() {
+    fun editSubmission() = viewModelScope.launch {
         val submission = editingSubmissionDetails.toSubmissionWithArtist()
         submissionRepo.updateSubmissionWithArtist(submission)
         editingSubmissionDetails = SubmissionDetails()
@@ -201,7 +216,7 @@ class SubmissionsViewModel(
     /**
      * Saves a new submission
      */
-    suspend fun saveSubmission() {
+    fun saveSubmission() = viewModelScope.launch {
         isLoading.value = true
         var i = 0f
         val total = newFiles.value.size.toFloat()

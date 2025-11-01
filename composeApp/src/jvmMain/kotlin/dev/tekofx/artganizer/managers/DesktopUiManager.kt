@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 enum class RightPanelContent {
-    NONE
+    NONE,
+    ARTIST_DETAILS,
+    SUBMISSION_DETAILS,
+    CHARACTER_DETAILS
 }
 
 enum class DialogContent {
@@ -22,9 +25,6 @@ class DesktopUiManager {
     // Panels
     private val _showLeftPanel = MutableStateFlow(false)
     val showLeftPanel: StateFlow<Boolean> = _showLeftPanel.asStateFlow()
-
-    private val _showRightPanel = MutableStateFlow(false)
-    val showRightPanel: StateFlow<Boolean> = _showRightPanel.asStateFlow()
 
     private val _showBottomPanel = MutableStateFlow(false)
     val showBottomPanel: StateFlow<Boolean> = _showBottomPanel.asStateFlow()
@@ -43,11 +43,11 @@ class DesktopUiManager {
     val selectedArtist = _selectedArtist.asStateFlow()
 
 
-    fun toggleRightPanel() {
-        _showRightPanel.value = !_showRightPanel.value
-    }
-
     fun setDialogContent(dialogContent: DialogContent) {
         this._dialogContent.value = dialogContent
+    }
+
+    fun setRightPanelContent(rightPanelContent: RightPanelContent) {
+        this._rightPanelContent.value = rightPanelContent
     }
 }

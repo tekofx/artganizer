@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -20,6 +19,7 @@ import androidx.navigation.NavHostController
 import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.x
 import dev.tekofx.artganizer.managers.DialogContent
+import dev.tekofx.artganizer.managers.RightPanelContent
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.forms.DesktopSubmissionForm
 import dev.tekofx.artganizer.ui.components.input.form.CharacterForm
@@ -31,12 +31,7 @@ import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import dev.tekofx.artganizer.viewmodel.DesktopUiViewModel
-import io.github.vinceglb.filekit.FileKit
-import io.github.vinceglb.filekit.dialogs.FileKitMode
-import io.github.vinceglb.filekit.dialogs.FileKitType
-import io.github.vinceglb.filekit.dialogs.openFilePicker
 import io.github.vinceglb.filekit.path
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -55,9 +50,8 @@ fun MainScreen(
     val files by submissionsViewModel.newFiles.collectAsState()
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
 
-    val scope = rememberCoroutineScope()
-    val showRigthPanel by desktopUiViewModel.showRightPanel.collectAsState()
     val dialogContent by desktopUiViewModel.dialogContent.collectAsState()
+    val rightPanelContent by desktopUiViewModel.rightPanelContent.collectAsState()
 
     if (dialogContent != DialogContent.NONE) {
         Dialog(
@@ -85,9 +79,7 @@ fun MainScreen(
                             )
                         },
                         onSaveClick = {
-                            scope.launch {
-                                submissionsViewModel.saveSubmission()
-                            }
+                            submissionsViewModel.saveSubmission()
                             desktopUiViewModel.setDialogContent(DialogContent.NONE)
                         },
                         onCancelClick = {
@@ -136,19 +128,11 @@ fun MainScreen(
             LeftPanel(
                 onArtistClick = {
                     artistsViewModel.getArtistWithSubmissions(it)
-                    desktopUiViewModel.toggleRightPanel()
+                    desktopUiViewModel.setRightPanelContent(RightPanelContent.ARTIST_DETAILS)
                 },
                 onSubmissionAddClick = {
-                    scope.launch {
-                        val files = FileKit.openFilePicker(
-                            mode = FileKitMode.Multiple(),
-                            type = FileKitType.Image
-                        )
-
-                        files?.let {
-                            submissionsViewModel.newFiles.value = files
-                            desktopUiViewModel.setDialogContent(DialogContent.SUBMISSIONS_FORM)
-                        }
+                    submissionsViewModel.setNewFiles().invokeOnCompletion {
+                        desktopUiViewModel.setDialogContent(DialogContent.SUBMISSIONS_FORM)
                     }
                 },
                 onArtistAddClick = {
@@ -163,10 +147,10 @@ fun MainScreen(
             )
         },
         rightPanel = {
-            if (showRigthPanel) {
+            if (rightPanelContent == RightPanelContent.ARTIST_DETAILS) {
                 Column {
                     IconButton(
-                        onClick = { desktopUiViewModel.toggleRightPanel() }
+                        onClick = { desktopUiViewModel.setRightPanelContent(RightPanelContent.NONE) }
                     ) {
                         Icon(
                             painterResource(Res.drawable.x),
