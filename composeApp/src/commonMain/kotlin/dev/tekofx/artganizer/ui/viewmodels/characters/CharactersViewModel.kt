@@ -13,7 +13,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.tekofx.artganizer.entities.CharacterWithSubmissions
 import dev.tekofx.artganizer.repository.CharactersRepository
-import dev.tekofx.artganizer.repository.ImageManager
+import dev.tekofx.artganizer.utils.saveThumbnailFromPath
+import io.github.vinceglb.filekit.path
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -24,7 +25,6 @@ import kotlinx.coroutines.launch
 
 class CharactersViewModel(
     private val repository: CharactersRepository,
-    private val imageManager: ImageManager
 ) : ViewModel() {
 
     // Data states
@@ -184,12 +184,11 @@ class CharactersViewModel(
 
         if (imagePath != null) {
             // Save image to private storage
-            val newImagePath =
-                imageManager.saveThumbnail(imagePath, "character_${System.currentTimeMillis()}.jpg")
+            val newImagePath = saveThumbnailFromPath(imagePath)
 
             currentCharacterUiState = currentCharacterUiState.copy(
                 characterDetails = currentCharacterUiState.characterDetails.copy(
-                    imagePath = newImagePath
+                    imagePath = newImagePath.path
                 )
             )
 
@@ -209,12 +208,12 @@ class CharactersViewModel(
         if (imagePath != null) {
             // Save image to private storage
             val newImagePath =
-                imageManager.saveThumbnail(imagePath, "character_${System.currentTimeMillis()}.jpg")
+                saveThumbnailFromPath(imagePath)
 
 
             newCharacterUiState = newCharacterUiState.copy(
                 characterDetails = newCharacterUiState.characterDetails.copy(
-                    imagePath = newImagePath
+                    imagePath = newImagePath.path
                 )
             )
 

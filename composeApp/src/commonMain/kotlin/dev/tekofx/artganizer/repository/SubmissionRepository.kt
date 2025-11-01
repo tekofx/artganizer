@@ -10,6 +10,8 @@ import dev.tekofx.artganizer.entities.SubmissionWithArtist
 import dev.tekofx.artganizer.entities.TagSubmissionCrossRef
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionDetails
 import dev.tekofx.artganizer.ui.viewmodels.submissions.toSubmission
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.delete
 import kotlinx.coroutines.flow.Flow
 
 interface SubmissionRepositoryInterface {
@@ -26,7 +28,6 @@ class SubmissionRepository(
     private val imageDao: IImageDao,
     private val characterSubmissionCrossRef: ICharacterSubmissionCrossRef,
     private val tagSubmissionCrossRef: ITagSubmissionCrossRef,
-    private val imageManager: ImageManager
 ) : SubmissionRepositoryInterface {
 
     // GET
@@ -115,12 +116,14 @@ class SubmissionRepository(
         // Delete images associated with the submission
         submission.images.forEach {
             imageDao.delete(it)
-            imageManager.removeImage(it.uri)
+            val platformFile = PlatformFile(it.uri)
+            platformFile.delete()
 
         }
 
         // Delete thumbnail
-        imageManager.removeImage(submission.submission.thumbnail)
+        val platformFile = PlatformFile(submission.submission.thumbnail)
+        platformFile.delete()
 
     }
 
