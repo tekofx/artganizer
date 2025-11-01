@@ -42,7 +42,10 @@ fun DropdownAdd(
                         contentDescription = "Submission"
                     )
                 },
-                onClick = onSubmissionAddClick
+                onClick = {
+                    onSubmissionAddClick()
+                    expanded = false
+                }
             )
             DropdownMenuItem(
                 text = { Text("Artist") },
