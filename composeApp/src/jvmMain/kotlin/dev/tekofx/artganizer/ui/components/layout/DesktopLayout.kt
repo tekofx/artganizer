@@ -23,6 +23,9 @@ fun DesktopLayout(
     bottomPanel: @Composable () -> Unit = {},
     mainPanel: @Composable () -> Unit,
 ) {
+
+    CreateDialog()
+    
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
