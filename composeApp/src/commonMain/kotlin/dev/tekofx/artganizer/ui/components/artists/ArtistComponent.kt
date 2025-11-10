@@ -67,11 +67,6 @@ fun ArtistComponent(
             onDeleteClick = {
                 artistsViewModel.setShowDeletePopup(true)
             },
-            onImageClick = { submissionId ->
-                /* navigationViewModel.navigateTo(
-                     SubmissionDetails(submissionId)
-                 )*/
-            },
         )
     }
 }

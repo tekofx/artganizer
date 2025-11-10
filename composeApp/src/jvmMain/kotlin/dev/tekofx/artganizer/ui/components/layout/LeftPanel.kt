@@ -39,7 +39,7 @@ fun LeftPanel(
     onSubmissionAddClick: () -> Unit,
     onArtistAddClick: () -> Unit,
     onCharacterAddClick: () -> Unit,
-    onTagAddClick: () -> Unit
+    onTagAddClick: () -> Unit,
 ) {
     // ViewModels
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
@@ -47,6 +47,7 @@ fun LeftPanel(
 
     // Entities
     val artists by artistsViewModel.artists.collectAsState()
+
 
     Column(
         modifier = Modifier.fillMaxHeight()

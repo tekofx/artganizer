@@ -8,7 +8,13 @@ import dev.tekofx.artganizer.managers.RightPanelContent
 class DesktopUiViewModel(
     val desktopUiManager: DesktopUiManager
 ) : ViewModel() {
+
+
+    // Panels show status
     val showLeftPanel = desktopUiManager.showLeftPanel
+    val showRightPanel = desktopUiManager.showRightPanel
+
+
     val dialogContent = desktopUiManager.dialogContent
     val rightPanelContent = desktopUiManager.rightPanelContent
 
@@ -20,5 +26,14 @@ class DesktopUiViewModel(
     fun setRightPanelContent(rightPanelContent: RightPanelContent) {
         desktopUiManager.setRightPanelContent(rightPanelContent)
     }
+
+    fun toggleRightPanel() {
+        desktopUiManager.setShowRightPanel(!showRightPanel.value)
+    }
+
+    fun toggleLeftPanel() {
+        desktopUiManager.setShowLeftPanel(!showLeftPanel.value)
+    }
+
 
 }

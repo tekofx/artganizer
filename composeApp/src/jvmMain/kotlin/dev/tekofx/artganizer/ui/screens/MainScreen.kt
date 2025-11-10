@@ -1,10 +1,7 @@
 package dev.tekofx.artganizer.ui.screens
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,8 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
-import artganizer.composeapp.generated.resources.Res
-import artganizer.composeapp.generated.resources.x
 import dev.tekofx.artganizer.managers.DialogContent
 import dev.tekofx.artganizer.managers.RightPanelContent
 import dev.tekofx.artganizer.ui.components.ArtistForm
@@ -32,15 +27,13 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import dev.tekofx.artganizer.viewmodel.DesktopUiViewModel
 import io.github.vinceglb.filekit.path
-import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen(
     navController: NavHostController,
 ) {
-    val desktopUiViewModel = koinInject<DesktopUiViewModel>()
+    val desktopUiViewModel = koinViewModel<DesktopUiViewModel>()
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val submissionsViewModel = koinViewModel<SubmissionsViewModel>()
     val charactersViewModel = koinViewModel<CharactersViewModel>()
@@ -49,6 +42,11 @@ fun MainScreen(
     val submissions by submissionsViewModel.submissions.collectAsState()
     val files by submissionsViewModel.newFiles.collectAsState()
     val currentImageIndex by submissionsViewModel.currentImageIndex.collectAsState()
+
+
+    // Panels show status
+    val showLeftPanel by desktopUiViewModel.showLeftPanel.collectAsState()
+    val showRightPanel by desktopUiViewModel.showRightPanel.collectAsState()
 
     val dialogContent by desktopUiViewModel.dialogContent.collectAsState()
     val rightPanelContent by desktopUiViewModel.rightPanelContent.collectAsState()
@@ -84,6 +82,7 @@ fun MainScreen(
                         },
                         onCancelClick = {
                             submissionsViewModel.clearNewUiState()
+                            submissionsViewModel.clearNewFiles()
                             desktopUiViewModel.setDialogContent(DialogContent.NONE)
                         }
                     )
@@ -128,40 +127,30 @@ fun MainScreen(
             LeftPanel(
                 onArtistClick = {
                     artistsViewModel.getArtistWithSubmissions(it)
+                    desktopUiViewModel.toggleRightPanel()
                     desktopUiViewModel.setRightPanelContent(RightPanelContent.ARTIST_DETAILS)
                 },
                 onSubmissionAddClick = {
-                    submissionsViewModel.setNewFiles().invokeOnCompletion {
-                        desktopUiViewModel.setDialogContent(DialogContent.SUBMISSIONS_FORM)
-                    }
+                    submissionsViewModel.setNewFiles()
+                    desktopUiViewModel.setDialogContent(DialogContent.SUBMISSIONS_FORM)
                 },
                 onArtistAddClick = {
                     desktopUiViewModel.setDialogContent(DialogContent.ARTIST_FORM)
-
                 },
                 onCharacterAddClick = {
                     desktopUiViewModel.setDialogContent(DialogContent.CHARACTER_FORM)
 
                 },
-                onTagAddClick = {}
+                onTagAddClick = {},
             )
         },
+        toggleLeftPanelShow = { desktopUiViewModel.toggleLeftPanel() },
+        showLeftPanel = showLeftPanel,
         rightPanel = {
-            if (rightPanelContent == RightPanelContent.ARTIST_DETAILS) {
-                Column {
-                    IconButton(
-                        onClick = { desktopUiViewModel.setRightPanelContent(RightPanelContent.NONE) }
-                    ) {
-                        Icon(
-                            painterResource(Res.drawable.x),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            contentDescription = "Close Right Panel"
-                        )
-                    }
-                    RightArtistPanel()
-                }
-            }
-        }
+            RightArtistPanel()
+        },
+        toggleRightPanelShow = { desktopUiViewModel.toggleRightPanel() },
+        showRightPanel = showRightPanel
     ) {
         Text("Main panel")
 

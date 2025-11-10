@@ -145,6 +145,10 @@ class SubmissionsViewModel(
         )
     }
 
+    fun clearNewFiles() {
+        newFiles.value = emptyList<PlatformFile>()
+    }
+
     fun onSelectSubmission(submissionId: Long) {
 
         // Show the selection mode if not already selecting

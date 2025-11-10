@@ -25,7 +25,6 @@ fun ArtistInfo(
     artistWithSubmissions: ArtistWithSubmissions,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onImageClick: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -64,16 +63,6 @@ fun ArtistInfo(
                     text = "Delete",
                     drawableResource = Res.drawable.trash,
                     color = MaterialTheme.colorScheme.error,
-                )
-            }
-        }
-
-        // Group submissions into chunks of 3
-        artistWithSubmissions.submissions.chunked(3).forEach { chunk ->
-            item {
-                GalleryRow(
-                    submissions = chunk,
-                    onImageClick = onImageClick
                 )
             }
         }

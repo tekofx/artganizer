@@ -23,8 +23,11 @@ enum class DialogContent {
 class DesktopUiManager {
 
     // Panels
-    private val _showLeftPanel = MutableStateFlow(false)
+    private val _showLeftPanel = MutableStateFlow(true)
     val showLeftPanel: StateFlow<Boolean> = _showLeftPanel.asStateFlow()
+
+    private val _showRightPanel = MutableStateFlow(false)
+    val showRightPanel: StateFlow<Boolean> = _showRightPanel.asStateFlow()
 
     private val _showBottomPanel = MutableStateFlow(false)
     val showBottomPanel: StateFlow<Boolean> = _showBottomPanel.asStateFlow()
@@ -49,5 +52,13 @@ class DesktopUiManager {
 
     fun setRightPanelContent(rightPanelContent: RightPanelContent) {
         this._rightPanelContent.value = rightPanelContent
+    }
+
+    fun setShowRightPanel(value: Boolean) {
+        _showRightPanel.value = value
+    }
+
+    fun setShowLeftPanel(value: Boolean) {
+        _showLeftPanel.value = value
     }
 }
