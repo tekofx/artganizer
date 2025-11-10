@@ -25,7 +25,7 @@ fun DesktopLayout(
 ) {
 
     CreateDialog()
-    
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

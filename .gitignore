@@ -19,3 +19,5 @@ composeApp/build
 
 *.db*
 *.log
+
+*.salive

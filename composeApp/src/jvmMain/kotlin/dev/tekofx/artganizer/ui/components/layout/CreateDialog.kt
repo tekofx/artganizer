@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.tekofx.artganizer.managers.DialogContent
 import dev.tekofx.artganizer.ui.components.ArtistForm
 import dev.tekofx.artganizer.ui.components.forms.DesktopSubmissionForm
@@ -22,14 +21,15 @@ import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
 import dev.tekofx.artganizer.viewmodel.DesktopUiViewModel
 import io.github.vinceglb.filekit.path
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CreateDialog(
-    artistsViewModel: ArtistsViewModel = viewModel(),
-    desktopUiViewModel: DesktopUiViewModel = viewModel(),
-    submissionsViewModel: SubmissionsViewModel = viewModel(),
-    charactersViewModel: CharactersViewModel = viewModel(),
-    tagsViewModel: TagsViewModel = viewModel()
+    artistsViewModel: ArtistsViewModel = koinViewModel<ArtistsViewModel>(),
+    desktopUiViewModel: DesktopUiViewModel = koinViewModel<DesktopUiViewModel>(),
+    submissionsViewModel: SubmissionsViewModel = koinViewModel<SubmissionsViewModel>(),
+    charactersViewModel: CharactersViewModel = koinViewModel<CharactersViewModel>(),
+    tagsViewModel: TagsViewModel = koinViewModel<TagsViewModel>()
 ) {
     val dialogContent by desktopUiViewModel.dialogContent.collectAsState()
     val files by submissionsViewModel.newFiles.collectAsState()

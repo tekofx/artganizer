@@ -31,7 +31,7 @@ fun MainScreen() {
                 onArtistClick = {
                     artistsViewModel.getArtistWithSubmissions(it)
                     desktopUiViewModel.setRightPanelContent(RightPanelContent.ARTIST_DETAILS)
-                    if (!showLeftPanel) {
+                    if (!showRightPanel) {
                         desktopUiViewModel.toggleRightPanel()
                     }
                 },
