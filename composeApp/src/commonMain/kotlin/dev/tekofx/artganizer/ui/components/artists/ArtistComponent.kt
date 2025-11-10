@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.navigation.ArtistDetailsRoute
 import dev.tekofx.artganizer.ui.components.ArtistForm
@@ -20,7 +21,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun ArtistComponent(
     artist: ArtistDetailsRoute,
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val showPopup by artistsViewModel.showDeletePopup.collectAsState()
@@ -48,7 +50,8 @@ fun ArtistComponent(
     }
     if (showEditArtist) {
         ArtistForm(
-            artistsViewModel.currentArtistUiState,
+            modifier = modifier,
+            artistUiState = artistsViewModel.currentArtistUiState,
             onItemValueChange = { newValue -> artistsViewModel.updateCurrentUiState(newValue) },
             onSaveClick = {
                 scope.launch { artistsViewModel.editArtist() }
@@ -67,6 +70,7 @@ fun ArtistComponent(
             onDeleteClick = {
                 artistsViewModel.setShowDeletePopup(true)
             },
+            modifier
         )
     }
 }

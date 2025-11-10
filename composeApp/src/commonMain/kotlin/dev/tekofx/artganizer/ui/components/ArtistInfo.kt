@@ -3,7 +3,6 @@ package dev.tekofx.artganizer.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,11 +24,11 @@ fun ArtistInfo(
     artistWithSubmissions: ArtistWithSubmissions,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    modifier: Modifier
 ) {
     LazyColumn(
-        modifier = Modifier
-            .padding(10.dp)
-            .wrapContentWidth(),
+        modifier = modifier
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {

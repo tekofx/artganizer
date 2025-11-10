@@ -25,25 +25,25 @@ import artganizer.composeapp.generated.resources.Res
 import artganizer.composeapp.generated.resources.settings
 import artganizer.composeapp.generated.resources.share
 import dev.tekofx.artganizer.entities.ArtistWithSubmissions
+import dev.tekofx.artganizer.managers.DialogContent
+import dev.tekofx.artganizer.managers.RightPanelContent
 import dev.tekofx.artganizer.ui.components.Avatar
 import dev.tekofx.artganizer.ui.components.DropdownAdd
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
-import dev.tekofx.artganizer.ui.viewmodels.tags.TagsViewModel
+import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
+import dev.tekofx.artganizer.viewmodel.DesktopUiViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun LeftPanel(
-    onArtistClick: (Long) -> Unit,
-    onSubmissionAddClick: () -> Unit,
-    onArtistAddClick: () -> Unit,
-    onCharacterAddClick: () -> Unit,
-    onTagAddClick: () -> Unit,
+    artistsViewModel: ArtistsViewModel = koinViewModel<ArtistsViewModel>(),
+    desktopUiViewModel: DesktopUiViewModel = koinViewModel<DesktopUiViewModel>(),
+    submissionsViewModel: SubmissionsViewModel = koinViewModel<SubmissionsViewModel>(),
 ) {
-    // ViewModels
-    val artistsViewModel = koinViewModel<ArtistsViewModel>()
-    val tagsViewModel = koinViewModel<TagsViewModel>()
+
+    val showRightPanel by desktopUiViewModel.showRightPanel.collectAsState()
 
     // Entities
     val artists by artistsViewModel.artists.collectAsState()
@@ -53,16 +53,29 @@ fun LeftPanel(
         modifier = Modifier.fillMaxHeight()
     ) {
         TopButtons(
-            onSubmissionAddClick = onSubmissionAddClick,
-            onArtistAddClick = onArtistAddClick,
-            onCharacterAddClick = onCharacterAddClick,
-            onTagAddClick = onTagAddClick
+            onSubmissionAddClick = {
+                submissionsViewModel.setNewFiles()
+                desktopUiViewModel.setDialogContent(DialogContent.SUBMISSIONS_FORM)
+            },
+            onArtistAddClick = {
+                desktopUiViewModel.setDialogContent(DialogContent.ARTIST_FORM)
+            },
+            onCharacterAddClick = {
+                desktopUiViewModel.setDialogContent(DialogContent.CHARACTER_FORM)
+            },
+            onTagAddClick = {}
         )
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
             item {
-                ArtistSection(artists = artists, onArtistClick = onArtistClick)
+                ArtistSection(artists = artists, onArtistClick = {
+                    artistsViewModel.getArtistWithSubmissions(it)
+                    desktopUiViewModel.setRightPanelContent(RightPanelContent.ARTIST_DETAILS)
+                    if (!showRightPanel) {
+                        desktopUiViewModel.toggleRightPanel()
+                    }
+                })
             }
         }
     }

@@ -3,7 +3,6 @@ package dev.tekofx.artganizer.ui.components.input
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -22,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import artganizer.composeapp.generated.resources.Res
-import artganizer.composeapp.generated.resources.brand_discord
 import artganizer.composeapp.generated.resources.trash
 import dev.tekofx.artganizer.utils.getSocialNetworkIconRes
 import org.jetbrains.compose.resources.painterResource
@@ -47,26 +45,27 @@ fun SocialNetworkInput(
         var newSocialNetwork by remember { mutableStateOf("") }
 
         Row(
+            modifier,
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedTextField(
-                modifier = Modifier
-                    .weight(1f),
                 value = newSocialNetwork,
                 onValueChange = { newSocialNetwork = it },
                 label = { Text("Add Social Network") },
                 singleLine = true,
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(getSocialNetworkIconRes(
-                            newSocialNetwork
-                        )),
+                        painter = painterResource(
+                            getSocialNetworkIconRes(
+                                newSocialNetwork
+                            )
+                        ),
                         contentDescription = "Social Network Icon",
                         modifier = Modifier.size(40.dp)
                     )
                 }
+
             )
             Button(
                 enabled = newSocialNetwork.isNotBlank(),
@@ -95,7 +94,6 @@ fun SocialNetworksList(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .padding(vertical = 4.dp)
-                .fillMaxWidth()
         ) {
             Row(
                 modifier = Modifier.weight(1f),
@@ -116,7 +114,7 @@ fun SocialNetworksList(
             }
             IconButton(onClick = { onRemoveSocialNetwork(url) }) {
                 Icon(
-                    painter = org.jetbrains.compose.resources.painterResource( Res.drawable.trash),
+                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.trash),
                     contentDescription = "Remove Icon",
                     modifier = Modifier.size(30.dp)
                 )

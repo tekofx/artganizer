@@ -27,6 +27,7 @@ fun ArtistForm(
     onItemValueChange: (ArtistDetails) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
 
@@ -60,6 +61,7 @@ fun ArtistForm(
             ArtistFormFields(
                 artistsDetails = artistUiState.artistDetails,
                 onValueChange = onItemValueChange,
+                modifier = modifier
             )
         }
         item {
@@ -88,9 +90,11 @@ fun ArtistFormFields(
             value = artistsDetails.name,
             onValueChange = { onValueChange(artistsDetails.copy(name = it)) },
             label = "Name",
-            enabled = enabled
+            enabled = enabled,
+            modifier = modifier
         )
         SocialNetworkInput(
+            modifier = modifier,
             socialNetworks = artistsDetails.socialNetworks,
             onAddSocialNetwork = {
                 onValueChange(

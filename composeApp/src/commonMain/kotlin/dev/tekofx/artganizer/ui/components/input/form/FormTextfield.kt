@@ -1,6 +1,5 @@
 package dev.tekofx.artganizer.ui.components.input.form
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
@@ -17,8 +16,8 @@ fun FormTextfield(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    enabled: Boolean = true,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     singleLine: Boolean = true,
     imeAction: ImeAction = ImeAction.Next,
 ) {
@@ -39,7 +38,7 @@ fun FormTextfield(
                 focusManager.clearFocus()
             }
         ),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         enabled = enabled,
         singleLine = singleLine,
     )
