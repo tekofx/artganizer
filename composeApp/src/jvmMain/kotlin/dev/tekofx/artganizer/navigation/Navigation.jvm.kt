@@ -16,7 +16,7 @@ actual fun Navigation() {
         startDestination = FIRST_DESKTOP_ROUTE
     ) {
         composable<DesktopMainRoute> {
-            MainScreen(navHostController)
+            MainScreen()
         }
     }
 }

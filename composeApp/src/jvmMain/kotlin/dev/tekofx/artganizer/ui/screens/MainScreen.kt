@@ -4,7 +4,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavHostController
 import dev.tekofx.artganizer.managers.DialogContent
 import dev.tekofx.artganizer.managers.RightPanelContent
 import dev.tekofx.artganizer.ui.components.layout.DesktopLayout
@@ -16,9 +15,7 @@ import dev.tekofx.artganizer.viewmodel.DesktopUiViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MainScreen(
-    navController: NavHostController,
-) {
+fun MainScreen() {
     val desktopUiViewModel = koinViewModel<DesktopUiViewModel>()
     val artistsViewModel = koinViewModel<ArtistsViewModel>()
     val submissionsViewModel = koinViewModel<SubmissionsViewModel>()
@@ -47,7 +44,6 @@ fun MainScreen(
                 },
                 onCharacterAddClick = {
                     desktopUiViewModel.setDialogContent(DialogContent.CHARACTER_FORM)
-
                 },
                 onTagAddClick = {},
             )
