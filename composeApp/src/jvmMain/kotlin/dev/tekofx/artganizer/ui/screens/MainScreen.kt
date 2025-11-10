@@ -127,8 +127,10 @@ fun MainScreen(
             LeftPanel(
                 onArtistClick = {
                     artistsViewModel.getArtistWithSubmissions(it)
-                    desktopUiViewModel.toggleRightPanel()
                     desktopUiViewModel.setRightPanelContent(RightPanelContent.ARTIST_DETAILS)
+                    if (!showLeftPanel) {
+                        desktopUiViewModel.toggleRightPanel()
+                    }
                 },
                 onSubmissionAddClick = {
                     submissionsViewModel.setNewFiles()

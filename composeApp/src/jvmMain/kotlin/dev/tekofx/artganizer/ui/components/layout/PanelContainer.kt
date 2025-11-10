@@ -31,9 +31,10 @@ fun PanelContainer(
     togglePosition: TogglePosition,
     panel: @Composable () -> Unit,
 ) {
-    val icon = when (togglePosition) {
-        TogglePosition.LEFT -> if (showPanel) Res.drawable.arrow_right else Res.drawable.arrow_left
-        TogglePosition.RIGHT -> if (showPanel) Res.drawable.arrow_left else Res.drawable.arrow_right
+    val icon = if (togglePosition == TogglePosition.LEFT == showPanel) {
+        Res.drawable.arrow_right
+    } else {
+        Res.drawable.arrow_left
     }
     Surface(
         modifier = Modifier.wrapContentWidth().fillMaxHeight(),
