@@ -1,4 +1,4 @@
-package dev.tekofx.artganizer.ui.components.layout
+package dev.tekofx.artganizer.ui.components.layout.rightPanel
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController

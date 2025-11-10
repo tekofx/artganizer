@@ -20,7 +20,7 @@ import dev.tekofx.artganizer.ui.components.forms.DesktopSubmissionForm
 import dev.tekofx.artganizer.ui.components.input.form.CharacterForm
 import dev.tekofx.artganizer.ui.components.layout.DesktopLayout
 import dev.tekofx.artganizer.ui.components.layout.LeftPanel
-import dev.tekofx.artganizer.ui.components.layout.RightArtistPanel
+import dev.tekofx.artganizer.ui.components.layout.rightPanel.RightPanel
 import dev.tekofx.artganizer.ui.viewmodels.artists.ArtistsViewModel
 import dev.tekofx.artganizer.ui.viewmodels.characters.CharactersViewModel
 import dev.tekofx.artganizer.ui.viewmodels.submissions.SubmissionsViewModel
@@ -149,7 +149,7 @@ fun MainScreen(
         toggleLeftPanelShow = { desktopUiViewModel.toggleLeftPanel() },
         showLeftPanel = showLeftPanel,
         rightPanel = {
-            RightArtistPanel()
+            RightPanel()
         },
         toggleRightPanelShow = { desktopUiViewModel.toggleRightPanel() },
         showRightPanel = showRightPanel
